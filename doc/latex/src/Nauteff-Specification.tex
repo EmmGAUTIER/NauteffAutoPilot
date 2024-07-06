@@ -1,0 +1,287 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+%%\usepackage[francais]{babel}
+\usepackage[french]{babel}
+\usepackage{numprint}
+\usepackage{multirow}
+\usepackage{glossaries}
+\title{Nauteff P-1 Spécification}
+\author{Emmanuel Gautier}
+
+\input{Nauteff-Glossaire.tex}
+
+\makeglossaries
+\makeglossary
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Ce document contient la spécification du prototype Nauteff P-1.
+\end{abstract}
+
+\tableofcontents
+%\printglossary
+
+\chapter{Buts du document}
+\section{Buts}
+Ce document décrit la spécification du Nauteff P1. Il sert de référence
+pour tous les acteurs du projet.
+Il contient les exigences techniques du Nauteff,
+la description de son comportement et de ses fonctions. 
+
+\section{Guide de lecture}
+C'est le document de référence principal décrivant
+les exigences techniques et opérationnelles et la description
+des fonctions du système. Il est destiné à tous les acteurs
+participant à la définition du système ou à sa réalisation.
+
+Bien que décrivant le système il n'est pas un manuel d'utilisation.
+
+Le détail des fonctions de calculs et algorithmes est contenu
+dans un autre document à venir.
+
+\chapter{Documents applicables et de référence}
+
+NMEA revealed : https://gpsd.gitlab.io/gpsd/NMEA.html
+Ce document sert de référence pour le développement du Nauteff~P-1.
+
+\printglossary[numberedsection, title=Terminologie]
+
+\chapter{Présentation du système}
+\section{Objectifs du système}
+Nauteff P-1 est une maquette de pilote automatique pour navires à voile ou à moteur d'une taille comprise entre 5m et 24m.
+Cette maquette sert à évaluer et mettre au point le pilote automatique et améliorer son logiciel.
+
+L'objectif du Pilote automatique est d'agir sur sa barre afin de maintenir
+le cap d'un navire. Il doit aussi traiter des informations sur les conditions
+de navigation et le fournir à d'autres appareils.
+Il utilise les informations de ses capteurs, et lorsqu'elles
+sont disponibles celles d'autres appareils.
+
+\section{Environnement du système}
+L'environnement du Nauteff~P-1 comprend:
+\begin{itemize}
+	\item un ordinateur avec les outils de développement et la sonde;
+	\item un alimentation 12V;
+	\item un vérin électrique;
+	\item d'autres instruments de navigation: GPS, loch, gyrouette,\dots
+	\item un ou plusieurs équipiers du navire.
+\end{itemize}
+
+Nauteff P-1 est principalement utilisé et stocké dans un bureau
+au chaud et au sec. Lors des essais il est à l'intérieur d'un navire
+et modérément protégé de l'humidité.
+
+Il est relié à un ordinateur par l'intermédiaire d'un sonde qui
+alimente la calculateur et qui permet de charger le logiciel
+de contrôler l'exécution et de faire le débogage.
+
+Au bureau l'ordinateur est de type station de travail et l'alimentation
+de l'actionneur est fourni par une alimentation stabilisée.
+Lors des essais à bord d'un navire le l'ordinateur est un petit modèle
+portable, et économe en courant; l'ensemble est alors alimenté par
+la batterie de servitudes du navire.
+
+L'équipage confie la commande de la barre au Nauteff pour réaliser d'autres
+tâches ou pour se reposer. Il attend un bon suivi de cap, exige d'être
+alerté si le Nauteff ne peut plus remplir sa fonction.
+
+\subsection{Interfaces du système}
+
+\subsubsection{Alimentation électrique}
+Nauteff fonctionne avec une alimentation électrique
+très basse tension nominale de 12V et l'alimentation de la sonde.
+l'alimentation 12V répond aux exigences de la section exigences de l'environnement.
+
+
+\subsubsection{Clavier}
+Nauteff comporte un clavier à 6 touches fugitives (aussi appelées à contacts NO).
+
+\subsubsection{Bus de communication UART, \ldots}
+Nauteff comporte une interface série RS-232 principalement utilisée
+pour la communication avec un ordinateur pour le développement et
+la mise au point.
+La norme \gls{NMEA} prévoit un bus RS-422, cependant cette interface
+permet des échanges d'information avec des appareils utilisant
+ce protocole et peu exigeants.
+
+\subsubsection{Capteurs MEMS}
+Nauteff P-1 comporte les capteurs \gls{MEMS} suivants :
+\begin{enumerate}
+\item un magnétomètre (LSM6DS33);
+\item un gyromètre (LPS25H);
+\item un accéléromètre(LPS25H);
+\item un capteur de pression atmosphérique (LIS3MDL);
+\item des capteurs de température.
+\end{enumerate}
+Ces capteurs sont dans les circuits intégrés de ST Microelectronics et montés
+sur une carte d'évaluation Pololu AltIMU-10 v5. La communication entre ces capteurs et le STM32 utilise un bus \gls{I2C}. Les capteurs de température et de pression atmosphérique nz sonrt pas utilisés.
+
+\subsubsection{Commande du moteur}
+Nauteff comporte une unité de commande et de contrôle du moteur de l'actionneur.
+Cette unité permet de commander la marche du moteur de l'actionneur
+dans les deux sens et de mesurer l'effort du moteur (couple),
+de détecter la butée, un courant excessif ou un court-circuit et un courant nul
+ou anormalement faible.
+\subsubsection{Alarme sonore}
+L'alarme sonore appelle l'attention du navigateur que le Nauteff ne peut plus
+assurer ses fonctions ou que des valeurs sont en dehors des limites fixées
+et que la navigateur doit intervenir.
+
+\subsubsection{Écran}
+Dans la version d'évaluation Nauteff P-1 n'a pas d'écran et  sort les information
+sur la ligne RS-232 pour un affichage sur l'écran de l'ordinateur de développement.
+Ça serait dommage de se priver d'un écran, il en faudra au moins un petit avec quelques caractères.
+
+\subsubsection{Voyants}
+Nauteff P-1 comporte les voyants suivant :
+\begin{itemize}
+	\item Voyants de mise sous tension;
+	\item Voyant vert indiquant l'enclenchement du pilote;
+	\item Voyant rouge lors d'un mouvement vers tribord de l'actionneur;
+	\item Voyant indiquant le fonctionnement de l'USART;
+	\item Selon les besoins de mise au point.
+\end{itemize}
+
+\subsection{Utilisateurs}
+
+\subsection{Environnement en contexte opérationnel}
+
+\subsection{Environnement de développement et de mise au point}
+
+\chapter{Spécification générales}
+\section{Description des services attendus}
+
+\section{Description des générale des fonctions}
+\section{Exigences opérationnelles}
+\subsection{Contraintes d'exploitation}
+\subsection{Modes de fonctionnement}
+Nauteff comporte un mode veille, un mode Automatique et un mode paramétrage.
+\subsection{Transition entre modes}
+\subsection{Exigences de l'environnement}
+Nauteff P-1 est conçu pour supporter une ambiance saline avec une humidité
+saturante permanente et un température de fonctionnement comprise entre   -10\degres C et +50\degres C.
+Nauteff doit aussi supporter des vibrations.
+La tension d'alimentation du Nauteff doit être comprise entre 10V et 20V, il consomme moins de 50~mA en fonctionnement, hors moteur.
+Il permet de commander un actionneur avec une charge inductive consommant jusqu'à
+12\ A en régime permanent.
+Nauteff est protégé contre les surcharges et court-circuits de l'actionneur et 
+contre les inversions de polarité de l'alimentation.
+\subsection{Capacité}
+\subsection{Performances}
+\begin{tabular}{|c|c|}
+	\hline 
+	Temps de démarrage &  < 2s \\ 
+	\hline 
+	Entrée NMEA& décodage de trames transmises à \numprint{38400} bps \\ 
+	\hline 
+	Réaction à une embardée & 1s max \\ 
+	\hline 
+	&  \\ 
+	\hline 
+	&  \\ 
+	\hline 
+\end{tabular}
+
+
+\subsection{Paramétrage}
+Le Nauteff P-1 comporte des paramètres suivants:
+\begin{itemize}
+	\item caractéristiques du moteur: courants en butée et à vide, inertie;
+	\item valeurs d'étalonnage des capteurs;
+	\item Caractéristiques du navire: longueur, masse;
+	\item vitesse de réaction;
+	\item amplitude de réaction;
+	\item compensation d'\gls{embardee};
+	\item angle de virement de bord et amplitude du mouvement de l'actionneur;
+	\item valeurs limites;
+	\item coefficients de pilote à définir;
+	\item \ldots
+\end{itemize}
+Dans la version d'évaluation ces paramètres sont dans des constantes
+("codées en dur") modifiées avec les outils de développement.
+
+\subsection{Contraintes entre le matériel et le logiciel}
+\subsection{Sûreté de fonctionnement}
+
+\subsection{Exigence organisationnelles}
+
+\subsection{Exigences de mise au point et de maintenance}
+Nauteff P-1 est un prototype monté sur carte d'essai et permet un
+accès facile à tous les signaux et des modifications rapides et aisées.
+
+\section{Exigences techniques}
+
+
+
+\section{Interface homme machine}
+Nauteff est équipé d'un clavier à 6 touches fugitives (contact NO).
+\\
+\begin{tabular}{|c|c|c|c|}
+	\hline 
+	Libellé    & couleur & fonction principale &  \\ 
+	\hline 
+	``Auto''   & noire & Mise en mode automatique &  \\ 
+	\hline 
+	``Veille'' & noire & Mise en veille &  \\ 
+	\hline 
+	``+1''     & verte & Changement de cap 1\degres~vers tribord &  \\ 
+	\hline 
+	``-1''     & rouge & Changement de cap 1\degres~vers bâbord  &  \\ 
+	\hline 
+	``+10''    & verte & Changement de cap 1\degres~vers tribord &  \\ 
+	\hline 
+	``-10''    & rouge & Changement de cap 1\degres~vers bâbord  &  \\ 
+	\hline 
+\end{tabular} 
+
+
+
+\chapter{Description des services}
+
+\section{Lecture du clavier}
+
+\begin{tabular}{|c|p{6cm} |}
+	\hline
+	 Touche & Action  \\ \hline
+	\multicolumn{2}{|c|}{En mode veille} \\ \hline
+	 Appui sur ``Auto'' & Passage en mode suivi de cap\\ \hline
+	 Appui sur Veille & Sans effet \\ \ hline
+	 Appui +1 &  Mise en marche de l'actionneur vers tribord \\ \hline
+	 Appui -1 &  Mise en marche de l'actionneur vers bâbord \\ \hline
+	 +10 & Sans effet     \\ \hline
+	 -10 &  Sans effet    \\ \hline
+	\multicolumn{2}{|c|}{En mode auto} \\ \hline
+	pression sur touche ``Auto'' & changement de mode : suivi de cap, suivi de vent et suivi GPS     \\ \hline
+	Pression sur ``Veille'' & Mise en veille     \\ \hline
+	+1 & incrément de 1\degres de la consigne      \\ \hline
+	 &      \\ \hline
+	 
+\end{tabular} 
+
+L'appui sur la touche ``Auto'' met le Nauteff en mode automatique de suivi de cap.
+La touche ``Veille''met le Nauteff en mode veille.
+En mode veille l'enfoncement des touches ``+1'' et ``-1'' commandent le déplacement du vérin vers tribord et bâbord.
+En mode automatique, un appui sur les touches ``+1'' et ``-1'' ``+10'' et ``-10''
+changent le cap de 1\degres~ ou 10\degres~ vers tribord ou bâbord.
+Le maintient enfoncé des touches ``+1'' et ``-1''
+
+\subsection{Veille}
+
+
+\subsection{Maintient du cap}
+
+\subsection{Configuration et réglages}
+
+\section{Détermination de l'orientation du navire}
+
+\section{Maintien du cap}
+\gls{cavalement}
+\chapter{Description des informations}
+\gls{embardee}
+
+\end{document}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:latexdraw="http://latexdraw.sourceforge.net/namespaces/latexdraw" version="1.1" baseProfile="full">
+    <g>
+        <g latexdraw:type="bezierCurve" id="id670291427">
+            <path d="M 200.0 340.0 C 200.0 340.0 420.0 260.0 620.0 300.0 C 820.0 340.0 920.0 400.0 920.0 400.0 C 920.0 400.0 820.0 460.0 620.0 500.0 C 420.0 540.0 200.0 460.0 200.0 460.0 C 200.0 460.0 200.0 340.0 200.0 340.0 z " stroke-width="2.0" stroke="black" fill="none" latexdraw:rotationAngle="0.0"/>
+        </g>
+        <g latexdraw:type="joinedLines" id="id1990163612">
+            <polyline points="200.0,400.0 360.0,400.0 " stroke-width="2.0" stroke="black" latexdraw:rotationAngle="0.0"/>
+        </g>
+        <g latexdraw:type="bezierCurve" id="id299125400">
+            <path d="M 220.0 400.0 C 220.0 420.0 100.0 400.0 100.0 400.0 C 100.0 400.0 220.0 380.0 220.0 400.0 z " stroke-width="2.0" stroke="black" fill="none" latexdraw:rotationAngle="0.0"/>
+        </g>
+        <g latexdraw:type="joinedLines" id="id1760419522">
+            <polyline points="330.0,400.0 330.0,430.0 " stroke-width="2.0" stroke="black" latexdraw:rotationAngle="0.0"/>
+        </g>
+        <g latexdraw:type="rectangle" id="id1634339712">
+            <rect x="321.0" y="427.0" width="14.0" height="54.0" latexdraw:borderPos="outer" stroke-width="2.0" stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="text" id="id1042946650" fill="black" latexdraw:position="bl">
+            <text x="344.0" y="448.0">Actionneur (verin)</text>
+        </g>
+        <g latexdraw:type="rectangle" id="id1726299451">
+            <rect x="529.0" y="377.0" width="174.0" height="54.0" latexdraw:borderPos="outer" stroke-width="2.0" stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="text" id="id1858010669" fill="black" latexdraw:position="bl">
+            <text x="532.0" y="402.0">Nauteff AutoPilot</text>
+        </g>
+    </g>
+    <defs/>
+    <metadata>
+        <latexdraw:metadata>
+            <latexdraw:latexIncludes/>
+            <latexdraw:displayXScale>true</latexdraw:displayXScale>
+            <latexdraw:displayYScale>true</latexdraw:displayYScale>
+            <latexdraw:unit>CM</latexdraw:unit>
+            <latexdraw:zoom>1.25</latexdraw:zoom>
+            <latexdraw:magneticGridStyle>CUSTOMISED</latexdraw:magneticGridStyle>
+            <latexdraw:gridGap>10</latexdraw:gridGap>
+            <latexdraw:magneticGrid>true</latexdraw:magneticGrid>
+            <latexdraw:version>3.3.8</latexdraw:version>
+            <latexdraw:size>
+                <latexdraw:width>1920</latexdraw:width>
+                <latexdraw:height>1044</latexdraw:height>
+            </latexdraw:size>
+            <latexdraw:position>
+                <latexdraw:x>0.0</latexdraw:x>
+                <latexdraw:y>0.0</latexdraw:y>
+            </latexdraw:position>
+        </latexdraw:metadata>
+    </metadata>
+</svg>

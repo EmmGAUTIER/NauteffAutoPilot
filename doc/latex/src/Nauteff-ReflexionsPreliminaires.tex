@@ -1,0 +1,222 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+%%\usepackage[francais]{babel}
+\usepackage[french]{babel}
+\usepackage{numprint}
+\usepackage{glossaries}
+\title{Nauteff P-1 Spécification}
+\author{Emmanuel Gautier}
+
+\input{Nauteff-Glossaire.tex}
+
+\makeglossaries
+\makeglossary
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Ce document contient des principes conduisant à la spécification du prototype Nauteff P-1.
+Il est une première étape à la rédaction de la spécification du Nauteff.
+\end{abstract}
+
+\tableofcontents
+\printglossaries
+
+\chapter{Buts du document}
+\section{Buts}
+Ce document contient les réflexions préliminaires à la spécification 
+des principes de sécurité et des algorithmes de calculs.
+du Nauteff. Il sert à la rédaction de sa spécification.
+
+\section{Guide de lecture}
+
+
+%\chapter{Documents applicables et de référence}
+%\chapter{Terminologie}
+
+\chapter{Principes de sécurité}
+\section {Perte totale d'alimentation électrique}
+La conséquence est la perte de contrôle du navire par le pilote.
+En cas de perte totale d'alimentation le Nauteff doit émettre une alarme
+sonore avec l'énergie électrique restante. Faut-il bloquer la barre ?
+Évènement grave nécessitant un action urgent du navigateur.
+
+\section {Tension de l'alimentation électrique faible}
+Cet évènement est généralement du à une décharge des batteries,
+il peut aussi être du à des mauvaises connexions ou des fils de section insuffisante.
+La conséquence immédiate une est consommation accrue de courant et une moindre efficacité
+du pilote surtout si la barre est dure, à plus long terme les conséquences peuvent être :
+une décharge des batteries, la perte de contrôle du navire par le pilote, des désordres
+sur le circuit électrique.
+Le Nauteff doit émettre une alarme pour alerter le navigateur. 
+
+\section {Tension de l'alimentation électrique trop forte}
+La conséquence peut être une destruction du pilote.
+
+Le Nauteff doit émettre une alarme pour alerter le navigateur.
+Le Nauteff supporte une surtension importante
+
+\section {Courant du moteur très élevé}
+Le courant dépasse celui du moteur bloqué.
+Ce cas est souvent du à un court-circuit.
+
+Probabilité : moyenne lors des branchements, faible ensuite.
+
+Conséquences : Perte de contrôle du navire par le pilote, perturbations sur le circuit électrique, dommages sévères au circuit électrique et risque d'incendie.
+
+Actions: Arrêt immédiat de la commande du moteur, émission d'alarme.
+
+\section {Courant du moteur très faible ou nul}
+Ce cas est souvent du à un débranchement de l'actionneur.
+
+Probabilité : moyenne.
+
+Conséquences : Perte de contrôle du navire par le pilote, perturbations sur le circuit électrique, dommages sévères au circuit électrique et risque d'incendie.
+
+Actions: Arrêt immédiat de la commande du moteur, émission d'alarme.
+
+\section {Perte d'informations d'instruments de navigation}
+
+probabilité:moyenne.
+
+Conséquence en mode veille ou suivi de cap : performance du pilote réduite
+
+Conséquence en mode suivi de vent ou de route par GPS : Perte de la fonction de suivi de vent ou de route.
+
+Action sans suivi  vent ou route GPS : information visuelle sans alarme.
+
+Action avec suivi de vent ou route GPS : passage en mode suivi de Cap avec la cap courant,
+émission d'une alarme, reprise du mode précédant dès le retour de l'information et extinction de l'alarme.
+
+
+\subsection{Écart important entre le cap ou la route et un consigne}
+Cet évènement survient en mode automatique, de nombreuses causes peuvent le provoquer.
+
+probabilité: moyenne
+
+conséquences: perte de contrôle du navire par le pilote
+
+action : alarme
+
+\subsection{Fortes variations de cap en mode automatique}
+
+conséquences: fatigue de l'équipage, du bateau, mauvaise tenue du cap ou de la route, consommation électrique du pilote plus élevée, 
+
+Action: Augmentation du gain du pilote s'il est trop faible, affichage d'informations, alarme.
+Dans le cas d'un voilier cherchant à gagner au vent, il faut parfois le laisser lofer
+lors des surventes pour limiter la gîte et si possible avoir un meilleur gain au vent.
+Des mouvements importants de la barre augmentent la consommation du pilote
+et des angles de barre importants freinent le bateau et risquent de faire décrocher
+le safran. Il faudra prévoir des paramètres pour l'algorithme du pilote.
+
+\subsection{Actionneur en butée en mode automatique}
+
+Action: Émission d'alarme, maintient du mode automatique.
+
+\subsection{Surcharge actionneur (fort courant)}
+Cet évènement est caractérisé par un courant du moteur important mais inférieur
+au courant de moteur bloqué.
+
+conséquence: consommation de courant importante, perte d'efficacité du pilote, risque de perte de contrôle du navire par le pilote.
+Action : émission d'un information au navigateur, réduction des mouvement de l'actionneur.
+
+\subsection{Mouvement de l'actionneur peu efficace}
+Si le navire n'a pas assez de vitesse\dots
+
+\subsection{Crash logiciel (plantage)}
+
+Action: mettre un chien de garde, tentative de relancer le pilote,
+si le pilote était en mode automatique, tentative de reprendre ce mode,
+émission d'une alarme même si le pilote reprend son fonctionnement précédant.
+
+Le chien de garde et un dispositif déclenche une action si un système s'arête.
+
+\subsection{Perturbation du compas}
+
+Action: compensation par courbe de déviation, comparaison avec d'autres
+informations pour détecter cet évènement.
+
+\subsection{Défauts des valeurs des capteur internes}
+Rappel: capteurs 3 axes chacun : champs magnétique, accélération(pesanteur), gyromètre.
+dérive dans le temps, décalages, perturbations électromagnétiques\dots
+
+Conséquence: mauvaise performance du pilote, perte de contre du navire.
+Action: Mettre des valeurs limites, des valeurs d'étalonnage et des fonctions de contrôle et de diagnostic dans les algorithmes, en cas de défaut sérieux : émission d'une alarme.
+
+\subsection{Données reçues, erronées}
+
+Action: introduction d'un contrôle des données dans l'algorithme.
+
+\subsection{Données échangées : flot élevé ou mauvais format}
+
+Conséquence: risque de perturbation du pilote ou de crash.
+
+Action: Programmation défensive, rejet de données mal formatées, dimensionnement
+pour accepter un débit maximal.
+
+\subsection{Orientation du navire hors limites}
+Gîte importante, assiette anormale, embardées,\dots
+
+Action: émission d'information ou d'alarme
+
+\subsection{actes de malveillance, attaque informatique}
+
+
+
+\chapter{Principes des algorithmes}
+
+\section{Actions du pilote}
+Les actions du pilote sont les suivantes:
+\begin{itemize}
+	\item Commande de la barre;
+	\item Affichage par voyants ou sur écran;
+	\item Déclenchement de son alarme sonore;
+	\item Transmission de données.
+\end{itemize}
+\section{Données}
+
+\begin{itemize}
+	\item Données d'état : mode, cap à suivre\dots;
+	\item Orientation du navire, cap et autres information des capteurs MEMS;
+	\item Vitesse surface et fond, cap et direction;
+	\item Historique récent des mouvement du navire;
+	\item Historique récent des commandes de l'actionneur;
+	\item Caractéristiques du navire, nom, taille, type,\dots;
+	\item Valeurs d'étalonnage des capteurs MEMS;
+	\item Valeurs caractéristiques du navire: valeurs saisies,
+     	déterminées par étalonnage et déterminées par apprentissage; 
+\end{itemize}
+
+
+\section{Principes de l'algorithme}
+
+Sans capteur d'angle de barre, évaluation de la position de la barre avec le courant du moteur la tension et la durée des commandes.
+
+Adaptation du gain du pilote par apprentissage et stockage de la valeur
+dans la mémoire du pilote.
+
+Choix de l'amplitude des commande de l'actionneur avec les compromis de consommation
+de maintient de cap de confort.
+
+A chaque mouvement de la barre évaluer son effet sur le cap.
+Dans le cas d'une gîte moyenne significative, si la gîte augmente, le cap suit
+la gîte et le navire cavale (augmente sa vitesse) laisser gagner au vent.
+
+Si les mouvements du navire et de l'actionneur sont important réduire avec
+l'accord du navigateur (il ne faut pas empaner) les mouvements.
+enregistrer les évolutions récentes de l'orientation du navire et tenter de
+prédire les prochains mouvements pour adapter les prochaines commandes de l'actionneur.
+Ce fonctionnement est intéressant avec une houle régulière.
+
+Prendre les dispositions pour réduire la propagation des erreurs d'arrondi
+et empêcher les calculs impossibles (division par zéro,\dots).
+
+En mode automatique après une situation d'alarme maintenir le mode automatique
+tant que possible.
+
+
+\end{document}
