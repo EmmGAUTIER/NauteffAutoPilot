@@ -28,7 +28,6 @@
 #define SYSCFG_EXTICR4      (*(vuint32_t*)(SYSCFG_BASE + 0x14))
 #define SYSCFG_CMPCR        (*(vuint32_t*)(SYSCFG_BASE + 0x20))
 #define SYSCFG_CFGR         (*(vuint32_t*)(SYSCFG_BASE + 0x2C))
-/* SYSCFG_EXTICR is the base ad. for 4 registers SYSCFG_EXTICR1..4 */
 #define SYSCFG_EXTICR       (*(vuint32_t*)(SYSCFG_BASE + 0x08))
 
 #define EXTI_BASE           (0x40013C00)
@@ -43,8 +42,8 @@ void EXTI_Select_Edges (unsigned ln, _Bool re, _Bool fe);
 void EXTI_Select_srce_input (unsigned ln, unsigned nb);
 void EXTI_Intr_enable_line (unsigned ln, bool en);
 void EXTI_Event_enable_line (unsigned ln, bool en);
-INLINE void EXTI_clr_pending_bit (unsigned bn) {EXTI_PR |= 0x1 << bn;}
-INLINE bool EXTI_get_pending_bit (unsigned bn) {return EXTI_PR | (0x1 << bn);}
+_inline void EXTI_clr_pending_bit (unsigned bn) {EXTI_PR |= 0x1 << bn;}
+_inline bool EXTI_get_pending_bit (unsigned bn) {return EXTI_PR | (0x1 << bn);}
 
 /*
 __attribute__ ((interrupt("irq"))) void EXTI0_Handler (void);
@@ -55,7 +54,6 @@ __attribute__ ((interrupt("irq"))) void EXTI4_Handler (void);
 __attribute__ ((interrupt("irq"))) void EXTI5_9_Handler (void);
 __attribute__ ((interrupt("irq"))) void EXTI10_15_Handler (void);
 */
-
 
 void EXTI0_Handler (void);
 void EXTI1_Handler (void);

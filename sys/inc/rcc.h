@@ -20,6 +20,7 @@
 #ifndef RCC_H
 #define RCC_H
 
+
 #define RCC_BASE 0x40023800
 #define RCC_CR          (*(vuint32_t*)(RCC_BASE + 0x00))
 #define RCC_PLLCFGR     (*(vuint32_t*)(RCC_BASE + 0x04))
@@ -38,14 +39,18 @@
 #define CKGATENR        (*(vuint32_t*)(RCC_BASE + 0x90))
 #define RCC_DCKCFGR2    (*(vuint32_t*)(RCC_BASE + 0x94))
 
-#if 0
-typedef struct {
-	uint16_t SYSCLK_Freq_Mhz;
-	uint16_t AHB_2pwr_Prescaler;
-	uint16_t APB1_2pwr_Prescaler;
-	uint16_t APB2_2pwr_Prescaler;
+
+
+
+
+
+typedef struct
+{
+    unsigned SYSCLK_Freq_Mhz;
+    unsigned AHB_2pwr_Prescaler;
+    unsigned APB1_2pwr_Prescaler;
+    unsigned APB2_2pwr_Prescaler;
 } RCC_config_t;
-#endif
 
 #define AHB_PRESCALER_NO_DEVIDE       0x0
 #define AHB_PRESCALER_DEVIDED_BY_2    0x8
@@ -64,356 +69,228 @@ typedef struct {
 #define APBX_PRESCALER_DEVIDED_BY_8   0x6
 #define APBX_PRESCALER_DEVIDED_BY_16  0x7
 
-#define  SYSCLK_Freq_Hz     90000000
-#define  AHB_Freq_Hz        90000000
-#define  APB1_Freq_Hz       45000000
-#define  APB2_Freq_Hz       45000000
-#define  APB1_Timer_Freq_Hz 90000000
-#define  APB2_Timer_Freq_Hz 90000000
+int RCC_init_for_nauteff (RCC_config_t *cfg);
 
-void RCC_init_for_nauteff(void);
-
-INLINE uint32_t RCC_get_APB1_Freq_Hz(void) {
-	return APB1_Freq_Hz;
-}
-
-INLINE uint32_t RCC_get_APB2_Freq_Hz(void) {
-	return APB2_Freq_Hz;
-}
-
-INLINE uint32_t RCC_get_SYSCLK_Freq_Hz(void) {
-	return SYSCLK_Freq_Hz;
-}
-
-/**
- * @ brief returns the frequency in Hz of clock for APBI timers
- * @return clock frequency for timers on APB1
- */
-INLINE uint32_t RCC_get_APB1_Timer_Freq_Hz(void) {
-	return APB1_Timer_Freq_Hz;
-}
-
-INLINE uint32_t RCC_get_APB2_Timer_Freq_Hz(void) {
-	return APB2_Timer_Freq_Hz;
-}
+uint32_t RCC_get_APB1_Freq_Hz ();
+uint32_t RCC_get_APB2_Freq_Hz ();
+uint32_t RCC_get_SYSCLK_Freq_Hz ();
+uint32_t RCC_get_APB1_Timer_Freq_Hz ();
+uint32_t RCC_get_APB2_Timer_Freq_Hz ();
 
 __attribute__((always_inline))
-inline void rcc_start_GPIOA(void) {
-	RCC_AHB1ENR |= (0x1 << 0);
+inline void rcc_start_GPIOA (void)
+{
+    RCC_AHB1ENR |= (0x1 << 0);
 }
 __attribute__((always_inline))
-inline void rcc_start_GPIOB(void) {
-	RCC_AHB1ENR |= (0x1 << 1);
+inline void rcc_start_GPIOB (void)
+{
+    RCC_AHB1ENR |= (0x1 << 1);
 }
 __attribute__((always_inline))
-inline void rcc_start_GPIOC(void) {
-	RCC_AHB1ENR |= (0x1 << 2);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_GPIOD(void) {
-	RCC_AHB1ENR |= (0x1 << 3);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_GPIOE(void) {
-	RCC_AHB1ENR |= (0x1 << 4);
+inline void rcc_start_GPIOC (void)
+{
+    RCC_AHB1ENR |= (0x1 << 2);
 }
 __attribute__((always_inline))
-inline void rcc_start_GPIOF(void) {
-	RCC_AHB1ENR |= (0x1 << 5);
+inline void rcc_start_GPIOD (void)
+{
+    RCC_AHB1ENR |= (0x1 << 3);
+}
+inline void rcc_start_GPIOE (void)
+{
+    RCC_AHB1ENR |= (0x1 << 4);
+}
+inline void rcc_start_GPIOF (void)
+{
+    RCC_AHB1ENR |= (0x1 << 5);
+}
+inline void rcc_start_GPIOG (void)
+{
+    RCC_AHB1ENR |= (0x1 << 6);
+}
+inline void rcc_start_GPIOH (void)
+{
+    RCC_AHB1ENR |= (0x1 << 7);
+}
+inline void rcc_start_DMA1 (void)
+{
+    RCC_AHB1ENR |= (0x1 << 21);
+}
+inline void rcc_start_DMA2 (void)
+{
+    RCC_AHB1ENR |= (0x1 << 22);
 }
 
-__attribute__((always_inline))
-inline void rcc_start_GPIOG(void) {
-	RCC_AHB1ENR |= (0x1 << 6);
+inline void rcc_start_TIM2 (void)
+{
+    RCC_APB1ENR |= (0x1 << 0);
+}
+inline void rcc_start_TIM3 (void)
+{
+    RCC_APB1ENR |= (0x1 << 1);
+}
+inline void rcc_start_TIM4 (void)
+{
+    RCC_APB1ENR |= (0x1 << 2);
+}
+inline void rcc_start_TIM5 (void)
+{
+    RCC_APB1ENR |= (0x1 << 3);
+}
+inline void rcc_start_TIM6 (void)
+{
+    RCC_APB1ENR |= (0x1 << 4);
+}
+inline void rcc_start_TIM7 (void)
+{
+    RCC_APB1ENR |= (0x1 << 5);
+}
+inline void rcc_start_TIM12 (void)
+{
+    RCC_APB1ENR |= (0x1 << 6);
+}
+inline void rcc_start_TIM13 (void)
+{
+    RCC_APB1ENR |= (0x1 << 7);
+}
+inline void rcc_start_TIM14 (void)
+{
+    RCC_APB1ENR |= (0x1 << 8);
+}
+inline void rcc_start_WWDG (void)
+{
+    RCC_APB1ENR |= (0x1 << 11);
+}
+inline void rcc_start_SPI2 (void)
+{
+    RCC_APB1ENR |= (0x1 << 14);
+}
+inline void rcc_start_SPI3 (void)
+{
+    RCC_APB1ENR |= (0x1 << 15);
+}
+inline void rcc_start_SPDIFRX (void)
+{
+    RCC_APB1ENR |= (0x1 << 16);
+}
+inline void rcc_start_USART2 (void)
+{
+    RCC_APB1ENR |= (0x1 << 17);
+}
+inline void rcc_start_USART3 (void)
+{
+    RCC_APB1ENR |= (0x1 << 18);
+}
+inline void rcc_start_USART4 (void)
+{
+    RCC_APB1ENR |= (0x1 << 19);
+}
+inline void rcc_start_USART5 (void)
+{
+    RCC_APB1ENR |= (0x1 << 20);
+}
+inline void rcc_start_I2C1 (void)
+{
+    RCC_APB1ENR |= (0x1 << 21);
+}
+inline void rcc_start_I2C2 (void)
+{
+    RCC_APB1ENR |= (0x1 << 22);
+}
+inline void rcc_start_I2C3 (void)
+{
+    RCC_APB1ENR |= (0x1 << 23);
+}
+inline void rcc_start_FMPI2C1 (void)
+{
+    RCC_APB1ENR |= (0x1 << 24);
+}
+inline void rcc_start_CAN1 (void)
+{
+    RCC_APB1ENR |= (0x1 << 25);
+}
+inline void rcc_start_CAN2 (void)
+{
+    RCC_APB1ENR |= (0x1 << 26);
+}
+inline void rcc_start_CEC (void)
+{
+    RCC_APB1ENR |= (0x1 << 27);
+}
+inline void rcc_start_PWR (void)
+{
+    RCC_APB1ENR |= (0x1 << 28);
+}
+inline void rcc_start_DAC (void)
+{
+    RCC_APB1ENR |= (0x1 << 29);
 }
 
-__attribute__((always_inline))
-inline void rcc_start_GPIOH(void) {
-	RCC_AHB1ENR |= (0x1 << 7);
+inline void rcc_start_TIM1 (void)
+{
+    RCC_APB2ENR |= (0x1 << 0);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_DMA1(void) {
-	RCC_AHB1ENR |= (0x1 << 21);
+inline void rcc_start_TIM8 (void)
+{
+    RCC_APB2ENR |= (0x1 << 1);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_DMA2(void) {
-	RCC_AHB1ENR |= (0x1 << 22);
+inline void rcc_start_USART1 (void)
+{
+    RCC_APB2ENR |= (0x1 << 4);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM2(void) {
-	RCC_APB1ENR |= (0x1 << 0);
+inline void rcc_start_USART6 (void)
+{
+    RCC_APB2ENR |= (0x1 << 5);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM3(void) {
-	RCC_APB1ENR |= (0x1 << 1);
+inline void rcc_start_ADC1 (void)
+{
+    RCC_APB2ENR |= (0x1 << 8);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM4(void) {
-	RCC_APB1ENR |= (0x1 << 2);
+inline void rcc_start_ADC2 (void)
+{
+    RCC_APB2ENR |= (0x1 << 9);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM5(void) {
-	RCC_APB1ENR |= (0x1 << 3);
+inline void rcc_start_ADC3 (void)
+{
+    RCC_APB2ENR |= (0x1 << 10);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM6(void) {
-	RCC_APB1ENR |= (0x1 << 4);
+inline void rcc_start_SDIO (void)
+{
+    RCC_APB2ENR |= (0x1 << 11);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM7(void) {
-	RCC_APB1ENR |= (0x1 << 5);
+inline void rcc_start_SPI1 (void)
+{
+    RCC_APB2ENR |= (0x1 << 12);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM12(void) {
-	RCC_APB1ENR |= (0x1 << 6);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_TIM13(void) {
-	RCC_APB1ENR |= (0x1 << 7);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_TIM14(void) {
-	RCC_APB1ENR |= (0x1 << 8);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_WWDG(void) {
-	RCC_APB1ENR |= (0x1 << 11);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_SPI2(void) {
-	RCC_APB1ENR |= (0x1 << 14);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_SPI3(void) {
-	RCC_APB1ENR |= (0x1 << 15);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_SPDIFRX(void) {
-	RCC_APB1ENR |= (0x1 << 16);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_USART2(void) {
-	RCC_APB1ENR |= (0x1 << 17);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_USART3(void) {
-	RCC_APB1ENR |= (0x1 << 18);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_USART4(void) {
-	RCC_APB1ENR |= (0x1 << 19);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_USART5(void) {
-	RCC_APB1ENR |= (0x1 << 20);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_I2C1(void) {
-	RCC_APB1ENR |= (0x1 << 21);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_I2C2(void) {
-	RCC_APB1ENR |= (0x1 << 22);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_I2C3(void) {
-	RCC_APB1ENR |= (0x1 << 23);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_FMPI2C1(void) {
-	RCC_APB1ENR |= (0x1 << 24);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_CAN1(void) {
-	RCC_APB1ENR |= (0x1 << 25);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_CAN2(void) {
-	RCC_APB1ENR |= (0x1 << 26);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_CEC(void) {
-	RCC_APB1ENR |= (0x1 << 27);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_PWR(void) {
-	RCC_APB1ENR |= (0x1 << 28);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_DAC(void) {
-	RCC_APB1ENR |= (0x1 << 29);
-}
-
-#if 0
-#define SYS_USE_DMA1         1
-#define SYS_USE_DMA2         1
-
-#define SYS_USE_ADC1         1
-#define SYS_USE_ADC2         1
-#define SYS_USE_ADC3         0
-
-#define SYS_USE_USART1       1
-#define SYS_USE_USART2       1
-#define SYS_USE_USART3       0
-#define SYS_USE_USART4       0
-#define SYS_USE_USART5       0
-#define SYS_USE_USART6       0
-
-#define SYS_USE_I2C1         1
-#define SYS_USE_I2C2         0
-#define SYS_USE_I2C3         1
-
-#endif
-
-__attribute__((always_inline))
-inline void rcc_start_TIM1(void) {
-	RCC_APB2ENR |= (0x1 << 0);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_TIM8(void) {
-	RCC_APB2ENR |= (0x1 << 1);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_USART1(void) {
-	RCC_APB2ENR |= (0x1 << 4);
-}
-
-#if 0
-#define SYS_USE_DMA1         1
-#define SYS_USE_DMA2         1
-
-#define SYS_USE_ADC1         1
-#define SYS_USE_ADC2         1
-#define SYS_USE_ADC3         0
-
-#define SYS_USE_USART1       1
-#define SYS_USE_USART2       1
-#define SYS_USE_USART3       0
-#define SYS_USE_USART4       0
-#define SYS_USE_USART5       0
-#define SYS_USE_USART6       0
-
-#define SYS_USE_I2C1         1
-#define SYS_USE_I2C2         0
-#define SYS_USE_I2C3         1
-
-#endif
-
-__attribute__((always_inline))
-inline void rcc_start_USART6(void) {
-	RCC_APB2ENR |= (0x1 << 5);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_ADC1(void) {
-	RCC_APB2ENR |= (0x1 << 8);
-}
-
-#if 0
-#define SYS_USE_DMA1         1
-#define SYS_USE_DMA2         1
-
-#define SYS_USE_ADC1         1
-#define SYS_USE_ADC2         1
-#define SYS_USE_ADC3         0
-
-#define SYS_USE_USART1       1
-#define SYS_USE_USART2       1
-#define SYS_USE_USART3       0
-#define SYS_USE_USART4       0
-#define SYS_USE_USART5       0
-#define SYS_USE_USART6       0
-
-#define SYS_USE_I2C1         1
-#define SYS_USE_I2C2         0
-#define SYS_USE_I2C3         1
-
-#endif
-
-__attribute__((always_inline))
-inline void rcc_start_ADC2(void) {
-	RCC_APB2ENR |= (0x1 << 9);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_ADC3(void) {
-	RCC_APB2ENR |= (0x1 << 10);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_SDIO(void) {
-	RCC_APB2ENR |= (0x1 << 11);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_SPI1(void) {
-	RCC_APB2ENR |= (0x1 << 12);
-}
-
-__attribute__((always_inline))
-inline void rcc_start_SPI4(void) {
-	RCC_APB2ENR |= (0x1 << 13);
+inline void rcc_start_SPI4 (void)
+{
+    RCC_APB2ENR |= (0x1 << 13);
 }
 __attribute__((always_inline))
-inline void rcc_start_SYSCFG(void) {
-	RCC_APB2ENR |= (0x1 << 14);
+inline void rcc_start_SYSCFG (void)
+{
+    RCC_APB2ENR |= (0x1 << 14);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM9(void) {
-	RCC_APB2ENR |= (0x1 << 16);
+inline void rcc_start_TIM9 (void)
+{
+    RCC_APB2ENR |= (0x1 << 16);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM10(void) {
-	RCC_APB2ENR |= (0x1 << 17);
+inline void rcc_start_TIM10 (void)
+{
+    RCC_APB2ENR |= (0x1 << 17);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_TIM11(void) {
-	RCC_APB2ENR |= (0x1 << 18);
+inline void rcc_start_TIM11 (void)
+{
+    RCC_APB2ENR |= (0x1 << 18);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_SAI1(void) {
-	RCC_APB2ENR |= (0x1 << 22);
+inline void rcc_start_SAI1 (void)
+{
+    RCC_APB2ENR |= (0x1 << 22);
 }
-
-__attribute__((always_inline))
-inline void rcc_start_SAI2(void) {
-	RCC_APB2ENR |= (0x1 << 23);
+inline void rcc_start_SAI2 (void)
+{
+    RCC_APB2ENR |= (0x1 << 23);
 }
 
 #if 0

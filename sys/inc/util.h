@@ -27,7 +27,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define INLINE __attribute__((always_inline)) inline
+#define _inline __attribute__((always_inline)) inline
 #define bool _Bool
 
 typedef volatile uint8_t vuint8_t;
@@ -38,15 +38,9 @@ typedef volatile int8_t vint8_t;
 typedef volatile int16_t vint16_t;
 typedef volatile int32_t vint32_t;
 
-__attribute__((always_inline))
 inline void setbits   (vuint32_t * i, const vuint32_t m) { *i |= m; }
-__attribute__((always_inline))
 inline void clearbits (vuint32_t * i, const vuint32_t m) { *i &= ~m; }
-__attribute__((always_inline))
-inline void setbit     (vuint32_t *i, const int bn)    { *i |= (0x01<<bn); }
-__attribute__((always_inline))
-inline void clearbit   (vuint32_t *i, const int bn)    { *i &= ~(0x1<<bn); }
-
-//#define MAKE_LIST (...) __VA_ARGS__
+inline void setbit     (vuint32_t * i, const int bn)    { *i |= (0x01<<bn); }
+inline void clearbit   (vuint32_t * i, const int bn)    { *i &= ~(0x1<<bn); }
 
 #endif /* UTIL_H_ */

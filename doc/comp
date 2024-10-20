@@ -1,6 +1,0 @@
-latex Nauteff-Conception_Logiciel
-makeglossaries Nauteff-Conception_Logiciel
-biber          Nauteff-Conception_Logiciel
-latex Nauteff-Conception_Logiciel
-pdflatex Nauteff-Conception_Logiciel
-

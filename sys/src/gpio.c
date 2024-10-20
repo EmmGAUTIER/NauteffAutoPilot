@@ -42,7 +42,7 @@ void GPIO_init_pin_output(GPIO_TypeDef *port, unsigned pin, unsigned ppod,
 	nassert (pin<16U);
 	nassert (ppod<2U);
 	nassert (speed<2U);
-	nassert (pupd<3U);
+	nassert (pupd<2U);
 
 	port->MODER &= ~(0x03 << (2 * pin)); /* reset MODER for pin */
 	port->MODER |= (GPIO_MODER_OUTPUT << (2 * pin)); /* set MODER for pin */
@@ -64,9 +64,9 @@ void GPIO_init_pin_altfct(GPIO_TypeDef *port, unsigned pin, unsigned ppod,
 
 	nassert (pin<16);
 	nassert (ppod<2);
-	nassert (speed<4);
-	nassert (pupd<3U);
-	nassert (af<16);
+	nassert (speed<2);
+	nassert (pupd<2);
+	nassert (af<8);
 
 	port->MODER &= ~(0x03 << (2 * pin)); /* reset MODER for pin */
 	port->MODER |= (GPIO_MODER_ALTFCT << (2 * pin)); /* set MODER for pin */
@@ -80,15 +80,15 @@ void GPIO_init_pin_altfct(GPIO_TypeDef *port, unsigned pin, unsigned ppod,
 	port->PUPDR &= ~(0x03 << (2 * pin)); /* pull up down reset */
 	port->PUPDR |= pupd << (2 * pin);
 
-	if (pin < 8)
+	if (af < 8)
 	{
 		port->AFRL &= ~(0x0F << (4 * pin));
 		port->AFRL |= (af << (4 * pin));
 	}
 	else
 	{
-		port->AFRH &= ~(0x0F << (4 * (pin-8)));
-		port->AFRH |= (af << (4 * (pin-8)));
+		port->AFRH &= ~(0x0F << (4 * pin));
+		port->AFRH |= (af << (4 * pin));
 	}
 }
 
@@ -98,7 +98,7 @@ void GPIO_init_pin_adc(GPIO_TypeDef *port, unsigned pin)
 
 	/* Set MODER  */
 	port->MODER &= ~(0x03 << (2 * pin)); /* reset MODER for pin */
-	port->MODER |= (GPIO_MODER_ANALOG << (2 * pin)); /* set MODER for pin */
+	port->MODER |= (GPIO_MODER_INPUT << (2 * pin)); /* set MODER for pin */
 
 	port->OTYPER &= ~(0x01 << (1 * pin)); /* reset OTYPER for pin */
 

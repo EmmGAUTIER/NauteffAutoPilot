@@ -17,6 +17,10 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ *
+ */
+
 #ifndef STM32F446_H_
 #define STM32F446_H_
 
@@ -25,14 +29,15 @@
 
 /* Memory map */
 
-#define MEM_FLASH_BASE      0x08000000
-#define MEM_SRAM_BASE       0x20000000
+#define FLASH_BASE      0x08000000
+#define SRAM_BASE       0x20000000
 #define PERIPH_BASE     0x40000000
 #define APB2_BASE       (PERIPH_BASE + 0x10000)
 #define APB1_BASE       (PERIPH_BASE + 0x00000)
 #define AHB1_BASE       (PERIPH_BASE + 0x20000)
 #define AHB2_BASE       (PERIPH_BASE + 0x10000000)
 #define AHB3_BASE       (0x60000000)
+#define _FLASH_ACR      (*(vuint32_t)0x40022000)
 
 #define SYSCFG_BASE (0x40013800)
 

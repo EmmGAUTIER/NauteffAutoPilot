@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['xblocksize_0',['xBlockSize',['../a00079.html#ad5dcf5df03d8be6186c567be9e2c657b',1,'A_BLOCK_LINK']]],
+  ['xeventlistitem_1',['xEventListItem',['../a00103.html#a1a1612b6081a13683808284d93a9b28f',1,'tskTaskControlBlock']]],
+  ['xhead_2',['xHead',['../a00099.html#a75aafb9fdee8f0666837302bd9b12341',1,'StreamBufferDef_t']]],
+  ['xlength_3',['xLength',['../a00099.html#a6eedf41c877edd42b3b460780d1b6555',1,'StreamBufferDef_t']]],
+  ['xmutexholder_4',['xMutexHolder',['../a00087.html#ab1ed54c7b39dc45b3c310fae7ad08693',1,'SemaphoreData']]],
+  ['xqueue_5',['xQueue',['../a00091.html#aea4a2daf33054ff6b535f158bd4007f0',1,'QueueDefinition']]],
+  ['xsemaphore_6',['xSemaphore',['../a00091.html#adb2c0818274974553c619ff953b6f477',1,'QueueDefinition']]],
+  ['xstatelistitem_7',['xStateListItem',['../a00103.html#a16e0d20425d53ac78537e1fdb8834cf6',1,'tskTaskControlBlock']]],
+  ['xtail_8',['xTail',['../a00099.html#a937e441ed6c946a099d52b5955d7302c',1,'StreamBufferDef_t']]],
+  ['xtaskswaitingforbits_9',['xTasksWaitingForBits',['../a00075.html#a3dd347560456bfe452415efb52760dc3',1,'EventGroupDef_t']]],
+  ['xtaskswaitingtoreceive_10',['xTasksWaitingToReceive',['../a00091.html#af6d61526f77beee659cd604a0c473359',1,'QueueDefinition']]],
+  ['xtaskswaitingtosend_11',['xTasksWaitingToSend',['../a00091.html#aaab135c4345cb0393d6ff3cd5164c7b2',1,'QueueDefinition']]],
+  ['xtaskwaitingtoreceive_12',['xTaskWaitingToReceive',['../a00099.html#a8377ae8625121efa22d66e678add4057',1,'StreamBufferDef_t']]],
+  ['xtaskwaitingtosend_13',['xTaskWaitingToSend',['../a00099.html#a85b1cf05c0222f8d67a64f7d01722e52',1,'StreamBufferDef_t']]],
+  ['xtimer_14',['xTimer',['../a00011.html#a3e934bb5849bde559bb0310c8814e5fe',1,'main.c']]],
+  ['xtriggerlevelbytes_15',['xTriggerLevelBytes',['../a00099.html#a4a7ee9b374cc0b358d049811def8d595',1,'StreamBufferDef_t']]]
+];

@@ -18,99 +18,123 @@
  */
 
 #include "stm32F446.h"
-#include "flash.h"
 #include "rcc.h"
 
-void RCC_init_for_nauteff(void) {
+/* These variables store some frequencies used by peripherals
+ * they are accessed by RCC_get_XXXX_Freq_Hz() functions.
+ */
+static uint32_t SYSCLK_Freq_Hz = 0;
+static uint32_t AHB_Freq_Hz = 0;
+static uint32_t APB1_Freq_Hz = 0;
+static uint32_t APB2_Freq_Hz = 0;
+static uint32_t APB1_Timer_Freq_Hz = 0;
+static uint32_t APB2_Timer_Freq_Hz = 0;
 
-	/* Flash cannot be read when HCLK is over 30Mhz with 3.3V
-	 * See sections 3.4 and 3.8.1 Embedded flash memory interface
-	 * In FLASH_ACR set :
-	 * Latency 2 CPU cycles, bits 3..0, enable Prefetch and instruction cache
-	 * 2 CPU cycles latency allows 90 MHz at 3.3V.
-	 * PRFTEN  : Prefetch enable bit 8
-	 * ICEN    : Instruction cache enable, bit 9
-	 * LATENCY : 2 in bits 0..3
+int RCC_init_for_nauteff(RCC_config_t *cfg) {
+
+	/*----- RCC_PLLCFGR register -----
+	 * Input : HSE (cristal) at 16 Mhz, division factor M=4
+	 * so input clock for VCO is 2 Mhz as recommended by doc.
+	 * VCO. multiplication factor is the requested freq. in MHz
+	 * so its output runs at twice the requested freq. of SYSCLK
+	 * it is divided by 2
+	 *  PLLR   division factor 2, value 0x2 in bits 28 to 30
+	 *  PLLQ   division factor 2, value 0x2 in bits 24 à 27
+	 *         these clocks are not used for Nauteff project
+	 *         0 and 1 are wrong values according to documentation
+	 *  PLLSRC High speed external (HSE, quartz), value 0x1 in bit 22
+	 *  PLLP   division factor 2, value  0x2 in bits 16..17
+	 *  PLLN   mult. factor of VCO in bits 6..14
+	 *  PLLM   division factor 4, value 100b in bits 0..5
 	 */
 
-	FLASH_ACR = (0x1 << 8) | (0x1 << 9) | (5U << 0);
+	RCC_PLLCFGR = (0x02 << 28) | (0x02 << 24) | (0x01 << 22) | (0x2 << 16)
+			| (cfg->SYSCLK_Freq_Mhz << 6) | (0x4 << 0);
 
-	/* Set HSEON High Speed External ON, bit 16 in RCC_CR */
-	RCC_CR |= 0x01 << 16 | 0x01 << 18;
+	/*----- RCC_CFGR -----
+	 * MCO & RTCPRE configurations if used later APB1,2 and AHB prescalers and
+	 * system clock switch.
+	 * PPRE2  APB2 prescaler value from macro APBX_PRESCALER_X in bits 13..15
+	 * PPRE1  APB1 prescaler value from macro APBX_PRESCALER_X in bits 10..12
+	 * HPRE   AHB prescaler value from macro AHB_PRESCALER__X in bits 4..7
+	 * SW     system clock switch HSE, value 0x1 in bits 0..1
+	 */
+
+	RCC_CFGR = (cfg->APB2_2pwr_Prescaler << 13)
+			| (cfg->APB1_2pwr_Prescaler << 10) | (cfg->AHB_2pwr_Prescaler << 4);
 
 	/* HSEBYP High Speed External BYPass on since we use external clock */
 	/* bit 18 in RCC_CR */
 	RCC_CR |= 0x01 << 18;
 
-	int i = 0;
+	/* then set HSEON High Speed External ON, bit 16 in RCC_CR */
+	RCC_CR |= 0x01 << 16;
 
 	/* Wait for HSE ready by testing bit 17, HSERDY, in RCC_CR */
 	while ((RCC_CR & (0x01 << 17)) == 0x00) {
-		i++;
+		;
 	}
-
-	/* @formatter:off */
-	/*----- RCC_PLL CFGR register -----
-	 * Input : HSE (cristal) at 8 Mhz (PLLSRC set to 1 in RCC_PLLCFGR).
-	 * Main PLL : Input recomended freq. of VCO is 2MHz (cf RM0390 6.3.2)
-	 * so division factor at entry of PLL is 4 (PLLM)
-	 * Output frequency of VCO has to be between 100 and 432 MHz
-	 * With a multiplication factor of 90 VCO output frequency is 180 MHz
-	 * so PLLN[8:0] is 90
-	 * PLLP division factor is 2 so PLLCLK is 90MHz
-	 *
-	 *  PLLR   : 7U   in bits 28..30
-	 *  PLLQ   : 15U  in bits 24..27
-	 *  PLLSRC : 1    in bit 22
-	 *  PLLP   : 0    in bits 16..17 (00b for dividing by 2)
-	 *  PLLN   : 90   in bits 6..14
-	 *  PLLM   : 4    in bits 0..5
-	 */
-
-	RCC_PLLCFGR = (7    << 28) |
-			      (15   << 24) |
-				  (0x0  << 22) |
-				  (0x1  << 16) |
-				  (90   <<  6) |
-				  (4    <<  0) ;
-
-	/*----- RCC_CFGR -----
-	 * MCO2    MCO2 uses PLLCLK (11b) and uses a division factor of 5
-	 * AHB not divided : 90MHz(HPRE)
-	 * APB1(PPRE1) & APB2(PPRE2) divided by 2 45MHz
-	 * System clock switch selects PLLP aka PLLCLK
-	 * MCO2PRE 0x3, division by 5
-	 * MCO1 and RTC unused and left
-	 * MCO2    : 11b   in bits  30..31
-	 * MCO2PRE : 111b  in bits  27..29
-	 * PPRE2   : 100b  in bits  13..15
-	 * PPRE1   : 100b  in bits  10..12
-	 * HPRE    : 0000b in bits  4..7
-	 * SW      : 10b   in bits  0..1
-	 */
-
-	RCC_CFGR = (0x0 << 30) | // SYSCLK selected
-               (0x7 << 27) |
-               (0x4 << 13) |
-               (0x4 << 10) |
-               (0x0 <<  4) |
-			   (0x2 <<  0) ;
 
 	/* Start main PLL by setting PLLON bit 24 in RCC_CR */
 	RCC_CR |= (0x01 << 24);
 
 	/* Wait for main PLL to be ready by testing bit 25 PLLRDY in RCC_CR*/
-	int j = 0; // for debugging purpose, to be removed later
 	while ((RCC_CR & (0x01 << 25)) == 0x00) {
-		j++;
+		;
 	}
 
-	/* Select PLLCLK aka PLL_P for SYSCLK */
-	RCC_CFGR &= ~(0x2 << 0);
+	/* Select PLL_P for SYSCLK */
 	RCC_CFGR |= (0x2 << 0);
 
-	/* @formatter:on */
+	if (cfg->AHB_2pwr_Prescaler == 0) {
+		AHB_Freq_Hz = cfg->SYSCLK_Freq_Mhz * 1000000;
+	} else {
+		AHB_Freq_Hz = cfg->SYSCLK_Freq_Mhz * 1000000
+				/ (2 << (cfg->AHB_2pwr_Prescaler & 0x3));
+	}
 
-    return;
+	if (cfg->APB1_2pwr_Prescaler == 0) {
+		APB1_Freq_Hz = AHB_Freq_Hz;
+	} else {
+		APB1_Freq_Hz = AHB_Freq_Hz / (2 << (cfg->APB1_2pwr_Prescaler & 0x2));
+	}
+
+	if (cfg->APB2_2pwr_Prescaler == 0) {
+		APB2_Freq_Hz = AHB_Freq_Hz;
+	} else {
+		APB2_Freq_Hz = AHB_Freq_Hz / (2 << (cfg->APB2_2pwr_Prescaler & 0x2));
+	}
+
+	APB1_Timer_Freq_Hz =
+			(cfg->APB1_2pwr_Prescaler == 0) ? APB1_Freq_Hz : APB1_Freq_Hz * 2;
+
+	APB2_Timer_Freq_Hz =
+			(cfg->APB2_2pwr_Prescaler == 0) ? APB2_Freq_Hz : APB2_Freq_Hz * 2;
+
+	return 0;
+}
+
+uint32_t RCC_get_APB1_Freq_Hz() {
+	return APB1_Freq_Hz;
+}
+
+uint32_t RCC_get_APB2_Freq_Hz() {
+	return APB2_Freq_Hz;
+}
+
+uint32_t RCC_get_SYSCLK_Freq_Hz() {
+	return SYSCLK_Freq_Hz;
+}
+
+/**
+ * @ brief returns the frequency in Hz of clock for APBI timers
+ * @return clock frequency for timers on APB1
+ */
+uint32_t RCC_get_APB1_Timer_Freq_Hz() {
+	return APB1_Timer_Freq_Hz;
+}
+
+uint32_t RCC_get_APB2_Timer_Freq_Hz() {
+	return APB2_Timer_Freq_Hz;
 }
 

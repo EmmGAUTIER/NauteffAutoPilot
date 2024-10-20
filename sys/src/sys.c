@@ -20,48 +20,58 @@
 /*
  * \author Emmanuel Gautier
  * \brief Initializing functions
- * \version  first
- * \date  February, 23 2022
- * \param  none
- * \return  none
+ * \version first
+ * \date February, 23 2022
+ * \param none
+ * \return none
  */
-
-#include "FreeRTOSConfig.h"
-#include "FreeRTOS.h"
-#include "stream_buffer.h"
-#include "event_groups.h"
-#include "semphr.h"
 #include <stdbool.h>
 #include "stm32F446.h"
-#include "nassert.h"
 #include "gpio.h"
+#include "FreeRTOSConfig.h"
+#include "FreeRTOS.h"
 #include "sys.h"
-#include "nvic.h"
-#include "dma.h"
 #include "rcc.h"
 #include "gpio.h"
 #include "usart.h"
 #include "i2c.h"
-#include "adc.h"
 #include "exti.h"
-#include "nvic.h"
 
 void main(void);
 void xPortPendSVHandler(void) __attribute__ (( naked ));
 void xPortSysTickHandler(void);
 void vPortSVCHandler(void) __attribute__ (( naked ));
 
-void start(void);
+void sys_init() {
+	rcc_start_SYSCFG();
+	sys_init_clocks();
+	sys_init_Data();
+	sys_init_FPU();
+	sys_init_GPIOs();
+	sys_init_EXTI();
+	sys_init_I2C();
 
-void start(void) {
+#if 0
+    sys_init_DMA ();
+    sys_init_USART1 ();
+    sys_init_I2C1 ();
+    sys_init_ADC ();
+#endif
+}
 
+void sys_init_clocks(void) {
+	RCC_config_t rcc_config = { 40, AHB_PRESCALER_NO_DEVIDE,
+	APBX_PRESCALER_DEVIDED_BY_2,
+	APBX_PRESCALER_DEVIDED_BY_4 };
+
+	RCC_init_for_nauteff(&rcc_config);
+
+}
+
+void sys_init_Data(void) {
 	unsigned *src;
 	unsigned *dst;
 
-	/*----- Data initialization -----*/
-	/* Copy initialized data from flash and zero bss */
-	/* Values of initialized var are stored in flash and have to be copied in RAM */
-	/* bss have to be zeros for compliance with standards : C, MISRA-C */
 	/* copy the data segment from FLASH to RAM */
 	/* Copy is made with 32 bit words */
 	/* data areas (FLASH and RAM) are 4-byte aligned */
@@ -69,72 +79,53 @@ void start(void) {
 	/* &_sdata is the first address of initialized data in RAM */
 	/* &_edata is the address of the end of initialized data in RAM*/
 	/* see linker script (.ld file) */
-#if 0
 	src = &_sidata;
 	dst = &_sdata;
 	while (dst < &_edata)
-		*dst++ = *src++;
-#else
-    src = &_la_data;
-	dst = &_sdata;
-	while (dst < &_edata)
-		*dst++ = *src++;
-#endif
+		*(dst++) = *(src++);
 
 	/* zero the bss segment */
 	dst = &_sbss;
 	while (dst < &_ebss)
 		*(dst++) = 0;
+	;
+}
 
-	/*-----  -----*/
-	rcc_start_SYSCFG();
+/*
+ * \brief Enable FPU
+ * \see PM0214 Programming manual 4.6 floating point unit p. 253
+ */
+void sys_init_FPU(void) {
 
-	/*----- Clocks configuration -----*/
-	RCC_init_for_nauteff();
+	CPACR |= 0x03 << 20;
+}
+
 #if 0
-	RCC_config_t rcc_config = { 1, AHB_PRESCALER_NO_DEVIDE,
-	APBX_PRESCALER_DEVIDED_BY_4,
-	APBX_PRESCALER_DEVIDED_BY_2 };
-	RCC_init_for_nauteff(&rcc_config);
+inline void rcc_start_GPIOA(void) {RCC_AHB1ENR |= (0x1 << 0);}
+inline void rcc_start_GPIOB(void) {RCC_AHB1ENR |= (0x1 << 1);}
+inline void rcc_start_GPIOC(void) {RCC_AHB1ENR |= (0x1 << 2);}
+inline void rcc_start_GPIOD(void) {RCC_AHB1ENR |= (0x1 << 3);}
 #endif
 
-	/*----- FPU Start -----*/
-	FPU_enable();
-
-	/*----- Peripherals initialization -----*/
-	//DMA_init_all();
-	ADC_init_all();
-	USART_init_all();
-
-	/*----- Initialization des GPIO -----*/
-	/* See docs for pin use and config */
-	/* Start GPIOA..D before */
+void sys_init_GPIOs(void) {
 	rcc_start_GPIOA();
 	rcc_start_GPIOB();
 	rcc_start_GPIOC();
 	rcc_start_GPIOD();
 
-	/* Set pins individually */
 	/*@formatter:off  */
-    GPIO_init_pin_adc (GPIOA, 0);
-    GPIO_init_pin_adc (GPIOA, 1);
-	/* USART2 TX : PA2 / D1,  RX : PA3 / D0  AF 7 */
-    GPIO_init_pin_altfct (GPIOA, 2, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 7);
-    GPIO_init_pin_altfct (GPIOA, 3, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 7);
-    GPIO_init_pin_output (GPIOA, 4, GPIO_OTYPER_PUSHPULL, GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE);
-    /* GPIOA, pin 5 : Output, slow, push/pull : clutch */
+    GPIO_init_pin_unused (GPIOA, 0);
+    GPIO_init_pin_unused (GPIOA, 1);
+    GPIO_init_pin_unused (GPIOA, 2);
+    GPIO_init_pin_unused (GPIOA, 3);
+    GPIO_init_pin_unused (GPIOA, 4);
+    /* GPIOA, pin 5 : Output, slow, psush/pull : clutch */
     GPIO_init_pin_output (GPIOA, 5, GPIO_OTYPER_PUSHPULL, GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE);
     GPIO_init_pin_unused (GPIOA, 6);
     GPIO_init_pin_unused (GPIOA, 7);
     GPIO_init_pin_unused (GPIOA, 8);
-
-    /* USART 1 TX (PA9) et RX (PA10) */
-    GPIO_init_pin_altfct (GPIOA, 9, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 7);
-    GPIO_init_pin_altfct (GPIOA, 10, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 7);
-    /*GPIO_init_pin_unused (GPIOA, 10);*/
-    /*GPIO_init_pin_altfct (GPIOA, 9, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 7);*/
-    /*GPIO_init_pin_altfct (GPIOA, 10, GPIO_OTYPER_OPENDRAIN, GPIO_OSPEEDR_MEDIUMSPEED, GPIO_PUPDR_NONE, 7);*/
-
+    GPIO_init_pin_unused (GPIOA, 9);
+    GPIO_init_pin_unused (GPIOA, 10);
     GPIO_init_pin_unused (GPIOA, 11);
     GPIO_init_pin_unused (GPIOA, 12);
 
@@ -173,138 +164,138 @@ void start(void) {
     GPIO_init_pin_unused (GPIOC, 6);
     GPIO_init_pin_unused (GPIOC, 7);
     GPIO_init_pin_unused (GPIOC, 8);
-    /* Main clock output 2 : MCO2 */
-    GPIO_init_pin_altfct (GPIOC, 9, GPIO_OTYPER_PUSHPULL, GPIO_OSPEEDR_HIGHSPEED, GPIO_OTYPER_PUSHPULL, 0);
-
-    GPIO_init_pin_altfct (GPIOC, 10, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 8);
-    GPIO_init_pin_altfct (GPIOC, 11, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 8);
-    GPIO_init_pin_altfct (GPIOC, 12, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 8);
+    GPIO_init_pin_unused (GPIOC, 9);
+    GPIO_init_pin_unused (GPIOC, 10);
+    GPIO_init_pin_unused (GPIOC, 11);
+    GPIO_init_pin_unused (GPIOC, 12);
     /* PC13 connected to blue button  */
     GPIO_init_pin_input  (GPIOC, 13, GPIO_PUPDR_NONE);
     /* PC14 & 15 : used by cristal */
 
     GPIO_init_pin_unused (GPIOD, 0);
     GPIO_init_pin_unused (GPIOD, 1);
-    GPIO_init_pin_altfct (GPIOD, 2, GPIO_OTYPER_PUSHPULL,GPIO_OSPEEDR_MEDIUMSPEED,GPIO_PUPDR_NONE, 8);
 
-    /*@formatter:on  */
+                    	/*@formatter:on  */
 
-	/*----- EXTI -----*/
+#if 0
+	/*----- GPIO A -----*/
+	/* GPIOA, pin 0 : Analog input, ADC1 IN0, power voltage */
+	GPIO_pin_init(GPIOA, 0, GPIO_MODER_INPUT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 0);
 
-	/*----- DMAs -----*/
-	rcc_start_DMA1();
-	rcc_start_DMA2();
-	//DMA_init_all();
+	/* GPIOA, pin 1 : Analog input, ADC1 IN0, Motor current */
+	GPIO_pin_init(GPIOA, 1, GPIO_MODER_INPUT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 0);
+
+	/* GPIOA, pin 2 : Alt. fct. #7 : USART2 TX */
+	GPIO_pin_init(GPIOA, 2, GPIO_MODER_ALTFCT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 7);
+
+	/* GPIOA, pin 3 : Alt. fct. #7 : USART2 RX */
+	GPIO_pin_init(GPIOA, 3, GPIO_MODER_ALTFCT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_PULLDOWN, 7);
+
+	/* GPIOA, pin 4 : Output, slow, psush/pull : motor */
+	GPIO_pin_init(GPIOA, 4, GPIO_MODER_OUTPUT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 0);
+
+	/* GPIOA, pin 5 : Output, slow, psush/pull : clutch */
+	GPIO_pin_init(GPIOA, 5, GPIO_MODER_OUTPUT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 0);
+
+	/* GPIOA, pin 6 : Output, slow, psush/pull : INA */
+	GPIO_pin_init(GPIOA, 6, GPIO_MODER_OUTPUT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 0);
+
+	/* GPIOA, pin 7 : Output, slow, psush/pull : INB */
+	GPIO_pin_init(GPIOA, 7, GPIO_MODER_OUTPUT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 0);
+
+	/* GPIOA, pin 8 : alt. fct. #4 : I2C3 SCL */
+	GPIO_pin_init(GPIOA, 8, GPIO_MODER_ALTFCT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 0);
+
+	/* GPIOA, pin 9 : alt. fct. #7 : USART1 TX  */
+	GPIO_pin_init(GPIOA, 5, GPIO_MODER_ALTFCT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_NONE, 0);
+
+	/* GPIOA, pin 10 : alt. fct. #7 : USART1 RX  */
+	GPIO_pin_init(GPIOA, 5, GPIO_MODER_ALTFCT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_PULLDOWN, 0);
+
+	/* GPIOA, pin 11 : alt. fct. #9 : CAN1 RX  */
+	GPIO_pin_init(GPIOA, 5, GPIO_MODER_ALTFCT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_PULLDOWN, 0);
+
+	/* GPIOA, pin 12 : alt. fct. #9 : CAN1 TX  */
+	GPIO_pin_init(GPIOA, 5, GPIO_MODER_ALTFCT, GPIO_OTYPER_PUSHPULL,
+	GPIO_OSPEEDR_LOWSPEED, GPIO_PUPDR_PULLDOWN, 0);
 
 
-//*((int*)((void*)DMA2 + 0x10 + 0x18*4)) = 0x7 << 25;
+	/*----- GPIO A config -----*/
+	/* PA13..15 already configured after reset and used for JTAG : */
+	/* PA13 -> JTMS-SWDIO, PA14 -> JTCK-SWCLK, PA15 -> JTDI */
+	/* first, make sure that PA0..12 = 0 */
+	GPIOA->MODER &= (0x3) << (15 * 2) | (0x3) << (14 * 2) | (0x3) << (14 * 2);
+	/* then set PA0..12 */
+	GPIOA->MODER |= (0x3) << (0 * 2) /* PA0 Analog input ADC1 IN0 pwr voltage */
+	| (0x3) << (1 * 2) /* PA1 Analog input ADC1 IN0 */
+	| (0x2) << (2 * 2) /* PA2 USART 2 TX, alternate function */
+	| (0x2) << (3 * 2) /* PA3 USART 2 RX, alternate function*/
+	| (0x1) << (4 * 2) /* Motor */
+	| (0x1) << (5 * 2) /* Clutch and LED */
+	| (0x1) << (6 * 2) /* INA */
+	| (0x1) << (7 * 2) /* INB */
+	| (0x2) << (8 * 2) /* I2C3 serial clock, alternate function */
+	| (0x2) << (9 * 2) /* USART1 TX, alternate function */
+	| (0x2) << (10 * 2) /* USART1 RX, alternate function */
+	| (0x2) << (11 * 2) /* CAN1 TX, alternate function */
+	| (0x2) << (12 * 2) /* CAN1 RX, alternate function */
+	;
 
-	/*DMA_init_Stream(dma1, 0);*/
-	/*DMA_CHANNEL_enable(dma1_ch0);*/
+	/*----- GPIO B config -----*/
+	/* PB3, PB11, PB12 left unchanged */
+	GPIOB->MODER &= (0x3) << (3 * 2) | (0x3) << (11 * 2);
+	GPIOB->MODER |= (0x2) << (0 * 2) /* PB0 GPIO output Buzzer alarm */
+	| (0x0) << (1 * 2) /* PB1 input, Gyro./Acc. data ready */
+	| (0x0) << (2 * 2) /* PA2 Input, Mag. data ready       */
+	| (0x2) << (4 * 2) /* I2C3 SDA ,alternate function     */
+	| (0x2) << (5 * 2) /* CAN2 RX ,alternate function      */
+	| (0x2) << (6 * 2) /* CAN2 TX, alternate function      */
+	| (0x1) << (7 * 2) /* I2C1 SDA, alternate function     */
+	| (0x2) << (8 * 2) /* I2C1 SCL, alternate function     */
+	| (0x2) << (10 * 2) /* USART3 TX, alternate function   */
+	| (0x2) << (13 * 2) /* SPI2 SCK, alternate function    */
+	| (0x2) << (14 * 2) /* SPI2 MISO, alternate function   */
+	| (0x2) << (15 * 2) /* SPI2 MOSI, alternate function   */
+	;
 
-	/*----- UARTs -----*/
-#if SYS_USE_USART1
-	rcc_start_USART1();
-	USART_init(usart1);
-	USART_set_baudrate(usart1, 38400);
-	USART_set_parity_none(usart1);
-	USART_set_stop_bits(usart1, twoStopBits);
-	USART_set_buffer_mode(usart1, lineBuffered);
-	USART_enable(usart1);
-	NVIC_enable_IRQ(NVIC_NUM_IRQ_USART1);
+	/*----- GPIO C config -----*/
+	/* PC8, PC14 & PC15 left unchanged */
+	GPIOB->MODER &= (0x3) << (14 * 2) | (0x3) << (15 * 2);
+	GPIOB->MODER |= (0x2) << (0 * 2) /* Input, Auto btn*/
+	| (0x0) << (1 * 2) /* Input, Standby btn*/
+	| (0x0) << (2 * 2) /* Input, +1 btn*/
+	| (0x0) << (3 * 2) /* Input, -1 btn*/
+	| (0x0) << (4 * 2) /* Input, +10 btn*/
+	| (0x0) << (5 * 2) /* Input, -10 btn*/
+	| (0x0) << (6 * 2) /* Input, Auxiliary btn 1 */
+	| (0x0) << (7 * 2) /* Input, Auxiliary btn 2 */
+	| (0x0) << (9 * 2) /* MCO output, alternate function*/
+	| (0x2) << (10 * 2) /* USART 4 TX, alternate function */
+	| (0x2) << (11 * 2) /* USART 4 RX, alternate function */
+	| (0x2) << (12 * 2) /* USART 5 Tx, alternate function */
+	| (0x0) << (13 * 2) /* Input, blue btn */
+#if 0
+	| (0x0) << (14 * 2) /* Cristal 32.768 kHz */
+	| (0x0) << (15 * 2) /* Cristal 32.768 kHz */
 #endif
+	;
 
-#if SYS_USE_USART2
-	rcc_start_USART2();
-	USART_init(usart2);
-	USART_set_baudrate(usart2, 38400);
-	USART_set_parity_none(usart2);
-	USART_set_stop_bits(usart2, twoStopBits);
-	USART_set_buffer_mode(usart2, lineBuffered);
-	USART_enable(usart2);
-	NVIC_enable_IRQ(NVIC_NUM_IRQ_USART2);
+	/*----- GPIO D config -----*/
+	/* Only PD2 used */
+    GPIOD->MODER = (0x2) << (2*2);
 #endif
-
-#if SYS_USE_USART3
-	rcc_start_USART3();
-	USART_init(usart3);
-	USART_set_baudrate(usart3, 4800);
-	USART_set_parity_none(usart3);
-	USART_set_stop_bits(usart3, oneStopBit);
-	USART_enable(usart3);
-	NVIC_enable_IRQ(NVIC_NUM_IRQ_USART3);
-#endif
-
-#if SYS_USE_USART4
-	rcc_start_USART4();
-	USART_init(usart4, USART4);
-	USART_set_baudrate(usart4, 4800);
-	USART_set_parity_none(usart4);
-	USART_set_stop_bits(usart4, oneStopBit);
-	USART_enable(usart4);
-	NVIC_enable_IRQ(NVIC_NUM_IRQ_UART4);
-#endif
-
-#if SYS_USE_USART5
-	rcc_start_USART5();
-	USART_init(usart5);
-	USART_set_baudrate(usart5, 115200);
-	USART_set_parity_none(usart5);
-	USART_set_stop_bits(usart5, oneStopBit);
-	USART_enable(usart5);	
-	USART_set_buffer_mode(usart5, blockBuffered);
-	NVIC_enable_IRQ(NVIC_NUM_IRQ_UART5);
-#endif
-
-#if SYS_USE_USART6
-	rcc_start_USART6();
-	USART_init(usart6, USART6);
-	USART_set_baudrate(usart6, 4800);
-	USART_set_parity_none(usart6);
-	USART_set_stop_bits(usart6, oneStopBit);
-	USART_enable(usart6);
-	NVIC_enable_IRQ(NVIC_NUM_IRQ_USART6);
-#endif
-
-	/*----- ADC1 et ADC2 et ADC3 -----*/
-#if SYS_USE_ADC1
-	rcc_start_ADC1();
-	ADC_set_on(adc1);
-	ADC_select_channel(adc1, 1U);
-#endif
-
-#if SYS_USE_ADC2
-	rcc_start_ADC2();
-	ADC_set_on(adc2);
-	ADC_select_channel(adc2, 1U);
-#endif
-
-#if SYS_USE_ADC3
-	rcc_start_ADC3();
-	ADC_set_on(adc3);
-	ADC_select_channel(adc3, 1U);
-#endif
-
-	/*----- I2C -----*/
-	rcc_start_I2C1();
-	I2C_init(i2c1, I2C1);
-	I2C_set_std_speed(i2c1);
-
-	I2C_init(i2c3, I2C3);
-	rcc_start_I2C3();
-	I2C_set_std_speed(i2c3);
-
-	/*----- So, now let's work -----*/
-	main();
-}
-
-/*
- * \brief Enable FPU
- * \see PM0214 Programming manual 4.6 floating point unit p. 253
- */
-void FPU_enable(void) {
-
-	CPACR |= 0x03 << 20;
 }
 
 void sys_init_DMA(void) {
@@ -312,6 +303,10 @@ void sys_init_DMA(void) {
 }
 
 void sys_init_USART1(void) {
+	;
+}
+
+void initADC(void) {
 	;
 }
 
@@ -327,6 +322,14 @@ void sys_init_EXTI(void) {
     NVIC_ISER1 = ~0U;
     NVIC_ISER2 = ~0U;
 #endif
+}
+
+void sys_init_I2C(void) {
+	I2C_init();
+	I2C_start_periph(&i2c1);
+	I2C1_set_std_speed(&i2c1);
+	I2C1_enable(&i2c1);
+
 }
 
 __attribute__ ((interrupt("irq")))
@@ -369,7 +372,7 @@ __attribute__ ((section(".vector_table")))
 void (*const vector_table[])(void) =
 {
 	(void (*)(void)) &_estack,/*0 initial stack pointer */
-	start,/*                    1 Reset Handler */
+	main,/*                     1 Reset Handler */
 	NMI_Handler,/*              2 NMI Handler */
 	HardFault_Handler,/*        3 Hard Fault Handler */
 	MemManage_Handler,/*        4 MPU Fault Handler */
@@ -386,7 +389,7 @@ void (*const vector_table[])(void) =
 	xPortSysTickHandler,/*     15 SysTick Handler */
 	/* External Interrupts */
 	(void (*)()) 0,/*       16 Window Watchdog */
-	(void (*)()) 0,/*       17 PVD through EXTI Line detectcube */
+	(void (*)()) 0,/*       17 PVD through EXTI Line detect */
 	(void (*)()) 0,/*       18 Tamper and TimeStamp intr through EXTI line */
 	(void (*)()) 0,/*       19 RTC_WKUP */
 	(void (*)()) 0,/*       20 Flash */
@@ -396,13 +399,13 @@ void (*const vector_table[])(void) =
 	EXTI2_Handler,/*        24 EXTI Line 2 and touch sensing */
 	EXTI3_Handler,/*        25 EXTI Line 3 */
 	EXTI4_Handler,/*        26 EXTI Line 4 */
-	DMA1_Ch0_Handler,/*     27 DMA1 stream 0 : UART5 RX */
-	DMA1_Ch1_Handler,/*     28 DMA1 stream 1 : I2C3 RX */
-	DMA1_Ch2_Handler,/*     29 DMA1 stream 2 : I2C3 TX */
-	DMA1_Ch3_Handler,/*     30 DMA1 stream 3 */
-	DMA1_Ch4_Handler,/*     31 DMA1 stream 4 */
-	DMA1_Ch5_Handler,/*     32 DMA1 stream 5 : USART2 RX */
-	DMA1_Ch2_Handler,/*     33 DMA1 stream 6 : USART2 TX */
+	DMA1_stream0,/*         27 DMA1 stream 0 : UART5 RX */
+	DMA1_stream1,/*         28 DMA1 stream 1 : I2C3 RX */
+	DMA1_stream2,/*         29 DMA1 stream 2 : I2C3 TX */
+	(void (*)()) 0,/*       30 DMA1 stream 3 */
+	(void (*)()) 0,/*       31 DMA1 stream 4 */
+	DMA1_stream5,/*         32 DMA1 stream 5 : USART2 RX */
+	DMA1_stream6,/*         33 DMA1 stream 6 : USART2 TX */
 	(void (*)()) 0,/*       34 ADC1 & ADC2 & ADC3 */
 	(void (*)()) 0,/*       35 CAN1 TX */
 	(void (*)()) 0,/*       36 CAN1 RX0 */
@@ -423,8 +426,8 @@ void (*const vector_table[])(void) =
 	(void (*)()) 0,/*       51 SPI1 */
 	(void (*)()) 0,/*       52 SPI2 */
 	USART1_Event,/*         53 USART1 */
-	USART2_Event,/*         54 USART2 */
-	USART3_Event,/*         55 USART3 */
+	(void (*)()) 0,/*       54 USART2 */
+	(void (*)()) 0,/*       55 USART3 */
 	EXTI10_15_Handler,/*    56 EXTI Line 15..10 */
 	(void (*)()) 0,/*       57 RTC Alarms (A and B) through EXTI Line */
 	(void (*)()) 0,/*       58 USB On the Go FS Wakeup through EXTI line */
@@ -432,20 +435,20 @@ void (*const vector_table[])(void) =
 	(void (*)()) 0,/*       60 TIM8 Update intr. & TIM13 global intr. */
 	(void (*)()) 0,/*       61 TIM8 Trig. & Commutation intr. & TIM14 intr. */
 	(void (*)()) 0,/*       62 TIM8 capture compare intr. */
-	DMA1_Ch2_Handler,/*     63 DMA1 Stream 7 global intr. : UART5 TX */
+	DMA1_stream7,/*         63 DMA1 Stream 7 global intr. : UART5 TX */
 	(void (*)()) 0,/*       64 FMC global intr. */
 	(void (*)()) 0,/*       65 SDIO global intr. */
 	(void (*)()) 0,/*       66 TIM5 global intr. */
 	(void (*)()) 0,/*       67 SPI3 global intr. */
-	USART4_Event,/*         68 UART 4 intr. */
-	USART5_Event,/*         69 UART 5 global intr. */
+	(void (*)()) 0,/*       68 UART 4 intr. */
+	(void (*)()) 0,/*       69 UART 5 global intr. */
 	(void (*)()) 0,/*       70 TIM6 global intr. and DAC1/2 underrun intr. */
 	(void (*)()) 0,/*       71 TIM7 global intr. */
-	DMA1_Ch0_Handler,/*     72 DMA2 Stream 0 global intr. */
-	DMA1_Ch1_Handler,/*     73 DMA2 Stream 1 global intr. */
-	DMA2_Ch2_Handler,/*     74 DMA2 Stream 2 global intr. : USART1 RX */
-	DMA2_Ch3_Handler,/*     75 DMA2 Stream 3 global intr. */
-	DMA2_Ch4_Handler,/*     76 DMA2 Stream 4 global intr. */
+	(void (*)()) 0,/*       72 DMA2 Stream 0 global intr. */
+	(void (*)()) 0,/*       73 DMA2 Stream 1 global intr. */
+	DMA2_stream2,/*         74 DMA2 Stream 2 global intr. : USART1 RX */
+	(void (*)()) 0,/*       75 DMA2 Stream 3 global intr. */
+	(void (*)()) 0,/*       76 DMA2 Stream 4 global intr. */
 	(void (*)()) 0,/*       77 Reserved */
 	(void (*)()) 0,/*       78 Reserved */
 	(void (*)()) 0,/*       79 CAN2 TX intr. */
@@ -453,10 +456,10 @@ void (*const vector_table[])(void) =
 	(void (*)()) 0,/*       81 CAN2 RX1 intr. */
 	(void (*)()) 0,/*       82 CAN2 CSE */
 	(void (*)()) 0,/*       83 USB On The Go FS global int */
-	DMA2_Ch4_Handler,/*     84 DMA2 Stream 5 global intr. */
-	DMA2_Ch4_Handler,/*     85 DMA2 Stream 6 global intr. */
-	DMA2_Ch7_Handler,/*     86 DMA2 Stream 7 global intr. : Uisr_vectorSART1 TX */
-	USART6_Event,/*         87 USART6 global intr. */
+	(void (*)()) 0,/*       84 DMA2 Stream 5 global intr. */
+	(void (*)()) 0,/*       85 DMA2 Stream 6 global intr. */
+	DMA2_stream7,/*         86 DMA2 Stream 7 global intr. : USART1 TX */
+	(void (*)()) 0,/*       87 USART6 global intr. */
 	I2C3_Event,/*           88 I2C3 event intr. */
 	I2C3_Error,/*           89 I2C3 error intr. */
 	(void (*)()) 0,/*       90 USB On The Go HS End Point 1 Out	global intr. */

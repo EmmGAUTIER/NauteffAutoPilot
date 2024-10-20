@@ -1,6 +1,6 @@
-AutoPilot for boat project
+AutoPilot for boats 
 
-Designed for STM32F4, BNO055.
+Designed for STM32L4, BNO055.
 
 ##doc/stm32 :
   Documentations du STM32F446.
