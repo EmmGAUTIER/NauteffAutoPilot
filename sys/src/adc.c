@@ -81,8 +81,8 @@ void ADC_init_all(void) {
 
 void ADC_init(ADC_Handle *adc) {
 
+    (void)adc;
 	;
-
 	return;
 }
 

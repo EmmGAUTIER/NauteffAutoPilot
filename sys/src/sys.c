@@ -209,6 +209,7 @@ void start(void) {
 	USART_set_baudrate(usart1, 38400);
 	USART_set_parity_none(usart1);
 	USART_set_stop_bits(usart1, twoStopBits);
+	USART_set_buffer_mode(usart1, lineBuffered);
 	USART_enable(usart1);
 	NVIC_enable_IRQ(NVIC_NUM_IRQ_USART1);
 #endif

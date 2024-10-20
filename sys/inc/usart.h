@@ -122,6 +122,9 @@ typedef struct
 	vuint8_t bufferMode; /* 0 bloc, other line mode (ie \n */
 	/* TOTO : suppress this counter of interrupts : */
 	unsigned long cnt_intr;
+	unsigned long cnt_rx;
+	unsigned long cnt_tx;
+	char tampon[100]; // For debugging purpose only, to be removed
 } UART_Handle;
 
 #define usart1 (&usart1_Handle)

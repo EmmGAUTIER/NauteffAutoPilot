@@ -14,8 +14,11 @@
 
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 #include "FreeRTOS.h"
-#include <message_buffer.h>
+#include "message_buffer.h"
+#include "semphr.h"
+#include "queue.h"
 #if 0
 #include <projdefs.h>
 #include <stddef.h>
@@ -26,10 +29,11 @@
 #include "timers.h"
 #include "util.h"
 #include "gpio.h"
+#include "usart.h"
 #include "nauteff.h"
 #include "motor.h"
 
-MessageBufferHandle_t bufferMotor;
+QueueHandle_t msgQueueMotor;
 
 void LetInTheClutch(void);
 void letOutTheClutch(void);
@@ -103,12 +107,28 @@ void runMotorToStarboard(void)
  * to taskMotor when motor is running. When taskMotor receive this message
  * it measures current compute an estimated position and checks current.
  *
- * \date November 10 2020
+ * \date November 10 2024
  */
-static void MotorTimerCallback(TimerHandle_t xTimer)
+
+
+typedef enum {
+    MSG_MOTOR_CONTROL = 0,
+} MessageMotorType_t;
+
+
+void MotorTimerCallback(TimerHandle_t xTimer)
 {
-	uint16_t commande = MSG_MOT_MOVING_CONTROL;
-	xMessageBufferSend(bufferMotor, &commande, sizeof(commande), 0);
+    (void)xTimer;
+
+	MessageCore_t commande;
+	commande.category = MSG_MOTOR;
+    commande.type = MSG_MOTOR_CONTROL;
+
+	static char message[100];
+	// sprintf (message, "###### >>> Appel MotorTimerCallback\n");
+	// USART_write (usart1, message, strlen(message), 0U);
+
+	xQueueSendToBack (msgQueueMotor, &commande, 0U);
 }
 
 /**
@@ -117,27 +137,49 @@ static void MotorTimerCallback(TimerHandle_t xTimer)
 
 void taskMotor(void *parameters)
 {
-	(void)parameters;
+	(void)parameters; /* parameters ignored, instr to avoid warning */
 
 	size_t ret;
 	MessageCore_t commande;
 
-	char enMarche = 0;
-	float MoveToDo = 0.F;
-	vuint32_t delay = 1000;
+	// char enMarche = 0;
+	// float MoveToDo = 0.F;
+	// vuint32_t delay = 1000;
 	// vuint32_t   tension;
-	static char message[50];
-	static char cnbre[10];
+	static char message[100];
 
-	TimerHandle_t motorTimer = xTimerCreate("MotorTimer", pdMS_TO_TICKS(10),
-											pdTRUE, 0, MotorTimerCallback);
+	// sprintf (message, "@@@@@@   taskMotor Départ\n");
+	// USART_write(usart1, message, strlen(message), 0U);
+
+	msgQueueMotor = xQueueCreate (10, sizeof (MessageCore_t));
+
+    /* Timer that calls periodically MotorTimerCallback wich sends a message */
+	TimerHandle_t motorTimer = xTimerCreate("MotorTimer",
+	                                        pdMS_TO_TICKS(100),
+											pdTRUE,
+											0,
+											MotorTimerCallback);
+    ret = xTimerStart(motorTimer, 0);
 
 	for (;;)
 	{
+        // vTaskDelay(pdMS_TO_TICKS(200));
+    	sprintf (message, "Allo ?\n");
+	    USART_write(usart1, message, strlen(message), 0U);
 
-		commande.msgCode = 0;
-		ret = xMessageBufferReceive(bufferMotor, &commande, sizeof(commande),
-									delay);
+        commande.category = -1;
+        commande.type = -1;
+		ret = xQueueReceive(msgQueueMotor,
+		                    &commande,
+		                    1000);
+
+    	// sprintf (message, "Motor retour xMessageBufferReceive %x, %d\n", ret, (int)commande.category);
+	    // USART_write(usart1, message, strlen(message), 0U);
+	}
+}
+
+#if 0
+
 		if (ret != (size_t)0)
 		{
 			switch (commande.msgCode)
@@ -249,3 +291,4 @@ void taskMotor(void *parameters)
 		}
 	}
 }
+#endif

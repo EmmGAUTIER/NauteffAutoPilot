@@ -12,6 +12,4 @@
 //#include "stmregs.h"
 //#include "nauteff.h"
 
-extern MessageBufferHandle_t bufferMotor;
-
 void taskMotor(void *);

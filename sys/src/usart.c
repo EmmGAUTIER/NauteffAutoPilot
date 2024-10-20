@@ -156,6 +156,8 @@ void USART_init(UART_Handle *uh)
 	uh->RxSemlock = xSemaphoreCreateMutex();
 	uh->TxSemlock = xSemaphoreCreateMutex();
 	uh->RxSemEOL = xSemaphoreCreateMutex();
+	uh->cnt_rx = 0;
+	uh->cnt_tx = 0;
 
 	uh->registers->SR = 0x0;
 	uh->registers->BRR = 0x0;
@@ -237,13 +239,13 @@ int USART_write(UART_Handle *uh, const void *buf, size_t count, unsigned delay)
 	{
 		if (uh->transmitting == 0)
 		{
-			res = xStreamBufferSend(uh->streamBufferTx, buf, count, 0);
+			res = xStreamBufferSend(uh->streamBufferTx, buf, count, delay);
 			USART_enable_TXE_intr(uh);
 			uh->transmitting = 1;
 		}
 		else
 		{
-			res = xStreamBufferSend(uh->streamBufferTx, buf, count, 0);
+			res = xStreamBufferSend(uh->streamBufferTx, buf, count, delay);
 		}
 
 	}
@@ -276,9 +278,11 @@ int USART_read(UART_Handle *uh, void *buf, const size_t count, unsigned delay)
 			do
 			{
 				/* TODO : Calculer le temps restant et mettre des delais */
-				nbl = xStreamBufferReceive(uh->streamBufferRx, &car, sizeof(car), 0);
-				((char *)buf)[nb] = car;
-				nb++;
+				nbl = xStreamBufferReceive(uh->streamBufferRx, &car, sizeof(car), delay);
+				if (nbl) {
+		    		((char *)buf)[nb] = car;
+			    	nb++;
+				}
 			} while (nbl > 0 && car != '\n');
 		}
 		else
@@ -305,7 +309,7 @@ int USART_flush_rx_buffer(UART_Handle *uh)
 	if (xSemaphoreTake(uh->RxSemlock, 0) == pdTRUE)
 	{
 		len = xStreamBufferBytesAvailable(uh->streamBufferRx);
-		for (int i = 0; i < len; i++)
+		for (unsigned i = 0; i < len; i++)
 		{
 			xStreamBufferReceive(uh->streamBufferRx,
 								 &data,
@@ -324,14 +328,13 @@ void USART_Event_Handler(UART_Handle *uh)
 	status = uh->registers->SR;
 	uh->cnt_intr++; /* for debugging purpose */
 	size_t xReceivedBytes;
-	BaseType_t xHigherPriorityTaskWoken;
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 	char car;
 
 	if (status & (0x1 << 7))
 	{
 		/* TXE (Tx Empty) bit 7 in SR (status register),
 		 * if set next char to transmit has to be written in USART_DR */
-		xHigherPriorityTaskWoken = pdFALSE;
 		xReceivedBytes = xStreamBufferReceiveFromISR(uh->streamBufferTx, &car,
 													 1U, &xHigherPriorityTaskWoken);
 		if (xReceivedBytes != 0)
@@ -343,6 +346,7 @@ void USART_Event_Handler(UART_Handle *uh)
 			USART_disable_TXE_intr(uh);
 			uh->transmitting = 0;
 		}
+		uh->cnt_tx++;
 	}
 
 	/*----- Réception d'un caractère ----*/
@@ -350,10 +354,10 @@ void USART_Event_Handler(UART_Handle *uh)
 	{ /* RXNE : Receive Not Empty */
 		car = uh->registers->DR;
 		/* TODO Gérer le cas de dépassement de tampon*/
-		xHigherPriorityTaskWoken = pdFALSE;
 		(void)xStreamBufferSendFromISR(uh->streamBufferRx, &car, 1U,
 									   &xHigherPriorityTaskWoken);
-		// TODO taskYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        uh->tampon[uh->cnt_rx % sizeof(uh->tampon)] = car;
+		uh->cnt_rx++;
 #if 0
 		if (uh->bufferMode == lineBuffered && car == '\n') {
 			xSemaphoreGiveFromISR(uh->RxSemEOL, &xHigherPriorityTaskWoken);
@@ -361,6 +365,7 @@ void USART_Event_Handler(UART_Handle *uh)
 		}
 #endif
 	}
+	taskYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 	return;
 }
 

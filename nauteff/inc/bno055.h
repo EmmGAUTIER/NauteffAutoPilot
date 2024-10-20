@@ -17,6 +17,7 @@ typedef struct
 {
     UART_Handle *usart;
     int errno;
+    unsigned errno_EE;
 } BNO055_Handle;
 
 extern BNO055_Handle bno055_Handle;
@@ -26,8 +27,8 @@ int BNO055_init(BNO055_Handle *, UART_Handle *uh);
 
 void taskBNO055(void *);
 
-int BNO055_write(BNO055_Handle *device, unsigned reg, char *data, unsigned len);
-int BNO055_read(BNO055_Handle *device, unsigned reg, char *data, unsigned len);
+int BNO055_write(BNO055_Handle *device, unsigned reg, void *data, unsigned len);
+int BNO055_read(BNO055_Handle *device, unsigned reg, void *data, unsigned len);
 
 INLINE int BNO055_get_errno(BNO055_Handle *device)
 {

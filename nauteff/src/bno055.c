@@ -12,12 +12,14 @@
 
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
 #include "semphr.h"
 #include "stream_buffer.h"
+#include "message_buffer.h"
 
 #include "util.h"
 #include "gpio.h"
@@ -34,7 +36,7 @@ void stopMotor(void);
 void runMotorToStarboard(void);
 #endif
 
-static void BNO055TimerCallback(TimerHandle_t xTimer);
+//static void BNO055TimerCallback(TimerHandle_t xTimer);
 
 BNO055_Handle bno055_Handle = {
     .usart = usart5,
@@ -42,8 +44,8 @@ BNO055_Handle bno055_Handle = {
 
 int BNO055_init(BNO055_Handle *device, UART_Handle *uh)
 {
-    char data;
-    int ret;
+    //char data;
+    //int ret;
 
     device->usart = uh;
 #if 0
@@ -107,12 +109,13 @@ int BNO055_init(BNO055_Handle *device, UART_Handle *uh)
  *  @param len    : length od data to write
  *  @return len if success, -1 otherwise.
  */
-int BNO055_write(BNO055_Handle *device, unsigned reg, char *data, unsigned len)
+int BNO055_write(BNO055_Handle *device, unsigned reg, void *data, unsigned len)
 {
     int ret;
     int len_rx;
     char commande[4];
     char write_rep[2];
+    static char message[128];
 
     /* write command is 0xAA, 0x00, reg address, len , data bytes */
     commande[0] = 0xAA;
@@ -121,13 +124,18 @@ int BNO055_write(BNO055_Handle *device, unsigned reg, char *data, unsigned len)
     commande[3] = (char)len;
 
 
-    USART_flush_rx_buffer(device->usart);
+    //USART_flush_rx_buffer(device->usart);
 
     ret = USART_write(device->usart, commande, 4, 0U); /* write command sending */
     ret = USART_write(device->usart, data, len, 0U);   /* data sending */
 
     /* Get response message of BNO055 .. */
+    write_rep[0] = 0;
+    write_rep[1] = 0;
     len_rx = USART_read(device->usart, write_rep, 2, 600U);
+    sprintf (message, "BNO055_write retour commande d'écriture : len = %d, rep = %x %x\n", len_rx, (unsigned)write_rep[0], (unsigned)write_rep[1]);
+    USART_write(usart1, message, strlen(message), 0U);
+
     if (len_rx == 2) /* 2 character response message ? */
     {
         if ((write_rep[0] == 0xEE)) /* status message ? */
@@ -158,7 +166,7 @@ int BNO055_write(BNO055_Handle *device, unsigned reg, char *data, unsigned len)
     return ret;
 }
 
-int BNO055_read(BNO055_Handle *device, unsigned reg, char *data, unsigned len)
+int BNO055_read(BNO055_Handle *device, unsigned reg, void *data, unsigned len)
 {
     int ret;
     int len_rx;
@@ -184,11 +192,14 @@ int BNO055_read(BNO055_Handle *device, unsigned reg, char *data, unsigned len)
 
     /* Get response message of BNO055 .. */
     /* First check transfer  with first 2 bytes */
-    vTaskDelay(pdMS_TO_TICKS(10));
-    len_rx = USART_read(device->usart, read_rep, 2, pdMS_TO_TICKS(200));
+    vTaskDelay(pdMS_TO_TICKS(50));
+    len_rx = USART_read(device->usart, read_rep, 2, pdMS_TO_TICKS(0));
+
+    device->errno_EE = 0x00;
 
     if (len_rx == 2) /* 2 character response message ? */
     {
+        device->errno_EE = (read_rep[0] << 8) + read_rep[1];
         if ((read_rep[0] == 0xBB)) /* Is there a response  ? */
         {
             // if (read_rep[1] > 0 );

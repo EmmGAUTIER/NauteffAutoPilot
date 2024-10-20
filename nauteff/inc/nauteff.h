@@ -7,15 +7,29 @@
 
 #ifndef INC_NAUTEFF_H_
 #define INC_NAUTEFF_H_
-;
-#include "message_buffer.h"
+//;
+//#include "message_buffer.h"
+
+typedef enum {
+	MSG_NONE = 0,
+	MSG_MOTOR,
+	MSG_KBD,
+	MSG_MEMS,
+	MSG_DATA
+} MessageCategory_t;
 
 
-
+typedef struct {
+	uint16_t category;
+	uint16_t type;
+	union {
+		struct Nothing {};
+		};
+	} MessageCore_t;
 
 //----- Commandes vers la tâche principale -----
 typedef enum {
-	MSG_NONE = 0,
+	MSG_NOTHING = 0,
 	MSG_KBD_AUTO,
 	MSG_KBD_STDBY,
 	MSG_KBD_STARBOARD_ONE,
@@ -64,13 +78,18 @@ typedef struct {
 	float angle;
 } MsgMotorMoveOrder_t;
 
+typedef struct {
+	MsgCode_t msgCode;
+} MsgMotorCommand_t;
+
+
 typedef union {
 	MsgCode_t msgCode;
 	MsgMEMSInfo_t msgMEMs;
 	MsgKeyboard_t msgKeyboard;
 	MsgMotorTorque_t msgMotor;
 	MsgMotorMoveOrder_t msgMotorMove;
-} MessageCore_t;
+} MessageCore_t_old;
 
 extern MessageBufferHandle_t bufferCore;
 #if 0
