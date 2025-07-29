@@ -1,0 +1,386 @@
+/*
+MIT License
+
+Copyright (c) 2025 Emmanuel Gautier / Nauteff
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#include "math.h"
+
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "semphr.h"
+#include "timers.h"
+#include "message_buffer.h"
+#include "stream_buffer.h"
+
+#include "util.h"
+#include "printf.h"
+#include "rlib.h"
+#include "geom.h"
+
+#include <stm32l452xx.h>
+#include <stm32l4xx_ll_gpio.h>
+
+#include "aux_usart.h"
+//#include "gpio.h"
+
+#include "motor.h"
+#include "mems.h"
+#include "autopilot.h"
+
+void timerAPCallback(TimerHandle_t xTimer);
+
+static TimerHandle_t timerAP;
+APStatus_t APStatus;
+QueueHandle_t msgQueueAutoPilot;
+
+void AP_init(APStatus_t *aps);
+int AP_set_mode_idle(APStatus_t *aps);
+int AP_set_mode_heading(APStatus_t *aps);
+int AP_turn(APStatus_t *aps, float angle);
+int AP_get_engaged(APStatus_t *aps);
+float AP_get_heading_dir(APStatus_t *aps);
+int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate);
+int AP_compute(APStatus_t *aps);
+
+int init_taskAutoPilot(void)
+{
+
+    AP_init(&APStatus);
+
+    /* Create incoming queue */
+    msgQueueAutoPilot = xQueueCreate(10, sizeof(MsgAutoPilot_t));
+    if (msgQueueAutoPilot == (QueueHandle_t)0)
+    {
+        return -1;
+    }
+
+    /* create tick timer */
+    timerAP = xTimerCreate("MEMs",
+                           pdMS_TO_TICKS(AP_PERIOD_TICKS),
+                           pdTRUE,    /* Auto reload (repeat indefinitely) */
+                           (void *)0, /* Timer ID, not used */
+                           timerAPCallback);
+    if (timerAP == (TimerHandle_t)0)
+    {
+        return -1;
+    }
+
+    return 1;
+}
+
+void timerAPCallback(TimerHandle_t xTimer)
+{
+    (void)xTimer;
+
+    static MsgAutoPilot_t command = {
+        .msgType = AP_MSG_TICK};
+
+    xQueueSend(msgQueueAutoPilot, (const void *)&command, (TickType_t)0);
+
+    return;
+}
+
+void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
+{
+    MsgAutoPilot_t msg;
+    long unsigned int compteur = 0L;
+    static char message[100];
+    int nbcar;
+    unsigned memsdata = 0;
+    float deltat;
+    BaseType_t timestamp, timestamp_2;
+
+    xTimerStart(timerAP, 0);
+    timestamp = xTaskGetTickCount();
+
+    for (;;)
+    {
+        if (xQueueReceive(msgQueueAutoPilot, &msg, portMAX_DELAY) == pdPASS)
+        {
+            // nbcar = 0;
+            // message[0] = '\0';
+            // nbcar = snprintf(message, sizeof(message) - 1, "AP: type message  %d\n", msg.msgType);
+            // USART_write(usart1, message, nbcar, 0U);
+
+            switch (msg.msgType)
+            {
+            case AP_MSG_MODE_HEADING:
+                AP_set_mode_heading(&APStatus);
+                nbcar = snprintf(message, sizeof(message), "AP Mode heading %.1f\n", AP_get_heading_dir(&APStatus));
+                aux_USART_write(aux_usart1, message, nbcar, 0U);
+                timestamp = xTaskGetTickCount();
+                break;
+
+            case AP_MSG_MODE_IDLE:
+                nbcar = snprintf(message, sizeof(message), "AP Mode idle\n");
+                aux_USART_write(aux_usart1, message, nbcar, 0U);
+                AP_set_mode_idle(&APStatus);
+                break;
+
+            case AP_MSG_TURN:
+                AP_turn(&APStatus, msg.data.reqTurnAngle * (-M_PI / 180.F));
+                if (AP_get_engaged(&APStatus))
+                {
+                    nbcar = snprintf(message, sizeof(message), "AP Mode heading %8f\n", AP_get_heading_dir(&APStatus));
+                    aux_USART_write(aux_usart1, message, nbcar, 0U);
+                }
+                break;
+
+            case AP_MSG_AHRS:
+                // nbcar = snprintf(message, sizeof(message) - 1, "AP AHRS %8f\n", cvt_dir_rad_deg(msg.data.IMUData.heading));
+                // USART_write(usart1, message, nbcar, 0U);
+                memsdata++;
+                timestamp_2 = xTaskGetTickCount();
+                deltat = ((float)(timestamp_2 - timestamp)) / ((float)configTICK_RATE_HZ);
+                timestamp = timestamp_2;
+                AP_new_values(&APStatus, deltat, msg.data.IMUData.heading, msg.data.IMUData.yawRate);
+                break;
+
+            case AP_MSG_TICK:
+                break;
+
+            case AP_MSG_PARAM:
+                nbcar = snprintf(message, sizeof(message) - 1, "AP: param %d %f\n", (int)msg.data.coefficient.param_number, msg.data.coefficient.param_value);
+                aux_USART_write(aux_usart1, message, nbcar, 0U);
+                // APStatus.headingToSteer = msg.data.reqHeading;
+                switch (msg.data.coefficient.param_number)
+                {
+                case AP_PARAM_PROPORTIONNAL:
+                    APStatus.kp = msg.data.coefficient.param_value;
+                    break;
+                case AP_PARAM_INTEGRAL:
+                    APStatus.ki = msg.data.coefficient.param_value;
+                    break;
+                case AP_PARAM_DERIVATIVE:
+                    APStatus.kd = msg.data.coefficient.param_value;
+                    break;
+                default:
+                    break;
+                }
+                break;
+
+            case AP_MSG_CALIBRATE_MEMS:
+                if (APStatus.engaged)
+                {
+                    nbcar = snprintf(message, sizeof(message) - 1, "AP: MEMS calibrate impossible while AP engaged\n");
+                    aux_USART_write(aux_usart1, message, nbcar, 0U);
+                }
+                else
+                {
+                    nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n");
+                    aux_USART_write(aux_usart1, message, nbcar, 0U);
+                    // msgMEMs.msgType = MSG_BNO055_CALIB_REQ;
+                    // xQueueSend(msgQueueMEMs , &msgMEMs, pdMS_TO_TICKS(10));
+                }
+                break;
+
+            case AP_MSG_MEMS_READY:
+                nbcar = snprintf(message, sizeof(message) - 1, "AP: MEMS ready\n");
+                aux_USART_write(aux_usart1, message, nbcar, 0U);
+                APStatus.MEMsReady = 1;
+                break;
+
+            default:
+                break;
+            }
+        }
+        compteur++;
+    }
+}
+
+/**
+ * @brief send the order engage clutch to motor task
+ * @param none
+ * Motor task stops motor if it is running and engage clutch.
+ * @return none
+ */
+
+void MOTOR_engage()
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_EMBRAYE};
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+/**
+ * @brief send the order disengage clutch to motor task
+ * @param none
+ * Motor task release clutch and stops motor if it is running.
+ * Task motor sends a message later when motor is stopped if it was moving.
+ * @return none
+ */
+
+void MOTOR_disengage()
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_DEBRAYE};
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+/**
+ * @brief send the order move angle
+ * @param angle to move radians counterclockwise (as in trigonometric functions)
+ * @return none
+ */
+
+void MOTOR_move_angle(float angle)
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_MOVE_ANGLE};
+    msg.data.moveAngle = angle;
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+/**
+ * @brief send the order move for a time
+ * @param time to move in seconds  counterclockwise if positive, clockwise if negative
+ * Used to move tiller when not in auto mode.
+ * Task motor send a message when move done.
+ * Previous move order for time is discarded if motor was running.
+ * Used for moving continuously with repeated pushes on button.
+ * @return none
+ */
+
+void MOTOR_move_time(float time)
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_MOVE_TIME};
+    msg.data.moveAngle = time;
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+void MOTOR_stop()
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_STOP};
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+void AP_init(APStatus_t *aps)
+{
+    aps->MEMsReady = 0;
+    aps->engaged = 0;
+    aps->headingToSteerDegrees = 0;
+    aps->headingToSteerRadians = 0.;
+    aps->currentHeading = 0;
+    aps->currentGap = 0;
+    aps->integratedGap = 0;
+    aps->heading = 0;
+    aps->memorizedHeading = 0;
+    aps->roll = 0;
+    aps->pitch = 0;
+    aps->yawRate = 0;
+    aps->rollRate = 0;
+    aps->pitchRate = 0;
+
+    /* PID parameters */
+    aps->kd = AP_KD;
+    aps->ki = AP_KI;
+    aps->kp = AP_KP;
+
+    /*Motor parameters*/
+    aps->motorThreshold = AP_MOTOR_THRESHOLD;
+    aps->steerAngle = 0.F;
+
+    return;
+}
+
+/**
+ * @brief Set Idle mode
+ * @param APStatus_t *aps AutoPilot structure
+ * @return none */
+
+int AP_set_mode_idle(APStatus_t *aps)
+{
+    aps->engaged = 0;
+    aps->currentGap = 0.F;
+    aps->integratedGap = 0.F;
+
+    MOTOR_disengage();
+
+    return 0;
+}
+
+int AP_set_mode_heading(APStatus_t *aps)
+{
+    /* change state engage to 1 */
+    /* No order to do since heading to steer is actual heading */
+    if (aps->engaged == 0)
+    {
+        aps->engaged = 1;
+        aps->headingToSteerRadians = aps->currentHeading;
+        aps->currentGap = 0;
+        aps->integratedGap = 0;
+        aps->steerAngle = 0.F;
+
+        MOTOR_engage();
+    }
+    /* else : Already engaged, Nothing to do*/
+    return 0;
+}
+
+int AP_turn(APStatus_t *aps, float angle)
+{
+    if (aps->engaged == 0)
+    {
+        MOTOR_move_time(angle >= 0. ? -.2F : .2F);
+    }
+    else
+    { /* AP idle, send move order to motor task */
+        aps->headingToSteerRadians += angle;
+        // AP_compute(aps);
+    }
+    return 1;
+}
+
+int AP_get_engaged(APStatus_t *aps)
+{
+    return aps->engaged;
+}
+
+float AP_get_heading_dir(APStatus_t *aps)
+{
+    return aps->headingToSteerRadians;
+}
+
+int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
+{
+    int nbcar;
+    static char message[120];
+    float steerReq;
+
+    aps->currentHeading = heading;
+    if (aps->engaged)
+    {
+        aps->currentGap = (heading - aps->headingToSteerRadians);
+        aps->integratedGap += aps->currentGap * deltat;
+        aps->yawRate = yawRate;
+
+        steerReq = aps->currentGap * aps->kp + aps->integratedGap * aps->ki + aps->yawRate * aps->kd;
+
+        nbcar = snprintf(message, sizeof(message) - 1, "AP GAP %8f  %8f  %8f  %8f\n", aps->currentGap, aps->integratedGap, aps->yawRate, steerReq);
+        aux_USART_write(aux_usart1, message, nbcar, 0U);
+
+        if (fabsf(steerReq - aps->steerAngle) > aps->motorThreshold)
+        {
+            MOTOR_move_angle(steerReq);
+            aps->steerAngle += steerReq;
+        }
+    }
+
+    return 0;
+}
