@@ -436,7 +436,7 @@ static void MX_GPIO_Init(void)
   /**/
   GPIO_InitStruct.Pin = ACC_READY_Pin|GYR_READY_Pin|MAG_READY_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_DOWN;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /**/
