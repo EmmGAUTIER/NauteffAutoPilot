@@ -23,20 +23,130 @@ SOFTWARE.
 */
 
 /*
- *  MEMs driver
- * TODO : improve dialog
+ * MEMs driver
  *
  */
-#include "string.h"
-#include <math.h>
+#define LSM9DS1_MAG_I2C_ADDR (0x1E) /* Magnetometer device address */
+#define LSM9DS1_XL_I2C_ADDR (0x6B)  /* Accelerometer and gyrometer device address */
+#define MEMS_PERIOD_MS 200
+/*
+ * Magnetometer register addresses
+ */
+
+/* Offset registers in order to compensate environmental effects */
+#define OFFSET_X_REG_L_M 0x05
+#define OFFSET_X_REG_H_M 0x06
+#define OFFSET_Y_REG_L_M 0x07
+#define OFFSET_Y_REG_H_M 0x18
+#define OFFSET_Z_REG_L_M 0x09
+#define OFFSET_Z_REG_H_M 0x1A
+
+/* Identification register WHO AM I */
+#define WHO_AM_I_REG_M 0x0F
+
+/* Magnetic control registers */
+#define CTRL_REG1_M 0x20
+#define CTRL_REG2_M 0x21
+#define CTRL_REG3_M 0x22
+#define CTRL_REG4_M 0x23
+#define CTRL_REG5_M 0x24
+
+/* Status registers */
+#define STATUS_REG_M 0x27
+
+/* Data output registers */
+#define OUT_X_L_M 0x28
+#define OUT_X_H_M 0x29
+#define OUT_Y_L_M 0x2A
+#define OUT_Y_H_M 0x2B
+#define OUT_Z_L_M 0x2C
+#define OUT_Z_H_M 0x2D
+
+// Registres d'interruption
+#define INT_CFG_M 0x30
+#define INT_SRC_M 0x31
+#define INT_THS_L_REG_M 0x32
+#define INT_THS_H_REG_M 0x33
+
+/*
+ * Register addresses of magnetometer and gyrometer registers
+ */
+
+#define ACT_THS 0x04
+#define ACT_DUR 0x05
+#define INT_GEN_CFG_XL 0x06
+#define INT_GEN_THS_X_XL 0x07
+#define INT_GEN_THS_Y_XL 0x08
+#define INT_GEN_THS_Z_XL 0x09
+#define INT_GEN_DUR_XL 0x0A
+#define REFERENCE_G 0x0B
+
+#define INT1_CTRL 0x0C
+#define INT2_CTRL 0x0D
+
+/* Identification register */
+#define WHO_AM_I_REG_XG 0x0F
+
+/* Control registers */
+#define CTRL_REG1_G 0x10
+#define CTRL_REG2_G 0x11
+#define CTRL_REG3_G 0x12
+#define ORIENT_CFG_G 0x13
+#define INT_GEN_SRC_G 0x14
+#define OUT_TEMP_L 0x15
+#define OUT_TEMP_H 0x16
+
+#define STATUS_REG_1 0x17
+
+/* Gyrometer output data registers */
+#define OUT_X_L_G 0x18
+#define OUT_X_H_G 0x19
+#define OUT_Y_L_G 0x1A
+#define OUT_Y_H_G 0x1B
+#define OUT_Z_L_G 0x1C
+#define OUT_Z_H_G 0x1D
+
+#define CTRL_REG4 0x1E
+#define CTRL_REG5_XL 0x1F
+
+#define CTRL_REG6_XL 0x20
+#define CTRL_REG7_XL 0x21
+
+#define CTRL_REG8 0x22
+#define CTRL_REG9 0x23
+#define CTRL_REG10 0x24
+
+#define INT_GEN_SRC_XL 0x26
+
+#define STATUS_REG_2 0x27
+
+/* Accelerometer data output registers */
+#define OUT_X_L_XL 0x28
+#define OUT_X_H_XL 0x29
+#define OUT_Y_L_XL 0x2A
+#define OUT_Y_H_XL 0x2B
+#define OUT_Z_L_XL 0x2C
+#define OUT_Z_H_XL 0x2D
+
+#define FIFO_CTRL 0x2E
+#define FIFO_SRC 0x2F
+
+#define INT_GEN_CFG_G 0x30
+#define INT_GEN_THS_XH_G 0x31
+#define INT_GEN_THS_XL_G 0x32
+#define INT_GEN_THS_YH_G 0x33
+#define INT_GEN_THS_YL_G 0x34
+#define INT_GEN_THS_ZH_G 0x35
+#define INT_GEN_THS_ZL_G 0x36
+#define INT_GEN_DUR_G 0x37
 
 #include "FreeRTOS.h"
 #include "timers.h"
 #include "task.h"
 #include "queue.h"
-#include "mems.h"
+// #include "mems.h"
 #include "semphr.h"
-#include "stream_buffer.h"
+// #include "stream_buffer.h"
 
 #include "printf.h"
 #include <stdbool.h>
@@ -44,626 +154,289 @@ SOFTWARE.
 #include <stm32l452xx.h>
 #include <stm32l4xx_ll_gpio.h>
 
-#include "util.h"
-//#include "gpio.h"
-//#include "exti.h"
-//#include "nvic.h"
-//#include "i2c.h"
+#include "main.h"
+#include "stm32l4xx_hal.h"
+
+#include "mems.h"
+
 #include "aux_usart.h"
-#include "geom.h"
-#include "autopilot.h"
-#include "madgwick.h"
+// #include "geom.h"
+// #include "autopilot.h"
+// #include "madgwick.h"
 
-#define MEMS_PERIOD_SEND 200
-#define MEMS_FREQUENCY_SEND (configTICK_RATE_HZ / MEMS_PERIOD_SEND)
+void timerMEMsCallback(TimerHandle_t xTimer);
 
-#define MEMS_MAG_VS_GYRO 0.5F
+extern I2C_HandleTypeDef hi2c1;
 
-QueueHandle_t msgQueueMEMs;
-TimerHandle_t timerMEMSSend;
+/* The callbacks give those semaphores */
+/* to signal to I2C_Write/Read the end of transfer*/
+SemaphoreHandle_t semi2c1tx = NULL;
+SemaphoreHandle_t semi2c1rx = NULL;
 
-#define MEMS_ACC_CORR_OFFSET_X ((9.97F - 9.62F) / 2.F)
-#define MEMS_ACC_CORR_OFFSET_Y ((9.79F - 9.75F) / 2.F)
-#define MEMS_ACC_CORR_OFFSET_Z ((10.15F - 9.68F) / 2.F)
+/* The queue of messages of the MEMs task */
+QueueHandle_t msgQueueMEMs = (QueueHandle_t)0;
 
-#define MEMS_ACC_CORR_GAIN_X (MEMS_STANDARD_GRAVITY / ((9.97 + 9.62) / 2.F))
-#define MEMS_ACC_CORR_GAIN_Y (MEMS_STANDARD_GRAVITY / ((9.79 + 9.75) / 2.F))
-#define MEMS_ACC_CORR_GAIN_Z (MEMS_STANDARD_GRAVITY / ((9.68 + 10.15) / 2.F))
+/* Timer : sends MSG periodicaly */
+static TimerHandle_t timerMEMs = (TimerHandle_t)0;
 
-#define MEMS_MAG_CORR_OFFSET_X ((2240.F - 3800.F) / 2.F)
-#define MEMS_MAG_CORR_OFFSET_Y ((1300.F - 4685.F) / 2.F)
-#define MEMS_MAG_CORR_OFFSET_Z ((1450.F - 4100.F) / 2.F)
+unsigned cpt1 = 0U; // For debugging
+unsigned cpt2 = 0U; // For debugging
 
-#define MEMS_MAG_CORR_GAIN_X (MEMS_STANDARD_GRAVITY / ((3800.F + 2240.F) / 2.F))
-#define MEMS_MAG_CORR_GAIN_Y (MEMS_STANDARD_GRAVITY / ((1300.F + 4685.F) / 2.F))
-#define MEMS_MAG_CORR_GAIN_Z (MEMS_STANDARD_GRAVITY / ((1450.F + 4100.F) / 2.F))
+/*
+ * @brief Read data from a peripheral memory by I2C bus
+ *
+ * This function reads data over I2C1 bus from a specified memory address of an I2C device.
+ * It uses DMA for the transfer and and uses semaphore for synchronisation.
+ *
+ * @param DevAddress Device address
+ * @param MemAddress Memory address to read from
+ * @param pData Pointer to the buffer where data will be stored
+ * @param Size Number of bytes to read
+ * @param delay Maximum time to wait for the semaphore
+ * @return Number of bytes read, or -1 on error or timeout
 
-#define MEMS_GYR_CORR_OFFSET_X (+0.0010589F)
-#define MEMS_GYR_CORR_OFFSET_Y (-0.0077812F)
-#define MEMS_GYR_CORR_OFFSET_Z (-0.0199720F)
+ * The address of the device is restricted to 7 bits.
+ * The function shifts the address left by 1 bit.
+ * @note This function is not reentrant.
+ */
 
-typedef struct
+int I2C_Mem_Read(uint16_t DevAddress,
+                 uint16_t MemAddress,
+                 uint8_t *pData,
+                 uint16_t Size,
+                 TickType_t delay)
 {
-    Vector3f acc;
-    Vector3f gyr;
-    Vector3f mag;
-    float roll, pitch, heading;
-    bool initialized;
-} MEMS_Status_t;
+    HAL_StatusTypeDef status;
+    BaseType_t ret;
 
-MEMS_Status_t memsStatus;
-
-void MEMS_init_status(MEMS_Status_t *mstatus)
-{
-    mstatus->acc = unitmzf;
-    mstatus->gyr = Vector3f_null;
-    mstatus->mag = Vector3f_null;
-    mstatus->roll = NAN;
-    mstatus->pitch = NAN;
-    mstatus->heading = NAN;
-    mstatus->initialized = false;
-}
-
-float MEMS_get_roll(MEMS_Status_t *mstatus)
-{
-    return mstatus->roll;
-}
-
-float MEMS_get_pitch(MEMS_Status_t *mstatus)
-{
-    return mstatus->pitch;
-}
-
-float MEMS_get_heading(MEMS_Status_t *mstatus)
-{
-    return mstatus->heading;
-}
-
-float MEMS_get_yawRate(MEMS_Status_t *mstatus)
-{
-    return mstatus->gyr.z;
-}
-
-int MEMS_new_values(MEMS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
-{
-    Vector3f dir1, dir3;
-    float heading_mag;
-    float delta_heading_mag;
-    static char message[200];
-    int nbcar;
-
-    mstatus->acc = *acc;
-    mstatus->gyr = *gyr;
-    mstatus->mag = *mag;
-
-    dir1 = vector3f_getCrossProduct(*mag, *acc);
-    dir3 = vector3f_getCrossProduct(dir1, unitmzf);
-
-    nbcar = snprintf(message, sizeof(message) - 1, "MEMS magacc %+6f %+6f %+6f   %+6f %+6f %+6f    %+6f %+6f %+6f\n",
-                     acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, dir1.x, dir1.y, dir1.z);
-    aux_USART_write(aux_usart1, message, nbcar, 0U);
-
-    if ((!mstatus->initialized) || isnan(mstatus->heading))
+    /* No delay, and function is not reentrant, */
+    ret = xSemaphoreTake(semi2c1rx, (TickType_t)0);
+    if (ret == pdFAIL)
     {
-        mstatus->heading = M_PI + atan2f(dir1.y, dir1.x);
-        mstatus->initialized = true;
-    }
-    else
-    {
-        if (isnan(gyr->z))
-        {
-            gyr->z = 0.F;
-        }
-        heading_mag = M_PI + atan2f(dir3.x, dir3.y);
-        float delta_mag = heading_mag - mstatus->heading;
-        // float delta_gyr = deltat * gyr->z;
-        mstatus->heading = mstatus->heading + (1.F - MEMS_MAG_VS_GYRO) * deltat * gyr->z + MEMS_MAG_VS_GYRO * delta_mag;
-        delta_heading_mag = heading_mag - mstatus->heading;
-        // mstatus->heading = (deltat * MEMS_MAG_VS_GYRO) * delta_heading_mag + (1 - (deltat * MEMS_MAG_VS_GYRO)) *;
+        return -1; /* Not Given */
     }
 
-    nbcar = snprintf(message, sizeof(message) - 1, "MEMS Calc %6f  %+8f  %+8f  %+8f\n",
-                     deltat, mstatus->heading, heading_mag, delta_heading_mag);
-    aux_USART_write(aux_usart1, message, nbcar, 0U);
+    status = HAL_I2C_Mem_Read_DMA(&hi2c1,
+                                  (DevAddress << 1),
+                                  MemAddress,
+                                  I2C_MEMADD_SIZE_8BIT,
+                                  pData,
+                                  Size);
 
-    dir1 = vector3f_getNormalized(*acc);
-    dir3 = vector3f_getCrossProduct(dir1, unitzf);
-    mstatus->roll = -acosf(dir3.x) + M_PI_2F;
-    mstatus->pitch = acosf(dir3.y) - M_PI_2F;
-
-    return 1;
-}
-
-#if 0
-I2C_Report_t I2C_readRegs(I2C_Handle_t *i2c, uint8_t addr, uint8_t reg, uint8_t *data, unsigned size, unsigned delay)
-{
-    uint8_t dmd_acc_code[] = {reg};
-    I2C_Transfer_t dmd_acc[] = {
-        {
-            .data = dmd_acc_code,
-            .dir = I2C_DIR_SEND,
-            .size = 1,
-        },
-        {
-            .data = data,
-            .dir = I2C_DIR_RECEIVE,
-            .size = size + 1,
-        }};
-
-    return I2C_transfer(i2c, addr, dmd_acc, 2, delay);
-}
-
-I2C_Report_t I2C_WriteRegs(I2C_Handle_t *i2c, uint8_t addr, uint8_t reg, uint8_t *data, unsigned size, unsigned delay)
-{
-    uint8_t dmd_acc_code[1];
-    dmd_acc_code[0] = reg;
-
-    I2C_Transfer_t dmd_acc[] = {
-        {
-            .data = dmd_acc_code,
-            .dir = I2C_DIR_SEND,
-            .size = 1,
-        },
-        {
-            .data = data,
-            .dir = I2C_DIR_SEND,
-            .size = size,
-        }};
-    dmd_acc[0].data = dmd_acc_code;
-    dmd_acc[0].dir = I2C_DIR_SEND;
-    dmd_acc[0].size = 1;
-    dmd_acc[1].data = data;
-    dmd_acc[1].dir = I2C_DIR_SEND;
-    dmd_acc[1].size = size;
-
-    return I2C_transfer(i2c, addr, dmd_acc, 2, delay);
-}
-
-I2C_Report_t I2C_Write(I2C_Handle_t *i2c, uint8_t addr, uint8_t *data, unsigned size, unsigned delay)
-{
-    I2C_Transfer_t transfer = {
-        .data = data,
-        .dir = I2C_DIR_SEND,
-        .size = size,
-    };
-
-    return I2C_transfer(i2c, addr, &transfer, 1, delay);
-}
-
-I2C_Report_t MEMS_readVector3x(I2C_Handle_t *i2c, uint8_t addr, uint8_t base, uint8_t *status, int16_t *vector3x, unsigned delay)
-{
-    int8_t dataint[8];
-
-    I2C_Report_t report = I2C_readRegs(i2c, addr, base, (uint8_t *)dataint, 7, delay);
-
-    if (report.ok)
+    if (status != HAL_OK)
     {
-        *status = dataint[0];
-
-        vector3x[0] = dataint[1] << 8 | dataint[2];
-        vector3x[1] = dataint[3] << 8 | dataint[4];
-        vector3x[2] = dataint[5] << 8 | dataint[6];
+        /* Error.  Release semaphore, status is ignored */
+        /* since give fails only if semaphore was taken by another task */
+        xSemaphoreGive(semi2c1rx);
+        return -2;
     }
-    return report;
+
+    /* Wait for the semaphore to be given by the ISR */
+    ret = xSemaphoreTake(semi2c1rx, delay);
+    if (ret == pdFAIL)
+    {
+        /* Timeout */
+        xSemaphoreGive(semi2c1rx); // Release the semaphore
+        return -3;                 // Timeout error
+    }
+
+    vTaskDelay(20);
+    xSemaphoreGive(semi2c1rx); // Release the semaphore
+    return Size;               /* Success */
 }
 
-I2C_Report_t MEMS_readVector3f(I2C_Handle_t *i2c, uint8_t addr, uint8_t base, uint8_t *status, Vector3f *vector, unsigned delay)
+/*
+ *
+ * This function write data over I2C1 bus to a specified memory address of an I2C device.
+ * It uses DMA for the transfer and and uses semaphore for synchronisation.
+ *
+ * @param DevAddress Device address
+ * @param MemAddress Memory address to read from
+ * @param pData Pointer to the buffer where data will be stored
+ * @param Size Number of bytes to read
+ * @param delay Maximum time to wait for the semaphore
+ * @return Number of bytes read, or -1 on error or timeout
+
+ * The address of the device is restricted to 7 bits.
+ * The function shifts the address left by 1 bit.
+ * @note This function is not reentrant.
+ */
+
+int I2C_Mem_Write(uint16_t DevAddress,
+                  uint16_t MemAddress,
+                  uint8_t *pData,
+                  uint16_t Size,
+                  TickType_t delay)
 {
-    int8_t dataint[8];
+    HAL_StatusTypeDef status;
+    BaseType_t ret;
 
-    I2C_Report_t report = I2C_readRegs(i2c, addr, base, (uint8_t *)dataint, 7, delay);
-
-    if (report.ok)
+    /* No delay, and function is not reentrant, */
+    ret = xSemaphoreTake(semi2c1tx, (TickType_t)0);
+    if (ret == pdFAIL)
     {
-        *status = dataint[0];
-
-        int16_t ints[3];
-        memcpy(ints, &dataint[1], sizeof(int16_t) * 3);
-        vector->x = (float)((ints[0]));
-        vector->y = (float)((ints[1]));
-        vector->z = (float)((ints[2]));
+        return -1; /* Not Given */
     }
-    return report;
+
+    status = HAL_I2C_Mem_Write_DMA(&hi2c1,
+                                   (DevAddress << 1),
+                                   MemAddress,
+                                   I2C_MEMADD_SIZE_8BIT,
+                                   pData,
+                                   Size);
+
+    if (status != HAL_OK)
+    {
+        /* Error.  Release semaphore, status is ignored */
+        /* since give fails only if semaphore was taken by another task */
+        xSemaphoreGive(semi2c1tx);
+        return -2;
+    }
+
+    /* Wait for the semaphore to be given by the ISR */
+    ret = xSemaphoreTake(semi2c1tx, delay);
+    if (ret == pdFAIL)
+    {
+        /* Timeout */
+        xSemaphoreGive(semi2c1tx); // Release the semaphore
+        return -3;                 // Timeout error
+    }
+
+    // vTaskDelay(50);
+
+    // status = HAL_I2C_IsDeviceReady(&hi2c1, DevAddress << 1, 3, 50);
+
+    xSemaphoreGive(semi2c1tx); // Release the semaphore
+    return Size;               /* Success */
 }
-#endif
 
-int init_taskMEMs(void)
+/*
+ * @brief Initialize MEMs task
+ *
+ * Create two binary semaphores used to signal the completion of I2C transfers.
+ * Semaphores are given so they can be taken.
+ *
+ */
+
+int init_taskMEMs()
 {
-    msgQueueMEMs = xQueueCreate(10, sizeof(MEMS_Msg_t));
-    if (msgQueueMEMs == (QueueHandle_t)0)
-    {
-        return -1;
-    }
-    // Create a timer to send MEMS data periodically
-    timerMEMSSend = xTimerCreate("MEMST1", pdMS_TO_TICKS(MEMS_PERIOD_SEND),
-                                 pdTRUE, (void *)0, MEMSSendTimerCallback);
-    if (timerMEMSSend == NULL)
-    {
-        return -1; // Timer creation failed
-    }
+    semi2c1tx = xSemaphoreCreateBinary();
+    xSemaphoreGive(semi2c1tx);
+    semi2c1rx = xSemaphoreCreateBinary();
+    xSemaphoreGive(semi2c1rx);
+
+    /* MEMs task queue creation */
+    msgQueueMEMs = xQueueCreate(10, sizeof(MEMS_MsgType_t));
+
+    /* create tick timer */
+    timerMEMs = xTimerCreate("MEMs",
+                             pdMS_TO_TICKS(MEMS_PERIOD_MS),
+                             pdTRUE,    /* Auto reload (repeat indefinitely) */
+                             (void *)0, /* Timer ID, not used */
+                             timerMEMsCallback);
+    /* TODO : test creation of objects*/
     return 0;
 }
 
-void MEMSSendTimerCallback(TimerHandle_t xTimer)
+void timerMEMsCallback(TimerHandle_t xTimer)
 {
     (void)xTimer;
 
-    static MEMS_Msg_t msg;
-    msg.msgType = MEMS_MSG_SEND;
-    msg.number = 0; // For debug purpose
+    static MEMS_Msg_t command = {
+        .msgType = MEMS_MSG_SEND};
 
-    BaseType_t res = xQueueSend(msgQueueMEMs, &msg, (TickType_t)0);
-    if (res != pdPASS)
+    xQueueSend(msgQueueMEMs, (const void *)&command, (TickType_t)0);
+
+    return;
+}
+
+int config_MEMs(void)
+{
+    int ret_m;
+    int ret_xl1;
+    int ret_int;
+
+    /* Magnetometer configuration */
+    static uint8_t cfg_m_1[] = {0x54, /* X&Y : high perf.,  ODR : 20Hz */
+                                0x00,
+                                0x00,
+                                0x08, /* Z : High perf. */
+                                0x00};
+
+    ret_m = I2C_Mem_Write(LSM9DS1_MAG_I2C_ADDR,
+                          0x20,
+                          cfg_m_1,
+                          5,
+                          100);
+
+    /* Accelerometer and gyrometer configuration */
+    static uint8_t cfg_xl_1[] = {0x20, 0x00, 0x00};
+    ret_xl1 = I2C_Mem_Write(LSM9DS1_XL_I2C_ADDR, 0x10, cfg_xl_1, sizeof(cfg_xl_1), 100);
+
+    /* LSM9DS1 interrupts generation configuration */
+    /* Interrupts set INT pins of LSM9DS1 */
+
+    static uint8_t cfg_int[] = {
+        0x01, /* INT1 pin : DRDY_XL, data ready accelerometer */
+        0x0   /* INT2 pin : DRDY_G , data ready gyrometer */
+    };
+    ret_int = I2C_Mem_Write(LSM9DS1_XL_I2C_ADDR, 0x0C, cfg_int, 2, 100);
+
+    if (ret_m < 0 || ret_xl1 < 0 || ret_int < 0)
     {
-        aux_USART_write(aux_usart1, "MEMS Send Timer Callback: Queue send failed\n", 44, 0U);
+        return -1;
+    }
+    else
+    {
+        return 1;
     }
 }
 
-void taskMEMs(void *pvParameters)
+void taskMEMs(void *param)
 {
-    (void)pvParameters;
+    (void)param;
+    int ret;
+    uint8_t reg = 0x55;
+    int drapeau;
+    int16_t vec3[3];
 
-    static char message[150];
-    int nbcar;
-    unsigned nbTours = 0U;
-    MEMS_Msg_t msgMEMs;
-    // MsgDialog_t msgDialog;
-    Vector3f vector, rvector;
-    uint8_t status = 0U;
+    int16_t x, y, z;
 
-    Vector3f acc = {0.0f, 0.0f, 0.0f};
-    Vector3f gyr = {0.0f, 0.0f, 0.0f};
-    Vector3f mag = {0.0f, 0.0f, 0.0f};
-    // Quaternionf quat;
-    int nb_acc = 0;
-    int nb_gyr = 0;
-    int nb_mag = 0;
-
-    uint8_t data2[10];
-    int accrdy = 0;
-    //I2C_Report_t report;
-
-    MEMS_Status_t mstatus;
-    BaseType_t timestamp;
-    BaseType_t timestamp_2;
-    float deltat;
-    MsgAutoPilot_t msgAutoPilot;
-
-    aux_USART_write(aux_usart1, "\n\n", 2, 0U);
-
-    MEMS_init_status(&mstatus);
-
-    /* Activation des interruptions */
-    /* GPIOB2 : Magnetic data ready RDY_M pin of LSM9DS1 */
-    EXTI_Select_Edges(2, true, false);
-    EXTI_Select_srce_input(2, 1);
-    NVIC_SetPriority(NVIC_NUM_IRQ_EXTI2, 0xD);
-    NVIC_enable_IRQ(NVIC_NUM_IRQ_EXTI2);
-    // EXTI_Intr_enable_line(2, true);
-
-    /* GPIOB0 : Accelerometer data ready INT1 pin of LSM9DS1 */
-    EXTI_Select_Edges(0, true, false);
-    EXTI_Select_srce_input(0, 1);
-    NVIC_SetPriority(NVIC_NUM_IRQ_EXTI0, 0xD);
-    NVIC_enable_IRQ(NVIC_NUM_IRQ_EXTI0);
-    EXTI_Intr_enable_line(0, true);
-
-    /* GPIOB1 : Gyrometer data ready INT2 pin of LSM9DS1 */
-    EXTI_Select_Edges(1, true, false);
-    EXTI_Select_srce_input(1, 1);
-    NVIC_SetPriority(NVIC_NUM_IRQ_EXTI1, 0xD);
-    NVIC_enable_IRQ(NVIC_NUM_IRQ_EXTI1);
-    EXTI_Intr_enable_line(1, true);
-
-    xTimerStart(timerMEMSSend, (TickType_t)0);
-
-    /* Initialisation des capteurs MEMs */
-    uint8_t cfg_m_1[] = {0x20, 0x54, 0x00, 0x00, 0x08, 0x00};
-    // report = I2C_WriteRegs(i2c1, 0x1E, 0x20, cfg_m_1, 6, 100);
-
-    /* Initialisation de l'accéléromètre */
-    // uint8_t bidon[] = {0x10, 0x20, 0x05, 0x42};
-    uint8_t bidon[] = {0x10, 0x20, 0x00, 0x00};
-    // report = I2C_Write(i2c1, 0x6B, bidon, 3 + 2, 100);
-
-    /* Configuration des interruptions du LSM9DS1 */
-    uint8_t jerrican[] = {0x0C, 0x01, 0x02};
-    // report = I2C_Write(i2c1, 0x6B, jerrican, 2 + 2, 100);
-
-    // report = MEMS_readVector3f(i2c1, 0x1E, 0x27, &status, &vector, 200);
-    // report = MEMS_readVector3f(i2c1, 0x6B, 0x17, &status, &vector, 200);
-    // report = MEMS_readVector3f(i2c1, 0x6B, 0x27, &status, &vector, 200);
-
-#if 0
-    report = I2C_readRegs(i2c1, 0x1E, 0x20, data2, 3, 200);
-    nbcar = snprintf(message,
-                     sizeof(message),
-                     "MEMS Registres 0x20 et suivants %2x %2x %2x %2x %2x %2x\n",
-                     (unsigned)data2[0], (unsigned)data2[1], (unsigned)data2[2],
-                     (unsigned)data2[3], (unsigned)data2[4], (unsigned)data2[5]);
-    aux_USART_write(aux_usart1, message, nbcar, 0U);
-
-#endif
-
-#if 0
-    report = I2C_readRegs(i2c1, 0x6B, 0x10, data2, 3, 200);
-    nbcar = snprintf(message,
-                     sizeof(message),
-                     "MEMS Registres 0x10 et suivants %2x %2x %2x %2x %2x %2x\n",
-                     (unsigned)data2[0], (unsigned)data2[1], (unsigned)data2[2],
-                     (unsigned)data2[3], (unsigned)data2[4], (unsigned)data2[5]);
-    aux_USART_write(aux_usart1, message, nbcar, 0U);
-
-    report = I2C_readRegs(i2c1, 0x6B, 0x0C, data2, 3, 200);
-    nbcar = snprintf(message,
-                     sizeof(message),
-                     "MEMS Registres 0x0C et suivants %2x %2x %2x\n",
-                     (unsigned)data2[0], (unsigned)data2[1], (unsigned)data2[2]);
-    aux_USART_write(aux_usart1, message, nbcar, 0U);
-#endif
-
-    timestamp = xTaskGetTickCount();
-
-    I2C_enable(i2c1);
+    config_MEMs();
 
     for (;;)
     {
-        // uint8_t addr = 0x6B;
-        BaseType_t res;
 
-        res = xQueueReceive(msgQueueMEMs, &msgMEMs, pdMS_TO_TICKS(1000));
-        if (res != pdPASS)
+        /* Try to read the WHO AM I registers of devices to check they are connected */
+
+        /* Lock access by binary semaphore and wait */
+        drapeau = 0;
+        cpt1++;
+
+        ret = I2C_Mem_Read(LSM9DS1_MAG_I2C_ADDR,
+                           OUT_X_L_M,
+                           &vec3,
+                           6,
+                           pdMS_TO_TICKS(100));
+        x = vec3[0];
+        y = vec3[1];
+        z = vec3[2];
+
+        if (ret < 0)
         {
-            nbcar = snprintf(message, sizeof(message), "MEMs Erreur Réception message\n");
-            aux_USART_write(aux_usart1, message, nbcar, 0U);
+            // Erreur
+            drapeau = 1;
         }
         else
         {
-            nbcar = snprintf(message, sizeof(message), "MEMs message type : %d\n", msgMEMs.msgType);
-            // aux_USART_write(aux_usart1, message, nbcar, 0U);
-
-            switch (msgMEMs.msgType)
-            {
-            case MEMS_MSG_ACC_READY:
-                accrdy = GPIO_pin_get(GPIOB, 0);
-                // report = MEMS_readVector3f(i2c1, 0x6B, 0x27, &status, &rvector, 200);
-
-                break;
-
-            case MEMS_MSG_GYR_READY:
-                accrdy = GPIO_pin_get(GPIOB, 1);
-                // report = MEMS_readVector3f(i2c1, 0x6B, 0x17, &status, &rvector, 200);
-
-                // vector = vector3f_getScaled(rvector, (245.0F / 32768.F) * (M_PI / 180.F));
-
-                gyr = vector3f_add(gyr, vector);
-                nb_gyr++;
-
-                /* display raw data, without offset and without gain correction */
-                nbcar = snprintf(message, sizeof(message),
-                                 "MEMS GYR %ld %ld %ld\n",
-                                 lrintf(rvector.x), lrintf(rvector.y), lrintf(rvector.z));
-                USART_write(usart1, message, nbcar, 0U);
-
-                break;
-
-            case MEMS_MSG_MAG_READY:
-                accrdy = GPIO_pin_get(GPIOB, 2);
-                // report = MEMS_readVector3f(i2c1, 0x1E, 0x27, &status, &vector, 200);
-
-                // vector = vector3f_getScaled(vector, (4.0F / 32768.F));
-#if 0
-                if (report.ok)
-                {
-
-                    mag = vector3f_add(mag, vector);
-                    nb_mag++;
-
-                    /* display raw data, without offset and without gain correction */
-                    nbcar = snprintf(message, sizeof(message),
-                                     "MEMS MAG %ld %ld %ld\n",
-                                     lrintf(vector.x), lrintf(vector.y), lrintf(vector.z));
-                    aux_USART_write(aux_usart1, message, nbcar, 0U);
-                }
-                else
-                {
-                    reprise_sur_erreur_i2c();
-                    nbcar = snprintf(message, sizeof(message), "====>> MEMS MAG reprise suite à erreur\n");
-                    aux_USART_write(aux_usart1, message, nbcar, 0U);
-                }
-
-#endif
-                break;
-
-            case MEMS_MSG_SEND:
-
-                uint8_t reg = 0x20 | 0x80;
-                uint8_t buffer[6];
-
-                I2C_Transfer_t seq[] = {
-                    {I2C_DIR_SEND, 0x6A, &reg, 1, NULL, 0},
-                    {I2C_DIR_RECEIVE, 0x6A, NULL, 0, buffer, 6}};
-
-                if (I2C_transfer_sequence(i2c1, seq, 2, pdMS_TO_TICKS(10)))
-                {
-                    // lecture OK
-                        nbcar = snprintf(message, sizeof(message),
-                                         "MEMS %x %x %x \n",
-                                         (int)buffer[0],
-                                         (int)buffer[1],
-                                         (int)buffer[2]);
-                        aux_USART_write(usart1, message, nbcar, 0U);
-                        nb_mag++;
-                }
-                else
-                {
-                    // erreur ou timeout
-                }
-
-#if 0
-                if (nb_mag == 0)
-                {
-                    vector.x = 0.F;
-                    vector.y = 0.F;
-                    vector.z = 0.F;
-                    report = MEMS_readVector3f(i2c1, 0x1E, 0x27, &status, &vector, 200);
-                    if (report.ok == 1)
-                    {
-                        mag = vector;
-                        nbcar = snprintf(message, sizeof(message),
-                                         "MEMS MAG %ld %ld %ld # secours\n",
-                                         lrintf(vector.x), lrintf(vector.y), lrintf(vector.z));
-                        aux_USART_write(aux_usart1, message, nbcar, 0U);
-                        nb_mag++;
-                    }
-                }
-                if (nb_acc == 0 && nb_gyr == 0 && nb_mag == 0)
-                {
-                    reprise_sur_erreur_i2c();
-                    nbcar = snprintf(message, sizeof(message), "MEMS Send reprise suite à absence de données\n");
-                    aux_USART_write(aux_usart1, message, nbcar, 0U);
-                    break;
-                }
-                else
-                {
-                    acc = vector3f_getScaled(acc, 1.0f / nb_acc);
-                    gyr = vector3f_getScaled(gyr, 1.0f / nb_gyr);
-                    mag = vector3f_getScaled(mag, 1.0f / nb_mag);
-
-                    acc.x += MEMS_ACC_CORR_OFFSET_X;
-                    acc.x *= MEMS_ACC_CORR_GAIN_X;
-                    acc.y += MEMS_ACC_CORR_OFFSET_Y;
-                    acc.y *= MEMS_ACC_CORR_GAIN_Y;
-                    acc.z += MEMS_ACC_CORR_OFFSET_Z;
-                    acc.z *= MEMS_ACC_CORR_GAIN_Z;
-
-                    mag.x += MEMS_MAG_CORR_OFFSET_X;
-                    mag.x *= MEMS_MAG_CORR_GAIN_X;
-                    mag.y += MEMS_MAG_CORR_OFFSET_Y;
-                    mag.y *= MEMS_MAG_CORR_GAIN_Y;
-                    mag.z += MEMS_MAG_CORR_OFFSET_Z;
-                    mag.z *= MEMS_MAG_CORR_GAIN_Z;
-
-                    gyr.x += MEMS_GYR_CORR_OFFSET_X;
-                    gyr.y += MEMS_GYR_CORR_OFFSET_Y;
-                    gyr.z += MEMS_GYR_CORR_OFFSET_Z;
-
-                    acc.x *= -1.F;
-                    acc.z *= -1.F;
-
-                    gyr.x *= -1.F;
-                    gyr.z *= -1.F;
-
-                    mag.x *= -1.F;
-                    mag.y *= -1.F;
-
-                    filter_Update(acc.x, acc.y, acc.z, gyr.x, gyr.y, gyr.z, mag.x, mag.y, mag.z, (float)MEMS_PERIOD_SEND / (float)configTICK_RATE_HZ);
-                    Quaternionf quat = filter_Get_Quaternion();
-                    nbcar = snprintf(message, sizeof(message),
-                                     "MEMS quat %8f %8f %8f %8f\n",
-                                     quat.w, quat.x, quat.y, quat.z);
-                    aux_USART_write(aux_usart1, message, nbcar, 0U);
-
-                    // Roll (gîte) autour de x
-                    float sinr_cosp = 2 * (quat.w * quat.x + quat.y * quat.z);
-                    float cosr_cosp = 1 - 2 * (quat.x * quat.x + quat.y * quat.y);
-                    float roll = atan2f(sinr_cosp, cosr_cosp);
-
-                    // Pitch (tangage) autour de y
-                    float sinp = 2 * (quat.w * quat.y - quat.z * quat.x);
-                    float pitch;
-                    if (fabsf(sinp) >= 1.0F)
-                        pitch = copysign(M_PI / 2, sinp);
-                    else
-                    {
-                        pitch = asinf(sinp);
-                    }
-
-                    // Yaw (cap) autour de z
-                    float siny_cosp = 2 * (quat.w * quat.z + quat.x * quat.y);
-                    float cosy_cosp = 1 - 2 * (quat.y * quat.y + quat.z * quat.z);
-                    float heading = atan2f(siny_cosp, cosy_cosp);
-
-                    nbcar = snprintf(message, sizeof(message),
-                                     "MEMS quatatt %8f %8f %8f\n",
-                                     heading, roll, pitch);
-                    aux_USART_write(aux_usart1, message, nbcar, 0U);
-
-                    timestamp_2 = xTaskGetTickCount();
-                    deltat = ((float)(timestamp_2 - timestamp) / (float)configTICK_RATE_HZ);
-                    MEMS_new_values(&mstatus, &acc, &gyr, &mag, (deltat));
-                    timestamp = timestamp_2;
-                    // MEMS_get_heading(mstatus)
-
-                    msgAutoPilot.msgType = AP_MSG_AHRS;
-                    msgAutoPilot.defaultCodes = 0;
-                    msgAutoPilot.data.IMUData.heading = MEMS_get_heading(&mstatus);
-                    msgAutoPilot.data.IMUData.roll = MEMS_get_roll(&mstatus);
-                    msgAutoPilot.data.IMUData.pitch = MEMS_get_pitch(&mstatus);
-                    msgAutoPilot.data.IMUData.yawRate = MEMS_get_yawRate(&mstatus);
-                    xQueueSend(msgQueueAutoPilot, &msgAutoPilot, pdMS_TO_TICKS(0));
-#if 1
-                    nbcar = snprintf(message, sizeof(message),
-                                     "ATTITUDE %8f %8f %8f\n",
-                                     msgAutoPilot.data.IMUData.heading,
-                                     msgAutoPilot.data.IMUData.roll,
-                                     msgAutoPilot.data.IMUData.pitch);
-                    USART_write(usart1, message, nbcar, 0U);
-#endif
-
-                    nb_acc = nb_gyr = nb_mag = 0;
-                    acc = gyr = mag = (Vector3f){0.0f, 0.0f, 0.0f};
-                }
-#endif
-            default:
-                break;
-            }
+            // succès
+            drapeau = 999;
         }
 
-        nbTours++;
-        vTaskDelay(pdMS_TO_TICKS(10));
+        vTaskDelay(pdMS_TO_TICKS(100)); /* Délai de garde pour éviter une famine */
     }
-    (void)accrdy; /* Sometime used for debugging purpose */
-}
-
-void EXTI0_Acc_Ready_Handler(void)
-{
-    static MEMS_Msg_t msgMEMs = {
-        .msgType = MEMS_MSG_ACC_READY,
-        .number = 0 // For debug purpose
-    };
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-    EXTI_clr_pending_bit(0);
-    xQueueSendToBackFromISR(msgQueueMEMs, &msgMEMs, &xHigherPriorityTaskWoken);
-
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-}
-
-void EXTI1_Gyr_Ready_Handler(void)
-{
-    static MEMS_Msg_t msgMEMs = {
-        .msgType = MEMS_MSG_GYR_READY,
-        .number = 0 // For debug purpose
-    };
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-    EXTI_clr_pending_bit(1);
-    xQueueSendToBackFromISR(msgQueueMEMs, &msgMEMs, &xHigherPriorityTaskWoken);
-
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-}
-
-void EXTI2_Mag_Ready_Handler(void)
-{
-    static MEMS_Msg_t msgMEMs = {
-        .msgType = MEMS_MSG_MAG_READY,
-        .number = 0 // For debug purpose
-    };
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-    EXTI_clr_pending_bit(2);
-    xQueueSendToBackFromISR(msgQueueMEMs, &msgMEMs, &xHigherPriorityTaskWoken);
-
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    (void)drapeau;
+    (void)x;
+    (void)y;
+    (void)z;
 }

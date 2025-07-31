@@ -22,6 +22,11 @@
 #include "stm32l4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "queue.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,6 +72,9 @@ extern UART_HandleTypeDef huart2;
 extern TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN EV */
+
+extern SemaphoreHandle_t semi2c1tx;
+extern SemaphoreHandle_t semi2c1rx;
 
 /* USER CODE END EV */
 
@@ -323,5 +331,23 @@ void DMA2_Channel7_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
+
+void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+    // TODO : if (hi2c == hi2c1) ...
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    xSemaphoreGiveFromISR(semi2c1tx, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    (void)hi2c;
+}
+
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+    // TODO : if (hi2c == hi2c1) ...
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    xSemaphoreGiveFromISR(semi2c1rx, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    (void)hi2c;
+}
 
 /* USER CODE END 1 */

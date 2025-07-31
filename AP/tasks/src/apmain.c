@@ -26,13 +26,13 @@ void taskBlink(void *param)
         vTaskDelay(pdMS_TO_TICKS(100));
 
         LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
-        vTaskDelay(pdMS_TO_TICKS(50));
+        vTaskDelay(pdMS_TO_TICKS(200));
 
         LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
         vTaskDelay(pdMS_TO_TICKS(100));
 
         LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
-        vTaskDelay(pdMS_TO_TICKS(250));
+        vTaskDelay(pdMS_TO_TICKS(600));
     }
 }
 
@@ -43,13 +43,13 @@ void apmain()
     aux_USART_Init_all();
 
     init_taskMotor();
-    // init_taskMEMs();
+    init_taskMEMs();
 
     //init_taskDialogIn();
     //init_taskAutoPilot();
 
     xTaskCreate(taskMotor, "Motor", configMINIMAL_STACK_SIZE + 200, (void *)0, 3, (void *)0);
-    // xTaskCreate(taskMEMs, "MEMs", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
+    xTaskCreate(taskMEMs, "MEMs", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
     // xTaskCreate(taskDialogIn, "Dialog", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
     // xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
 

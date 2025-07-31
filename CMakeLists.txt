@@ -49,8 +49,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     AP/tasks/src/motor.c
     AP/tasks/src/autopilot.c
     AP/tasks/src/apdialog.c
-    #AP/tasks/src/mems.c
-
+    AP/tasks/src/mems.c
 
     AP/aux/src/printf.c
     AP/aux/src/rlib.c
