@@ -77,10 +77,13 @@ void Error_Handler(void);
 #define LD4_GPIO_Port GPIOA
 #define ACC_READY_Pin LL_GPIO_PIN_0
 #define ACC_READY_GPIO_Port GPIOB
+#define ACC_READY_EXTI_IRQn EXTI0_IRQn
 #define GYR_READY_Pin LL_GPIO_PIN_1
 #define GYR_READY_GPIO_Port GPIOB
+#define GYR_READY_EXTI_IRQn EXTI1_IRQn
 #define MAG_READY_Pin LL_GPIO_PIN_2
 #define MAG_READY_GPIO_Port GPIOB
+#define MAG_READY_EXTI_IRQn EXTI2_IRQn
 #define TMS_Pin LL_GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin LL_GPIO_PIN_14

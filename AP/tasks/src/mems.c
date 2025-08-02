@@ -27,7 +27,7 @@ SOFTWARE.
  *
  */
 #define LSM9DS1_MAG_I2C_ADDR (0x1E) /* Magnetometer device address */
-#define LSM9DS1_XL_I2C_ADDR (0x6B)  /* Accelerometer and gyrometer device address */
+#define LSM9DS1_XLG_I2C_ADDR (0x6B) /* Accelerometer and gyrometer device address */
 #define MEMS_PERIOD_MS 200
 /*
  * Magnetometer register addresses
@@ -105,6 +105,7 @@ SOFTWARE.
 #define OUT_Y_H_G 0x1B
 #define OUT_Z_L_G 0x1C
 #define OUT_Z_H_G 0x1D
+#define OUT_GYR OUT_X_L_G /* For accessing x,y,z of gyr reading 6 bytes */
 
 #define CTRL_REG4 0x1E
 #define CTRL_REG5_XL 0x1F
@@ -144,29 +145,31 @@ SOFTWARE.
 #include "timers.h"
 #include "task.h"
 #include "queue.h"
-// #include "mems.h"
 #include "semphr.h"
-// #include "stream_buffer.h"
 
 #include "printf.h"
 #include <stdbool.h>
 
 #include <stm32l452xx.h>
 #include <stm32l4xx_ll_gpio.h>
+#include <stm32l4xx_ll_usart.h>
 
 #include "main.h"
 #include "stm32l4xx_hal.h"
 
+#include "service.h"
+
 #include "mems.h"
 
 #include "aux_usart.h"
-// #include "geom.h"
-// #include "autopilot.h"
+#include "geom.h"
+#include "autopilot.h"
 // #include "madgwick.h"
 
 void timerMEMsCallback(TimerHandle_t xTimer);
 
 extern I2C_HandleTypeDef hi2c1;
+extern UART_HandleTypeDef huart1;
 
 /* The callbacks give those semaphores */
 /* to signal to I2C_Write/Read the end of transfer*/
@@ -320,6 +323,8 @@ int I2C_Mem_Write(uint16_t DevAddress,
 
 int init_taskMEMs()
 {
+    // aux_USART_Init_all();
+
     semi2c1tx = xSemaphoreCreateBinary();
     xSemaphoreGive(semi2c1tx);
     semi2c1rx = xSemaphoreCreateBinary();
@@ -371,7 +376,7 @@ int config_MEMs(void)
 
     /* Accelerometer and gyrometer configuration */
     static uint8_t cfg_xl_1[] = {0x20, 0x00, 0x00};
-    ret_xl1 = I2C_Mem_Write(LSM9DS1_XL_I2C_ADDR, 0x10, cfg_xl_1, sizeof(cfg_xl_1), 100);
+    ret_xl1 = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x10, cfg_xl_1, sizeof(cfg_xl_1), 100);
 
     /* LSM9DS1 interrupts generation configuration */
     /* Interrupts set INT pins of LSM9DS1 */
@@ -380,7 +385,7 @@ int config_MEMs(void)
         0x01, /* INT1 pin : DRDY_XL, data ready accelerometer */
         0x0   /* INT2 pin : DRDY_G , data ready gyrometer */
     };
-    ret_int = I2C_Mem_Write(LSM9DS1_XL_I2C_ADDR, 0x0C, cfg_int, 2, 100);
+    ret_int = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x0C, cfg_int, 2, 100);
 
     if (ret_m < 0 || ret_xl1 < 0 || ret_int < 0)
     {
@@ -395,48 +400,111 @@ int config_MEMs(void)
 void taskMEMs(void *param)
 {
     (void)param;
-    int ret;
-    uint8_t reg = 0x55;
-    int drapeau;
-    int16_t vec3[3];
 
-    int16_t x, y, z;
+    BaseType_t ret;
+    int res;
+    MEMS_Msg_t msg;
+    int16_t vec3i16[3]; /* 3 vectors as uint16_t read from MEMs device */
+
+    unsigned long compteur = 0UL;
+
+    unsigned accNumber = 0;
+    unsigned gyrNumber = 0;
+    unsigned magNumber = 0;
+    Vector3f accCumul = Vector3f_null;
+    Vector3f gyrCumul = Vector3f_null;
+    Vector3f magCumul = Vector3f_null;
 
     config_MEMs();
+
+    /* Interrupts mustn't be enabled before the message queue is created */
+    /* so enable them */
+    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+    HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+    HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+
+    xTimerStart(timerMEMs, (TickType_t)0);
 
     for (;;)
     {
 
-        /* Try to read the WHO AM I registers of devices to check they are connected */
+        static char message[100];
 
-        /* Lock access by binary semaphore and wait */
-        drapeau = 0;
-        cpt1++;
+        ret = xQueueReceive(msgQueueMEMs, &msg, pdMS_TO_TICKS(500));
 
-        ret = I2C_Mem_Read(LSM9DS1_MAG_I2C_ADDR,
-                           OUT_X_L_M,
-                           &vec3,
-                           6,
-                           pdMS_TO_TICKS(100));
-        x = vec3[0];
-        y = vec3[1];
-        z = vec3[2];
-
-        if (ret < 0)
+        if (ret == pdPASS)
         {
-            // Erreur
-            drapeau = 1;
-        }
-        else
-        {
-            // succès
-            drapeau = 999;
+            switch (msg.msgType)
+            {
+            case MEMS_MSG_ACC_READY: /* Accelerometer data ready */
+                res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_XL,
+                                   (uint8_t*)&vec3i16, 6,
+                                   pdMS_TO_TICKS(100));
+                if (res > 0)
+                {
+                    accCumul.x = (float)vec3i16[0];
+                    accCumul.y = (float)vec3i16[1];
+                    accCumul.z = (float)vec3i16[2];
+                    accNumber++;
+                }
+                break;
+
+            case MEMS_MSG_GYR_READY: /* Gyrometer data ready */
+                res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_G,
+                                   (uint8_t*)&vec3i16, 6,
+                                   pdMS_TO_TICKS(100));
+                if (res > 0)
+                {
+                    gyrCumul.x = (float)vec3i16[0];
+                    gyrCumul.y = (float)vec3i16[1];
+                    gyrCumul.z = (float)vec3i16[2];
+                    gyrNumber++;
+                }
+                break;
+
+            case MEMS_MSG_MAG_READY: /* Magnetometer data ready */
+                res = I2C_Mem_Read(LSM9DS1_MAG_I2C_ADDR, OUT_X_L_M,
+                                   (uint8_t*)&vec3i16, 6,
+                                   pdMS_TO_TICKS(100));
+                if (res > 0)
+                {
+                    magCumul.x = (float)vec3i16[0];
+                    magCumul.y = (float)vec3i16[1];
+                    magCumul.z = (float)vec3i16[2];
+                    magNumber++;
+                }
+                break;
+
+            case MEMS_MSG_SEND: /* Compute and send orientation */
+                if (accNumber > 0)
+                {
+                    accCumul.x /= (float)accNumber;
+                    accCumul.y /= (float)accNumber;
+                    accCumul.z /= (float)accNumber;
+                }
+                if (gyrNumber > 0)
+                {
+                    gyrCumul.x /= (float)gyrNumber;
+                    gyrCumul.y /= (float)gyrNumber;
+                    gyrCumul.z /= (float)gyrNumber;
+                }
+                if (magNumber > 0)
+                {
+                    magCumul.x /= (float)magNumber;
+                    magCumul.y /= (float)magNumber;
+                    magCumul.z /= (float)magNumber;
+                }
+
+                // strcpy (message, "Bonjour\n");
+                //  HAL_StatusTypeDef
+                svc_UART_Write(&svc_uart1, "Bonjour\n", 8, pdMS_TO_TICKS(0));
+
+            default:
+                /* shouldn't hapen */
+            }
         }
 
-        vTaskDelay(pdMS_TO_TICKS(100)); /* Délai de garde pour éviter une famine */
+        vTaskDelay(pdMS_TO_TICKS(100)); /* Délai de garde, à enlever plus tard */
+        compteur++;
     }
-    (void)drapeau;
-    (void)x;
-    (void)y;
-    (void)z;
 }

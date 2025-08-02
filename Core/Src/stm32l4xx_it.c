@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    stm32l4xx_it.c
-  * @brief   Interrupt Service Routines.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    stm32l4xx_it.c
+ * @brief   Interrupt Service Routines.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -25,7 +25,10 @@
 
 #include "FreeRTOS.h"
 #include "semphr.h"
+#include "timers.h"
 #include "queue.h"
+
+#include "mems.h"
 
 /* USER CODE END Includes */
 
@@ -75,6 +78,7 @@ extern TIM_HandleTypeDef htim2;
 
 extern SemaphoreHandle_t semi2c1tx;
 extern SemaphoreHandle_t semi2c1rx;
+extern QueueHandle_t msgQueueMEMs;
 
 /* USER CODE END EV */
 
@@ -90,9 +94,9 @@ void NMI_Handler(void)
 
   /* USER CODE END NonMaskableInt_IRQn 0 */
   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
-   while (1)
-  {
-  }
+    while (1)
+    {
+    }
   /* USER CODE END NonMaskableInt_IRQn 1 */
 }
 
@@ -175,6 +179,93 @@ void DebugMon_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32l4xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles EXTI line0 interrupt.
+  */
+void EXTI0_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
+
+  /* USER CODE END EXTI0_IRQn 0 */
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_0) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_0);
+    /* USER CODE BEGIN LL_EXTI_LINE_0 */
+
+        static MEMS_Msg_t command = {
+            .msgType = MEMS_MSG_ACC_READY};
+
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+        xQueueSendToBackFromISR(msgQueueMEMs, (const void *)&command, &xHigherPriorityTaskWoken);
+
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+    /* USER CODE END LL_EXTI_LINE_0 */
+  }
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+
+  /* USER CODE END EXTI0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line1 interrupt.
+  */
+void EXTI1_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI1_IRQn 0 */
+
+  /* USER CODE END EXTI1_IRQn 0 */
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_1) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_1);
+    /* USER CODE BEGIN LL_EXTI_LINE_1 */
+
+        static MEMS_Msg_t command = {
+            .msgType = MEMS_MSG_GYR_READY};
+
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+        xQueueSendToBackFromISR(msgQueueMEMs, (const void *)&command, &xHigherPriorityTaskWoken);
+
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+    /* USER CODE END LL_EXTI_LINE_1 */
+  }
+  /* USER CODE BEGIN EXTI1_IRQn 1 */
+
+  /* USER CODE END EXTI1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line2 interrupt.
+  */
+void EXTI2_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI2_IRQn 0 */
+
+  /* USER CODE END EXTI2_IRQn 0 */
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_2) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_2);
+    /* USER CODE BEGIN LL_EXTI_LINE_2 */
+
+        static MEMS_Msg_t command = {
+            .msgType = MEMS_MSG_MAG_READY};
+
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+        xQueueSendToBackFromISR(msgQueueMEMs, (const void *)&command, &xHigherPriorityTaskWoken);
+
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+    /* USER CODE END LL_EXTI_LINE_2 */
+  }
+  /* USER CODE BEGIN EXTI2_IRQn 1 */
+
+  /* USER CODE END EXTI2_IRQn 1 */
+}
 
 /**
   * @brief This function handles DMA1 channel4 global interrupt.
@@ -349,5 +440,39 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     (void)hi2c;
 }
+#if 0
+/**
+  * @brief  EXTI line detection callback 
+  * @param  GPIO_Pin: Specifies the pins connected EXTI line
+  * @retval None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == GPIO_PIN_0) {
+        /* Votre code applicatif ici */
+        //pb0_interrupt_count++;
+        //pb0_flag = 1;
+        
+        /* Pour FreeRTOS : utiliser les versions FromISR */
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        
+        /* Exemple avec sémaphore binaire */
+        // xSemaphoreGiveFromISR(xPB0Semaphore, &xHigherPriorityTaskWoken);
+        
+        /* Exemple avec queue */
+        // uint32_t timestamp = HAL_GetTick();
+        // xQueueSendFromISR(xPB0Queue, &timestamp, &xHigherPriorityTaskWoken);
+        
+        /* Exemple avec notification de tâche */
+        // vTaskNotifyGiveFromISR(xPB0TaskHandle, &xHigherPriorityTaskWoken);
+        
+        /* Force context switch si nécessaire  */
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        
+        /* ATTENTION: Gardez ce code très court ! */
+        /* Pas de printf, HAL_Delay, ou opérations longues dans une ISR */
+    }
+}
+#endif
 
 /* USER CODE END 1 */

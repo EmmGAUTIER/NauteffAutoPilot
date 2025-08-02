@@ -50,12 +50,13 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     AP/tasks/src/autopilot.c
     AP/tasks/src/apdialog.c
     AP/tasks/src/mems.c
+    AP/tasks/src/service.c
 
     AP/aux/src/printf.c
     AP/aux/src/rlib.c
     AP/aux/src/aux_usart.c
 
-    #AP/compute/src/geom.c
+    AP/compute/src/geom.c
 )
 
 # Add include paths

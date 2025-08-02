@@ -6,6 +6,7 @@
 #include "stm32l4xx_ll_gpio.h"
 
 #include "aux_usart.h"
+#include "service.h"
 
 #include "motor.h"
 #include "mems.h"
@@ -45,8 +46,9 @@ void apmain()
     init_taskMotor();
     init_taskMEMs();
 
-    //init_taskDialogIn();
-    //init_taskAutoPilot();
+    init_taskDialogIn();
+    init_taskAutoPilot();
+    init_taskService();
 
     xTaskCreate(taskMotor, "Motor", configMINIMAL_STACK_SIZE + 200, (void *)0, 3, (void *)0);
     xTaskCreate(taskMEMs, "MEMs", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);

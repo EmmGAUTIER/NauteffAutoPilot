@@ -8,13 +8,13 @@ typedef struct
     unsigned idxEnd;
 } RingBuffer_t;
 
-INLINE void RingBufferInit(RingBuffer_t *buffer)
+INLINE void RingBuffer_Init(RingBuffer_t *buffer)
 {
     buffer->idxStart = 0U;
     buffer->idxEnd = 0U;
 }
 
-INLINE size_t RingBufferSpaceAvailable(RingBuffer_t *buffer)
+INLINE size_t RingBuffer_Available(RingBuffer_t *buffer)
 {
     size_t spaceAvailable;
 
@@ -30,3 +30,5 @@ INLINE size_t RingBufferSpaceAvailable(RingBuffer_t *buffer)
 
     return spaceAvailable;
 }
+
+INLINE size_t 
