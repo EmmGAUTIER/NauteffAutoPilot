@@ -17,3 +17,4 @@ extern ServiceUartHandle_t svc_uart2;
 
 int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void*data, size_t len, TickType_t delay);
 int init_taskService();
+void taskService(void*);

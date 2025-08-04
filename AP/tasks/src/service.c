@@ -46,8 +46,7 @@ QueueHandle_t svcQueueRequests = (QueueHandle_t)0;
 
 typedef enum
 {
-    ServiceNone,
-    ServiceUartWrite,
+    ServiceUartWrite = 0,
     ServiceUartRead,
     ServiceEnd
 } ServiceType;
@@ -68,7 +67,7 @@ typedef struct
 typedef struct
 {
     ServiceType type;
-    void* deviceHandle;
+    void *deviceHandle;
     union
     {
         ServiceTransfer_t transfer;
@@ -137,6 +136,10 @@ int init_taskService()
     {
         return -1;
     }
+
+    svc_init_UART(&svc_uart1);
+    svc_init_UART(&svc_uart2);
+
 }
 
 void taskService(void *)
@@ -149,7 +152,7 @@ void taskService(void *)
         ret = xQueueReceive(svcQueueRequests, &request, portMAX_DELAY);
         if (ret != pdFAIL)
         {
-            if (request.type > 0 && request.type < ServiceEnd)
+            if (request.type >= 0 && request.type < ServiceEnd)
             {
                 res = (*fcts[request.type])(&request);
                 (void)res;
@@ -160,6 +163,46 @@ void taskService(void *)
 
 int svc_internal_UART_Write(ServiceRequest_t *request)
 {
+    ServiceUartHandle_t *huart;
+    // int idxStart
+    size_t remaining;
+
+    huart = (ServiceUartHandle_t *)request->deviceHandle;
+    if ((huart->idxEnd - huart->idxStart) > 0)
+    {
+        remaining = SERVICE_USART_BUFFER_SIZE - (huart->idxEnd - huart->idxStart);
+    }
+    else
+    {
+        remaining = huart->idxStart - huart->idxEnd;
+    }
+    if (request->requestdescription.transfer.len <= remaining)
+    {
+        /* There is enough remaining space, copy data in circular buffer */
+        int idx = huart->idxEnd;
+        const uint8_t *data = (const uint8_t *)request->requestdescription.transfer.data;
+        size_t len = request->requestdescription.transfer.len; 
+        for (size_t i = 0; i < len; i++)
+        {
+            huart->data[idx] = data[i];
+            idx++;
+            if (idx >= SERVICE_USART_BUFFER_SIZE)
+            {
+                idx = 0;
+            }
+        }
+        if (!(HAL_UART_GetState(&huart1) & HAL_UART_STATE_BUSY_TX))
+        {
+            HAL_UART_Transmit_DMA(huart->huart,
+                                  huart->data + huart->idxStart,
+                                  request->requestdescription.transfer.len);
+        }
+    }
+    else
+    {
+        /* Plus assez de place dans le tampon */
+        return -1;
+    }
 
     return 0;
 }
@@ -174,7 +217,7 @@ int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, 
 
     request.type = ServiceUartWrite;
     request.deviceHandle = svc_uart;
-    request.requestdescription.transfer.data = (void*)data;
+    request.requestdescription.transfer.data = (void *)data;
     request.requestdescription.transfer.len = len;
     request.requestdescription.transfer.dir = ServiceDirectionOut;
 
