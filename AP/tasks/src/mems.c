@@ -436,7 +436,7 @@ void taskMEMs(void *param)
     int res;
     MEMS_Msg_t msg;
     int16_t vec3i16[3]; /* 3 vectors as uint16_t read from MEMs device */
-    char message[100];
+    static char message[120];
     size_t len;
 
     unsigned long compteur = 0UL;
@@ -444,12 +444,21 @@ void taskMEMs(void *param)
     unsigned accNumber = 0;
     unsigned gyrNumber = 0;
     unsigned magNumber = 0;
-    Vector3f accCumul = Vector3f_null;
-    Vector3f gyrCumul = Vector3f_null;
-    Vector3f magCumul = Vector3f_null;
+    int32_t accCumulx = 0;
+    int32_t accCumuly = 0;
+    int32_t accCumulz = 0;
+    int32_t gyrCumulx = 0;
+    int32_t gyrCumuly = 0;
+    int32_t gyrCumulz = 0;
+    int32_t magCumulx = 0;
+    int32_t magCumuly = 0;
+    int32_t magCumulz = 0;
     Vector3f accMean = Vector3f_null;
     Vector3f gyrMean = Vector3f_null;
     Vector3f magMean = Vector3f_null;
+    Vector3f accCorr = Vector3f_null;
+    Vector3f gyrCorr = Vector3f_null;
+    Vector3f magCorr = Vector3f_null;
 
     unsigned accTotal = 0;
     unsigned gyrTotal = 0;
@@ -492,15 +501,15 @@ void taskMEMs(void *param)
                                    pdMS_TO_TICKS(100));
                 if (res > 0)
                 {
-                    accCumul.x += (float)vec3i16[0];
-                    accCumul.y += (float)vec3i16[1];
-                    accCumul.z += (float)vec3i16[2];
+                    accCumulx += vec3i16[0];
+                    accCumuly += vec3i16[1];
+                    accCumulz += vec3i16[2];
                     accNumber++;
                     accTotal++;
                     len = snprintf(message, sizeof(message),
                                    "ACC %d %d %d\n",
                                    vec3i16[0], vec3i16[1], vec3i16[2]);
-                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
                 break;
 
@@ -510,15 +519,15 @@ void taskMEMs(void *param)
                                    pdMS_TO_TICKS(100));
                 if (res > 0)
                 {
-                    gyrCumul.x += (float)vec3i16[0];
-                    gyrCumul.y += (float)vec3i16[1];
-                    gyrCumul.z += (float)vec3i16[2];
+                    gyrCumulx += vec3i16[0];
+                    gyrCumuly += vec3i16[1];
+                    gyrCumulz += vec3i16[2];
                     gyrNumber++;
                     gyrTotal++;
                     len = snprintf(message, sizeof(message),
                                    "GYR %d %d %d\n",
                                    vec3i16[0], vec3i16[1], vec3i16[2]);
-                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
                 break;
 
@@ -528,81 +537,105 @@ void taskMEMs(void *param)
                                    pdMS_TO_TICKS(100));
                 if (res > 0)
                 {
-                    magCumul.x += (float)vec3i16[0];
-                    magCumul.y += (float)vec3i16[1];
-                    magCumul.z += (float)vec3i16[2];
+                    magCumulx += vec3i16[0];
+                    magCumuly += vec3i16[1];
+                    magCumulz += vec3i16[2];
                     magNumber++;
                     magTotal++;
                     len = snprintf(message, sizeof(message),
                                    "MAG %d %d %d\n",
                                    vec3i16[0], vec3i16[1], vec3i16[2]);
-                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
                 break;
 
             case MEMS_MSG_TICK: /* Compute and send orientation */
                 if (accNumber > 0)
                 {
-                    accMean.x = accCumul.x / (float)accNumber;
-                    accMean.y = accCumul.y / (float)accNumber;
-                    accMean.z = accCumul.z / (float)accNumber;
+                    accMean.x = (float)accCumulx / (float)accNumber;
+                    accMean.y = (float)accCumuly / (float)accNumber;
+                    accMean.z = (float)accCumulz / (float)accNumber;
 
-                    accMean.x += MEMS_ACC_CORR_OFFSET_X;
-                    accMean.x *= MEMS_ACC_CORR_GAIN_X;
-                    accMean.y += MEMS_ACC_CORR_OFFSET_Y;
-                    accMean.y *= MEMS_ACC_CORR_GAIN_Y;
-                    accMean.z += MEMS_ACC_CORR_OFFSET_Z;
-                    accMean.z *= MEMS_ACC_CORR_GAIN_Z;
+                    accCorr.x = accCorr.x + MEMS_ACC_CORR_OFFSET_X;
+                    accCorr.x = accCorr.x * MEMS_ACC_CORR_GAIN_X;
+                    accCorr.y = accCorr.y + MEMS_ACC_CORR_OFFSET_Y;
+                    accCorr.y = accCorr.y * MEMS_ACC_CORR_GAIN_Y;
+                    accCorr.z = accCorr.z + MEMS_ACC_CORR_OFFSET_Z;
+                    accCorr.z = accCorr.z * MEMS_ACC_CORR_GAIN_Z;
 
                     len = snprintf(message, sizeof(message) - 1,
                                    "ACC  %d %.2f %.2f %.2f    %.2f\n",
                                    accNumber,
-                                   accMean.x, accMean.y, accMean.z, vector3f_getNorm(accMean));
-                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                                   accCorr.x, accCorr.y, accCorr.z, vector3f_getNorm(accCorr));
+                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
 
                 if (gyrNumber > 0)
                 {
-                    gyrMean.x = gyrCumul.x / (float)gyrNumber;
-                    gyrMean.y = gyrCumul.y / (float)gyrNumber;
-                    gyrMean.z = gyrCumul.z / (float)gyrNumber;
+                    gyrMean.x = (float)gyrCumulx / (float)gyrNumber;
+                    gyrMean.y = (float)gyrCumuly / (float)gyrNumber;
+                    gyrMean.z = (float)gyrCumulz / (float)gyrNumber;
 
-                    gyrMean.x += MEMS_GYR_CORR_OFFSET_X;
-                    gyrMean.y += MEMS_GYR_CORR_OFFSET_Y;
-                    gyrMean.z += MEMS_GYR_CORR_OFFSET_Z;
+                    gyrCorr.x = gyrMean.x += MEMS_GYR_CORR_OFFSET_X;
+                    gyrCorr.y = gyrMean.y += MEMS_GYR_CORR_OFFSET_Y;
+                    gyrCorr.z = gyrMean.z += MEMS_GYR_CORR_OFFSET_Z;
 
                     len = snprintf(message, sizeof(message) - 1,
                                    "GYR  %d %.1f %.1f %.1f    %.1f\n",
                                    gyrNumber,
-                                   gyrMean.x, gyrMean.y, gyrMean.z, vector3f_getNorm(gyrMean));
-                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                                   gyrCorr.x, gyrCorr.y, gyrCorr.z, vector3f_getNorm(gyrCorr));
+                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
                 if (magNumber > 0)
                 {
-                    magMean.x = magCumul.x / (float)magNumber;
-                    magMean.y = magCumul.y / (float)magNumber;
-                    magMean.z = magCumul.z / (float)magNumber;
+                    magMean.x = (float)magCumulx / (float)magNumber;
+                    magMean.y = (float)magCumuly / (float)magNumber;
+                    magMean.z = (float)magCumulz / (float)magNumber;
 
-                    magMean.x += MEMS_MAG_CORR_OFFSET_X;
-                    magMean.x *= MEMS_MAG_CORR_GAIN_X;
-                    magMean.y += MEMS_MAG_CORR_OFFSET_Y;
-                    magMean.y *= MEMS_MAG_CORR_GAIN_Y;
-                    magMean.z += MEMS_MAG_CORR_OFFSET_Z;
-                    magMean.z *= MEMS_MAG_CORR_GAIN_Z;
+                    magCorr.x = magMean.x + MEMS_MAG_CORR_OFFSET_X;
+                    magCorr.x = magMean.x * MEMS_MAG_CORR_GAIN_X;
+                    magCorr.y = magMean.y + MEMS_MAG_CORR_OFFSET_Y;
+                    magCorr.y = magMean.y * MEMS_MAG_CORR_GAIN_Y;
+                    magCorr.z = magMean.z + MEMS_MAG_CORR_OFFSET_Z;
+                    magCorr.z = magMean.z * MEMS_MAG_CORR_GAIN_Z;
 
                     len = snprintf(message, sizeof(message) - 1,
                                    "MAG  %d %.2f %.2f %.2f    %.2f\n",
                                    magNumber,
-                                   magMean.x, magMean.y, magMean.z, vector3f_getNorm(magMean));
+                                   magCorr.x, magCorr.y, magCorr.z, vector3f_getNorm(magCorr));
+                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                }
+                if ((accNumber > 0) && (gyrNumber > 0) && (magNumber > 0))
+                {
+                    TickType_t currtime = xTaskGetTickCount();
+                    len = snprintf(message, sizeof(message) - 1,
+                                   "MEMS raw %u   %.2f %.2f %.2f    %.2f %.2f %.2f     %.2f %.2f %.2f\n",
+                                   currtime,
+                                   accMean.x, accMean.y, accMean.z,
+                                   gyrMean.x, gyrMean.y, gyrMean.z,
+                                   magMean.x, magMean.y, magMean.z);
                     svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                    if (!calibration ){
+                        autopilot_setMEMs(accMean, gyrMean, magMean);
+                    }
+                    else {
+                        /* Calibrating, put sample in calibreur */
+                        calibreur_addSample(calibreur, currTime, accMean, gyrMean, magMean);
+                    }
                 }
 
                 accNumber = 0;
                 gyrNumber = 0;
                 magNumber = 0;
-                accCumul = Vector3f_null;
-                gyrCumul = Vector3f_null;
-                magCumul = Vector3f_null;
+                accCumulx = 0;
+                accCumuly = 0;
+                accCumulz = 0;
+                gyrCumulx = 0;
+                gyrCumuly = 0;
+                gyrCumulz = 0;
+                magCumulx = 0;
+                magCumuly = 0;
+                magCumulz = 0;
 
                 break;
 
