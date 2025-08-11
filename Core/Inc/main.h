@@ -73,8 +73,14 @@ void Error_Handler(void);
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin LL_GPIO_PIN_3
 #define USART_RX_GPIO_Port GPIOA
+#define MOTOR_Pin LL_GPIO_PIN_4
+#define MOTOR_GPIO_Port GPIOA
 #define LD4_Pin LL_GPIO_PIN_5
 #define LD4_GPIO_Port GPIOA
+#define INA_Pin LL_GPIO_PIN_6
+#define INA_GPIO_Port GPIOA
+#define INB_Pin LL_GPIO_PIN_7
+#define INB_GPIO_Port GPIOA
 #define ACC_READY_Pin LL_GPIO_PIN_0
 #define ACC_READY_GPIO_Port GPIOB
 #define ACC_READY_EXTI_IRQn EXTI0_IRQn

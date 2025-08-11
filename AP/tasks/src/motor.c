@@ -47,7 +47,8 @@ SOFTWARE.
 #include "util.h"
 #include "printf.h"
 #include "rlib.h"
-#include "aux_usart.h"
+#include "service.h"
+//#include "aux_usart.h"
 
 #include "autopilot.h"
 #include "motor.h"
@@ -240,7 +241,7 @@ void taskMotor(void *parameters)
     // StaticTimer_t triggerTimerBuffer;
 
     sprintf(message, "taskMotor Départ\n");
-    aux_USART_write(aux_usart1, message, strlen(message), 0U);
+    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
 
     /* TODO : Faire un déclenchement des conversions ADC par timer */
     /* Actuellement il faut le faire par un timer géré par freertos */
@@ -253,7 +254,7 @@ void taskMotor(void *parameters)
     if (timerTriggerConv == NULL)
     {
         sprintf(message, "taskMotor : timerTriggerConv creation failed\n");
-        aux_USART_write(aux_usart1, message, strlen(message), 0U);
+        svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
     }
     else
     {
@@ -289,7 +290,7 @@ void taskMotor(void *parameters)
                 {
                     sprintf(message, "ADC %3d %f %f\n", nb2, motorData.vPower, motorData.vCurrent);
                     sprintf(message, "ADC %4d %6f %6f\n", nb2, motorData.vPower, motorData.vCurrent);
-                    aux_USART_write(aux_usart1, message, strlen(message), 0U);
+                    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
                     nbtours = 0;
                 }
 
@@ -312,7 +313,7 @@ void taskMotor(void *parameters)
                         motorData.turnAngleReq = 0.F;
                         motorData.timeStopping = 0.F;
                         sprintf(message, "Motor angle  stop  %f\n", motorData.turnAngleDone);
-                        aux_USART_write(aux_usart1, message, strlen(message), 0U);
+                        svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
                     }
                     break;
 
@@ -328,7 +329,7 @@ void taskMotor(void *parameters)
                         motorData.turnTimeReq = 0.F;
                         motorData.timeStopping = 0.F;
                         sprintf(message, "Motor time  stop  %f\n", motorData.turnTimeDone);
-                        aux_USART_write(aux_usart1, message, strlen(message), 0U);
+                        svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
                     }
                     break;
 
@@ -339,7 +340,7 @@ void taskMotor(void *parameters)
                         motorData.status = MotorIdle;
                         motorData.timeStopping = 0.F;
                         sprintf(message, "MOTOR stopped\n");
-                        aux_USART_write(aux_usart1, message, strlen(message), 0U);
+                        svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
                         msgAutoPilot.msgType = AP_MSG_MOTOR_STOPPED;
                         msgAutoPilot.data.moveReport.effort = 0.;
                         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, pdMS_TO_TICKS(0));
@@ -403,7 +404,7 @@ void taskMotor(void *parameters)
                     (motorData.direction == 1) ? motorRunToPort() : motorRunToStarboard();
 
                     sprintf(message, "MOTOR turn %s time %f\n", motorData.direction > 0 ? "port" : "starboard", motorData.turnTimeReq);
-                    aux_USART_write(aux_usart1, message, strlen(message), 0U);
+                    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
                 }
                 break;
 
@@ -417,7 +418,7 @@ void taskMotor(void *parameters)
                     motorData.direction > 0 ? motorRunToPort() : motorRunToStarboard();
 
                     sprintf(message, "MOTOR turn %s angle %f\n", motorData.direction > 0 ? "port" : "starboard", motorData.turnAngleReq);
-                    aux_USART_write(aux_usart1, message, strlen(message), 0U);
+                    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
                 }
                 break;
 

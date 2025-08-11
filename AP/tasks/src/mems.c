@@ -146,6 +146,7 @@ SOFTWARE.
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "stream_buffer.h"
 
 #include "printf.h"
 #include <stdbool.h>
@@ -157,6 +158,8 @@ SOFTWARE.
 #include "main.h"
 #include "stm32l4xx_hal.h"
 
+#include "util.h"
+#include "rlib.h"
 #include "service.h"
 
 #include "mems.h"
@@ -165,6 +168,32 @@ SOFTWARE.
 #include "geom.h"
 #include "autopilot.h"
 // #include "madgwick.h"
+
+/*
+ * Offsets and gain values for the device that is connected
+ * those values are meant to be obtained from calibration in the future
+ * and stored in flash memory.
+ */
+
+#define MEMS_ACC_CORR_OFFSET_X ((9.97F - 9.62F) / 2.F)
+#define MEMS_ACC_CORR_OFFSET_Y ((9.79F - 9.75F) / 2.F)
+#define MEMS_ACC_CORR_OFFSET_Z ((10.15F - 9.68F) / 2.F)
+
+#define MEMS_ACC_CORR_GAIN_X (MEMS_STANDARD_GRAVITY / ((9.97 + 9.62) / 2.F))
+#define MEMS_ACC_CORR_GAIN_Y (MEMS_STANDARD_GRAVITY / ((9.79 + 9.75) / 2.F))
+#define MEMS_ACC_CORR_GAIN_Z (MEMS_STANDARD_GRAVITY / ((9.68 + 10.15) / 2.F))
+
+#define MEMS_MAG_CORR_OFFSET_X ((2240.F - 3800.F) / 2.F)
+#define MEMS_MAG_CORR_OFFSET_Y ((1300.F - 4685.F) / 2.F)
+#define MEMS_MAG_CORR_OFFSET_Z ((1450.F - 4100.F) / 2.F)
+
+#define MEMS_MAG_CORR_GAIN_X (MEMS_STANDARD_GRAVITY / ((3800.F + 2240.F) / 2.F))
+#define MEMS_MAG_CORR_GAIN_Y (MEMS_STANDARD_GRAVITY / ((1300.F + 4685.F) / 2.F))
+#define MEMS_MAG_CORR_GAIN_Z (MEMS_STANDARD_GRAVITY / ((1450.F + 4100.F) / 2.F))
+
+#define MEMS_GYR_CORR_OFFSET_X (+0.0010589F)
+#define MEMS_GYR_CORR_OFFSET_Y (-0.0077812F)
+#define MEMS_GYR_CORR_OFFSET_Z (-0.0199720F)
 
 void timerMEMsCallback(TimerHandle_t xTimer);
 
@@ -243,7 +272,7 @@ int I2C_Mem_Read(uint16_t DevAddress,
         return -3;                 // Timeout error
     }
 
-    vTaskDelay(20);
+    // vTaskDelay(20);
     xSemaphoreGive(semi2c1rx); // Release the semaphore
     return Size;               /* Success */
 }
@@ -348,7 +377,7 @@ void timerMEMsCallback(TimerHandle_t xTimer)
     (void)xTimer;
 
     static MEMS_Msg_t command = {
-        .msgType = MEMS_MSG_SEND};
+        .msgType = MEMS_MSG_TICK};
 
     xQueueSend(msgQueueMEMs, (const void *)&command, (TickType_t)0);
 
@@ -375,7 +404,9 @@ int config_MEMs(void)
                           100);
 
     /* Accelerometer and gyrometer configuration */
-    static uint8_t cfg_xl_1[] = {0x20, 0x00, 0x00};
+    static uint8_t cfg_xl_1[] = {(1) << 5,
+                                 0x00,
+                                 0x00};
     ret_xl1 = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x10, cfg_xl_1, sizeof(cfg_xl_1), 100);
 
     /* LSM9DS1 interrupts generation configuration */
@@ -383,7 +414,7 @@ int config_MEMs(void)
 
     static uint8_t cfg_int[] = {
         0x01, /* INT1 pin : DRDY_XL, data ready accelerometer */
-        0x0   /* INT2 pin : DRDY_G , data ready gyrometer */
+        0x02  /* INT2 pin : DRDY_G , data ready gyrometer */
     };
     ret_int = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x0C, cfg_int, 2, 100);
 
@@ -405,6 +436,8 @@ void taskMEMs(void *param)
     int res;
     MEMS_Msg_t msg;
     int16_t vec3i16[3]; /* 3 vectors as uint16_t read from MEMs device */
+    char message[100];
+    size_t len;
 
     unsigned long compteur = 0UL;
 
@@ -414,21 +447,38 @@ void taskMEMs(void *param)
     Vector3f accCumul = Vector3f_null;
     Vector3f gyrCumul = Vector3f_null;
     Vector3f magCumul = Vector3f_null;
+    Vector3f accMean = Vector3f_null;
+    Vector3f gyrMean = Vector3f_null;
+    Vector3f magMean = Vector3f_null;
+
+    unsigned accTotal = 0;
+    unsigned gyrTotal = 0;
+    unsigned magTotal = 0;
 
     config_MEMs();
 
     /* Interrupts mustn't be enabled before the message queue is created */
-    /* so enable them */
+    /* so enable them now */
     HAL_NVIC_EnableIRQ(EXTI0_IRQn);
     HAL_NVIC_EnableIRQ(EXTI1_IRQn);
     HAL_NVIC_EnableIRQ(EXTI2_IRQn);
 
     xTimerStart(timerMEMs, (TickType_t)0);
 
+    res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_XL,
+                       (uint8_t *)&vec3i16, 6,
+                       pdMS_TO_TICKS(100));
+    res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_G,
+                       (uint8_t *)&vec3i16, 6,
+                       pdMS_TO_TICKS(100));
+    res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_M,
+                       (uint8_t *)&vec3i16, 6,
+                       pdMS_TO_TICKS(100));
+
     for (;;)
     {
 
-        static char message[100];
+        // static char message[100];
 
         ret = xQueueReceive(msgQueueMEMs, &msg, pdMS_TO_TICKS(500));
 
@@ -438,73 +488,138 @@ void taskMEMs(void *param)
             {
             case MEMS_MSG_ACC_READY: /* Accelerometer data ready */
                 res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_XL,
-                                   (uint8_t*)&vec3i16, 6,
+                                   (uint8_t *)&vec3i16, 6,
                                    pdMS_TO_TICKS(100));
                 if (res > 0)
                 {
-                    accCumul.x = (float)vec3i16[0];
-                    accCumul.y = (float)vec3i16[1];
-                    accCumul.z = (float)vec3i16[2];
+                    accCumul.x += (float)vec3i16[0];
+                    accCumul.y += (float)vec3i16[1];
+                    accCumul.z += (float)vec3i16[2];
                     accNumber++;
+                    accTotal++;
+                    len = snprintf(message, sizeof(message),
+                                   "ACC %d %d %d\n",
+                                   vec3i16[0], vec3i16[1], vec3i16[2]);
+                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
                 break;
 
             case MEMS_MSG_GYR_READY: /* Gyrometer data ready */
                 res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_G,
-                                   (uint8_t*)&vec3i16, 6,
+                                   (uint8_t *)&vec3i16, 6,
                                    pdMS_TO_TICKS(100));
                 if (res > 0)
                 {
-                    gyrCumul.x = (float)vec3i16[0];
-                    gyrCumul.y = (float)vec3i16[1];
-                    gyrCumul.z = (float)vec3i16[2];
+                    gyrCumul.x += (float)vec3i16[0];
+                    gyrCumul.y += (float)vec3i16[1];
+                    gyrCumul.z += (float)vec3i16[2];
                     gyrNumber++;
+                    gyrTotal++;
+                    len = snprintf(message, sizeof(message),
+                                   "GYR %d %d %d\n",
+                                   vec3i16[0], vec3i16[1], vec3i16[2]);
+                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
                 break;
 
             case MEMS_MSG_MAG_READY: /* Magnetometer data ready */
                 res = I2C_Mem_Read(LSM9DS1_MAG_I2C_ADDR, OUT_X_L_M,
-                                   (uint8_t*)&vec3i16, 6,
+                                   (uint8_t *)&vec3i16, 6,
                                    pdMS_TO_TICKS(100));
                 if (res > 0)
                 {
-                    magCumul.x = (float)vec3i16[0];
-                    magCumul.y = (float)vec3i16[1];
-                    magCumul.z = (float)vec3i16[2];
+                    magCumul.x += (float)vec3i16[0];
+                    magCumul.y += (float)vec3i16[1];
+                    magCumul.z += (float)vec3i16[2];
                     magNumber++;
+                    magTotal++;
+                    len = snprintf(message, sizeof(message),
+                                   "MAG %d %d %d\n",
+                                   vec3i16[0], vec3i16[1], vec3i16[2]);
+                    // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
                 break;
 
-            case MEMS_MSG_SEND: /* Compute and send orientation */
+            case MEMS_MSG_TICK: /* Compute and send orientation */
                 if (accNumber > 0)
                 {
-                    accCumul.x /= (float)accNumber;
-                    accCumul.y /= (float)accNumber;
-                    accCumul.z /= (float)accNumber;
+                    accMean.x = accCumul.x / (float)accNumber;
+                    accMean.y = accCumul.y / (float)accNumber;
+                    accMean.z = accCumul.z / (float)accNumber;
+
+                    accMean.x += MEMS_ACC_CORR_OFFSET_X;
+                    accMean.x *= MEMS_ACC_CORR_GAIN_X;
+                    accMean.y += MEMS_ACC_CORR_OFFSET_Y;
+                    accMean.y *= MEMS_ACC_CORR_GAIN_Y;
+                    accMean.z += MEMS_ACC_CORR_OFFSET_Z;
+                    accMean.z *= MEMS_ACC_CORR_GAIN_Z;
+
+                    len = snprintf(message, sizeof(message) - 1,
+                                   "ACC  %d %.2f %.2f %.2f    %.2f\n",
+                                   accNumber,
+                                   accMean.x, accMean.y, accMean.z, vector3f_getNorm(accMean));
+                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
+
                 if (gyrNumber > 0)
                 {
-                    gyrCumul.x /= (float)gyrNumber;
-                    gyrCumul.y /= (float)gyrNumber;
-                    gyrCumul.z /= (float)gyrNumber;
+                    gyrMean.x = gyrCumul.x / (float)gyrNumber;
+                    gyrMean.y = gyrCumul.y / (float)gyrNumber;
+                    gyrMean.z = gyrCumul.z / (float)gyrNumber;
+
+                    gyrMean.x += MEMS_GYR_CORR_OFFSET_X;
+                    gyrMean.y += MEMS_GYR_CORR_OFFSET_Y;
+                    gyrMean.z += MEMS_GYR_CORR_OFFSET_Z;
+
+                    len = snprintf(message, sizeof(message) - 1,
+                                   "GYR  %d %.1f %.1f %.1f    %.1f\n",
+                                   gyrNumber,
+                                   gyrMean.x, gyrMean.y, gyrMean.z, vector3f_getNorm(gyrMean));
+                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
                 if (magNumber > 0)
                 {
-                    magCumul.x /= (float)magNumber;
-                    magCumul.y /= (float)magNumber;
-                    magCumul.z /= (float)magNumber;
+                    magMean.x = magCumul.x / (float)magNumber;
+                    magMean.y = magCumul.y / (float)magNumber;
+                    magMean.z = magCumul.z / (float)magNumber;
+
+                    magMean.x += MEMS_MAG_CORR_OFFSET_X;
+                    magMean.x *= MEMS_MAG_CORR_GAIN_X;
+                    magMean.y += MEMS_MAG_CORR_OFFSET_Y;
+                    magMean.y *= MEMS_MAG_CORR_GAIN_Y;
+                    magMean.z += MEMS_MAG_CORR_OFFSET_Z;
+                    magMean.z *= MEMS_MAG_CORR_GAIN_Z;
+
+                    len = snprintf(message, sizeof(message) - 1,
+                                   "MAG  %d %.2f %.2f %.2f    %.2f\n",
+                                   magNumber,
+                                   magMean.x, magMean.y, magMean.z, vector3f_getNorm(magMean));
+                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                 }
 
-                // strcpy (message, "Bonjour\n");
-                //  HAL_StatusTypeDef
-                svc_UART_Write(&svc_uart1, "Bonjour\n", 8, pdMS_TO_TICKS(0));
+                accNumber = 0;
+                gyrNumber = 0;
+                magNumber = 0;
+                accCumul = Vector3f_null;
+                gyrCumul = Vector3f_null;
+                magCumul = Vector3f_null;
+
+                break;
+
+            case MEMS_MSG_CALIBRATE:
+                len = snprintf(message, sizeof(message),
+                               "-----> Calibration demandée\n");
+                svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+
+                /* Allocate memory to store values  */
+
+                break;
 
             default:
                 /* shouldn't hapen */
             }
         }
 
-        vTaskDelay(pdMS_TO_TICKS(100)); /* Délai de garde, à enlever plus tard */
         compteur++;
     }
 }

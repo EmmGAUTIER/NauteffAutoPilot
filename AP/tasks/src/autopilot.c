@@ -39,8 +39,7 @@ SOFTWARE.
 #include <stm32l452xx.h>
 #include <stm32l4xx_ll_gpio.h>
 
-#include "aux_usart.h"
-//#include "gpio.h"
+#include "service.h"
 
 #include "motor.h"
 #include "mems.h"
@@ -126,13 +125,13 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
             case AP_MSG_MODE_HEADING:
                 AP_set_mode_heading(&APStatus);
                 nbcar = snprintf(message, sizeof(message), "AP Mode heading %.1f\n", AP_get_heading_dir(&APStatus));
-                aux_USART_write(aux_usart1, message, nbcar, 0U);
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
                 timestamp = xTaskGetTickCount();
                 break;
 
             case AP_MSG_MODE_IDLE:
                 nbcar = snprintf(message, sizeof(message), "AP Mode idle\n");
-                aux_USART_write(aux_usart1, message, nbcar, 0U);
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
                 AP_set_mode_idle(&APStatus);
                 break;
 
@@ -141,7 +140,7 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 if (AP_get_engaged(&APStatus))
                 {
                     nbcar = snprintf(message, sizeof(message), "AP Mode heading %8f\n", AP_get_heading_dir(&APStatus));
-                    aux_USART_write(aux_usart1, message, nbcar, 0U);
+                    svc_UART_Write(&svc_uart2, message, nbcar, 0U);
                 }
                 break;
 
@@ -160,7 +159,7 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 
             case AP_MSG_PARAM:
                 nbcar = snprintf(message, sizeof(message) - 1, "AP: param %d %f\n", (int)msg.data.coefficient.param_number, msg.data.coefficient.param_value);
-                aux_USART_write(aux_usart1, message, nbcar, 0U);
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
                 // APStatus.headingToSteer = msg.data.reqHeading;
                 switch (msg.data.coefficient.param_number)
                 {
@@ -182,20 +181,20 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 if (APStatus.engaged)
                 {
                     nbcar = snprintf(message, sizeof(message) - 1, "AP: MEMS calibrate impossible while AP engaged\n");
-                    aux_USART_write(aux_usart1, message, nbcar, 0U);
+                    svc_UART_Write(&svc_uart2, message, nbcar, 0U);
                 }
                 else
                 {
-                    nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n");
-                    aux_USART_write(aux_usart1, message, nbcar, 0U);
-                    // msgMEMs.msgType = MSG_BNO055_CALIB_REQ;
-                    // xQueueSend(msgQueueMEMs , &msgMEMs, pdMS_TO_TICKS(10));
+                    //nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n");
+                    //svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                    static MEMS_Msg_t msgMEMs = {.msgType = MEMS_MSG_CALIBRATE};
+                    xQueueSend(msgQueueMEMs , &msgMEMs, pdMS_TO_TICKS(10));
                 }
                 break;
 
             case AP_MSG_MEMS_READY:
                 nbcar = snprintf(message, sizeof(message) - 1, "AP: MEMS ready\n");
-                aux_USART_write(aux_usart1, message, nbcar, 0U);
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
                 APStatus.MEMsReady = 1;
                 break;
 
@@ -373,7 +372,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
         steerReq = aps->currentGap * aps->kp + aps->integratedGap * aps->ki + aps->yawRate * aps->kd;
 
         nbcar = snprintf(message, sizeof(message) - 1, "AP GAP %8f  %8f  %8f  %8f\n", aps->currentGap, aps->integratedGap, aps->yawRate, steerReq);
-        aux_USART_write(aux_usart1, message, nbcar, 0U);
+        svc_UART_Write(&svc_uart2, message, nbcar, 0U);
 
         if (fabsf(steerReq - aps->steerAngle) > aps->motorThreshold)
         {

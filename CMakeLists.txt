@@ -54,7 +54,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 
     AP/aux/src/printf.c
     AP/aux/src/rlib.c
-    AP/aux/src/aux_usart.c
+    #AP/aux/src/aux_usart.c
+    AP/aux/src/rbuffer.c
 
     AP/compute/src/geom.c
 )

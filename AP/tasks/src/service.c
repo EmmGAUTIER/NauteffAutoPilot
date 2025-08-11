@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "FreeRTOS.h"
 #include "message_buffer.h"
+#include "stream_buffer.h"
 #include "semphr.h"
 #include "queue.h"
 #include "task.h"
@@ -36,6 +37,7 @@ SOFTWARE.
 #include "main.h"
 #include "stm32l4xx_hal.h"
 
+#include "rbuffer.h"
 #include "service.h"
 
 extern I2C_HandleTypeDef hi2c1;
@@ -47,6 +49,7 @@ QueueHandle_t svcQueueRequests = (QueueHandle_t)0;
 typedef enum
 {
     ServiceUartWrite = 0,
+    ServiceUartEndWriteDMA,
     ServiceUartRead,
     ServiceEnd
 } ServiceType;
@@ -74,45 +77,34 @@ typedef struct
     } requestdescription;
 } ServiceRequest_t;
 
-#if 0
-typedef struct
-{
-    UART_HandleTypeDef *huart;
-    uint8_t data[SERVICE_USART_BUFFER_SIZE];
-    unsigned idxStart;
-    unsigned idxEnd;
-    SemaphoreHandle_t sem;
-} ServiceUartHandle_t;
-#endif
-
 ServiceUartHandle_t svc_uart1 =
     {
         .huart = &huart1,
-        .idxStart = 0U,
-        .idxEnd = 0U,
-        .sem = 0U};
+        .dma_tx_busy = 0U,
+        .charRx = 0U,
+        .receiveBuffer = (StreamBufferHandle_t)0,
+};
 
 ServiceUartHandle_t svc_uart2 =
     {
-        .huart = &huart1,
-        .idxStart = 0U,
-        .idxEnd = 0U,
-        .sem = 0U};
+        .huart = &huart2,
+        .dma_tx_busy = 0U,
+        .charRx = 0U,
+        .receiveBuffer = (StreamBufferHandle_t)0,
+};
 
 int svc_init_UART(ServiceUartHandle_t *svc_uart)
 {
-    svc_uart->sem = xSemaphoreCreateBinary();
-    if (svc_uart->sem == NULL)
-    {
-        return -1;
-    }
-    xSemaphoreGive(svc_uart->sem);
-
+    svc_uart->receiveBuffer = xStreamBufferCreate((size_t)200, 1);
+    rbuffer_init(&svc_uart->bufferTx);
+    svc_uart->dma_tx_busy = 0U;
     return 1;
 }
 
 int svc_internal_UART_Write(ServiceRequest_t *request);
+int svc_internal_UART_EndWriteDMA(ServiceRequest_t *request);
 
+#if 0
 int scv_init_UARTS()
 {
     svc_init_UART(&svc_uart1);
@@ -120,38 +112,59 @@ int scv_init_UARTS()
 
     return 0;
 }
-
-int((*fcts[])(ServiceRequest_t *)) = {
-    svc_internal_UART_Write};
+#endif
 
 int init_taskService()
 {
     svcQueueRequests = xQueueCreate(SERVICE_QUEUE_LENGTH,
                                     sizeof(ServiceRequest_t));
-    if (svcQueueRequests != pdFAIL)
-    {
-        return 1;
-    }
-    else
+    if (svcQueueRequests == pdFAIL)
     {
         return -1;
     }
 
     svc_init_UART(&svc_uart1);
     svc_init_UART(&svc_uart2);
-
 }
+
+int((*fcts[])(ServiceRequest_t *)) = {
+    svc_internal_UART_Write,
+    svc_internal_UART_EndWriteDMA};
+
+/*
+ * @brief Task that serves io and peripherals requests
+ * @param pvParameters: Not used
+ * @retval None
+ *
+ * This task is created by the main task and runs indefinitely.
+ * It processes requests from the service queue.
+ * This task is designed to handle requests in a non-blocking manner,
+ * allowing it to efficiently manage multiple requests without
+ * blocking the main execution flow. It uses a queue to receive
+ * requests and processes them based on their type.
+ * The user sends requests whith the service functions.
+ */
 
 void taskService(void *)
 {
     ServiceRequest_t request;
     BaseType_t ret;
     int res;
+
+    /* Enable reception by interrupts  of UARTS */
+
+    HAL_UART_Receive_IT(svc_uart1.huart, &(svc_uart1.charRx), 1);
+    HAL_UART_Receive_IT(svc_uart2.huart, &(svc_uart2.charRx), 1);
+
     for (;;)
     {
         ret = xQueueReceive(svcQueueRequests, &request, portMAX_DELAY);
         if (ret != pdFAIL)
         {
+            /*
+             * The request to serve is ian index to the functions array.
+             * The use of a switch statement is less efficient.
+             */
             if (request.type >= 0 && request.type < ServiceEnd)
             {
                 res = (*fcts[request.type])(&request);
@@ -159,52 +172,6 @@ void taskService(void *)
             }
         }
     }
-}
-
-int svc_internal_UART_Write(ServiceRequest_t *request)
-{
-    ServiceUartHandle_t *huart;
-    // int idxStart
-    size_t remaining;
-
-    huart = (ServiceUartHandle_t *)request->deviceHandle;
-    if ((huart->idxEnd - huart->idxStart) > 0)
-    {
-        remaining = SERVICE_USART_BUFFER_SIZE - (huart->idxEnd - huart->idxStart);
-    }
-    else
-    {
-        remaining = huart->idxStart - huart->idxEnd;
-    }
-    if (request->requestdescription.transfer.len <= remaining)
-    {
-        /* There is enough remaining space, copy data in circular buffer */
-        int idx = huart->idxEnd;
-        const uint8_t *data = (const uint8_t *)request->requestdescription.transfer.data;
-        size_t len = request->requestdescription.transfer.len; 
-        for (size_t i = 0; i < len; i++)
-        {
-            huart->data[idx] = data[i];
-            idx++;
-            if (idx >= SERVICE_USART_BUFFER_SIZE)
-            {
-                idx = 0;
-            }
-        }
-        if (!(HAL_UART_GetState(&huart1) & HAL_UART_STATE_BUSY_TX))
-        {
-            HAL_UART_Transmit_DMA(huart->huart,
-                                  huart->data + huart->idxStart,
-                                  request->requestdescription.transfer.len);
-        }
-    }
-    else
-    {
-        /* Plus assez de place dans le tampon */
-        return -1;
-    }
-
-    return 0;
 }
 
 int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, TickType_t delay)
@@ -224,4 +191,137 @@ int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, 
     ret = xQueueSend(svcQueueRequests, &request, delay);
 
     return (ret == pdPASS) ? len : -1;
+}
+
+int svc_UART_getc(ServiceUartHandle_t *svc_uart, TickType_t delay)
+{
+    size_t ret;
+    int car = NULL;
+    UART_HandleTypeDef huart;
+
+    ret = xStreamBufferReceive(svc_uart->receiveBuffer, &car, 1, delay);
+
+    return (ret == 0) ? 0 : car;
+}
+
+int svc_internal_UART_EndWriteDMA(ServiceRequest_t *request)
+{
+    ServiceUartHandle_t *svc_uart; /* Service UART Handle with HAL ptr and buffer */
+    UART_HandleTypeDef *huart;     /* HAL UART Handle */
+
+    svc_uart = (ServiceUartHandle_t *)request->deviceHandle;
+    huart = svc_uart->huart;
+    rbuffer_skip(&svc_uart->bufferTx, svc_uart->dma_tx_busy);
+    svc_uart->dma_tx_busy = 0; /* Reset DMA transfer busy flag */
+    if (!rbuffer_isEmpty(&svc_uart->bufferTx))
+    {
+        void *data;
+        size_t len;
+        rbuffer_getNextBlock(&svc_uart->bufferTx, &data, &len);
+        HAL_UART_Transmit_DMA(huart, data, len);
+        svc_uart->dma_tx_busy = len; /* Set DMA transfer busy flag */
+
+        return 0;
+    }
+
+    return 1;
+}
+
+/*
+ * @brief Copies data and initiates DMA transmission over UART
+ * @param request: Pointer to the ServiceRequest_t structure containing the request informations
+ */
+int svc_internal_UART_Write(ServiceRequest_t *request)
+{
+    ServiceUartHandle_t *svc_uart; /* Service UART Handle with HAL ptr and buffer */
+    UART_HandleTypeDef *huart;     /* HAL UART Handle */
+    // size_t remaining;              /* remaining space in circular buffer */
+    // size_t reqlen;                 /* Requested data length to write */
+    // size_t transferlen;            /* Length of data that can be transfered */
+    size_t buffput; /* Length of data put in buffer */
+
+    svc_uart = (ServiceUartHandle_t *)request->deviceHandle;
+    huart = svc_uart->huart;
+
+    buffput = rbuffer_write(&svc_uart->bufferTx,
+                            request->requestdescription.transfer.data,
+                            request->requestdescription.transfer.len);
+
+    if ((buffput > 0) && (!(svc_uart->dma_tx_busy)))
+    /* Data added in buffer and no DMA transfer in progress */
+    /* initiate a DMA transfer*/
+    {
+        void *data;
+        size_t len;
+        rbuffer_getNextBlock(&svc_uart->bufferTx, &data, &len);
+        HAL_UART_Transmit_DMA(huart, data, len);
+        svc_uart->dma_tx_busy = len; /* Set DMA transfer busy flag */
+    }
+
+    return buffput;
+}
+/*
+ * @brief Callback function called when UART transmission is complete
+ * @param huart: Pointer to the UART_HandleTypeDef of the UART.
+ * @return none
+ * This function is called by HAL when DMA transmission is complete.
+ * It sets the dma_tx_busy flag to 0 for the corresponding UART handle.
+ *
+ *
+ */
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+    static ServiceRequest_t request = {
+        .type = ServiceUartEndWriteDMA};
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+    // Cherche le handle de service correspondant
+    ServiceUartHandle_t *svc_uart = NULL;
+    if (huart == svc_uart1.huart)
+    {
+        svc_uart = &svc_uart1;
+    }
+    else if (huart == svc_uart2.huart)
+    {
+        svc_uart = &svc_uart2;
+    }
+
+    /* End of a DMA transfer, sends a notification to service task */
+    if (svc_uart != NULL)
+    {
+        request.deviceHandle = svc_uart;
+        xQueueSendFromISR(svcQueueRequests, &request, &xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
+}
+
+/*
+ * @brief Callback called by HAL interrupt function
+ * This callback has to call the xxxFromISR() functions of FreeRTOS
+ *
+ */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    ServiceUartHandle_t *svc_uart = (ServiceUartHandle_t *)0;
+    if (huart == svc_uart1.huart)
+    {
+        svc_uart = &svc_uart1;
+    }
+    else if (huart == svc_uart2.huart)
+    {
+        svc_uart = &svc_uart2;
+    }
+
+    if (huart != (UART_HandleTypeDef *)0)
+    {
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        xStreamBufferSendFromISR(svc_uart->receiveBuffer,
+                                 &(svc_uart->charRx),
+                                 1,
+                                 &xHigherPriorityTaskWoken);
+        /* Relance de la réception de caractères */
+        HAL_UART_Receive_IT(svc_uart->huart, &svc_uart->charRx, 1); // Réarmement
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
 }

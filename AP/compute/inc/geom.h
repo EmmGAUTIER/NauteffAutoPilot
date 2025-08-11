@@ -129,7 +129,7 @@ float vector3f_getDotProduct(Vector3f v1, Vector3f v2);
 Vector3f vector3f_getScaled(Vector3f v, float a);
 
 /**
- * @brief Computes the Euclidean norm (length) of a 3D vector.
+ * @brief Computes the Euclidean norm ("length") of a 3D vector.
  *
  * The norm is calculated as sqrt(x^2 + y^2 + z^2).
  *
