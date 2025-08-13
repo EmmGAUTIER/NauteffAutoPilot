@@ -143,6 +143,7 @@ typedef struct
 
 int init_taskAutoPilot(void);
 void taskAutoPilot(void *parameters);
+int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
 
 // int ap_init(APStatus_t *ap);
 // int ap_set_heading(APStatus_t *ap, int heading);

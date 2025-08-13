@@ -29,6 +29,7 @@ SOFTWARE.
 #define LSM9DS1_MAG_I2C_ADDR (0x1E) /* Magnetometer device address */
 #define LSM9DS1_XLG_I2C_ADDR (0x6B) /* Accelerometer and gyrometer device address */
 #define MEMS_PERIOD_MS 200
+#define MEMS_PERIOD_S ((float)MEMS_PERIOD_MS / 1000.0F)
 /*
  * Magnetometer register addresses
  */
@@ -164,9 +165,10 @@ SOFTWARE.
 
 #include "mems.h"
 
-#include "aux_usart.h"
+// #include "aux_usart.h"
 #include "geom.h"
 #include "autopilot.h"
+#include "imu.h"
 // #include "madgwick.h"
 
 /*
@@ -191,9 +193,9 @@ SOFTWARE.
 #define MEMS_MAG_CORR_GAIN_Y (MEMS_STANDARD_GRAVITY / ((1300.F + 4685.F) / 2.F))
 #define MEMS_MAG_CORR_GAIN_Z (MEMS_STANDARD_GRAVITY / ((1450.F + 4100.F) / 2.F))
 
-#define MEMS_GYR_CORR_OFFSET_X (+0.0010589F)
-#define MEMS_GYR_CORR_OFFSET_Y (-0.0077812F)
-#define MEMS_GYR_CORR_OFFSET_Z (-0.0199720F)
+#define MEMS_GYR_CORR_OFFSET_X (+23.F)
+#define MEMS_GYR_CORR_OFFSET_Y (-60.F)
+#define MEMS_GYR_CORR_OFFSET_Z (-153.F)
 
 void timerMEMsCallback(TimerHandle_t xTimer);
 
@@ -213,6 +215,27 @@ static TimerHandle_t timerMEMs = (TimerHandle_t)0;
 
 unsigned cpt1 = 0U; // For debugging
 unsigned cpt2 = 0U; // For debugging
+
+/*
+ * @brief Correct the accelerometer, gyrometer and magnetometer values
+ */
+void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
+{
+    /* Correct the accelerometer values */
+    acc->x = (acc->x - MEMS_ACC_CORR_OFFSET_X) * MEMS_ACC_CORR_GAIN_X;
+    acc->y = (acc->y - MEMS_ACC_CORR_OFFSET_Y) * MEMS_ACC_CORR_GAIN_Y;
+    acc->z = (acc->z - MEMS_ACC_CORR_OFFSET_Z) * MEMS_ACC_CORR_GAIN_Z;
+
+    /* Correct the gyrometer values */
+    gyr->x -= MEMS_GYR_CORR_OFFSET_X;
+    gyr->y -= MEMS_GYR_CORR_OFFSET_Y;
+    gyr->z -= MEMS_GYR_CORR_OFFSET_Z;
+
+    /* Correct the magnetometer values */
+    mag->x = (mag->x - MEMS_MAG_CORR_OFFSET_X) * MEMS_MAG_CORR_GAIN_X;
+    mag->y = (mag->y - MEMS_MAG_CORR_OFFSET_Y) * MEMS_MAG_CORR_GAIN_Y;
+    mag->z = (mag->z - MEMS_MAG_CORR_OFFSET_Z) * MEMS_MAG_CORR_GAIN_Z;
+}
 
 /*
  * @brief Read data from a peripheral memory by I2C bus
@@ -438,6 +461,8 @@ void taskMEMs(void *param)
     int16_t vec3i16[3]; /* 3 vectors as uint16_t read from MEMs device */
     static char message[120];
     size_t len;
+    unsigned calibration = 0;
+    Calibreur_t *calibreur;
 
     unsigned long compteur = 0UL;
 
@@ -460,6 +485,7 @@ void taskMEMs(void *param)
     Vector3f gyrCorr = Vector3f_null;
     Vector3f magCorr = Vector3f_null;
 
+    /* For debugging purpose only, to remove later */
     unsigned accTotal = 0;
     unsigned gyrTotal = 0;
     unsigned magTotal = 0;
@@ -498,7 +524,7 @@ void taskMEMs(void *param)
             case MEMS_MSG_ACC_READY: /* Accelerometer data ready */
                 res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_XL,
                                    (uint8_t *)&vec3i16, 6,
-                                   pdMS_TO_TICKS(100));
+                                   pdMS_TO_TICKS(10));
                 if (res > 0)
                 {
                     accCumulx += vec3i16[0];
@@ -516,7 +542,7 @@ void taskMEMs(void *param)
             case MEMS_MSG_GYR_READY: /* Gyrometer data ready */
                 res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_G,
                                    (uint8_t *)&vec3i16, 6,
-                                   pdMS_TO_TICKS(100));
+                                   pdMS_TO_TICKS(10));
                 if (res > 0)
                 {
                     gyrCumulx += vec3i16[0];
@@ -534,7 +560,7 @@ void taskMEMs(void *param)
             case MEMS_MSG_MAG_READY: /* Magnetometer data ready */
                 res = I2C_Mem_Read(LSM9DS1_MAG_I2C_ADDR, OUT_X_L_M,
                                    (uint8_t *)&vec3i16, 6,
-                                   pdMS_TO_TICKS(100));
+                                   pdMS_TO_TICKS(10));
                 if (res > 0)
                 {
                     magCumulx += vec3i16[0];
@@ -555,19 +581,18 @@ void taskMEMs(void *param)
                     accMean.x = (float)accCumulx / (float)accNumber;
                     accMean.y = (float)accCumuly / (float)accNumber;
                     accMean.z = (float)accCumulz / (float)accNumber;
+                    accCorr.x = (accMean.x + MEMS_ACC_CORR_OFFSET_X) * MEMS_ACC_CORR_GAIN_X;
+                    accCorr.y = (accMean.y + MEMS_ACC_CORR_OFFSET_Y) * MEMS_ACC_CORR_GAIN_Y;
+                    accCorr.z = (accMean.z + MEMS_ACC_CORR_OFFSET_Z) * MEMS_ACC_CORR_GAIN_Z;
 
-                    accCorr.x = accCorr.x + MEMS_ACC_CORR_OFFSET_X;
-                    accCorr.x = accCorr.x * MEMS_ACC_CORR_GAIN_X;
-                    accCorr.y = accCorr.y + MEMS_ACC_CORR_OFFSET_Y;
-                    accCorr.y = accCorr.y * MEMS_ACC_CORR_GAIN_Y;
-                    accCorr.z = accCorr.z + MEMS_ACC_CORR_OFFSET_Z;
-                    accCorr.z = accCorr.z * MEMS_ACC_CORR_GAIN_Z;
-
+                    accCorr = vector3f_getScaled(accCorr, MEMS_STANDARD_GRAVITY/ 16384.F);
+#if 0
                     len = snprintf(message, sizeof(message) - 1,
                                    "ACC  %d %.2f %.2f %.2f    %.2f\n",
                                    accNumber,
                                    accCorr.x, accCorr.y, accCorr.z, vector3f_getNorm(accCorr));
                     // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+#endif
                 }
 
                 if (gyrNumber > 0)
@@ -579,12 +604,14 @@ void taskMEMs(void *param)
                     gyrCorr.x = gyrMean.x += MEMS_GYR_CORR_OFFSET_X;
                     gyrCorr.y = gyrMean.y += MEMS_GYR_CORR_OFFSET_Y;
                     gyrCorr.z = gyrMean.z += MEMS_GYR_CORR_OFFSET_Z;
-
+                    gyrCorr = vector3f_getScaled(gyrCorr, (245.F/16384.F) * (M_PI / 180.F)); 
+#if 0
                     len = snprintf(message, sizeof(message) - 1,
                                    "GYR  %d %.1f %.1f %.1f    %.1f\n",
                                    gyrNumber,
                                    gyrCorr.x, gyrCorr.y, gyrCorr.z, vector3f_getNorm(gyrCorr));
                     // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+#endif
                 }
                 if (magNumber > 0)
                 {
@@ -599,28 +626,55 @@ void taskMEMs(void *param)
                     magCorr.z = magMean.z + MEMS_MAG_CORR_OFFSET_Z;
                     magCorr.z = magMean.z * MEMS_MAG_CORR_GAIN_Z;
 
+#if 0
                     len = snprintf(message, sizeof(message) - 1,
                                    "MAG  %d %.2f %.2f %.2f    %.2f\n",
                                    magNumber,
                                    magCorr.x, magCorr.y, magCorr.z, vector3f_getNorm(magCorr));
                     // svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+#endif
                 }
                 if ((accNumber > 0) && (gyrNumber > 0) && (magNumber > 0))
                 {
-                    TickType_t currtime = xTaskGetTickCount();
+                    TickType_t currTime = xTaskGetTickCount();
                     len = snprintf(message, sizeof(message) - 1,
-                                   "MEMS raw %u   %.2f %.2f %.2f    %.2f %.2f %.2f     %.2f %.2f %.2f\n",
-                                   currtime,
-                                   accMean.x, accMean.y, accMean.z,
-                                   gyrMean.x, gyrMean.y, gyrMean.z,
-                                   magMean.x, magMean.y, magMean.z);
+                                   "MEMS corrected %u   %.2f %.2f %.2f    %.2f %.2f %.2f     %.2f %.2f %.2f\n",
+                                   currTime,
+                                   accCorr.x, accCorr.y, accCorr.z,
+                                   gyrCorr.x, gyrCorr.y, gyrCorr.z,
+                                   magCorr.x, magCorr.y, magCorr.z);
                     svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
-                    if (!calibration ){
-                        autopilot_setMEMs(accMean, gyrMean, magMean);
+                    if (!calibration)
+                    {
+                        /* autopilot_setMEMs(accMean, gyrMean, magMean); */
+
+                        autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
                     }
-                    else {
+                    else
+                    {
                         /* Calibrating, put sample in calibreur */
-                        calibreur_addSample(calibreur, currTime, accMean, gyrMean, magMean);
+                        calibreur_addSample(calibreur, currTime, &accMean, &gyrMean, &magMean);
+                        if (calibreur_isFull(calibreur))
+                        {
+#if 0
+                            int res = calibreur_calibrate(calibreur, &accCorr, M, &quality);
+                            if (res == 0)
+                            {
+                                len = snprintf(message, sizeof(message) - 1,
+                                               "Calibration done : acc %.2f %.2f %.2f\n",
+                                               accCorr.x, accCorr.y, accCorr.z);
+                                svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                            }
+                            else
+                            {
+                                len = snprintf(message, sizeof(message) - 1,
+                                               "Calibration failed\n");
+                                svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                            }
+#endif
+                            calibreur_destroy(calibreur);
+                            calibration = 0; // Stop calibration
+                        }
                     }
                 }
 
@@ -643,6 +697,8 @@ void taskMEMs(void *param)
                 len = snprintf(message, sizeof(message),
                                "-----> Calibration demandée\n");
                 svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                calibration = 1; /* Set calibration mode */
+                calibreur = calibreur_create(200);
 
                 /* Allocate memory to store values  */
 

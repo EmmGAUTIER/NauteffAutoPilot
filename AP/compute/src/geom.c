@@ -22,8 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "math.h"
-#include <geom.h>
+#include <math.h>
+#include <stdint.h>
+#include "geom.h"
 
 int __errno = 0; /* needed by math functions */
 

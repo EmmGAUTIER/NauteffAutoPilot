@@ -450,7 +450,7 @@ void printMatF3(const float M[3][3])
 }
 
 /* ---------------- main : exécution du test ---------------- */
-int main(void)
+int main_ellipsoid(void)
 {
     MEMsSample_t samples[N_SAMPLES];
 

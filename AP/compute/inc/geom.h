@@ -55,6 +55,18 @@ typedef struct
     float y; /**< Y component */
     float z; /**< Z component */
 } Vector3f;
+
+typedef struct{
+    int16_t x;
+    int16_t y;
+    int16_t z;
+} Vector3i16;
+
+typedef struct{
+    int32_t x;
+    int32_t y;
+    int32_t z;
+} Vector3i32;
 /*
  * @brief Unity 3D vectors
  * those vectors are used to determine directions of vectors

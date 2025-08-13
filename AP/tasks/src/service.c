@@ -196,8 +196,7 @@ int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, 
 int svc_UART_getc(ServiceUartHandle_t *svc_uart, TickType_t delay)
 {
     size_t ret;
-    int car = NULL;
-    UART_HandleTypeDef huart;
+    int car = 0;
 
     ret = xStreamBufferReceive(svc_uart->receiveBuffer, &car, 1, delay);
 
