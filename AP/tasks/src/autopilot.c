@@ -60,6 +60,24 @@ float AP_get_heading_dir(APStatus_t *aps);
 int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate);
 int AP_compute(APStatus_t *aps);
 
+int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate)
+{
+    
+    MsgAutoPilot_t msg = {
+        .msgType = AP_MSG_AHRS,
+        .data.IMUData.heading = heading,
+        .data.IMUData.roll = roll,
+        .data.IMUData.pitch = pitch,
+        .data.IMUData.yawRate = yawRate};
+
+    if (xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS)
+    {
+        return -1; // Failed to send message
+    }
+
+    return 0; // Success
+}
+
 int init_taskAutoPilot(void)
 {
 
@@ -152,6 +170,15 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 deltat = ((float)(timestamp_2 - timestamp)) / ((float)configTICK_RATE_HZ);
                 timestamp = timestamp_2;
                 AP_new_values(&APStatus, deltat, msg.data.IMUData.heading, msg.data.IMUData.yawRate);
+                snprintf(message, sizeof(message) - 1,
+                         "AP AHRS %8f %8f %8f %8f %8f %8f\n",
+                         cvt_dir_rad_deg(msg.data.IMUData.heading),
+                         msg.data.IMUData.roll,
+                         msg.data.IMUData.pitch,
+                         msg.data.IMUData.yawRate,
+                         APStatus.currentGap,
+                         APStatus.integratedGap);
+                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
                 break;
 
             case AP_MSG_TICK:
@@ -185,10 +212,10 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 }
                 else
                 {
-                    //nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n");
-                    //svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                    // nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n");
+                    // svc_UART_Write(&svc_uart2, message, nbcar, 0U);
                     static MEMS_Msg_t msgMEMs = {.msgType = MEMS_MSG_CALIBRATE};
-                    xQueueSend(msgQueueMEMs , &msgMEMs, pdMS_TO_TICKS(10));
+                    xQueueSend(msgQueueMEMs, &msgMEMs, pdMS_TO_TICKS(10));
                 }
                 break;
 
@@ -372,7 +399,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
         steerReq = aps->currentGap * aps->kp + aps->integratedGap * aps->ki + aps->yawRate * aps->kd;
 
         nbcar = snprintf(message, sizeof(message) - 1, "AP GAP %8f  %8f  %8f  %8f\n", aps->currentGap, aps->integratedGap, aps->yawRate, steerReq);
-        svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+        //svc_UART_Write(&svc_uart2, message, nbcar, 0U);
 
         if (fabsf(steerReq - aps->steerAngle) > aps->motorThreshold)
         {

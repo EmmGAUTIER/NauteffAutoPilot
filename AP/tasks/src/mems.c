@@ -22,6 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#define DBG_PRINT_RAW_VALUES 1
+#define DB_PRINT_MEAN_RAW_VALUES 1
+#define DB_PRINT_MEAN_COR_VALUES 1
+
 /*
  * MEMs driver
  *
@@ -490,6 +494,8 @@ void taskMEMs(void *param)
     unsigned gyrTotal = 0;
     unsigned magTotal = 0;
 
+    IMU_Status_t memsStatus;
+
     config_MEMs();
 
     /* Interrupts mustn't be enabled before the message queue is created */
@@ -509,6 +515,8 @@ void taskMEMs(void *param)
     res = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_M,
                        (uint8_t *)&vec3i16, 6,
                        pdMS_TO_TICKS(100));
+
+    /* Initialize the MEMS status */
 
     for (;;)
     {
@@ -532,10 +540,12 @@ void taskMEMs(void *param)
                     accCumulz += vec3i16[2];
                     accNumber++;
                     accTotal++;
+#if DBG_PRINT_RAW_VALUES == 1
                     len = snprintf(message, sizeof(message),
                                    "ACC %d %d %d\n",
                                    vec3i16[0], vec3i16[1], vec3i16[2]);
                     svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+#endif
                 }
                 break;
 
@@ -550,10 +560,12 @@ void taskMEMs(void *param)
                     gyrCumulz += vec3i16[2];
                     gyrNumber++;
                     gyrTotal++;
+#if DBG_PRINT_RAW_VALUES == 1
                     len = snprintf(message, sizeof(message),
                                    "GYR %d %d %d\n",
                                    vec3i16[0], vec3i16[1], vec3i16[2]);
                     svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+#endif
                 }
                 break;
 
@@ -568,10 +580,12 @@ void taskMEMs(void *param)
                     magCumulz += vec3i16[2];
                     magNumber++;
                     magTotal++;
+#if DBG_PRINT_RAW_VALUES == 1
                     len = snprintf(message, sizeof(message),
                                    "MAG %d %d %d\n",
                                    vec3i16[0], vec3i16[1], vec3i16[2]);
                     svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+#endif
                 }
                 break;
 
@@ -585,7 +599,7 @@ void taskMEMs(void *param)
                     accCorr.y = (accMean.y + MEMS_ACC_CORR_OFFSET_Y) * MEMS_ACC_CORR_GAIN_Y;
                     accCorr.z = (accMean.z + MEMS_ACC_CORR_OFFSET_Z) * MEMS_ACC_CORR_GAIN_Z;
 
-                    accCorr = vector3f_getScaled(accCorr, MEMS_STANDARD_GRAVITY/ 16384.F);
+                    accCorr = vector3f_getScaled(accCorr, MEMS_STANDARD_GRAVITY / 16384.F);
 #if 0
                     len = snprintf(message, sizeof(message) - 1,
                                    "ACC  %d %.2f %.2f %.2f    %.2f\n",
@@ -604,7 +618,7 @@ void taskMEMs(void *param)
                     gyrCorr.x = gyrMean.x += MEMS_GYR_CORR_OFFSET_X;
                     gyrCorr.y = gyrMean.y += MEMS_GYR_CORR_OFFSET_Y;
                     gyrCorr.z = gyrMean.z += MEMS_GYR_CORR_OFFSET_Z;
-                    gyrCorr = vector3f_getScaled(gyrCorr, (245.F/16384.F) * (M_PI / 180.F)); 
+                    gyrCorr = vector3f_getScaled(gyrCorr, (245.F / 16384.F) * (M_PI / 180.F));
 #if 0
                     len = snprintf(message, sizeof(message) - 1,
                                    "GYR  %d %.1f %.1f %.1f    %.1f\n",
@@ -636,24 +650,40 @@ void taskMEMs(void *param)
                 }
                 if ((accNumber > 0) && (gyrNumber > 0) && (magNumber > 0))
                 {
-                    TickType_t currTime = xTaskGetTickCount();
+                    TickType_t timeStamp = xTaskGetTickCount();
+#if DB_PRINT_MEAN_RAW_VALUES == 1
                     len = snprintf(message, sizeof(message) - 1,
-                                   "MEMS corrected %u   %.2f %.2f %.2f    %.2f %.2f %.2f     %.2f %.2f %.2f\n",
-                                   currTime,
+                                   "MEMS mean raw %u   %.2f %.2f %.2f    %.2f %.2f %.2f     %.2f %.2f %.2f\n",
+                                   timeStamp,
+                                   accMean.x, accMean.y, accMean.z,
+                                   gyrMean.x, gyrMean.y, gyrMean.z,
+                                   magMean.x, magMean.y, magMean.z);
+                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+#endif
+#if DB_PRINT_MEAN_COR_VALUES == 1
+                    len = snprintf(message, sizeof(message) - 1,
+                                   "MEMS mean corrected %u   %.2f %.2f %.2f    %.2f %.2f %.2f     %.2f %.2f %.2f\n",
+                                   timeStamp,
                                    accCorr.x, accCorr.y, accCorr.z,
                                    gyrCorr.x, gyrCorr.y, gyrCorr.z,
                                    magCorr.x, magCorr.y, magCorr.z);
                     svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+#endif
                     if (!calibration)
                     {
                         /* autopilot_setMEMs(accMean, gyrMean, magMean); */
+                        IMU_new_values(&memsStatus, &accCorr, &gyrCorr, &magCorr, MEMS_PERIOD_S);
 
-                        autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
+                        autopilot_sendValues(timeStamp,
+                                             IMU_get_heading(&memsStatus),
+                                             IMU_get_roll(&memsStatus),
+                                             IMU_get_pitch(&memsStatus),
+                                             IMU_get_yawRate(&memsStatus));
                     }
                     else
                     {
                         /* Calibrating, put sample in calibreur */
-                        calibreur_addSample(calibreur, currTime, &accMean, &gyrMean, &magMean);
+                        calibreur_addSample(calibreur, timeStamp, &accMean, &gyrMean, &magMean);
                         if (calibreur_isFull(calibreur))
                         {
 #if 0

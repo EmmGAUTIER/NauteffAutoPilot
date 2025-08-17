@@ -49,11 +49,11 @@ void apmain()
     init_taskAutoPilot();
     init_taskService();
 
-    xTaskCreate(taskMotor, "Motor", configMINIMAL_STACK_SIZE + 200, (void *)0, 3, (void *)0);
-    xTaskCreate(taskMEMs, "MEMs", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
-    xTaskCreate(taskDialogIn, "Dialog", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
-    xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
-    xTaskCreate(taskService, "SVC", configMINIMAL_STACK_SIZE + 200, (void *)0, 7, (void *)0);
+    xTaskCreate(taskMotor, "Motor", configMINIMAL_STACK_SIZE + 500, (void *)0, 3, (void *)0);
+    xTaskCreate(taskMEMs, "MEMs", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, (void *)0);
+    xTaskCreate(taskDialogIn, "Dialog", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, (void *)0);
+    xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, (void *)0);
+    xTaskCreate(taskService, "SVC", configMINIMAL_STACK_SIZE + 500, (void *)0, 7, (void *)0);
 
     ret = xTaskCreate(taskBlink, "Blink", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
 

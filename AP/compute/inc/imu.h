@@ -2,6 +2,12 @@
 #ifndef IMU_H
 #define IMU_H
 
+
+/* Réglages du calul */
+
+#define MEMS_MAG_VS_GYRO 0.5F /* Répartition de partie du compas et dy gyromètre pour le cap */
+
+
 typedef struct
 {
     float time;   /* Time of the sample */
@@ -16,6 +22,22 @@ typedef struct
     unsigned int maxSamples; /* Maximum number of samples */
     unsigned sampleCount;    /* Number of samples added */
 } Calibreur_t;
+
+typedef struct
+{
+    Vector3f acc;
+    Vector3f gyr;
+    Vector3f mag;
+    float roll, pitch, heading;
+    bool initialized;
+} IMU_Status_t;
+
+void IMU_init_status(IMU_Status_t *mstatus);
+float IMU_get_roll(IMU_Status_t *mstatus);
+float IMU_get_pitch(IMU_Status_t *mstatus);
+float IMU_get_heading(IMU_Status_t *mstatus);
+float IMU_get_yawRate(IMU_Status_t *mstatus);
+int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
 
 /*
  * @brief Create a calibrator with a specified number of samples

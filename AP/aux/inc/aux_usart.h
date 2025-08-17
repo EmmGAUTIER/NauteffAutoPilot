@@ -8,7 +8,7 @@
 
 #include "util.h"
 
-#define aux_USART_BUFFER_SIZE 196
+#define aux_USART_BUFFER_SIZE 400
 
 typedef struct
 {

@@ -98,6 +98,10 @@ int svc_init_UART(ServiceUartHandle_t *svc_uart)
     svc_uart->receiveBuffer = xStreamBufferCreate((size_t)200, 1);
     rbuffer_init(&svc_uart->bufferTx);
     svc_uart->dma_tx_busy = 0U;
+    svc_uart->semRx= xSemaphoreCreateMutex();
+    svc_uart->semTx= xSemaphoreCreateMutex();
+    xSemaphoreGive(svc_uart->semRx);
+    xSemaphoreGive(svc_uart->semTx);
     return 1;
 }
 
@@ -181,6 +185,11 @@ int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, 
     ServiceRequest_t request;
 
     /* There is no check that data are transfered */
+    ret = xSemaphoreTake(svc_uart->semTx, delay);
+    if (ret == pdFAIL)
+    {
+        return -1; /* Not Given */
+    }
 
     request.type = ServiceUartWrite;
     request.deviceHandle = svc_uart;
@@ -188,7 +197,14 @@ int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, 
     request.requestdescription.transfer.len = len;
     request.requestdescription.transfer.dir = ServiceDirectionOut;
 
+
     ret = xQueueSend(svcQueueRequests, &request, delay);
+
+    /* TODO trouver un mécanisme pour supprimer cette ligne */
+    /* plusieurs tâches ne peuvent pas écrire dans un uart */
+    vTaskDelay(pdMS_TO_TICKS(10));
+
+    xSemaphoreGive(svc_uart->semTx); /* Release the semaphore */
 
     return (ret == pdPASS) ? len : -1;
 }
