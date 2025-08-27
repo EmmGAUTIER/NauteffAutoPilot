@@ -4,7 +4,7 @@
 #ifndef RBUFFER_H
 #define RBUFFER_H
 
-#define RBUFFER_SIZE 128
+#define RBUFFER_SIZE 512
 
 typedef struct
 {
@@ -14,7 +14,7 @@ typedef struct
 } RBuffer_t;
 
 int rbuffer_init(RBuffer_t *buffer);
-int rbuffer_write(RBuffer_t *buffer, void *data, unsigned len);
+int rbuffer_write(RBuffer_t *buffer, const void *data, unsigned len);
 int rbuffer_read(RBuffer_t *buffer, void *data, unsigned len);
 int rbuffer_getNextBlock(RBuffer_t *buffer, void **data, unsigned *len);
 int rbuffer_skip(RBuffer_t *buffer, unsigned len);

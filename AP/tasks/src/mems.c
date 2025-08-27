@@ -471,7 +471,7 @@ void taskMEMs(void *param)
     int res;
     MEMS_Msg_t msg;
     int16_t vec3i16[3]; /* 3 vectors as uint16_t read from MEMs device */
-    static char message[120];
+    static char message[200];
     size_t len;
     unsigned calibration = 0;
     Calibreur_t *calibreur;
@@ -659,13 +659,13 @@ void taskMEMs(void *param)
                 {
                     TickType_t timeStamp = xTaskGetTickCount();
 #if DB_PRINT_MEAN_RAW_VALUES == 1
-                    len = snprintf(message, sizeof(message) - 1,
+                    snprintf(message, sizeof(message) - 1,
                                    "MEMS mr %u %d %6f %6f %6f %d %f %f %f  %d %f %f %f\n",
                                    timeStamp,
                                    accNumber, accMean.x, accMean.y, accMean.z,
                                    gyrNumber, gyrMean.x, gyrMean.y, gyrMean.z,
                                    magNumber, magMean.x, magMean.y, magMean.z);
-                    svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(0));
                     vTaskDelay(pdMS_TO_TICKS(10));
 #endif
 #if DB_PRINT_MEAN_COR_VALUES == 1

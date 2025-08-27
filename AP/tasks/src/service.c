@@ -129,6 +129,8 @@ int init_taskService()
 
     svc_init_UART(&svc_uart1);
     svc_init_UART(&svc_uart2);
+
+    return 1;
 }
 
 int((*fcts[])(ServiceRequest_t *)) = {
@@ -180,32 +182,46 @@ void taskService(void *)
 
 int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, TickType_t delay)
 {
-    BaseType_t ret;
+    // BaseType_t ret;
+    UART_HandleTypeDef *huart; /* HAL UART Handle */
+    size_t availSpace;
+    size_t sendSize;
+    static unsigned dejaoccupe = 0;
+    static unsigned relance = 0;
+    void *dataDMA = 0;
+    size_t lenDMA = 0;
 
-    ServiceRequest_t request;
+    vTaskSuspendAll();
 
-    /* There is no check that data are transfered */
-    ret = xSemaphoreTake(svc_uart->semTx, delay);
-    if (ret == pdFAIL)
+    huart = svc_uart->huart;
+
+    availSpace = rbuffer_getAvailSpace(&(svc_uart->bufferTx));
+    if (len > availSpace)
     {
-        return -1; /* Not Given */
+        sendSize = 0U;
+    }
+    else
+    {
+        rbuffer_write(&svc_uart->bufferTx, data, len);
+        if (svc_uart->dma_tx_busy == 0)
+        {
+            rbuffer_getNextBlock(&svc_uart->bufferTx, &dataDMA, &lenDMA);
+            HAL_UART_Transmit_DMA(huart, dataDMA, lenDMA);
+            svc_uart->dma_tx_busy = lenDMA; /* Set DMA transfer busy flag */
+            relance++;
+            (void)relance;
+        }
+        else
+        {
+            dejaoccupe++;
+            (void)dejaoccupe;
+        }
+        sendSize = len;
     }
 
-    request.type = ServiceUartWrite;
-    request.deviceHandle = svc_uart;
-    request.requestdescription.transfer.data = (void *)data;
-    request.requestdescription.transfer.len = len;
-    request.requestdescription.transfer.dir = ServiceDirectionOut;
+    xTaskResumeAll();
 
-    ret = xQueueSend(svcQueueRequests, &request, delay);
-
-    /* TODO trouver un mécanisme pour supprimer cette ligne */
-    /* plusieurs tâches ne peuvent pas écrire dans un uart */
-    // vTaskDelay(pdMS_TO_TICKS(15));
-
-    xSemaphoreGive(svc_uart->semTx); /* Release the semaphore */
-
-    return (ret == pdPASS) ? len : -1;
+    return sendSize;
 }
 
 int svc_UART_getc(ServiceUartHandle_t *svc_uart, TickType_t delay)
@@ -223,6 +239,8 @@ int svc_internal_UART_EndWriteDMA(ServiceRequest_t *request)
     ServiceUartHandle_t *svc_uart; /* Service UART Handle with HAL ptr and buffer */
     UART_HandleTypeDef *huart;     /* HAL UART Handle */
 
+    vTaskSuspendAll();
+
     svc_uart = (ServiceUartHandle_t *)request->deviceHandle;
     huart = svc_uart->huart;
     rbuffer_skip(&svc_uart->bufferTx, svc_uart->dma_tx_busy);
@@ -235,6 +253,8 @@ int svc_internal_UART_EndWriteDMA(ServiceRequest_t *request)
         HAL_UART_Transmit_DMA(huart, data, len);
         svc_uart->dma_tx_busy = len; /* Set DMA transfer busy flag */
     }
+
+    xTaskResumeAll();
 
     return 1;
 }
@@ -275,6 +295,7 @@ int svc_internal_UART_Write(ServiceRequest_t *request)
         if (state & 0x1)
         {
             int bidon = 0;
+            (void)bidon;
         }
 
         void *data;
