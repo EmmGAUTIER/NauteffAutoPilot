@@ -98,8 +98,8 @@ int svc_init_UART(ServiceUartHandle_t *svc_uart)
     svc_uart->receiveBuffer = xStreamBufferCreate((size_t)200, 1);
     rbuffer_init(&svc_uart->bufferTx);
     svc_uart->dma_tx_busy = 0U;
-    svc_uart->semRx= xSemaphoreCreateMutex();
-    svc_uart->semTx= xSemaphoreCreateMutex();
+    svc_uart->semRx = xSemaphoreCreateMutex();
+    svc_uart->semTx = xSemaphoreCreateMutex();
     xSemaphoreGive(svc_uart->semRx);
     xSemaphoreGive(svc_uart->semTx);
     return 1;
@@ -197,12 +197,11 @@ int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, 
     request.requestdescription.transfer.len = len;
     request.requestdescription.transfer.dir = ServiceDirectionOut;
 
-
     ret = xQueueSend(svcQueueRequests, &request, delay);
 
     /* TODO trouver un mécanisme pour supprimer cette ligne */
     /* plusieurs tâches ne peuvent pas écrire dans un uart */
-    vTaskDelay(pdMS_TO_TICKS(10));
+    // vTaskDelay(pdMS_TO_TICKS(15));
 
     xSemaphoreGive(svc_uart->semTx); /* Release the semaphore */
 
@@ -235,8 +234,6 @@ int svc_internal_UART_EndWriteDMA(ServiceRequest_t *request)
         rbuffer_getNextBlock(&svc_uart->bufferTx, &data, &len);
         HAL_UART_Transmit_DMA(huart, data, len);
         svc_uart->dma_tx_busy = len; /* Set DMA transfer busy flag */
-
-        return 0;
     }
 
     return 1;
@@ -262,10 +259,17 @@ int svc_internal_UART_Write(ServiceRequest_t *request)
                             request->requestdescription.transfer.data,
                             request->requestdescription.transfer.len);
 
-    if ((buffput > 0) && (!(svc_uart->dma_tx_busy)))
+    if ((buffput > 0) && (svc_uart->dma_tx_busy == 0))
     /* Data added in buffer and no DMA transfer in progress */
     /* initiate a DMA transfer*/
     {
+
+        HAL_UART_StateTypeDef state = HAL_UART_GetState(huart);
+        if (state & 0x1)
+        {
+            int bidon = 0;
+        }
+
         void *data;
         size_t len;
         rbuffer_getNextBlock(&svc_uart->bufferTx, &data, &len);

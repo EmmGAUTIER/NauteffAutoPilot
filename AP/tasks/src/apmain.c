@@ -4,6 +4,8 @@
 
 #include <stm32l452xx.h>
 #include "stm32l4xx_ll_gpio.h"
+#include "stm32l4xx_ll_tim.h" // pour mise au point
+#include "stm32l4xx_hal.h"    // pour mise au point
 
 #include "aux_usart.h"
 #include "service.h"
@@ -20,9 +22,11 @@ void taskBlink(void *param)
  */
 {
     (void)param;
+    unsigned cnt; // pour mise au point
 
     for (;;)
     {
+
         LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
         vTaskDelay(pdMS_TO_TICKS(100));
 
@@ -34,13 +38,16 @@ void taskBlink(void *param)
 
         LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
         vTaskDelay(pdMS_TO_TICKS(600));
+
+        cnt = TIM3->CNT;
+
+        (void)cnt;
     }
 }
 
 void apmain()
 {
     int ret;
-
 
     init_taskMotor();
     init_taskMEMs();

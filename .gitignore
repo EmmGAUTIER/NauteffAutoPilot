@@ -2,3 +2,5 @@
 build
 op.txt
 .mxproject
+*.alt
+

@@ -1,4 +1,4 @@
-/* USER CODE BEGIN Header */
+/* USER CODE BEGIN HeaUSE_16_BIT_TICKSder */
 /*
  * FreeRTOS Kernel V10.3.1
  * Portion Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.

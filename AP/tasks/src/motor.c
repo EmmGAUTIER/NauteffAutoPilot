@@ -43,22 +43,25 @@ SOFTWARE.
 
 #include <stm32l452xx.h>
 #include "stm32l4xx_ll_gpio.h"
+#include "stm32l4xx_hal_adc.h"
 
 #include "util.h"
 #include "printf.h"
 #include "rlib.h"
 #include "service.h"
-//#include "aux_usart.h"
+// #include "aux_usart.h"
 
 #include "autopilot.h"
 #include "motor.h"
 #include "apdialog.h"
 
+extern TIM_HandleTypeDef htim3;
+
 #define MOTOR_V_CURRENT_NONE (0.F)
 #define MOTOR_V_CURRENT_FREE (.35F)
-#define MOTOR_V_CURRENT_BLOCKED (5.F)
-#define ADC_PERIOD (0.01F)        /* 10 ms */
-#define MOTOR_TIME_TO_STOP (0.1F) /* 100 ms */
+#define MOTOR_V_CURRENT_BLOCKED (5.F) /*  */
+#define ADC_PERIOD (0.1F)             /* 100 ms */
+#define MOTOR_TIME_TO_STOP (0.1F)     /* 100 ms */
 #define MOTOR_CVT_ANGLE_TIME (1.0F)
 #define ADC_CVT_TO_VOLTAGE (0.0097F)
 #define ADC_CVT_TO_CURRENT (0.002F) /* Ratio  ADC val. and current */
@@ -90,6 +93,7 @@ typedef enum
 
 QueueHandle_t msgQueueMotor = (QueueHandle_t)0;
 
+static uint16_t adc_values[2];
 /*
  * States of the motor :
  *
@@ -199,6 +203,7 @@ void trigger_adc_conversion(TimerHandle_t th)
     // adc1->CR |= ADC_CR_ADSTART;
 }
 
+#if 0
 void sendADCValues(uint16_t v1, uint16_t v2)
 {
     static MsgMotor_t msgMotor;
@@ -220,6 +225,7 @@ void sendADCValues(uint16_t v1, uint16_t v2)
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
 }
+#endif
 
 /**
  * \brief Motor control task
@@ -233,8 +239,6 @@ void taskMotor(void *parameters)
     MsgMotor_t msgMoteur;
     MsgAutoPilot_t msgAutoPilot;
     char message[60];
-    unsigned nbtours = 0;
-    unsigned nb2 = 0;
     int status = 0;
     int dirdmd = 0;
     TimerHandle_t timerTriggerConv;
@@ -243,23 +247,13 @@ void taskMotor(void *parameters)
     sprintf(message, "taskMotor Départ\n");
     svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
 
-    /* TODO : Faire un déclenchement des conversions ADC par timer */
-    /* Actuellement il faut le faire par un timer géré par freertos */
-    timerTriggerConv = xTimerCreate("ADC trig.",
-                                    pdMS_TO_TICKS(25),
-                                    pdTRUE,
-                                    0U,
-                                    trigger_adc_conversion);
+    // HAL_NVIC_EnableIRQ(ADC1_IRQn);
 
-    if (timerTriggerConv == NULL)
-    {
-        sprintf(message, "taskMotor : timerTriggerConv creation failed\n");
-        svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
-    }
-    else
-    {
-        xTimerStart(timerTriggerConv, (TickType_t)0);
-    }
+    HAL_TIM_Base_Start(&htim3);
+
+    extern ADC_HandleTypeDef hadc1;
+
+    HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_values, 2);
 
     for (;;)
     {
@@ -279,20 +273,10 @@ void taskMotor(void *parameters)
                 /* get ADC values */
                 motorData.vPower = (float)msgMoteur.data.adcValues.adc_power * ADC_CVT_TO_VOLTAGE;
                 motorData.vCurrent = (float)msgMoteur.data.adcValues.adc_current * ADC_CVT_TO_CURRENT;
-                nb2++;
 
-                /* For debugging purpose, prints values of ADC */
-                if (nbtours <= 8)
-                {
-                    nbtours++;
-                }
-                else
-                {
-                    sprintf(message, "ADC %3d %f %f\n", nb2, motorData.vPower, motorData.vCurrent);
-                    sprintf(message, "ADC %4d %6f %6f\n", nb2, motorData.vPower, motorData.vCurrent);
-                    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
-                    nbtours = 0;
-                }
+                snprintf(message, sizeof(message), "ADC  %6f  %6f\n", motorData.vPower, motorData.vCurrent);
+                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                vTaskDelay(10);
 
                 /* Check Values */
                 /* TODO */
@@ -426,6 +410,55 @@ void taskMotor(void *parameters)
                 break;
             }
         }
-        vTaskDelay(pdMS_TO_TICKS(10)); /* Délai de garde pour éviter une famine */
+    }
+}
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+{
+    static MsgMotor_t msg = {
+        .msgType = MSG_MOTOR_ADC_VALUES};
+
+    static uint16_t nbint = 0U;
+    static uint32_t vpower = 0U;
+    static uint32_t vcurrent = 0U;
+    static uint32_t nbOverCurrent = 0U;
+    BaseType_t ret;
+
+    if (hadc->Instance == ADC1)
+    {
+        vpower += adc_values[0];
+        vcurrent += adc_values[1];
+
+        if (vcurrent > 2000)
+        {
+            nbOverCurrent++;
+        }
+        else
+        {
+            nbOverCurrent = 0U;
+        }
+        if (nbOverCurrent > 50)
+        {
+            motorStop();
+            
+        }
+
+        nbint++;
+        if ((nbint >= 10))
+        {
+            BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+            msg.data.adcValues.adc_power = vpower / nbint;
+            msg.data.adcValues.adc_current = vcurrent / nbint;
+            vpower = 0U;
+            vcurrent = 0U;
+
+            ret = xQueueSendToBackFromISR(msgQueueMotor,
+                                          &msg,
+                                          &xHigherPriorityTaskWoken);
+
+            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+            nbint = 0;
+        }
     }
 }

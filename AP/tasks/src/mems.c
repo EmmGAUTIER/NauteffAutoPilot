@@ -22,9 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#define DBG_PRINT_RAW_VALUES 1
+#define DBG_PRINT_RAW_VALUES 0
 #define DB_PRINT_MEAN_RAW_VALUES 1
-#define DB_PRINT_MEAN_COR_VALUES 1
+#define DB_PRINT_MEAN_COR_VALUES 0
 
 /*
  * MEMs driver
@@ -32,7 +32,7 @@ SOFTWARE.
  */
 #define LSM9DS1_MAG_I2C_ADDR (0x1E) /* Magnetometer device address */
 #define LSM9DS1_XLG_I2C_ADDR (0x6B) /* Accelerometer and gyrometer device address */
-#define MEMS_PERIOD_MS 200
+#define MEMS_PERIOD_MS 50
 #define MEMS_PERIOD_S ((float)MEMS_PERIOD_MS / 1000.0F)
 /*
  * Magnetometer register addresses
@@ -169,11 +169,9 @@ SOFTWARE.
 
 #include "mems.h"
 
-// #include "aux_usart.h"
 #include "geom.h"
 #include "autopilot.h"
 #include "imu.h"
-// #include "madgwick.h"
 
 /*
  * Offsets and gain values for the device that is connected
@@ -181,25 +179,29 @@ SOFTWARE.
  * and stored in flash memory.
  */
 
-#define MEMS_ACC_CORR_OFFSET_X ((9.97F - 9.62F) / 2.F)
-#define MEMS_ACC_CORR_OFFSET_Y ((9.79F - 9.75F) / 2.F)
-#define MEMS_ACC_CORR_OFFSET_Z ((10.15F - 9.68F) / 2.F)
+#define MEMS_ACC_CORR_OFFSET_X (+150.0F)
+#define MEMS_ACC_CORR_OFFSET_Y (-47.0F)
+#define MEMS_ACC_CORR_OFFSET_Z (-105.0F)
 
-#define MEMS_ACC_CORR_GAIN_X (MEMS_STANDARD_GRAVITY / ((9.97 + 9.62) / 2.F))
-#define MEMS_ACC_CORR_GAIN_Y (MEMS_STANDARD_GRAVITY / ((9.79 + 9.75) / 2.F))
-#define MEMS_ACC_CORR_GAIN_Z (MEMS_STANDARD_GRAVITY / ((9.68 + 10.15) / 2.F))
+#define MEMS_ACC_CORR_GAIN_X (0.001200F)
+#define MEMS_ACC_CORR_GAIN_Y (0.001204F)
+#define MEMS_ACC_CORR_GAIN_Z (0.001174F)
 
-#define MEMS_MAG_CORR_OFFSET_X ((2240.F - 3800.F) / 2.F)
-#define MEMS_MAG_CORR_OFFSET_Y ((1300.F - 4685.F) / 2.F)
-#define MEMS_MAG_CORR_OFFSET_Z ((1450.F - 4100.F) / 2.F)
+#define MEMS_GYR_CORR_OFFSET_X (-4.F)
+#define MEMS_GYR_CORR_OFFSET_Y (-4.F)
+#define MEMS_GYR_CORR_OFFSET_Z (-4.F)
 
-#define MEMS_MAG_CORR_GAIN_X (MEMS_STANDARD_GRAVITY / ((3800.F + 2240.F) / 2.F))
-#define MEMS_MAG_CORR_GAIN_Y (MEMS_STANDARD_GRAVITY / ((1300.F + 4685.F) / 2.F))
-#define MEMS_MAG_CORR_GAIN_Z (MEMS_STANDARD_GRAVITY / ((1450.F + 4100.F) / 2.F))
+#define MEMS_GYR_CORR_GAIN_X (0.0001305F)
+#define MEMS_GYR_CORR_GAIN_Y (0.0001305F)
+#define MEMS_GYR_CORR_GAIN_Z (0.0001305F)
 
-#define MEMS_GYR_CORR_OFFSET_X (+23.F)
-#define MEMS_GYR_CORR_OFFSET_Y (-60.F)
-#define MEMS_GYR_CORR_OFFSET_Z (-153.F)
+#define MEMS_MAG_CORR_OFFSET_X (-800.F)
+#define MEMS_MAG_CORR_OFFSET_Y (-1175.F)
+#define MEMS_MAG_CORR_OFFSET_Z (-1475.F)
+
+#define MEMS_MAG_CORR_GAIN_X (0.179F)
+#define MEMS_MAG_CORR_GAIN_Y (0.175F)
+#define MEMS_MAG_CORR_GAIN_Z (0.177F)
 
 void timerMEMsCallback(TimerHandle_t xTimer);
 
@@ -242,7 +244,7 @@ void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
 }
 
 /*
- * @brief Read data from a peripheral memory by I2C bus
+ * @brief Read data from a peripheral memory by I2C1bus
  *
  * This function reads data over I2C1 bus from a specified memory address of an I2C device.
  * It uses DMA for the transfer and and uses semaphore for synchronisation.
@@ -418,7 +420,7 @@ int config_MEMs(void)
     int ret_int;
 
     /* Magnetometer configuration */
-    static uint8_t cfg_m_1[] = {0x54, /* X&Y : high perf.,  ODR : 20Hz */
+    static uint8_t cfg_m_1[] = {(0x2) << 5 | (0x6) << 2, /* X&Y : high perf, ODR : 40Hz */
                                 0x00,
                                 0x00,
                                 0x08, /* Z : High perf. */
@@ -431,10 +433,16 @@ int config_MEMs(void)
                           100);
 
     /* Accelerometer and gyrometer configuration */
-    static uint8_t cfg_xl_1[] = {(1) << 5,
+    static uint8_t cfg_xl_1[] = {(0x2) << 5, // ODR_G : 010 : 59.5 Hz, cutoff freq. 19 Hz
                                  0x00,
                                  0x00};
     ret_xl1 = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x10, cfg_xl_1, sizeof(cfg_xl_1), 100);
+
+    /* Accelerometer 4g full scale */
+    /* FS0,1_XL bits in CTRL_REG6_XL register (address : 0x20)*/
+    /* Reset value is 0x20, so keep 0x20 (not in power down mode ) */
+    static uint8_t cfg_xl2[] = {0x20 | 0x2 << 3};
+    ret_xl1 = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x20, cfg_xl2, sizeof(cfg_xl2), 100);
 
     /* LSM9DS1 interrupts generation configuration */
     /* Interrupts set INT pins of LSM9DS1 */
@@ -595,11 +603,12 @@ void taskMEMs(void *param)
                     accMean.x = (float)accCumulx / (float)accNumber;
                     accMean.y = (float)accCumuly / (float)accNumber;
                     accMean.z = (float)accCumulz / (float)accNumber;
+
                     accCorr.x = (accMean.x + MEMS_ACC_CORR_OFFSET_X) * MEMS_ACC_CORR_GAIN_X;
                     accCorr.y = (accMean.y + MEMS_ACC_CORR_OFFSET_Y) * MEMS_ACC_CORR_GAIN_Y;
                     accCorr.z = (accMean.z + MEMS_ACC_CORR_OFFSET_Z) * MEMS_ACC_CORR_GAIN_Z;
 
-                    accCorr = vector3f_getScaled(accCorr, MEMS_STANDARD_GRAVITY / 16384.F);
+                    // accCorr = vector3f_getScaled(accCorr, MEMS_STANDARD_GRAVITY / 16384.F);
 #if 0
                     len = snprintf(message, sizeof(message) - 1,
                                    "ACC  %d %.2f %.2f %.2f    %.2f\n",
@@ -615,10 +624,11 @@ void taskMEMs(void *param)
                     gyrMean.y = (float)gyrCumuly / (float)gyrNumber;
                     gyrMean.z = (float)gyrCumulz / (float)gyrNumber;
 
-                    gyrCorr.x = gyrMean.x += MEMS_GYR_CORR_OFFSET_X;
-                    gyrCorr.y = gyrMean.y += MEMS_GYR_CORR_OFFSET_Y;
-                    gyrCorr.z = gyrMean.z += MEMS_GYR_CORR_OFFSET_Z;
-                    gyrCorr = vector3f_getScaled(gyrCorr, (245.F / 16384.F) * (M_PI / 180.F));
+                    gyrCorr.x = (gyrMean.x += MEMS_GYR_CORR_OFFSET_X) * MEMS_GYR_CORR_GAIN_X;
+                    gyrCorr.x = (gyrMean.x += MEMS_GYR_CORR_OFFSET_X) * MEMS_GYR_CORR_GAIN_Y;
+                    gyrCorr.x = (gyrMean.x += MEMS_GYR_CORR_OFFSET_X) * MEMS_GYR_CORR_GAIN_Z;
+
+                    // gyrCorr = vector3f_getScaled(gyrCorr, (245.F / 16384.F) * (M_PI / 180.F));
 #if 0
                     len = snprintf(message, sizeof(message) - 1,
                                    "GYR  %d %.1f %.1f %.1f    %.1f\n",
@@ -633,12 +643,9 @@ void taskMEMs(void *param)
                     magMean.y = (float)magCumuly / (float)magNumber;
                     magMean.z = (float)magCumulz / (float)magNumber;
 
-                    magCorr.x = magMean.x + MEMS_MAG_CORR_OFFSET_X;
-                    magCorr.x = magMean.x * MEMS_MAG_CORR_GAIN_X;
-                    magCorr.y = magMean.y + MEMS_MAG_CORR_OFFSET_Y;
-                    magCorr.y = magMean.y * MEMS_MAG_CORR_GAIN_Y;
-                    magCorr.z = magMean.z + MEMS_MAG_CORR_OFFSET_Z;
-                    magCorr.z = magMean.z * MEMS_MAG_CORR_GAIN_Z;
+                    magCorr.x = (magMean.x + MEMS_MAG_CORR_OFFSET_X) * MEMS_MAG_CORR_GAIN_X;
+                    magCorr.y = (magMean.y + MEMS_MAG_CORR_OFFSET_Y) * MEMS_MAG_CORR_GAIN_Y;
+                    magCorr.z = (magMean.z + MEMS_MAG_CORR_OFFSET_Z) * MEMS_MAG_CORR_GAIN_Z;
 
 #if 0
                     len = snprintf(message, sizeof(message) - 1,
@@ -653,16 +660,17 @@ void taskMEMs(void *param)
                     TickType_t timeStamp = xTaskGetTickCount();
 #if DB_PRINT_MEAN_RAW_VALUES == 1
                     len = snprintf(message, sizeof(message) - 1,
-                                   "MEMS mean raw %u   %.2f %.2f %.2f    %.2f %.2f %.2f     %.2f %.2f %.2f\n",
+                                   "MEMS mean raw %u   %2d  %+8.2f %+8.2f %+8.2f   %2d %+8.2f %+8.2f %+8.2f   %2d %+8.2f %+8.2f %+8.2f\n",
                                    timeStamp,
-                                   accMean.x, accMean.y, accMean.z,
-                                   gyrMean.x, gyrMean.y, gyrMean.z,
-                                   magMean.x, magMean.y, magMean.z);
+                                   accNumber, accMean.x, accMean.y, accMean.z,
+                                   gyrNumber, gyrMean.x, gyrMean.y, gyrMean.z,
+                                   magNumber, magMean.x, magMean.y, magMean.z);
                     svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+                    vTaskDelay(pdMS_TO_TICKS(10));
 #endif
 #if DB_PRINT_MEAN_COR_VALUES == 1
                     len = snprintf(message, sizeof(message) - 1,
-                                   "MEMS mean corrected %u   %.2f %.2f %.2f    %.2f %.2f %.2f     %.2f %.2f %.2f\n",
+                                   "MEMS mean corrected %u   %+8.2f %+8.2f %+8.2f    %+8.2f %+8.2f %+8.2f     %+8.2f %+8.2f %+8.2f\n",
                                    timeStamp,
                                    accCorr.x, accCorr.y, accCorr.z,
                                    gyrCorr.x, gyrCorr.y, gyrCorr.z,

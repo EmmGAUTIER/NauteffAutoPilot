@@ -28,8 +28,10 @@ Matrix3f Matrix3f_init(float *)
 }
 
 /*
- * * @brief Adds two 3x3 matrices.
- *  The result is a new matrix where each element is the sum of the corresponding elements of the input matrices.
+ *  @brief Adds two 3x3 matrices.
+ *
+ *  The result is a new matrix where each element is the sum
+ *  of the elements of the input matrices.
  *
  * @param m1 The first matrix.
  * @param m2 The second matrix.

@@ -10,12 +10,12 @@
  */
 typedef struct
 {
-    UART_HandleTypeDef *huart; /* Pointer to HAL UART handler */
-    RBuffer_t bufferTx;        /* Circular buffer for UART data to transmit */
-    size_t dma_tx_busy;        /* 0: no DMA in progress, >0 : length of DMA transfer in progress */
-    uint8_t charRx;            /* Last character received */
-    SemaphoreHandle_t semTx;   /* Protect the streambuffer against concurrent write access */
-    SemaphoreHandle_t semRx;   /* Protect the streambuffer against concurrent read access */
+    UART_HandleTypeDef *huart;   /* Pointer to HAL UART handler */
+    RBuffer_t bufferTx;          /* Circular buffer for UART data to transmit */
+    volatile size_t dma_tx_busy; /* 0: no DMA in progress, >0 : length of DMA transfer in progress */
+    uint8_t charRx;              /* Last character received */
+    SemaphoreHandle_t semTx;     /* Protect the streambuffer against concurrent write access */
+    SemaphoreHandle_t semRx;     /* Protect the streambuffer against concurrent read access */
     StreamBufferHandle_t receiveBuffer;
 } ServiceUartHandle_t;
 
