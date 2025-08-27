@@ -660,7 +660,7 @@ void taskMEMs(void *param)
                     TickType_t timeStamp = xTaskGetTickCount();
 #if DB_PRINT_MEAN_RAW_VALUES == 1
                     len = snprintf(message, sizeof(message) - 1,
-                                   "MEMS mean raw %u   %2d  %+8.2f %+8.2f %+8.2f   %2d %+8.2f %+8.2f %+8.2f   %2d %+8.2f %+8.2f %+8.2f\n",
+                                   "MEMS mr %u %d %6f %6f %6f %d %f %f %f  %d %f %f %f\n",
                                    timeStamp,
                                    accNumber, accMean.x, accMean.y, accMean.z,
                                    gyrNumber, gyrMean.x, gyrMean.y, gyrMean.z,

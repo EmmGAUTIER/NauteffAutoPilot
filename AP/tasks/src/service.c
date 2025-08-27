@@ -245,6 +245,7 @@ int svc_internal_UART_EndWriteDMA(ServiceRequest_t *request)
  */
 int svc_internal_UART_Write(ServiceRequest_t *request)
 {
+    static unsigned trop = 0U;
     ServiceUartHandle_t *svc_uart; /* Service UART Handle with HAL ptr and buffer */
     UART_HandleTypeDef *huart;     /* HAL UART Handle */
     // size_t remaining;              /* remaining space in circular buffer */
@@ -254,6 +255,12 @@ int svc_internal_UART_Write(ServiceRequest_t *request)
 
     svc_uart = (ServiceUartHandle_t *)request->deviceHandle;
     huart = svc_uart->huart;
+
+    if (rbuffer_getAvailSpace(&svc_uart->bufferTx) < request->requestdescription.transfer.len)
+    {
+        trop++;
+        return 0;
+    }
 
     buffput = rbuffer_write(&svc_uart->bufferTx,
                             request->requestdescription.transfer.data,

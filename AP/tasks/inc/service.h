@@ -2,7 +2,7 @@
 #include "rbuffer.h"
 
 #define SERVICE_QUEUE_LENGTH 20
-#define SERVICE_USART_BUFFER_SIZE 128
+#define SERVICE_USART_BUFFER_SIZE 512
 
 /*
  * Service Handle for UART communication.

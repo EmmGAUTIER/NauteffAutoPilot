@@ -194,6 +194,10 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                              APStatus.currentGap,
                              APStatus.integratedGap),
                     svc_UART_Write(&svc_uart2, message, strlen(message), 0)));
+                    //svc_UART_Write(&svc_uart2, "AP 00\n", 6, 0);
+                    //svc_UART_Write(&svc_uart2, "AP 01\n", 6, 0);
+                    //svc_UART_Write(&svc_uart2, "AP 02\n", 6, 0);
+                    //svc_UART_Write(&svc_uart2, "AP 03\n", 6, 0);
 
                 break;
 
