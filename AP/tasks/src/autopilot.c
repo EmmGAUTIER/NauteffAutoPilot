@@ -22,6 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+/* PID coefficients */
+#define AP_KP 1.0F /* Proportional coefficient */
+#define AP_KI 1.0F /* Integral coefficient */
+#define AP_KD 1.0F /* Derivative coefficient */
+
+/* minimum angle to send an order to motor */
+#define AP_MOTOR_THRESHOLD (0.2F * (M_PI / 180.F))
+
 #define DB_PRINT_ORDERS(X) (X)
 #define DB_PRINT_MEMS_MSGS(X) (X)
 
@@ -50,7 +58,9 @@ SOFTWARE.
 
 void timerAPCallback(TimerHandle_t xTimer);
 
+#if 0
 static TimerHandle_t timerAP;
+#endif
 APStatus_t APStatus;
 QueueHandle_t msgQueueAutoPilot;
 
@@ -93,6 +103,7 @@ int init_taskAutoPilot(void)
         return -1;
     }
 
+#if 0
     /* create tick timer */
     timerAP = xTimerCreate("MEMs",
                            pdMS_TO_TICKS(AP_PERIOD_TICKS),
@@ -103,10 +114,12 @@ int init_taskAutoPilot(void)
     {
         return -1;
     }
+#endif
 
     return 1;
 }
 
+#if 0
 void timerAPCallback(TimerHandle_t xTimer)
 {
     (void)xTimer;
@@ -118,6 +131,7 @@ void timerAPCallback(TimerHandle_t xTimer)
 
     return;
 }
+#endif
 
 void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 {
@@ -129,7 +143,7 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
     float deltat;
     BaseType_t timestamp, timestamp_2;
 
-    xTimerStart(timerAP, 0);
+    // xTimerStart(timerAP, 0);
     timestamp = xTaskGetTickCount();
 
     for (;;)
@@ -194,10 +208,10 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                              APStatus.currentGap,
                              APStatus.integratedGap),
                     svc_UART_Write(&svc_uart2, message, strlen(message), 0)));
-                    //svc_UART_Write(&svc_uart2, "AP 00\n", 6, 0);
-                    //svc_UART_Write(&svc_uart2, "AP 01\n", 6, 0);
-                    //svc_UART_Write(&svc_uart2, "AP 02\n", 6, 0);
-                    //svc_UART_Write(&svc_uart2, "AP 03\n", 6, 0);
+                // svc_UART_Write(&svc_uart2, "AP 00\n", 6, 0);
+                // svc_UART_Write(&svc_uart2, "AP 01\n", 6, 0);
+                // svc_UART_Write(&svc_uart2, "AP 02\n", 6, 0);
+                // svc_UART_Write(&svc_uart2, "AP 03\n", 6, 0);
 
                 break;
 
@@ -254,69 +268,6 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
         }
         compteur++;
     }
-}
-
-/**
- * @brief send the order engage clutch to motor task
- * @param none
- * Motor task stops motor if it is running and engage clutch.
- * @return none
- */
-
-void MOTOR_engage()
-{
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_EMBRAYE};
-    xQueueSend(msgQueueMotor, &msg, 0);
-}
-
-/**
- * @brief send the order disengage clutch to motor task
- * @param none
- * Motor task release clutch and stops motor if it is running.
- * Task motor sends a message later when motor is stopped if it was moving.
- * @return none
- */
-
-void MOTOR_disengage()
-{
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_DEBRAYE};
-    xQueueSend(msgQueueMotor, &msg, 0);
-}
-
-/**
- * @brief send the order move angle
- * @param angle to move radians counterclockwise (as in trigonometric functions)
- * @return none
- */
-
-void MOTOR_move_angle(float angle)
-{
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_MOVE_ANGLE};
-    msg.data.moveAngle = angle;
-    xQueueSend(msgQueueMotor, &msg, 0);
-}
-
-/**
- * @brief send the order move for a time
- * @param time to move in seconds  counterclockwise if positive, clockwise if negative
- * Used to move tiller when not in auto mode.
- * Task motor send a message when move done.
- * Previous move order for time is discarded if motor was running.
- * Used for moving continuously with repeated pushes on button.
- * @return none
- */
-
-void MOTOR_move_time(float time)
-{
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_MOVE_TIME};
-    msg.data.moveAngle = time;
-    xQueueSend(msgQueueMotor, &msg, 0);
-}
-
-void MOTOR_stop()
-{
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_STOP};
-    xQueueSend(msgQueueMotor, &msg, 0);
 }
 
 void AP_init(APStatus_t *aps)
@@ -422,7 +373,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
         steerReq = aps->currentGap * aps->kp + aps->integratedGap * aps->ki + aps->yawRate * aps->kd;
 
         nbcar = snprintf(message, sizeof(message) - 1, "AP GAP %8f  %8f  %8f  %8f\n", aps->currentGap, aps->integratedGap, aps->yawRate, steerReq);
-        // svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+        svc_UART_Write(&svc_uart2, message, nbcar, 0U);
 
         if (fabsf(steerReq - aps->steerAngle) > aps->motorThreshold)
         {

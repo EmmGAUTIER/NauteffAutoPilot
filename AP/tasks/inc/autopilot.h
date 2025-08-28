@@ -22,17 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/* PID coefficients */
-#define AP_KP 1.0F /* Proportional coefficient */
-#define AP_KI 1.0F /* Integral coefficient */
-#define AP_KD 1.0F /* derivative coefficient */
-
-/* minimum angle to send an order to motor */
-#define AP_MOTOR_THRESHOLD (0.2F * (M_PI / 180.F))
-
-#define AP_PERIOD_TICKS 250
-#define AP_FREQ_HZ 4.0
-#define AP_PERIOD_SEC (1.0 / AP_FREQ_HZ)
+//#define AP_PERIOD_TICKS 250
+//#define AP_FREQ_HZ 4.0
+//#define AP_PERIOD_SEC (1.0 / AP_FREQ_HZ)
 
 typedef enum
 {

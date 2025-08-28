@@ -51,7 +51,6 @@ void apmain()
 
     init_taskMotor();
     init_taskMEMs();
-
     init_taskDialogIn();
     init_taskAutoPilot();
     init_taskService();
@@ -61,10 +60,10 @@ void apmain()
     xTaskCreate(taskDialogIn, "Dialog", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, (void *)0);
     xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, (void *)0);
     xTaskCreate(taskService, "SVC", configMINIMAL_STACK_SIZE + 500, (void *)0, 7, (void *)0);
-
-    ret = xTaskCreate(taskBlink, "Blink", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
+    xTaskCreate(taskBlink, "Blink", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
 
     vTaskStartScheduler(); /* Start scheduler, should never return */
+
     for (;;)
         ;
     (void)ret; // To avoid unused variable warning

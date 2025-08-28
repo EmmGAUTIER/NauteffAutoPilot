@@ -76,94 +76,44 @@ typedef struct
 
 void taskMotor(void *);
 
-/*
-    Motor and clutch commands are connected to GPIOA pins as follows :
-    - PA4 : motor command,
-    - PA5 : clutch command, optionnal, connected to green LED on Nucleo board
-    - PA6 : INA, motor direction
-    - PA7 : INB, motor direction
-*/
-
-/*
- * \brief Run the motor to port
- * This function sets the GPIO pins to run the motor to port.
- * It is called by taskMotor.
- * \param void
- * \return void
+/**
+ * @brief Send the order "engage clutch" to motor task
+ * @param none
+ * Motor task stops motor if it is running and engage clutch.
+ * @return none
  */
-
-
-INLINE static void motorRunToPort(void)
-{
-    /* Set PWN and INA, reset INB */
-
-    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
-    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6);
-}
-
-/*
- * \brief Run the motor to starboard
- * This function sets the GPIO pins to run the motor to starboard.
- * It is called by taskMotor.
- * \param void
- * \return void
- * \note The motor is run to starboard when the INA pin is set to high and the INB pin is set to low.
- *       The motor is run to port when the INA pin is set to low and the INB pin is set to high.
- *       The motor is stopped when both INA and INB pins are set to low.
- */
-
-INLINE static void motorRunToStarboard(void)
-{
-    /* Set PWN and INB, reset INA */
-    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
-    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_7);
-}
-
-/*
- * \brief Stop the motor
- * This function sets the GPIO pins to stop the motor.
- * It is called by taskMotor or ADC interrupt if overcurrent is detected.
- * \param void
- * \return void
- */
-
-INLINE static void motorStop(void)
-{
-    /* Reset PWN, INA and INB */
-    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
-}
-
-/*
- * \brief Engage the clutch
- * This function sets the GPIO pin to engage the tiller.
- * pin is connected to the motor driver
- * it is also connected to a green LED on the Nucleo board.
- * It is called by taskMotor.
- * \param void
- * \return void
- */
-
-INLINE static void motorTillerEngage(void)
-{
-    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
-    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
-}
-
-/*
- * \brief Disengage the clutch
- * This function sets the GPIO pin to disengage the tiller.
- * \param void
- * \return void
- */
-
-INLINE static void motorTillerDisengage(void)
-{
-    /* Reset Clutch (and LED), INA, INB and motor */
-    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_5 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
-}
-
 void MOTOR_engage();
+
+/**
+ * @brief send the order disengage clutch to motor task
+ * @param none
+ * Motor task release clutch and stops motor if it is running.
+ * Task motor sends a message later when motor is stopped if it was moving.
+ * @return none
+ */
 void MOTOR_disengage();
+
+/**
+ * @brief send the order move angle
+ * @param angle to move radians counterclockwise (as in trigonometric functions)
+ * @return none
+ */
 void MOTOR_move_angle(float angle);
+
+/**
+ * @brief send the order move for a time
+ * @param time to move in seconds  counterclockwise if positive, clockwise if negative
+ * Used to move tiller when not in auto mode.
+ * Task motor send a message when move done.
+ * Previous move order for time is discarded if motor was running.
+ * Used for moving continuously with repeated pushes on button.
+ * @return none
+ */
 void MOTOR_move_time(float time);
+
+/**
+ * @brief send the order "stop motor"
+ * @param none
+ * @return none
+ */
 void MOTOR_stop();

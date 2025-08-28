@@ -60,8 +60,9 @@ extern TIM_HandleTypeDef htim3;
 #define MOTOR_V_CURRENT_NONE (0.F)
 #define MOTOR_V_CURRENT_FREE (.35F)
 #define MOTOR_V_CURRENT_BLOCKED (5.F) /*  */
-#define ADC_PERIOD (0.1F)             /* 100 ms */
-#define MOTOR_TIME_TO_STOP (0.1F)     /* 100 ms */
+#define ADC_NB_TICKS (10)
+#define ADC_PERIOD (0.1F)         /* 100 ms */
+#define MOTOR_TIME_TO_STOP (0.1F) /* 100 ms */
 #define MOTOR_CVT_ANGLE_TIME (1.0F)
 #define ADC_CVT_TO_VOLTAGE (0.0097F)
 #define ADC_CVT_TO_CURRENT (0.002F) /* Ratio  ADC val. and current */
@@ -94,6 +95,9 @@ typedef enum
 QueueHandle_t msgQueueMotor = (QueueHandle_t)0;
 
 static uint16_t adc_values[2];
+
+static volatile int moveTime = 0;
+
 /*
  * States of the motor :
  *
@@ -178,6 +182,123 @@ MotorData motorData = {
     .vCurrent = 0.F
 
 };
+
+/*
+    Motor and clutch commands are connected to GPIOA pins as follows :
+    - PA4 : motor command,
+    - PA5 : clutch command, optionnal, connected to green LED on Nucleo board
+    - PA6 : INA, motor direction
+    - PA7 : INB, motor direction
+*/
+
+/*
+ * \brief Run the motor to port
+ * This function sets the GPIO pins to run the motor to port.
+ * It is called by taskMotor.
+ * \param void
+ * \return void
+ */
+
+INLINE static void motorRunToPort(void)
+{
+    /* Set PWN and INA, reset INB */
+
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6);
+}
+
+/*
+ * \brief Run the motor to starboard
+ * This function sets the GPIO pins to run the motor to starboard.
+ * It is called by taskMotor.
+ * \param void
+ * \return void
+ * \note The motor is run to starboard when the INA pin is set to high and the INB pin is set to low.
+ *       The motor is run to port when the INA pin is set to low and the INB pin is set to high.
+ *       The motor is stopped when both INA and INB pins are set to low.
+ */
+
+INLINE static void motorRunToStarboard(void)
+{
+    /* Set PWN and INB, reset INA */
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_7);
+}
+
+/*
+ * \brief Stop the motor
+ * This function sets the GPIO pins to stop the motor.
+ * It is called by taskMotor or ADC interrupt if overcurrent is detected.
+ * \param void
+ * \return void
+ */
+
+INLINE static void motorStop(void)
+{
+    /* Reset PWN, INA and INB */
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+}
+
+/*
+ * \brief Engage the clutch
+ * This function sets the GPIO pin to engage the tiller.
+ * pin is connected to the motor driver
+ * it is also connected to a green LED on the Nucleo board.
+ * It is called by taskMotor.
+ * \param void
+ * \return void
+ */
+
+INLINE static void motorTillerEngage(void)
+{
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
+}
+
+/*
+ * \brief Disengage the clutch
+ * This function sets the GPIO pin to disengage the tiller.
+ * \param void
+ * \return void
+ */
+
+INLINE static void motorTillerDisengage(void)
+{
+    /* Reset Clutch (and LED), INA, INB and motor */
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_5 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+}
+
+void MOTOR_engage()
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_EMBRAYE};
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+void MOTOR_disengage()
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_DEBRAYE};
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+void MOTOR_move_angle(float angle)
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_MOVE_ANGLE};
+    msg.data.moveAngle = angle;
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+void MOTOR_move_time(float time)
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_MOVE_TIME};
+    msg.data.moveAngle = time;
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
+
+void MOTOR_stop()
+{
+    static MsgMotor_t msg = {.msgType = MSG_MOTOR_STOP};
+    xQueueSend(msgQueueMotor, &msg, 0);
+}
 
 /*
  * \brief Initialise the motor task
@@ -415,9 +536,61 @@ void taskMotor(void *parameters)
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
+
+    MsgMotor_t msgMotor;
+    uint32_t vpower = 0U;
+    uint32_t vcurrent = 0U;
+    uint32_t vpoweracc = 0U;
+    uint32_t vcurrentacc = 0U;
+    uint32_t nbOverCurrent = 0U;
+    uint32_t nbint = 0U;
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+    if (moveTime > 0)
+    {
+        moveTime -= ADC_NB_TICKS;
+        if (moveTime <= 0)
+        {
+            motorStop();
+            moveTime = 0;
+            msgMotor.msgType = MSG_MOTOR_MOVE_DONE;
+            ret = xQueueSendToBackFromISR(msgQueueMotor,
+                                          &msgMotor,
+                                          &xHigherPriorityTaskWoken);
+        }
+    }
+
+    vpower = adc_values[0];
+    vcurrent = adc_values[1];
+    vpoweracc += vpower;
+    vcurrentacc += vcurrent;
+
+    nbint++;
+    if (nbint >= 100)
+    {
+        msgMotor.msgType = MSG_MOTOR_ADC_VALUES;
+        msgMotor.data.adcValues.adc_power = vpoweracc / nbint;
+        msgMotor.data.adcValues.adc_current = vcurrentacc / nbint;
+        ret = xQueueSendToBackFromISR(msgQueueMotor,
+                                      &msgMotor,
+                                      &xHigherPriorityTaskWoken);
+        nbint = 0U;
+        vpoweracc = 0U;
+        vcurrentacc = 0U;
+    }
+
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+    return;
+}
+
+#if 0
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+{
     static MsgMotor_t msg = {
         .msgType = MSG_MOTOR_ADC_VALUES};
 
+    static uint16_t adc_values[2];
     static uint16_t nbint = 0U;
     static uint32_t vpower = 0U;
     static uint32_t vcurrent = 0U;
@@ -462,3 +635,4 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
         }
     }
 }
+#endif
