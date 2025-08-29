@@ -45,14 +45,16 @@ typedef enum
 {
     MSG_MOTOR_NONE = 0,
     MSG_MOTOR_ADC_VALUES,
-    MSG_MOTOR_START,
-    MSG_MOTOR_STOP,
+    //MSG_MOTOR_START,
+    //MSG_MOTOR_STOP,
     MSG_MOTOR_EMBRAYE,
     MSG_MOTOR_DEBRAYE,
-    MSG_MOTOR_ERROR,
-    MSG_MOTOR_EFFORT,
+    //MSG_MOTOR_ERROR,
+    //MSG_MOTOR_EFFORT,
     MSG_MOTOR_MOVE_ANGLE,
     MSG_MOTOR_MOVE_TIME,
+    MSG_MOTOR_MOVE_DONE,
+    MSG_MOTOR_DEFAULT,
 } MsgMotorType_t;
 
 typedef struct
@@ -82,7 +84,7 @@ void taskMotor(void *);
  * Motor task stops motor if it is running and engage clutch.
  * @return none
  */
-void MOTOR_engage();
+void MOTOR_order_engage();
 
 /**
  * @brief send the order disengage clutch to motor task
@@ -91,14 +93,14 @@ void MOTOR_engage();
  * Task motor sends a message later when motor is stopped if it was moving.
  * @return none
  */
-void MOTOR_disengage();
+void MOTOR_order_disengage();
 
 /**
  * @brief send the order move angle
  * @param angle to move radians counterclockwise (as in trigonometric functions)
  * @return none
  */
-void MOTOR_move_angle(float angle);
+void MOTOR_order_move_angle(float angle);
 
 /**
  * @brief send the order move for a time
@@ -109,7 +111,7 @@ void MOTOR_move_angle(float angle);
  * Used for moving continuously with repeated pushes on button.
  * @return none
  */
-void MOTOR_move_time(float time);
+void MOTOR_order_move_time(float time);
 
 /**
  * @brief send the order "stop motor"

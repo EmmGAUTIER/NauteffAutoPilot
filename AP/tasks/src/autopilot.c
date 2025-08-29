@@ -310,7 +310,7 @@ int AP_set_mode_idle(APStatus_t *aps)
     aps->currentGap = 0.F;
     aps->integratedGap = 0.F;
 
-    MOTOR_disengage();
+    MOTOR_order_disengage();
 
     return 0;
 }
@@ -327,7 +327,7 @@ int AP_set_mode_heading(APStatus_t *aps)
         aps->integratedGap = 0;
         aps->steerAngle = 0.F;
 
-        MOTOR_engage();
+        MOTOR_order_engage();
     }
     /* else : Already engaged, Nothing to do*/
     return 0;
@@ -337,7 +337,7 @@ int AP_turn(APStatus_t *aps, float angle)
 {
     if (aps->engaged == 0)
     {
-        MOTOR_move_time(angle >= 0. ? -.2F : .2F);
+        MOTOR_order_move_time(angle >= 0. ? -.2F : .2F);
     }
     else
     { /* AP idle, send move order to motor task */
@@ -377,7 +377,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
 
         if (fabsf(steerReq - aps->steerAngle) > aps->motorThreshold)
         {
-            MOTOR_move_angle(steerReq);
+            MOTOR_order_move_angle(steerReq);
             aps->steerAngle += steerReq;
         }
     }

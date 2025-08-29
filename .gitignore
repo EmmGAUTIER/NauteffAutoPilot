@@ -3,4 +3,5 @@ build
 op.txt
 .mxproject
 *.alt
+*.bak
 doc
