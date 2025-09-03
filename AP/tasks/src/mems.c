@@ -195,13 +195,13 @@ SOFTWARE.
 #define MEMS_GYR_CORR_GAIN_Y (0.0001305F)
 #define MEMS_GYR_CORR_GAIN_Z (0.0001305F)
 
-#define MEMS_MAG_CORR_OFFSET_X (-800.F)
-#define MEMS_MAG_CORR_OFFSET_Y (-1175.F)
-#define MEMS_MAG_CORR_OFFSET_Z (-1475.F)
+#define MEMS_MAG_CORR_OFFSET_X (-910.F)
+#define MEMS_MAG_CORR_OFFSET_Y (-1615.F)
+#define MEMS_MAG_CORR_OFFSET_Z (-1327.F)
 
-#define MEMS_MAG_CORR_GAIN_X (0.179F)
-#define MEMS_MAG_CORR_GAIN_Y (0.175F)
-#define MEMS_MAG_CORR_GAIN_Z (0.177F)
+#define MEMS_MAG_CORR_GAIN_X (0.34928F)
+#define MEMS_MAG_CORR_GAIN_Y (0.36193F)
+#define MEMS_MAG_CORR_GAIN_Z (0.36792F)
 
 void timerMEMsCallback(TimerHandle_t xTimer);
 
@@ -258,6 +258,7 @@ void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
 
  * The address of the device is restricted to 7 bits.
  * The function shifts the address left by 1 bit.
+ *
  * @note This function is not reentrant.
  */
 
@@ -320,6 +321,7 @@ int I2C_Mem_Read(uint16_t DevAddress,
 
  * The address of the device is restricted to 7 bits.
  * The function shifts the address left by 1 bit.
+ *
  * @note This function is not reentrant.
  */
 
@@ -362,10 +364,6 @@ int I2C_Mem_Write(uint16_t DevAddress,
         xSemaphoreGive(semi2c1tx); // Release the semaphore
         return -3;                 // Timeout error
     }
-
-    // vTaskDelay(50);
-
-    // status = HAL_I2C_IsDeviceReady(&hi2c1, DevAddress << 1, 3, 50);
 
     xSemaphoreGive(semi2c1tx); // Release the semaphore
     return Size;               /* Success */
@@ -529,8 +527,6 @@ void taskMEMs(void *param)
     for (;;)
     {
 
-        // static char message[100];
-
         ret = xQueueReceive(msgQueueMEMs, &msg, pdMS_TO_TICKS(500));
 
         if (ret == pdPASS)
@@ -660,11 +656,11 @@ void taskMEMs(void *param)
                     TickType_t timeStamp = xTaskGetTickCount();
 #if DB_PRINT_MEAN_RAW_VALUES == 1
                     snprintf(message, sizeof(message) - 1,
-                                   "MEMS mr %u %d %6f %6f %6f %d %f %f %f  %d %f %f %f\n",
-                                   timeStamp,
-                                   accNumber, accMean.x, accMean.y, accMean.z,
-                                   gyrNumber, gyrMean.x, gyrMean.y, gyrMean.z,
-                                   magNumber, magMean.x, magMean.y, magMean.z);
+                             "MEMS mr %u %d %6f %6f %6f %d %f %f %f  %d %f %f %f\n",
+                             timeStamp,
+                             accNumber, accMean.x, accMean.y, accMean.z,
+                             gyrNumber, gyrMean.x, gyrMean.y, gyrMean.z,
+                             magNumber, magMean.x, magMean.y, magMean.z);
                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(0));
                     vTaskDelay(pdMS_TO_TICKS(10));
 #endif
@@ -687,6 +683,13 @@ void taskMEMs(void *param)
                                              IMU_get_roll(&memsStatus),
                                              IMU_get_pitch(&memsStatus),
                                              IMU_get_yawRate(&memsStatus));
+
+                        len = snprintf(message, sizeof(message) - 1,
+                                       "ATTITUDE  %+.2f %+.2f %+.2f\n",
+                                       IMU_get_heading(&memsStatus),
+                                       IMU_get_roll(&memsStatus),
+                                       IMU_get_pitch(&memsStatus));
+                        svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
                     }
                     else
                     {
@@ -716,6 +719,42 @@ void taskMEMs(void *param)
                     }
                 }
 
+                else
+                {
+                    HAL_NVIC_DisableIRQ(EXTI0_IRQn);
+                    HAL_NVIC_DisableIRQ(EXTI1_IRQn);
+                    HAL_NVIC_DisableIRQ(EXTI2_IRQn);
+                    config_MEMs();
+                    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+                    HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+                    HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+
+                    /*
+                     * res1 à 3 servent à la mise au point
+                     * bidon ne sert à rien pour le calcul.
+                     * Il permet uniquement de placer un point d'arrêt avec le debuggueur
+                     * pour lire ret1 à 3.
+                     * cptReconfig sert à compter les reconfigurations.
+                     */
+                    static unsigned cptReconfig = 0U;
+                    cptReconfig++;
+
+                    int res1 = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_XL,
+                                            (uint8_t *)&vec3i16, 6,
+                                            pdMS_TO_TICKS(100));
+                    int res2 = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_G,
+                                            (uint8_t *)&vec3i16, 6,
+                                            pdMS_TO_TICKS(100));
+                    int res3 = I2C_Mem_Read(LSM9DS1_XLG_I2C_ADDR, OUT_X_L_M,
+                                            (uint8_t *)&vec3i16, 6,
+                                            pdMS_TO_TICKS(100));
+                    int bidon;
+
+                    /* Et bien sûr, une ligne dans le journal pour voir */
+                    snprintf(message, sizeof(message), "MEMS Restart %d\n", cptReconfig);
+                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(0));
+                }
+
                 accNumber = 0;
                 gyrNumber = 0;
                 magNumber = 0;
@@ -741,6 +780,38 @@ void taskMEMs(void *param)
                 /* Allocate memory to store values  */
 
                 break;
+            case MEMS_MSG_DISPLAY_CONFIG: /* Display config info */
+                                          /* three lines */
+                len = snprintf(message, sizeof(message),
+                               "MEMS config : acc offsets %8f %8f %8f  gains %8f %8f %8f\n",
+                               MEMS_ACC_CORR_OFFSET_X,
+                               MEMS_ACC_CORR_OFFSET_Y,
+                               MEMS_ACC_CORR_OFFSET_Z,
+                               MEMS_ACC_CORR_GAIN_X,
+                               MEMS_ACC_CORR_GAIN_Y,
+                               MEMS_ACC_CORR_GAIN_Z);
+                svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+
+                len = snprintf(message, sizeof(message),
+                               "MEMS config : gyr offsets %8f %8f %8f  gains %8f %8f %8f\n",
+                               MEMS_GYR_CORR_OFFSET_X,
+                               MEMS_GYR_CORR_OFFSET_Y,
+                               MEMS_GYR_CORR_OFFSET_Z,
+                               MEMS_GYR_CORR_GAIN_X,
+                               MEMS_GYR_CORR_GAIN_Y,
+                               MEMS_GYR_CORR_GAIN_Z);
+                svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
+
+                len = snprintf(message, sizeof(message),
+                               "MEMS config : mag offsets %8f %8f %8f  gains %8f %8f %8f\n",
+                               MEMS_ACC_CORR_OFFSET_X,
+                               MEMS_MAG_CORR_OFFSET_X,
+                               MEMS_MAG_CORR_OFFSET_Y,
+                               MEMS_MAG_CORR_OFFSET_Z,
+                               MEMS_MAG_CORR_GAIN_X,
+                               MEMS_MAG_CORR_GAIN_Y,
+                               MEMS_MAG_CORR_GAIN_Z);
+                svc_UART_Write(&svc_uart2, message, len, pdMS_TO_TICKS(0));
 
             default:
                 /* shouldn't hapen */

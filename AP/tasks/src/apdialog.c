@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "timers.h"
 #include "semphr.h"
 #include "stream_buffer.h"
 
@@ -31,11 +32,15 @@ SOFTWARE.
 #include "printf.h"
 #include "rlib.h"
 
-// #include "gpio.h"
-#include "aux_usart.h"
+#include <stm32l452xx.h>
+#include <stm32l4xx_ll_gpio.h>
 #include "service.h"
 #include "apdialog.h"
 #include "autopilot.h"
+#include "motor.h"
+#include "mems.h"
+
+#define DBG_DIALOG_PRINT(X) (X)
 
 #define YYINPUT svc_UART_getc(&svc_uart2, portMAX_DELAY)
 
@@ -74,6 +79,11 @@ typedef enum
     TOKEN_PROPORTIONAL,
     TOKEN_AHRS,
     TOKEN_CALIBRATE,
+    TOKEN_DISPLAY,
+    TOKEN_CONFIG,
+    TOKEN_MEMS,
+    TOKEN_MOTOR,
+    TOKEN_AP,
     TOKEN_EOL /* End-of-line marker */
 } TokenType;
 
@@ -100,6 +110,11 @@ static const TokenEntry tokenTable[] = {
     {"proportional", TOKEN_PROPORTIONAL},
     {"AHRS", TOKEN_AHRS},
     {"calibrate", TOKEN_CALIBRATE},
+    {"display", TOKEN_DISPLAY},
+    {"config", TOKEN_CONFIG},
+    {"MEMS", TOKEN_MEMS},
+    {"motor", TOKEN_MOTOR},
+    {"AP", TOKEN_AP},
     {NULL, TOKEN_UNKNOWN}};
 
 QueueHandle_t msgQueueDialogIn;
@@ -327,6 +342,8 @@ void parse_command_line(void)
     static char message[100];
     char nbcar;
     MsgAutoPilot_t msgAutoPilot;
+    MEMS_Msg_t msgMEMs;
+    MsgMotor_t msgMotor;
 
     for (int i = 0; i < MAX_TOKENS; i++)
     {
@@ -373,8 +390,9 @@ void parse_command_line(void)
     if (tokenCount == 3 && tokenTypes[0] == TOKEN_TURN && tokenTypes[1] == TOKEN_PORT && tokenTypes[2] == TOKEN_NUMBER)
     {
         int angle = convert_number(tokens[2]);
-        // nbcar = snprintf(message, sizeof(message), "DIALOG Turn port %d\r\n", angle);
-        // svc_UART_Write(aux_usart1, message, nbcar, 0U);
+        DBG_DIALOG_PRINT((
+            nbcar = snprintf(message, sizeof(message), "DIALOG Turn port %d\r\n", angle),
+            svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
         msgAutoPilot.msgType = AP_MSG_TURN;
         msgAutoPilot.data.reqTurnAngle = -angle;
@@ -384,8 +402,9 @@ void parse_command_line(void)
     else if (tokenCount == 3 && tokenTypes[0] == TOKEN_TURN && tokenTypes[1] == TOKEN_STARBOARD && tokenTypes[2] == TOKEN_NUMBER)
     {
         int angle = convert_number(tokens[2]);
-        // nbcar = snprintf(message, sizeof(message), "DIALOG Turn starboard %d\r\n", angle);
-        // svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+        DBG_DIALOG_PRINT((
+            nbcar = snprintf(message, sizeof(message), "DIALOG Turn starboard %d\r\n", angle),
+            svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
         msgAutoPilot.msgType = AP_MSG_TURN;
         msgAutoPilot.data.reqTurnAngle = angle;
@@ -394,7 +413,8 @@ void parse_command_line(void)
     else if (tokenCount == 2 && tokenTypes[0] == TOKEN_MODE && tokenTypes[1] == TOKEN_IDLE)
     {
         /* Command: mode idle */
-        // svc_UART_Write(&svc_uart2, "DIALOG mode idle\r\n", 11, 0U);
+        DBG_DIALOG_PRINT((
+            svc_UART_Write(&svc_uart2, "DIALOG mode idle\r\n", 11, 0U)));
 
         msgAutoPilot.msgType = AP_MSG_MODE_IDLE;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
@@ -402,8 +422,9 @@ void parse_command_line(void)
     else if (tokenCount == 2 && tokenTypes[0] == TOKEN_MODE && tokenTypes[1] == TOKEN_HEADING)
     {
         /* Command: mode heading */
-        // exec_heading();
-        // svc_UART_Write(&svc_uart2, "DIALOG mode heading\n", 14, 0U);
+
+        DBG_DIALOG_PRINT((
+            svc_UART_Write(&svc_uart2, "DIALOG mode heading\n", 14, 0U)));
 
         msgAutoPilot.msgType = AP_MSG_MODE_HEADING;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
@@ -412,9 +433,9 @@ void parse_command_line(void)
     {
         /* Command: mode heading NUMBER */
         int heading = convert_number(tokens[2]);
-        // nbcar = snprintf (message, sizeof(message), "Mode heading %d\n", heading);
-        // svc_UART_Write(&svc_uart2, message, nbcar, 0U);
-        // exec_heading_value(heading);
+        DBG_DIALOG_PRINT((
+            nbcar = snprintf(message, sizeof(message), "DIALOG Mode heading %d\n", heading),
+            svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
         msgAutoPilot.msgType = AP_MSG_MODE_HEADING_DIR;
         msgAutoPilot.data.reqHeading = heading;
@@ -423,7 +444,9 @@ void parse_command_line(void)
     else if (tokenCount == 2 && tokenTypes[0] == TOKEN_CALIBRATE && tokenTypes[1] == TOKEN_AHRS)
     {
         /* Command: calibrate AHRS */
-        //svc_UART_Write(&svc_uart2, "DIALOG calibrate AHRS\n", 22, 0U);
+        DBG_DIALOG_PRINT((
+            svc_UART_Write(&svc_uart2, "DIALOG calibrate AHRS\n", 22, 0U)));
+
         msgAutoPilot.msgType = AP_MSG_CALIBRATE_MEMS;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
     }
@@ -446,8 +469,10 @@ void parse_command_line(void)
         {
             res = convert_float(tokens[2], &coeff);
             (void)res;
-            nbcar = snprintf(message, sizeof(message), "Coefficient proportional %f\n", coeff);
-            svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+            DBG_DIALOG_PRINT((
+                nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient proportional %f\n", coeff),
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+
             msgAutoPilot.msgType = AP_MSG_PARAM;
             msgAutoPilot.data.coefficient.param_number = AP_PARAM_PROPORTIONNAL;
             msgAutoPilot.data.coefficient.param_value = coeff;
@@ -461,8 +486,9 @@ void parse_command_line(void)
             msgAutoPilot.data.coefficient.param_number = AP_PARAM_INTEGRAL;
             msgAutoPilot.data.coefficient.param_value = coeff;
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
-            nbcar = snprintf(message, sizeof(message), "Coefficient integral %f\n", coeff);
-            svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+            DBG_DIALOG_PRINT((
+                nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient integral %f\n", coeff),
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
         else if (tokenTypes[1] == TOKEN_DERIVATIVE && tokenTypes[2] == TOKEN_NUMBER)
         {
@@ -472,15 +498,44 @@ void parse_command_line(void)
             msgAutoPilot.data.coefficient.param_number = AP_PARAM_DERIVATIVE;
             msgAutoPilot.data.coefficient.param_value = coeff;
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
-            nbcar = snprintf(message, sizeof(message), "Coefficient derivative %f\n", coeff);
-            svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+            DBG_DIALOG_PRINT((
+                nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient derivative %f\n", coeff),
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+        }
+    }
+    else if (tokenCount == 3 && tokenTypes[0] == TOKEN_DISPLAY && tokenTypes[1] == TOKEN_CONFIG)
+    {
+        // Command: display
+        switch (tokenTypes[2])
+        {
+        case TOKEN_MEMS:
+            DBG_DIALOG_PRINT((svc_UART_Write(&svc_uart2, "DIALOG display config MEMS\n", 27, 0U)));
+            msgMEMs.msgType = MEMS_MSG_DISPLAY_CONFIG;
+            xQueueSend(msgQueueMEMs, &msgMEMs, 0);
+            break;
+
+        case TOKEN_MOTOR:
+            DBG_DIALOG_PRINT((svc_UART_Write(&svc_uart2, "DIALOG display config MOTOR\n", 28, 0U)));
+            msgMotor.msgType = MSG_MOTOR_DISPLAY_CONFIG;
+            xQueueSend(msgQueueMotor, &msgMotor, 0);
+            break;
+
+        case TOKEN_AP:
+            DBG_DIALOG_PRINT((svc_UART_Write(&svc_uart2, "DIALOG display config AP\n", 25, 0U)));
+            msgAutoPilot.msgType = AP_MSG_DISPLAY_CONFIG;
+            xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
+            break;
+
+        default:
+            break;
         }
     }
 
     else
     {
-        nbcar = snprintf(message, sizeof(message), "Syntax error ! %d tokens\r\n", tokenCount);
-        svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+        DBG_DIALOG_PRINT((
+            nbcar = snprintf(message, sizeof(message), "DIALOG Syntax error ! %d tokens\r\n", tokenCount),
+            svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
     }
     return;
 }
@@ -488,16 +543,17 @@ void parse_command_line(void)
 // void __attribute__((noreturn)) task_Dialog(void *args __attribute__((unused)))
 void taskDialogIn(void *args __attribute__((unused)))
 {
-    int nb = 0; // pour mise au point
+    //int nb = 0; // pour mise au point
 
     for (;;)
     {
-        nb++;
+        // nb++;
         parse_command_line();
         // vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
 
+#if 0
 void __attribute__((noreturn)) taskDialogOut(void *args __attribute__((unused)))
 {
     MsgDialog_t msg;
@@ -517,3 +573,4 @@ void __attribute__((noreturn)) taskDialogOut(void *args __attribute__((unused)))
         }
     }
 }
+#endif

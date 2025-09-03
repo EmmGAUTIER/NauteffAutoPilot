@@ -35,7 +35,8 @@ typedef enum
     MEMS_MSG_GYR_READY,
     MEMS_MSG_MAG_READY,
     MEMS_MSG_TICK,
-    MEMS_MSG_CALIBRATE
+    MEMS_MSG_CALIBRATE,
+    MEMS_MSG_DISPLAY_CONFIG,
 } MEMS_MsgType_t;
 
 typedef struct

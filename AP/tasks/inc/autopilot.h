@@ -22,9 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-//#define AP_PERIOD_TICKS 250
-//#define AP_FREQ_HZ 4.0
-//#define AP_PERIOD_SEC (1.0 / AP_FREQ_HZ)
+// #define AP_PERIOD_TICKS 250
+// #define AP_FREQ_HZ 4.0
+// #define AP_PERIOD_SEC (1.0 / AP_FREQ_HZ)
 
 typedef enum
 {
@@ -48,6 +48,8 @@ typedef enum
     AP_MSG_MEMS,
     AP_MSG_MOTOR_STOPPED,
     AP_MSG_MOTOR_STOPPING,
+    AP_MSG_MOTOR_STALLED,  /* From MOTOR, motor stalled (usually end course) */
+    AP_MSG_DISPLAY_CONFIG, /* From DIALOG, display coefficients, params,... */
 } MsgAutoPilotType_t;
 
 typedef enum
@@ -136,7 +138,3 @@ typedef struct
 int init_taskAutoPilot(void);
 void taskAutoPilot(void *parameters);
 int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
-
-// int ap_init(APStatus_t *ap);
-// int ap_set_heading(APStatus_t *ap, int heading);
-//  INLINE int ap_get_heading(APStatus_t *ap);

@@ -55,16 +55,23 @@ SOFTWARE.
 #include "motor.h"
 #include "apdialog.h"
 
+#define DBG_MOTOR_PRINT(X) (X)
+#define DBG_ADC_PRINT(X) (X)
+
 extern TIM_HandleTypeDef htim3;
+
+#define MOTOR_EVENT_STALLED (0x1 << 0)
+#define MOTOR_EVENT_STOP (0x1 << 1)
 
 #define MOTOR_V_CURRENT_NONE (0.F)
 #define MOTOR_V_CURRENT_FREE (.35F)
-#define MOTOR_V_CURRENT_BLOCKED (5.F) /*  */
-#define ADC_PERIOD (0.01F)            /* 100 ms */
-#define MOTOR_TIME_TO_STOP (0.1F)     /* 100 ms */
-#define MOTOR_CVT_ANGLE_TIME (1.0F)
-#define ADC_CVT_TO_VOLTAGE (0.0097F)
-#define ADC_CVT_TO_CURRENT (0.002F) /* Ratio  ADC val. and current */
+#define MOTOR_V_CURRENT_BLOCKED (1.0F)     /*  */
+#define ADC_PERIOD (0.01F)                 /* 100 ms */
+#define MOTOR_TIME_TO_STOP (0.1F)          /* 100 ms */
+#define MOTOR_MAX_TIME_OVERCURRENT (0.05F) /* 200 ms */
+#define MOTOR_CVT_ANGLE_TIME (10.0F)       /* Estimated conversion between time and rudder move angle */
+#define ADC_CVT_TO_VOLTAGE (0.0097F)       /* Ratio ADC val. and power voltage */
+#define ADC_CVT_TO_CURRENT (0.0004)        /* Ratio  ADC val. and current */
 
 typedef enum
 {
@@ -144,6 +151,7 @@ typedef struct
     float turnTimeReq;        /* Turn angle requested (rad counterclockwise ie with sign) */
     float turnTimeRemaining;  /* Turning time Remaining positive */
     float stopTimeRemaining;  /* Time since motor powered off */
+    float overCurrentTime;    /* Time since start of overcurrent */
 
     /* Values of calibration */
     float vcurrentNone;    /* adc value of current when not moving */
@@ -153,6 +161,8 @@ typedef struct
     float vPowerMin;       /* Minimum power voltage */
     float vPowerMax;       /* Maximum power voltage */
     float timeStartStop;   /* Time to start or stop the motor */
+
+    float currentStalled; /* Current when motor is stalled */
 
     /* measured values */
     float vPower;   /* Actual voltage*/
@@ -174,14 +184,13 @@ MotorData motorData = {
     .vcurrentFree = MOTOR_V_CURRENT_FREE,
     .vcurrentBlocked = MOTOR_V_CURRENT_BLOCKED,
     .timeStartStop = 0.1F,
+    .currentStalled = 1.0F,
 
     .vPowerStandard = 12.F,
     .vPowerMin = 10.,
     .vPowerMax = 15.F,
     .vPower = 0.F,
-    .vCurrent = 0.F
-
-};
+    .vCurrent = 0.F};
 
 /*
     Motor and clutch commands are connected to GPIOA pins as follows :
@@ -294,13 +303,47 @@ void MOTOR_order_move_time(float time)
     xQueueSend(msgQueueMotor, &msg, 0);
 }
 
-void Motor_newValues(float deltat, float vPower, float iMotor)
+/*
+ * @brief Update motor status with new values of voltage and current
+ *
+ * This function updates the motor status with new values of voltage and current
+ * and stops or start th motor.
+ * It is called by taskMotor when it receives new ADC values.
+ *
+ * @param deltat Time since last call in seconds
+ * @param vPower Voltage of power supply
+ * @param iMotor Current through motor
+ * @return void
+ */
+unsigned Motor_newValues(float deltat, float vPower, float iMotor)
 {
+    unsigned motorEvent = 0;
+
     /* vPower and iCurrent have to be used later for better
      * estimating the rudder angle
      */
     (void)vPower;
     (void)iMotor;
+
+    /* First check if motor stalled */
+    if (iMotor > motorData.currentStalled * .7F)
+    {
+        motorData.overCurrentTime += deltat;
+        if (motorData.overCurrentTime > MOTOR_MAX_TIME_OVERCURRENT)
+        {
+            Motor_LL_stop();
+            motorData.status = MotorStalled;
+            motorData.turnAngleRemaining = 0.F;
+            motorData.turnAngleReq = 0.F;
+            motorData.turnTimeRemaining = 0.F;
+            motorData.turnTimeReq = 0.F;
+            motorEvent |= MOTOR_EVENT_STALLED;
+        }
+    }
+    else
+    {
+        motorData.overCurrentTime = 0.F;
+    }
 
     switch (motorData.status)
     {
@@ -346,6 +389,7 @@ void Motor_newValues(float deltat, float vPower, float iMotor)
             motorData.status = MotorIdle;
             motorData.direction = 0;
             motorData.stopTimeRemaining = 0.F;
+            motorEvent |= MOTOR_EVENT_STOP;
         }
         break;
 
@@ -354,7 +398,7 @@ void Motor_newValues(float deltat, float vPower, float iMotor)
         break;
     }
 
-    return;
+    return motorEvent;
 }
 
 /*
@@ -446,10 +490,11 @@ void Motor_moveTime(float timeToMove)
 
     int dirtomove = (timeToMove > 0.F) ? MotorDirPort : MotorDirStbd;
 
-    if ((motorData.status == MotorMoveTime ||
-         motorData.status == MotorIdle ||
-         motorData.status == MotorStopping) &&
-        motorData.direction * dirtomove >= 0)
+    if (((motorData.status == MotorMoveTime ||
+          motorData.status == MotorIdle ||
+          motorData.status == MotorStopping) &&
+         motorData.direction * dirtomove >= 0) ||
+        ((motorData.status == MotorStalled) && (motorData.direction * dirtomove < 0)))
     {
         motorData.turnTimeReq = timeToMove;
         motorData.turnTimeRemaining = fabs(timeToMove);
@@ -513,16 +558,15 @@ void taskMotor(void *parameters)
     (void)parameters; /* parameters ignored, avoids warning */
 
     size_t ret;
+    unsigned motorEvent;
     MsgMotor_t msgMoteur;
-    // MsgAutoPilot_t msgAutoPilot;
-    char message[60];
-    // int status = 0;
-    // int dirdmd = 0;
-    //  TimerHandle_t timerTriggerConv;
+    char message[200];
     unsigned counter = 0;
 
-    snprintf(message, sizeof(message), "taskMotor Départ\n");
-    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
+    DBG_MOTOR_PRINT((
+        snprintf(message, sizeof(message),
+                 "taskMotor Départ\n"),
+        svc_UART_Write(&svc_uart1, message, strlen(message), 0U)));
 
     HAL_TIM_Base_Start(&htim3);
 
@@ -549,19 +593,28 @@ void taskMotor(void *parameters)
                 motorData.vPower = (float)msgMoteur.data.adcValues.adc_power * ADC_CVT_TO_VOLTAGE;
                 motorData.vCurrent = (float)msgMoteur.data.adcValues.adc_current * ADC_CVT_TO_CURRENT;
 
-                Motor_newValues(ADC_PERIOD,
-                                (float)msgMoteur.data.adcValues.adc_power * ADC_CVT_TO_VOLTAGE,
-                                (float)msgMoteur.data.adcValues.adc_current * ADC_CVT_TO_CURRENT);
+                motorEvent = Motor_newValues(ADC_PERIOD,
+                                             (float)msgMoteur.data.adcValues.adc_power * ADC_CVT_TO_VOLTAGE,
+                                             (float)msgMoteur.data.adcValues.adc_current * ADC_CVT_TO_CURRENT);
 
-                if (counter % 10 == 0)
+                if (counter % 5 == 0)
                 {
-
-                    // snprintf(message, sizeof(message), "ADC  %6f  %6f\n", motorData.vPower, motorData.vCurrent);
-                    snprintf(message, sizeof(message), "ADC %u %6u  %6u\n",
-                             xTaskGetTickCount(),
-                             msgMoteur.data.adcValues.adc_power,
-                             msgMoteur.data.adcValues.adc_current);
-                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                    DBG_ADC_PRINT((
+                        snprintf(message, sizeof(message), "ADC  %6f  %6f\n", motorData.vPower, motorData.vCurrent),
+                        svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
+                    // snprintf(message, sizeof(message), "ADC %u %6u  %6u\n",
+                    // xTaskGetTickCount(),
+                    // msgMoteur.data.adcValues.adc_power,
+                    // msgMoteur.data.adcValues.adc_current);
+                }
+                if (motorEvent & MOTOR_EVENT_STALLED)
+                {
+                    svc_UART_Write(&svc_uart2, "MOTOR stalled\n", 14, 0U);
+                    autopilot_sendMsgMotorStall();
+                }
+                if (motorEvent & MOTOR_EVENT_STOP)
+                {
+                    svc_UART_Write(&svc_uart2, "MOTOR stop\n", 11, 0U);
                 }
 
                 break;
@@ -569,22 +622,41 @@ void taskMotor(void *parameters)
             case MSG_MOTOR_DEBRAYE:
                 Motor_disengageTiller();
 
+                DBG_MOTOR_PRINT((
+                    svc_UART_Write(&svc_uart2, "MOTOR disengage\n", 16, 0U)));
+
                 break;
 
             case MSG_MOTOR_EMBRAYE:
                 Motor_engageTiller();
 
+                DBG_MOTOR_PRINT((
+                    svc_UART_Write(&svc_uart2, "MOTOR engage\n", 13, 0U)));
+
                 break;
 
             case MSG_MOTOR_MOVE_ANGLE:
                 Motor_moveAngle(msgMoteur.data.moveAngle);
+                DBG_MOTOR_PRINT((
+                    snprintf(message, sizeof(message), "MOTOR move angle %.4f\n", msgMoteur.data.moveAngle),
+                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
 
                 break;
 
             case MSG_MOTOR_MOVE_TIME:
                 Motor_moveTime(msgMoteur.data.moveTime);
+                DBG_MOTOR_PRINT((
+                    snprintf(message, sizeof(message), "MOTOR move time %.3f\n", msgMoteur.data.moveTime),
+                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
 
                 break;
+
+            case MSG_MOTOR_DISPLAY_CONFIG:
+            {
+                int nbcar = snprintf(message, sizeof(message),
+                                     "MOTOR config : not yet implemented\n");
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+            }
 
             default:
                 break;

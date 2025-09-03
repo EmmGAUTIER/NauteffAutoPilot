@@ -95,7 +95,7 @@ ServiceUartHandle_t svc_uart2 =
 
 int svc_init_UART(ServiceUartHandle_t *svc_uart)
 {
-    svc_uart->receiveBuffer = xStreamBufferCreate((size_t)200, 1);
+    svc_uart->receiveBuffer = xStreamBufferCreate((size_t)SERVICE_USART_BUFFER_SIZE , 1);
     rbuffer_init(&svc_uart->bufferTx);
     svc_uart->dma_tx_busy = 0U;
     svc_uart->semRx = xSemaphoreCreateMutex();
@@ -205,7 +205,12 @@ int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, 
         rbuffer_write(&svc_uart->bufferTx, data, len);
         if (svc_uart->dma_tx_busy == 0)
         {
+            char deb[4];
             rbuffer_getNextBlock(&svc_uart->bufferTx, &dataDMA, &lenDMA);
+            deb[0] = *((char*)dataDMA);
+            deb[1] = *((char*)dataDMA+1);
+            deb[2] = *((char*)dataDMA+2);
+            deb[3] = *((char*)dataDMA+3);
             HAL_UART_Transmit_DMA(huart, dataDMA, lenDMA);
             svc_uart->dma_tx_busy = lenDMA; /* Set DMA transfer busy flag */
             relance++;
@@ -337,6 +342,8 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
     /* End of a DMA transfer, sends a notification to service task */
     if (svc_uart != NULL)
     {
+        BaseType_t res = HAL_UART_GetState(svc_uart->huart);
+
         request.deviceHandle = svc_uart;
         xQueueSendFromISR(svcQueueRequests, &request, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);

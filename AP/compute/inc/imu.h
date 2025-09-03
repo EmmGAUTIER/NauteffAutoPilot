@@ -5,7 +5,7 @@
 
 /* Réglages du calul */
 
-#define MEMS_MAG_VS_GYRO 0.5F /* Répartition de partie du compas et dy gyromètre pour le cap */
+#define MEMS_MAG_VS_GYRO .10F /* Répartition de partie du compas et dy gyromètre pour le cap */
 
 
 typedef struct

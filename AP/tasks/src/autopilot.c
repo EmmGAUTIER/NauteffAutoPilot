@@ -32,6 +32,7 @@ SOFTWARE.
 
 #define DB_PRINT_ORDERS(X) (X)
 #define DB_PRINT_MEMS_MSGS(X) (X)
+#define DB_PRINT_PID(X) (X)
 
 #include "math.h"
 
@@ -91,6 +92,32 @@ int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float 
     return 0; // Success
 }
 
+int autopilot_sendMsgMotorStall()
+{
+    MsgAutoPilot_t msg = {
+        .msgType = AP_MSG_MOTOR_STALLED,
+    };
+
+    if (xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS)
+    {
+        return -1; // Failed to send message
+    }
+    return 1;
+}
+
+int autopilot_sendMsgMotorStop()
+{
+    MsgAutoPilot_t msg = {
+        .msgType = AP_MSG_MOTOR_STALLED,
+    };
+
+    if (xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS)
+    {
+        return -1; // Failed to send message
+    }
+    return 1;
+}
+
 int init_taskAutoPilot(void)
 {
 
@@ -119,25 +146,11 @@ int init_taskAutoPilot(void)
     return 1;
 }
 
-#if 0
-void timerAPCallback(TimerHandle_t xTimer)
-{
-    (void)xTimer;
-
-    static MsgAutoPilot_t command = {
-        .msgType = AP_MSG_TICK};
-
-    xQueueSend(msgQueueAutoPilot, (const void *)&command, (TickType_t)0);
-
-    return;
-}
-#endif
-
 void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 {
     MsgAutoPilot_t msg;
     long unsigned int compteur = 0L;
-    static char message[100];
+    static char message[200];
     int nbcar;
     unsigned memsdata = 0;
     float deltat;
@@ -150,14 +163,34 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
     {
         if (xQueueReceive(msgQueueAutoPilot, &msg, portMAX_DELAY) == pdPASS)
         {
-            // nbcar = 0;
-            // message[0] = '\0';
-            // nbcar = snprintf(message, sizeof(message) - 1, "AP: type message  %d\n", msg.msgType);
-            // USART_write(usart1, message, nbcar, 0U);
 
             switch (msg.msgType)
             {
+
+            case AP_MSG_AHRS:
+
+                memsdata++;
+                timestamp_2 = xTaskGetTickCount();
+                deltat = ((float)(timestamp_2 - timestamp)) / ((float)configTICK_RATE_HZ);
+                timestamp = timestamp_2;
+                AP_new_values(&APStatus, deltat, msg.data.IMUData.heading, msg.data.IMUData.yawRate);
+
+                DB_PRINT_MEMS_MSGS((
+                    snprintf(message, sizeof(message) - 1,
+                             "AP AHRS %6.3f  %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f\n",
+                             deltat,
+                             cvt_dir_rad_deg(msg.data.IMUData.heading),
+                             msg.data.IMUData.roll * (180. / M_PI),
+                             msg.data.IMUData.pitch * (180. / M_PI),
+                             msg.data.IMUData.yawRate * (180. / M_PI),
+                             APStatus.currentGap * (180. / M_PI),
+                             APStatus.integratedGap * (180. / M_PI)),
+                    svc_UART_Write(&svc_uart2, message, strlen(message), 0)));
+
+                break;
+
             case AP_MSG_MODE_HEADING:
+
                 AP_set_mode_heading(&APStatus);
                 DB_PRINT_ORDERS((
                     nbcar = snprintf(message, sizeof(message), "AP Mode heading %.1f\n", AP_get_heading_dir(&APStatus)),
@@ -166,6 +199,7 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 break;
 
             case AP_MSG_MODE_IDLE:
+
                 DB_PRINT_ORDERS((
                     nbcar = snprintf(message, sizeof(message), "AP Mode idle\n"),
                     svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
@@ -173,6 +207,7 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 break;
 
             case AP_MSG_TURN:
+
                 AP_turn(&APStatus, msg.data.reqTurnAngle * (-M_PI / 180.F));
                 if (AP_get_engaged(&APStatus))
                 {
@@ -188,39 +223,16 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 }
                 break;
 
-            case AP_MSG_AHRS:
-                // nbcar = snprintf(message, sizeof(message) - 1, "AP AHRS %8f\n", cvt_dir_rad_deg(msg.data.IMUData.heading));
-                // USART_write(usart1, message, nbcar, 0U);
-                memsdata++;
-                timestamp_2 = xTaskGetTickCount();
-                deltat = ((float)(timestamp_2 - timestamp)) / ((float)configTICK_RATE_HZ);
-                timestamp = timestamp_2;
-                AP_new_values(&APStatus, deltat, msg.data.IMUData.heading, msg.data.IMUData.yawRate);
-
-                DB_PRINT_MEMS_MSGS((
-                    snprintf(message, sizeof(message) - 1,
-                             "AP AHRS %8f  %8f %8f %8f %8f %8f %8f\n",
-                             deltat,
-                             cvt_dir_rad_deg(msg.data.IMUData.heading),
-                             msg.data.IMUData.roll,
-                             msg.data.IMUData.pitch,
-                             msg.data.IMUData.yawRate,
-                             APStatus.currentGap,
-                             APStatus.integratedGap),
-                    svc_UART_Write(&svc_uart2, message, strlen(message), 0)));
-                // svc_UART_Write(&svc_uart2, "AP 00\n", 6, 0);
-                // svc_UART_Write(&svc_uart2, "AP 01\n", 6, 0);
-                // svc_UART_Write(&svc_uart2, "AP 02\n", 6, 0);
-                // svc_UART_Write(&svc_uart2, "AP 03\n", 6, 0);
-
+            case AP_MSG_TICK:
                 break;
 
-            case AP_MSG_TICK:
+            case AP_MSG_MOTOR_STALLED:
+
                 break;
 
             case AP_MSG_PARAM:
                 DB_PRINT_ORDERS((
-                    nbcar = snprintf(message, sizeof(message) - 1, "AP: param %d %f\n", (int)msg.data.coefficient.param_number, msg.data.coefficient.param_value),
+                    nbcar = snprintf(message, sizeof(message) - 1, "AP param %d %f\n", (int)msg.data.coefficient.param_number, msg.data.coefficient.param_value),
                     svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 // APStatus.headingToSteer = msg.data.reqHeading;
                 switch (msg.data.coefficient.param_number)
@@ -243,13 +255,14 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 if (APStatus.engaged)
                 {
                     DB_PRINT_ORDERS((
-                        nbcar = snprintf(message, sizeof(message) - 1, "AP: MEMS calibrate impossible while AP engaged\n"),
+                        nbcar = snprintf(message, sizeof(message) - 1, "AP MEMS calibrate impossible while AP engaged\n"),
                         svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 }
                 else
                 {
-                    // nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n");
-                    // svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                    DB_PRINT_ORDERS((
+                        nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n"),
+                        svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                     static MEMS_Msg_t msgMEMs = {.msgType = MEMS_MSG_CALIBRATE};
                     xQueueSend(msgQueueMEMs, &msgMEMs, pdMS_TO_TICKS(10));
                 }
@@ -257,9 +270,20 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 
             case AP_MSG_MEMS_READY:
                 DB_PRINT_MEMS_MSGS((
-                    nbcar = snprintf(message, sizeof(message) - 1, "AP: MEMS ready\n"),
+                    nbcar = snprintf(message, sizeof(message) - 1, "AP MEMS ready\n"),
                     svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 APStatus.MEMsReady = 1;
+                break;
+
+            case AP_MSG_DISPLAY_CONFIG:
+                DB_PRINT_ORDERS((
+                    nbcar = snprintf(message, sizeof(message) - 1,
+                                     "AP config: Kp %8f  Ki %8f  Kd %8f  motor threshold %8f\n",
+                                     APStatus.kp,
+                                     APStatus.ki,
+                                     APStatus.kd,
+                                     APStatus.motorThreshold),
+                    svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 break;
 
             default:
@@ -372,8 +396,14 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
 
         steerReq = aps->currentGap * aps->kp + aps->integratedGap * aps->ki + aps->yawRate * aps->kd;
 
-        nbcar = snprintf(message, sizeof(message) - 1, "AP GAP %8f  %8f  %8f  %8f\n", aps->currentGap, aps->integratedGap, aps->yawRate, steerReq);
-        svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+        DB_PRINT_PID((
+            nbcar = snprintf(message, sizeof(message) - 1,
+                             "AP GAP %8f  %8f  %8f  %8f\n",
+                             aps->currentGap,
+                             aps->integratedGap,
+                             aps->yawRate,
+                             steerReq),
+            svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
         if (fabsf(steerReq - aps->steerAngle) > aps->motorThreshold)
         {

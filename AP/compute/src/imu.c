@@ -114,9 +114,11 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
 {
     Vector3f dir1, dir3;
     float heading_mag;
+    float gyrhdg; /* gyr->z over water, ie with roll and pitch compensation */
     float delta_heading_mag;
     static char message[200];
     int nbcar;
+    float accnorm;
 
     mstatus->acc = *acc;
     mstatus->gyr = *gyr;
@@ -132,6 +134,7 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
 
     if ((!mstatus->initialized) || isnan(mstatus->heading))
     {
+        /* First call heading unknown */
         mstatus->heading = M_PI + atan2f(dir1.y, dir1.x);
         mstatus->initialized = true;
     }
@@ -144,14 +147,30 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
         heading_mag = M_PI + atan2f(dir3.x, dir3.y);
         float delta_mag = heading_mag - mstatus->heading;
         // float delta_gyr = deltat * gyr->z;
-        mstatus->heading = mstatus->heading + (1.F - MEMS_MAG_VS_GYRO) * deltat * gyr->z + MEMS_MAG_VS_GYRO * delta_mag;
-        delta_heading_mag = heading_mag - mstatus->heading;
+
+        accnorm = vector3f_getNorm(*acc);
+        // float ax2 = acc->x * acc->x;
+        float ay2 = acc->y * acc->y;
+        float az2 = acc->z * acc->z;
+        float cosphi = acc->y / sqrtf(ay2 + az2);
+        float sinphi = acc->z / sqrtf(ay2 + az2);
+        float costetha = -acc->x / accnorm;
+        float sintetha = sqrtf(ay2 + az2) / accnorm;
+
+        // gyrhdg = gyr->z * cosphi * costetha + gyr->x * sinphi * sintetha - gyr->y * cosphi * sinphi;
+        gyrhdg = gyr->z;
+
+        mstatus->heading = mstatus->heading + (1.F - MEMS_MAG_VS_GYRO) * deltat * gyrhdg + MEMS_MAG_VS_GYRO * delta_mag;
+        // delta_heading_mag = heading_mag - mstatus->heading;
         // mstatus->heading = (deltat * MEMS_MAG_VS_GYRO) * delta_heading_mag + (1 - (deltat * MEMS_MAG_VS_GYRO)) *;
+        //  mstatus->heading = heading_mag;
     }
 
+#if 0
     nbcar = snprintf(message, sizeof(message) - 1, "MEMS Calc %6f  %+8f  %+8f  %+8f\n",
                      deltat, mstatus->heading, heading_mag, delta_heading_mag);
-    //svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+     svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+#endif
 
     dir1 = vector3f_getNormalized(*acc);
     dir3 = vector3f_getCrossProduct(dir1, unitzf);
