@@ -90,6 +90,12 @@ void Error_Handler(void);
 #define MAG_READY_Pin LL_GPIO_PIN_2
 #define MAG_READY_GPIO_Port GPIOB
 #define MAG_READY_EXTI_IRQn EXTI2_IRQn
+#define CS_AG_Pin LL_GPIO_PIN_11
+#define CS_AG_GPIO_Port GPIOB
+#define CS_M_Pin LL_GPIO_PIN_12
+#define CS_M_GPIO_Port GPIOB
+#define Synchro_signal_Pin LL_GPIO_PIN_9
+#define Synchro_signal_GPIO_Port GPIOC
 #define TMS_Pin LL_GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin LL_GPIO_PIN_14

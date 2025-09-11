@@ -26,6 +26,11 @@ SOFTWARE.
 #define DB_PRINT_MEAN_RAW_VALUES 1
 #define DB_PRINT_MEAN_COR_VALUES 0
 
+#define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ
+#define LSM9DS1_FS_G LSM9DS1_FS_G_245_DPS
+#define LSM9DS1_FS_XL LSM9DS1_FS_XL_4G
+#define LSM9DS1_DO LSM9DS1_DO_40_HZ
+
 /*
  * MEMs driver
  *
@@ -146,6 +151,37 @@ SOFTWARE.
 #define INT_GEN_THS_ZL_G 0x36
 #define INT_GEN_DUR_G 0x37
 
+/* ODR in CTRL_REG_1[5..7] */
+#define LSM9DS1_ODR_POWER_DOWN (0x0 << 5)
+#define LSM9DS1_ODR_G_14_9_HZ (0x1 << 5)
+#define LSM9DS1_ODR_G_59_5_HZ (0x2 << 5)
+#define LSM9DS1_ODR_G_119_HZ (0x3 << 5)
+#define LSM9DS1_ODR_G_238_HZ (0x4 << 5)
+#define LSM9DS1_ODR_G_476_HZ (0x5 << 5)
+#define LSM9DS1_ODR_G_592_HZ (0x6 << 5)
+
+/* FS_G[0..1] in CTRL_REG1_G[3..4] */
+#define LSM9DS1_FS_G_245_DPS (0x0 << 3) /* 245 deg/s */
+#define LSM9DS1_FS_G_500_DPS (0x1 << 3) /* 245 deg/s */
+/* (0x2 <<3) not available  */
+#define LSM9DS1_FS_G_2000_DPS (0x3 << 3) /* 2000 deg/s */
+
+/* FS_XL in CTRL_REG6[3..4] : accelerometer full scale */
+#define LSM9DS1_FS_XL_2G (0x0 << 3)
+#define LSM9DS1_FS_XL_16G (0x1 << 3)
+#define LSM9DS1_FS_XL_4G (0x2 << 3)
+#define LSM9DS1_FS_XL_8G (0x3 << 3)
+
+/* DO in CTRL_REG1_M[2..4] : data output rate */
+#define LSM9DS1_DO_0_625_HZ (0x0 << 2)
+#define LSM9DS1_DO_1_25_HZ (0x1 << 2)
+#define LSM9DS1_DO_2_5_HZ (0x2 << 2)
+#define LSM9DS1_DO_5_HZ (0x3 << 2)
+#define LSM9DS1_DO_10_HZ (0x4 << 2)
+#define LSM9DS1_DO_20_HZ (0x5 << 2)
+#define LSM9DS1_DO_40_HZ (0x6 << 2)
+#define LSM9DS1_DO_80_HZ (0x7 << 2)
+
 #include "FreeRTOS.h"
 #include "timers.h"
 #include "task.h"
@@ -205,13 +241,8 @@ SOFTWARE.
 
 void timerMEMsCallback(TimerHandle_t xTimer);
 
-extern I2C_HandleTypeDef hi2c1;
 extern UART_HandleTypeDef huart1;
-
-/* The callbacks give those semaphores */
-/* to signal to I2C_Write/Read the end of transfer*/
-SemaphoreHandle_t semi2c1tx = NULL;
-SemaphoreHandle_t semi2c1rx = NULL;
+extern SPI_HandleTypeDef hspi2;
 
 /* The queue of messages of the MEMs task */
 QueueHandle_t msgQueueMEMs = (QueueHandle_t)0;
@@ -219,8 +250,11 @@ QueueHandle_t msgQueueMEMs = (QueueHandle_t)0;
 /* Timer : sends MSG periodicaly */
 static TimerHandle_t timerMEMs = (TimerHandle_t)0;
 
-unsigned cpt1 = 0U; // For debugging
-unsigned cpt2 = 0U; // For debugging
+/* Semaphoe pour SPI lock */
+SemaphoreHandle_t semspi2 = (SemaphoreHandle_t)0;
+
+unsigned cpt1 = 0U; // For debugging only
+unsigned cpt2 = 0U; // For debugging only
 
 /*
  * @brief Correct the accelerometer, gyrometer and magnetometer values
@@ -243,131 +277,189 @@ void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
     mag->z = (mag->z - MEMS_MAG_CORR_OFFSET_Z) * MEMS_MAG_CORR_GAIN_Z;
 }
 
-/*
- * @brief Read data from a peripheral memory by I2C1bus
- *
- * This function reads data over I2C1 bus from a specified memory address of an I2C device.
- * It uses DMA for the transfer and and uses semaphore for synchronisation.
- *
- * @param DevAddress Device address
- * @param MemAddress Memory address to read from
- * @param pData Pointer to the buffer where data will be stored
- * @param Size Number of bytes to read
- * @param delay Maximum time to wait for the semaphore
- * @return Number of bytes read, or -1 on error or timeout
-
- * The address of the device is restricted to 7 bits.
- * The function shifts the address left by 1 bit.
- *
- * @note This function is not reentrant.
+/**
+ * @brief  Fonction d’échange SPI en DMA (full-duplex).
+ * @param  txBuffer : pointeur vers données à envoyer
+ * @param  rxBuffer : pointeur vers buffer de réception
+ * @param  size     : taille en octets
+ * @param  timeout  : délai max en ticks FreeRTOS
+ * @retval HAL_StatusTypeDef : HAL_OK si succès, sinon code d’erreur HAL
  */
-
-int I2C_Mem_Read(uint16_t DevAddress,
-                 uint16_t MemAddress,
-                 uint8_t *pData,
-                 uint16_t Size,
-                 TickType_t delay)
+HAL_StatusTypeDef SPI_DMA_Transfer(SPI_HandleTypeDef *hspi, uint8_t *txBuffer, uint8_t *rxBuffer, uint16_t size, TickType_t timeout)
 {
     HAL_StatusTypeDef status;
-    BaseType_t ret;
 
-    /* No delay, and function is not reentrant, */
-    ret = xSemaphoreTake(semi2c1rx, (TickType_t)0);
-    if (ret == pdFAIL)
-    {
-        return -1; /* Not Given */
-    }
+    xSemaphoreTake(semspi2, timeout);
 
-    status = HAL_I2C_Mem_Read_DMA(&hi2c1,
-                                  (DevAddress << 1),
-                                  MemAddress,
-                                  I2C_MEMADD_SIZE_8BIT,
-                                  pData,
-                                  Size);
-
+    // Lancer l’échange DMA (non bloquant)
+    status = HAL_SPI_TransmitReceive_DMA(hspi, txBuffer, rxBuffer, size);
     if (status != HAL_OK)
     {
-        /* Error.  Release semaphore, status is ignored */
-        /* since give fails only if semaphore was taken by another task */
-        xSemaphoreGive(semi2c1rx);
-        return -2;
+        return status;
     }
 
-    /* Wait for the semaphore to be given by the ISR */
-    ret = xSemaphoreTake(semi2c1rx, delay);
-    if (ret == pdFAIL)
+    // Attente de fin via callback et sémaphore
+    if (xSemaphoreTake(semspi2, timeout) != pdTRUE)
     {
-        /* Timeout */
-        xSemaphoreGive(semi2c1rx); // Release the semaphore
-        return -3;                 // Timeout error
+        return HAL_TIMEOUT;
     }
 
-    // vTaskDelay(20);
-    xSemaphoreGive(semi2c1rx); // Release the semaphore
-    return Size;               /* Success */
+    return HAL_OK;
 }
 
-/*
- *
- * This function write data over I2C1 bus to a specified memory address of an I2C device.
- * It uses DMA for the transfer and and uses semaphore for synchronisation.
- *
- * @param DevAddress Device address
- * @param MemAddress Memory address to read from
- * @param pData Pointer to the buffer where data will be stored
- * @param Size Number of bytes to read
- * @param delay Maximum time to wait for the semaphore
- * @return Number of bytes read, or -1 on error or timeout
-
- * The address of the device is restricted to 7 bits.
- * The function shifts the address left by 1 bit.
- *
- * @note This function is not reentrant.
+/**
+ * @brief Callback appelé par la HAL quand DMA terminé
  */
-
-int I2C_Mem_Write(uint16_t DevAddress,
-                  uint16_t MemAddress,
-                  uint8_t *pData,
-                  uint16_t Size,
-                  TickType_t delay)
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-    HAL_StatusTypeDef status;
-    BaseType_t ret;
-
-    /* No delay, and function is not reentrant, */
-    ret = xSemaphoreTake(semi2c1tx, (TickType_t)0);
-    if (ret == pdFAIL)
+    if (hspi->Instance == SPI2)
     {
-        return -1; /* Not Given */
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        xSemaphoreGiveFromISR(semspi2, &xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
-
-    status = HAL_I2C_Mem_Write_DMA(&hi2c1,
-                                   (DevAddress << 1),
-                                   MemAddress,
-                                   I2C_MEMADD_SIZE_8BIT,
-                                   pData,
-                                   Size);
-
-    if (status != HAL_OK)
-    {
-        /* Error.  Release semaphore, status is ignored */
-        /* since give fails only if semaphore was taken by another task */
-        xSemaphoreGive(semi2c1tx);
-        return -2;
-    }
-
-    /* Wait for the semaphore to be given by the ISR */
-    ret = xSemaphoreTake(semi2c1tx, delay);
-    if (ret == pdFAIL)
-    {
-        /* Timeout */
-        xSemaphoreGive(semi2c1tx); // Release the semaphore
-        return -3;                 // Timeout error
-    }
-
-    xSemaphoreGive(semi2c1tx); // Release the semaphore
-    return Size;               /* Success */
 }
+
+/**
+ * @brief Callback appelé si erreur SPI
+ */
+void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
+{
+    if (hspi->Instance == SPI2)
+    {
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        xSemaphoreGiveFromISR(semspi2, &xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
+}
+
+/**
+ * @brief  Écrit une valeur dans un registre du LSM9DS1 (SPI).
+ * @param  agmag    : 1 : Acc& gyr, 0 : mag
+ * @param  reg      : register address (0x00-0x7F)
+ * @param  value    : valeur à écrire
+ * @retval HAL_StatusTypeDef
+ */
+HAL_StatusTypeDef LSM9DS1_WriteRegister(int agmag, uint8_t reg, uint8_t value)
+{
+    uint8_t tx[2];
+    uint8_t rx[2]; /* dummy */
+
+    /* bit7=0 : écriture */
+    tx[0] = reg & 0x7F;
+    tx[1] = value;
+
+    /* CS_A/G low : select device */
+    LL_GPIO_ResetOutputPin(GPIOB, (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
+
+    HAL_StatusTypeDef status = SPI_DMA_Transfer(&hspi2, tx, rx, 2, pdMS_TO_TICKS(10));
+
+    /* CS_A/G high : deselect device */
+    LL_GPIO_SetOutputPin(GPIOB, (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
+
+    return status;
+}
+
+LSM9DS1_ReadRegister(int agmag, uint8_t reg, uint8_t *value)
+{
+
+    HAL_StatusTypeDef res;
+
+    uint8_t bufferTx[7] = {reg | 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+    uint8_t bufferRx[7] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+
+    /* CS_A/G low : select device */
+    LL_GPIO_ResetOutputPin(GPIOB, (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
+    res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 2, pdMS_TO_TICKS(10));
+    if (res == HAL_OK)
+    {
+        *value = bufferRx[1];
+    }
+    /* CS_A/G high : deselect device */
+    LL_GPIO_SetOutputPin(GPIOB, (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
+
+    return (int)res;
+}
+
+int LSM9DS1_ReadAcc(Vector3f *acc)
+{
+    return LSM9DS1_ReadVec(1, acc);
+}
+
+int LSM9DS1_ReadGyr(Vector3f *gyr)
+{
+    return LSM9DS1_ReadVec(2, gyr);
+}
+
+int LSM9DS1_ReadMag(Vector3f *mag)
+{
+    return LSM9DS1_ReadVec(3, mag);
+}
+
+int LSM9DS1_ReadVec(int agmag, Vector3f *vec)
+{
+    HAL_StatusTypeDef res;
+    uint8_t regaddr;
+    uint32_t pin;
+
+    switch (agmag)
+    {
+    case 1: // Acc
+        regaddr = 0x28 | 0x80;
+        pin = LL_GPIO_PIN_11;
+        break;
+
+    case 2: // Gyr
+        regaddr = 0x18 | 0x80;
+        pin = LL_GPIO_PIN_11;
+        break;
+
+    case 3: // Mag
+        regaddr = 0x28 | 0x80 | 0x40;
+        pin = LL_GPIO_PIN_12;
+        break;
+
+    default:
+        return -1;
+    }
+
+    uint8_t bufferTx[7] = {regaddr, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+    uint8_t bufferRx[7] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+
+    LL_GPIO_ResetOutputPin(GPIOB, pin); // CS_A/G or CS_M low : select device
+    res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 7, pdMS_TO_TICKS(10));
+    if (res == HAL_OK)
+    {
+        vec->x = (int16_t)(bufferRx[1] | (bufferRx[2] << 8));
+        vec->y = (int16_t)(bufferRx[3] | (bufferRx[4] << 8));
+        vec->z = (int16_t)(bufferRx[5] | (bufferRx[6] << 8));
+    }
+    LL_GPIO_SetOutputPin(GPIOB, pin); // CS_A/G high : deselect device
+
+    return (int)res;
+}
+
+#if 0
+int LSM9DS1_ReadVec(Vector3f *acc)
+{
+    HAL_StatusTypeDef res;
+
+    uint8_t bufferTx[7] = {0x28 | 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+    uint8_t bufferRx[7] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+
+    LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS_A/G low : select accelerometer and gyrometer
+    res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 7, pdMS_TO_TICKS(10));
+    if (res == HAL_OK)
+    {
+        acc->x = (int16_t)(bufferRx[1] | (bufferRx[2] << 8));
+        acc->y = (int16_t)(bufferRx[3] | (bufferRx[4] << 8));
+        acc->z = (int16_t)(bufferRx[5] | (bufferRx[6] << 8));
+    }
+    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS_A/G high : deselect device
+
+    return (int)res;
+}
+#endif
 
 /*
  * @brief Initialize MEMs task
@@ -379,26 +471,30 @@ int I2C_Mem_Write(uint16_t DevAddress,
 
 int init_taskMEMs()
 {
-    // aux_USART_Init_all();
-
-    semi2c1tx = xSemaphoreCreateBinary();
-    xSemaphoreGive(semi2c1tx);
-    semi2c1rx = xSemaphoreCreateBinary();
-    xSemaphoreGive(semi2c1rx);
+    semspi2 = xSemaphoreCreateBinary();
+    xSemaphoreGive(semspi2);
 
     /* MEMs task queue creation */
-    msgQueueMEMs = xQueueCreate(10, sizeof(MEMS_MsgType_t));
+    msgQueueMEMs = xQueueCreate(100, sizeof(MEMS_MsgType_t));
 
-    /* create tick timer */
+    /* create tick timer  (without starting it) */
     timerMEMs = xTimerCreate("MEMs",
                              pdMS_TO_TICKS(MEMS_PERIOD_MS),
                              pdTRUE,    /* Auto reload (repeat indefinitely) */
                              (void *)0, /* Timer ID, not used */
                              timerMEMsCallback);
-    /* TODO : test creation of objects*/
+
     return 0;
 }
 
+/*
+ * @brief Sends a tick message to the MEMs task
+ * It is called every MEMS_PERIOD_MS milliseconds by the timer timerMEMs.
+ * Upon reception of this message the task computes mean values of the sensors,
+ * compute the attitude and sends it to the autopilot task.
+ * @ param xTimer The timer handle (not used)
+ * @ return None
+ */
 void timerMEMsCallback(TimerHandle_t xTimer)
 {
     (void)xTimer;
@@ -411,56 +507,189 @@ void timerMEMsCallback(TimerHandle_t xTimer)
     return;
 }
 
-int config_MEMs(void)
+int LSM9DS1_init(void)
 {
-    int ret_m;
-    int ret_xl1;
-    int ret_int;
+    int res;
+    uint8_t whoami = 0;
+    // uint8_t value = 0;
 
-    /* Magnetometer configuration */
-    static uint8_t cfg_m_1[] = {(0x2) << 5 | (0x6) << 2, /* X&Y : high perf, ODR : 40Hz */
-                                0x00,
-                                0x00,
-                                0x08, /* Z : High perf. */
-                                0x00};
+    /* Set CS_A/G and CS_M */
+    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS high
+    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_12); // CS high
 
-    ret_m = I2C_Mem_Write(LSM9DS1_MAG_I2C_ADDR,
-                          0x20,
-                          cfg_m_1,
-                          5,
-                          100);
-
-    /* Accelerometer and gyrometer configuration */
-    static uint8_t cfg_xl_1[] = {(0x2) << 5, // ODR_G : 010 : 59.5 Hz, cutoff freq. 19 Hz
-                                 0x00,
-                                 0x00};
-    ret_xl1 = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x10, cfg_xl_1, sizeof(cfg_xl_1), 100);
-
-    /* Accelerometer 4g full scale */
-    /* FS0,1_XL bits in CTRL_REG6_XL register (address : 0x20)*/
-    /* Reset value is 0x20, so keep 0x20 (not in power down mode ) */
-    static uint8_t cfg_xl2[] = {0x20 | 0x2 << 3};
-    ret_xl1 = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x20, cfg_xl2, sizeof(cfg_xl2), 100);
-
-    /* LSM9DS1 interrupts generation configuration */
-    /* Interrupts set INT pins of LSM9DS1 */
-
-    static uint8_t cfg_int[] = {
-        0x01, /* INT1 pin : DRDY_XL, data ready accelerometer */
-        0x02  /* INT2 pin : DRDY_G , data ready gyrometer */
-    };
-    ret_int = I2C_Mem_Write(LSM9DS1_XLG_I2C_ADDR, 0x0C, cfg_int, 2, 100);
-
-    if (ret_m < 0 || ret_xl1 < 0 || ret_int < 0)
+    /* check connection of Devices by reading WHOAMI register */
+    whoami = 0x0;
+    res = LSM9DS1_ReadRegister(1, 0x0F, &whoami); /* Acc&gyr */
+    if (res != HAL_OK || whoami != 0x68)
     {
         return -1;
     }
-    else
+
+    whoami = 0x0;
+    res = LSM9DS1_ReadRegister(2, 0x0F, &whoami); /* mag */
+    if (res != HAL_OK || whoami != 0x3D)
     {
-        return 1;
+        return -1;
+    }
+
+    /* Reset devices */
+    /* Sofware reset of acc/gyr meter : set SW_RESET an IF_ADD_INC in CTRL_REG8*/
+    /* the IF_ADD_INC needs to be preserved, it increments addresses during reads */
+    LSM9DS1_WriteRegister(1, CTRL_REG8, 0x05); /* Reboot memory content */
+
+    /* set SOFT_RESET in CTRL_REG2_M */
+    LSM9DS1_WriteRegister(2, CTRL_REG2_M, 0x04); /* Software reset */
+
+    /* wait */
+    vTaskDelay(pdMS_TO_TICKS(10));
+
+    /* CTRL_REG1_G  Control register gyrometer */
+    /* Set ODR_G output data rate and FS gyrometer full scale */
+    res = LSM9DS1_WriteRegister(1, CTRL_REG1_G, LSM9DS1_ODR | LSM9DS1_FS_G);
+    if (res != HAL_OK)
+    {
+        return -1;
+    }
+
+    LSM9DS1_WriteRegister(1, CTRL_REG6_XL, (0x2 << 5) | LSM9DS1_FS_XL); /* Accelerometer full scale */
+    // LSM9DS1_WriteRegister(1, CTRL_REG6_XL, 0x40);
+    LSM9DS1_WriteRegister(1, INT1_CTRL, 0x1); /* Interrupt on INT1 : data ready accelerometer */
+    LSM9DS1_WriteRegister(1, INT2_CTRL, 0x2); /* Interrupt on INT2 : data ready gyrometer */
+
+    /* Output data rate, x&y ultra high performance mode, Temperature compensation */
+    LSM9DS1_WriteRegister(2, CTRL_REG1_M, (0x1 << 7) | (0x3 << 5) | LSM9DS1_DO);
+    LSM9DS1_WriteRegister(2, CTRL_REG2_M, 0x00);       /* Full scale +/- 4 gauss */
+    LSM9DS1_WriteRegister(2, CTRL_REG3_M, 0x00);       /* Continuous conversion mode */
+    LSM9DS1_WriteRegister(2, CTRL_REG4_M, 0x0C);       /* Z axis ultra high performance */
+    LSM9DS1_WriteRegister(2, CTRL_REG5_M, (0x1 << 6)); /* Block data update */
+    LSM9DS1_WriteRegister(2, INT_CFG_M, 0x05);         /* DRDY_M set when data available so Interrupt configuration useless */
+
+    return 1;
+}
+
+void taskMEMs(void *param)
+{
+    (void)param;
+    MEMS_Msg_t MEMS_Msg;
+    BaseType_t ret;
+    char message[200];
+    Vector3f acc, gyr, mag;
+    uint8_t value;
+    unsigned nbTotAcc = 0U;
+    unsigned nbTotGyr = 0U;
+    unsigned nbTotMag = 0U;
+
+    int16_t acctx, accty, acctz;
+    int16_t gyrtx, gyrty, gyrtz;
+    int16_t magtx, magty, magtz;
+    int32_t accCumulx, accCumuly, accCumulz;
+    int32_t gyrCumulx, gyrCumuly, gyrCumulz;
+    int32_t magCumulx, magCumuly, magCumulz;
+
+    unsigned accNb = 0U;
+    unsigned gyrNb = 0U;
+    unsigned magNb = 0U;
+
+    unsigned accNbId = 0U;
+    unsigned gyrNbId = 0U;
+    unsigned magNbId = 0U;
+
+    unsigned tickAcc = 0U;
+    unsigned tickGyr = 0U;
+    unsigned tickMag = 0U;
+    unsigned tickNew = 0U;
+
+    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS_A/G high
+    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_12); // CS_M high
+
+    LSM9DS1_init();
+    /* Interrupts mustn't be enabled before the message queue is created */
+    /* so enable them now */
+    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+    HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+    HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+
+    xTimerStart(timerMEMs, (TickType_t)0);
+
+    tickAcc = tickGyr = tickMag = xTaskGetTickCount();
+
+    for (;;)
+    {
+        ret = xQueueReceive(msgQueueMEMs, &MEMS_Msg, pdMS_TO_TICKS(500));
+        if (ret == pdPASS)
+        {
+
+            switch (MEMS_Msg.msgType)
+            {
+            case MEMS_MSG_TICK:
+
+                break;
+
+            case MEMS_MSG_ACC_READY: /* Accelerometer data ready */
+            case MEMS_MSG_MAG_READY: /* Magnetometer data ready */
+                /* set and reset C9 pin for synchronisation */
+                LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9);   // C9 signal synchro
+                LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9); // C9 signal synchro
+
+                tickNew = xTaskGetTickCount();
+                LSM9DS1_ReadAcc(&acc);
+                nbTotAcc++;
+                snprintf(message, sizeof(message),
+                         "ACC : %u %u   %f %f %f\n",
+                         tickNew - tickAcc, nbTotAcc,
+                         acc.x, acc.y, acc.z);
+                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+                tickAcc = tickNew;
+
+                LSM9DS1_ReadRegister(2, 0x27, &value);
+                if (value & 0x08)
+                {
+                    tickNew = xTaskGetTickCount();
+                    LSM9DS1_ReadMag(&mag);
+                    nbTotMag++;
+                    snprintf(message, sizeof(message),
+                             "MAG : %u %d    %f %f %f\n",
+                             tickNew - tickMag, nbTotMag,
+                             mag.x, mag.y, mag.z);
+                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+                    tickMag = tickNew;
+                }
+
+                break;
+            case MEMS_MSG_GYR_READY: /* Gyrometer data ready */
+
+                tickNew = xTaskGetTickCount();
+                LSM9DS1_ReadGyr(&gyr);
+                nbTotGyr++;
+                snprintf(message, sizeof(message),
+                         "GYR : %u %d    %f %f %f\n",
+                         tickNew - tickGyr, nbTotGyr,
+                         gyr.x, gyr.y, gyr.z);
+                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+                tickGyr = tickNew;
+
+                break;
+
+            case MEMS_MSG_CALIBRATE: /* Calibrate the sensors */
+                break;
+
+            case MEMS_MSG_DISPLAY_CONFIG: /* Display the configuration */
+                break;
+
+            default:
+                break;
+            }
+        }
+        else
+        {
+            strcpy(message, "MEMS Error receive from queue\n");
+            svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(100));
+        }
+        // vTaskDelay(pdMS_TO_TICKS(20));
     }
 }
 
+#if 0
 void taskMEMs(void *param)
 {
     (void)param;
@@ -821,3 +1050,4 @@ void taskMEMs(void *param)
         compteur++;
     }
 }
+#endif

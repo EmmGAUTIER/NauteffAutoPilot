@@ -56,7 +56,7 @@ SOFTWARE.
 #include "apdialog.h"
 
 #define DBG_MOTOR_PRINT(X) (X)
-#define DBG_ADC_PRINT(X) (X)
+#define DBG_ADC_PRINT(X) 
 
 extern TIM_HandleTypeDef htim3;
 

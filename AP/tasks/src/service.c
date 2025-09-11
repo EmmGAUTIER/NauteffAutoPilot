@@ -40,7 +40,6 @@ SOFTWARE.
 #include "rbuffer.h"
 #include "service.h"
 
-extern I2C_HandleTypeDef hi2c1;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 
