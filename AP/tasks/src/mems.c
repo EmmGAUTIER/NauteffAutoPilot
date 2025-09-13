@@ -26,10 +26,10 @@ SOFTWARE.
 #define DB_PRINT_MEAN_RAW_VALUES 1
 #define DB_PRINT_MEAN_COR_VALUES 0
 
-#define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ
+#define LSM9DS1_ODR LSM9DS1_ODR_G_14_9_HZ
 #define LSM9DS1_FS_G LSM9DS1_FS_G_245_DPS
 #define LSM9DS1_FS_XL LSM9DS1_FS_XL_4G
-#define LSM9DS1_DO LSM9DS1_DO_40_HZ
+#define LSM9DS1_DO LSM9DS1_DO_20_HZ
 
 /*
  * MEMs driver
@@ -37,7 +37,7 @@ SOFTWARE.
  */
 #define LSM9DS1_MAG_I2C_ADDR (0x1E) /* Magnetometer device address */
 #define LSM9DS1_XLG_I2C_ADDR (0x6B) /* Accelerometer and gyrometer device address */
-#define MEMS_PERIOD_MS 50
+#define MEMS_PERIOD_MS 20
 #define MEMS_PERIOD_S ((float)MEMS_PERIOD_MS / 1000.0F)
 /*
  * Magnetometer register addresses
@@ -605,9 +605,9 @@ void taskMEMs(void *param)
     LSM9DS1_init();
     /* Interrupts mustn't be enabled before the message queue is created */
     /* so enable them now */
-    HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-    HAL_NVIC_EnableIRQ(EXTI1_IRQn);
-    HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+    // HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+    // HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+    // HAL_NVIC_EnableIRQ(EXTI2_IRQn);
 
     xTimerStart(timerMEMs, (TickType_t)0);
 
@@ -622,14 +622,49 @@ void taskMEMs(void *param)
             switch (MEMS_Msg.msgType)
             {
             case MEMS_MSG_TICK:
+                LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9);   // C9 signal synchro
+                LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9); // C9 signal synchro
+
+                LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS_A/G high
+                LSM9DS1_ReadRegister(1, 0x17, &value);
+                LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS_A/G high
+                int gyrReady = (value & 0x2);                  /* Gyroscope new data available */
+                int accReady = (value & 0x1);                  /* accelerometer new data available */
+
+                LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_12); // CS_A/G high
+                LSM9DS1_ReadRegister(2, 0x27, &value);
+                LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_12); // CS_A/G high
+                int magReady = (value & 0x8);          /* accelerometer new data available */
+
+                snprintf(message, sizeof(message), "MEMS tick test %d %d %d\n", accReady, gyrReady, magReady);
+                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+
+                if (accReady)
+                {
+                    LSM9DS1_ReadAcc(&acc);
+                    snprintf(message, sizeof(message), "ACC :  %f %f %f\n", acc.x, acc.y, acc.z);
+                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+                }
+
+                if (gyrReady)
+                {
+                    LSM9DS1_ReadGyr(&gyr);
+                    snprintf(message, sizeof(message), "GYR :  %f %f %f\n", gyr.x, gyr.y, gyr.z);
+                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+                }
+
+                if (magReady)
+                {
+                    LSM9DS1_ReadMag(&mag);
+                    snprintf(message, sizeof(message), "MAG :  %f %f %f\n", mag.x, mag.y, mag.z);
+                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+                }
 
                 break;
 
             case MEMS_MSG_ACC_READY: /* Accelerometer data ready */
             case MEMS_MSG_MAG_READY: /* Magnetometer data ready */
                 /* set and reset C9 pin for synchronisation */
-                LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9);   // C9 signal synchro
-                LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9); // C9 signal synchro
 
                 tickNew = xTaskGetTickCount();
                 LSM9DS1_ReadAcc(&acc);
