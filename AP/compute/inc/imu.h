@@ -2,11 +2,9 @@
 #ifndef IMU_H
 #define IMU_H
 
-
 /* Réglages du calul */
 
-#define MEMS_MAG_VS_GYRO .10F /* Répartition de partie du compas et dy gyromètre pour le cap */
-
+#define MEMS_MAG_VS_GYRO 1.0F /* Répartition de partie du compas et dy gyromètre pour le cap */
 
 typedef struct
 {
@@ -29,6 +27,7 @@ typedef struct
     Vector3f gyr;
     Vector3f mag;
     float roll, pitch, heading;
+    float yawRate;
     bool initialized;
 } IMU_Status_t;
 

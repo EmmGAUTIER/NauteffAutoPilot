@@ -58,6 +58,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     AP/aux/src/rbuffer.c
 
     AP/compute/src/geom.c
+    AP/compute/src/quat.c
     AP/compute/src/matrix3f.c
     AP/compute/src/imu.c
 )

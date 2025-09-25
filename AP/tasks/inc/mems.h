@@ -34,6 +34,7 @@ typedef enum
     MEMS_MSG_ACC_READY,
     MEMS_MSG_GYR_READY,
     MEMS_MSG_MAG_READY,
+    MEMS_MSG_POLL,
     MEMS_MSG_TICK,
     MEMS_MSG_CALIBRATE,
     MEMS_MSG_DISPLAY_CONFIG,
@@ -48,8 +49,5 @@ typedef struct
 void MEMSSendTimerCallback(TimerHandle_t xTimer);
 
 #define MEMS_STANDARD_GRAVITY 9.80665F
-#define MEMS_STANDARD_MAGNETIG 0.000048F
-
-/* Full scales of devices , full scale is +- */
-#define MEMS_FULL_SCALE_ACC 2.F
-#define MEMS_FULL_SCALE_GYR (245.F * (M_PI / 180.F))
+#define MEMS_STANDARD_MAGNETIC_TESLA 0.00005F
+#define MEMS_STANDARD_MAGNETIC_GAUSS 0.5F
