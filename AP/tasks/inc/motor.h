@@ -45,15 +45,16 @@ typedef enum
 {
     MSG_MOTOR_NONE = 0,
     MSG_MOTOR_ADC_VALUES,
-    //MSG_MOTOR_START,
-    //MSG_MOTOR_STOP,
+    // MSG_MOTOR_START,
+    // MSG_MOTOR_STOP,
     MSG_MOTOR_EMBRAYE,
     MSG_MOTOR_DEBRAYE,
-    //MSG_MOTOR_ERROR,
-    //MSG_MOTOR_EFFORT,
+    // MSG_MOTOR_ERROR,
+    // MSG_MOTOR_EFFORT,
     MSG_MOTOR_MOVE_ANGLE,
     MSG_MOTOR_MOVE_TIME,
     MSG_MOTOR_MOVE_DONE,
+    MSG_MOTOR_SET_CVT_ANGLE_TIME,
     MSG_MOTOR_DISPLAY_CONFIG,
     MSG_MOTOR_DEFAULT,
 } MsgMotorType_t;
@@ -120,3 +121,10 @@ void MOTOR_order_move_time(float time);
  * @return none
  */
 void MOTOR_stop();
+
+/*
+ * @brief Set the conversion factor between helm angle and time
+ * @param cat Conversion factor angle to time
+ * @return void
+ */
+void Motor_set_cvt_angle_time(float cat);

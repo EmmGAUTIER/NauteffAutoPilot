@@ -74,9 +74,12 @@ typedef enum
     TOKEN_PORT,
     TOKEN_NUMBER, /* Represents a number token (with optional sign) */
     TOKEN_COEFFICIENT,
-    TOKEN_INTEGRAL,
     TOKEN_DERIVATIVE,
     TOKEN_PROPORTIONAL,
+    TOKEN_INTEGRAL,
+    TOKEN_MOTOR_CVT_ANGLE_TIME,
+    TOKEN_MAG_VS_GYR,
+    TOKEN_MOTOR_THESHOLD,
     TOKEN_AHRS,
     TOKEN_CALIBRATE,
     TOKEN_DISPLAY,
@@ -105,9 +108,12 @@ static const TokenEntry tokenTable[] = {
     {"starboard", TOKEN_STARBOARD},
     {"port", TOKEN_PORT},
     {"coefficient", TOKEN_COEFFICIENT},
-    {"integral", TOKEN_INTEGRAL},
     {"derivative", TOKEN_DERIVATIVE},
     {"proportional", TOKEN_PROPORTIONAL},
+    {"integral", TOKEN_INTEGRAL},
+    {"motor_cvt_angle_time", TOKEN_MOTOR_CVT_ANGLE_TIME},
+    {"mag_vs_gyr", TOKEN_MAG_VS_GYR},
+    {"motor_threshold", TOKEN_MOTOR_THESHOLD},
     {"AHRS", TOKEN_AHRS},
     {"calibrate", TOKEN_CALIBRATE},
     {"display", TOKEN_DISPLAY},
@@ -465,7 +471,19 @@ void parse_command_line(void)
         float coeff = 2.71F;
         int res;
 
-        if (tokenTypes[1] == TOKEN_PROPORTIONAL && tokenTypes[2] == TOKEN_NUMBER)
+        if (tokenTypes[1] == TOKEN_DERIVATIVE && tokenTypes[2] == TOKEN_NUMBER)
+        {
+            res = convert_float(tokens[2], &coeff);
+            (void)res;
+            msgAutoPilot.msgType = AP_MSG_PARAM;
+            msgAutoPilot.data.coefficient.param_number = AP_PARAM_DERIVATIVE;
+            msgAutoPilot.data.coefficient.param_value = coeff;
+            xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
+            DBG_DIALOG_PRINT((
+                nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient derivative %f\n", coeff),
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+        }
+        else if (tokenTypes[1] == TOKEN_PROPORTIONAL && tokenTypes[2] == TOKEN_NUMBER)
         {
             res = convert_float(tokens[2], &coeff);
             (void)res;
@@ -478,6 +496,7 @@ void parse_command_line(void)
             msgAutoPilot.data.coefficient.param_value = coeff;
             res = xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
         }
+
         else if (tokenTypes[1] == TOKEN_INTEGRAL && tokenTypes[2] == TOKEN_NUMBER)
         {
             res = convert_float(tokens[2], &coeff);
@@ -490,16 +509,38 @@ void parse_command_line(void)
                 nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient integral %f\n", coeff),
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
-        else if (tokenTypes[1] == TOKEN_DERIVATIVE && tokenTypes[2] == TOKEN_NUMBER)
+
+        /* Parameter : ration helm move in degrees and command time */
+        else if (tokenTypes[1] == TOKEN_MOTOR_CVT_ANGLE_TIME && tokenTypes[2] == TOKEN_NUMBER)
         {
-            res = convert_float(tokens[2], &coeff);
-            (void)res;
+            convert_float(tokens[2], &coeff);
+            Motor_set_cvt_angle_time(coeff);
+            DBG_DIALOG_PRINT((
+                nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient cvt angle time %f\n", coeff),
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+        }
+
+        /* Parameter : prop between magnetometer and gyro */
+        else if (tokenTypes[1] == TOKEN_MAG_VS_GYR && tokenTypes[2] == TOKEN_NUMBER)
+        {
+            convert_float(tokens[2], &coeff);
+            msgMEMs.msgType = MEMS_MSG_SET_MAG_VS_GYR;
+            msgMEMs.data.mag_vs_gyr = coeff;
+            xQueueSend(msgQueueMEMs, &msgMEMs, 0);
+            DBG_DIALOG_PRINT((
+                nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient mag vs gyr %f\n", coeff),
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+        }
+
+        else if (tokenTypes[1] == TOKEN_MOTOR_THESHOLD && tokenTypes[2] == TOKEN_NUMBER)
+        {
+            convert_float(tokens[2], &coeff);
             msgAutoPilot.msgType = AP_MSG_PARAM;
-            msgAutoPilot.data.coefficient.param_number = AP_PARAM_DERIVATIVE;
+            msgAutoPilot.data.coefficient.param_number = AP_PARAM_MOTOR_THRESHOLD;
             msgAutoPilot.data.coefficient.param_value = coeff;
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
             DBG_DIALOG_PRINT((
-                nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient derivative %f\n", coeff),
+                nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient motor threshold %f\n", coeff),
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
     }
@@ -543,7 +584,7 @@ void parse_command_line(void)
 // void __attribute__((noreturn)) task_Dialog(void *args __attribute__((unused)))
 void taskDialogIn(void *args __attribute__((unused)))
 {
-    //int nb = 0; // pour mise au point
+    // int nb = 0; // pour mise au point
 
     for (;;)
     {

@@ -38,12 +38,17 @@ typedef enum
     MEMS_MSG_TICK,
     MEMS_MSG_CALIBRATE,
     MEMS_MSG_DISPLAY_CONFIG,
+    MEMS_MSG_SET_MAG_VS_GYR,
 } MEMS_MsgType_t;
 
 typedef struct
 {
     MEMS_MsgType_t msgType;
-    unsigned number; // For debug purpose
+    // unsigned number; // For debug purpose
+    union
+    {
+        float mag_vs_gyr;
+    } data;
 } MEMS_Msg_t;
 
 void MEMSSendTimerCallback(TimerHandle_t xTimer);

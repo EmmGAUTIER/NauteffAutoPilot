@@ -4,7 +4,8 @@
 
 /* Réglages du calul */
 
-#define MEMS_MAG_VS_GYRO 1.0F /* Répartition de partie du compas et dy gyromètre pour le cap */
+#define MEMS_INIT_MAG_VS_GYRO 1.0F /* Répartition de partie du compas et dy gyromètre pour le cap */
+//#define MEMS_MAG_VS_GYRO 1.0F /* Répartition de partie du compas et dy gyromètre pour le cap */
 
 typedef struct
 {
@@ -29,6 +30,8 @@ typedef struct
     float roll, pitch, heading;
     float yawRate;
     bool initialized;
+    float magVsGyr;
+    Quaternionf orientation;
 } IMU_Status_t;
 
 void IMU_init_status(IMU_Status_t *mstatus);
@@ -36,7 +39,31 @@ float IMU_get_roll(IMU_Status_t *mstatus);
 float IMU_get_pitch(IMU_Status_t *mstatus);
 float IMU_get_heading(IMU_Status_t *mstatus);
 float IMU_get_yawRate(IMU_Status_t *mstatus);
+
+INLINE float IMU_get_roll_quat(IMU_Status_t *mstatus)
+{
+    Quaternionf q = mstatus->orientation;
+    return atan2f(2.0f * (q.w * q.x + q.y * q.z), 1.0f - 2.0f * (q.x * q.x + q.y * q.y));
+}
+
+INLINE float IMU_get_pitch_quat(IMU_Status_t *mstatus)
+{
+    Quaternionf q = mstatus->orientation;
+    return asinf(2.0f * (q.w * q.y - q.z * q.x));
+}
+
+INLINE float IMU_get_heading_quat(IMU_Status_t *mstatus)
+{
+    Quaternionf q = mstatus->orientation;
+    return atan2f(2.0f * (q.w * q.z + q.x * q.y), 1.0f - 2.0f * (q.y * q.y + q.z * q.z));
+}
+
+int IMU_set_mag_vs_gyr_prop (IMU_Status_t *mstatus, float prop);
 int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
+int IMU_new_values_old(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
+int IMU_new_values_st(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
+void IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
+Quaternionf IMU_getQuaternion(IMU_Status_t *mstatus);
 
 /*
  * @brief Create a calibrator with a specified number of samples

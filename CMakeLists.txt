@@ -61,6 +61,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     AP/compute/src/quat.c
     AP/compute/src/matrix3f.c
     AP/compute/src/imu.c
+    AP/compute/src/madgwick.c
 )
 
 # Add include paths

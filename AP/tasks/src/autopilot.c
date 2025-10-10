@@ -240,12 +240,19 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 case AP_PARAM_PROPORTIONNAL:
                     APStatus.kp = msg.data.coefficient.param_value;
                     break;
+
                 case AP_PARAM_INTEGRAL:
                     APStatus.ki = msg.data.coefficient.param_value;
                     break;
+
                 case AP_PARAM_DERIVATIVE:
                     APStatus.kd = msg.data.coefficient.param_value;
                     break;
+
+                case AP_PARAM_MOTOR_THRESHOLD:
+                    APStatus.motorThreshold = msg.data.coefficient.param_value;
+                    break;
+
                 default:
                     break;
                 }

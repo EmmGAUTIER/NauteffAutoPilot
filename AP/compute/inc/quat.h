@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#if 0
+#if 1
 #ifndef QUAT_H
 #define QUAT_H
 
@@ -48,7 +48,7 @@ SOFTWARE.
 #endif
 
 /**
- * @brief Structure representing a 3D vector with float components.
+ * @brief Structure representing a quaternion with float components.
  *  componants are named x, y and z
  */
 typedef struct
@@ -57,7 +57,7 @@ typedef struct
     float x; /* imaginary i */
     float y; /* imaginary j */
     float z; /* imaginary k */
-} Quatf_t;
+} Quaternionf;
 
 typedef struct{
     int16_t w;
@@ -80,14 +80,14 @@ typedef struct{
 // extern Vector3f unitxf;
 // ...
 
-extern Quatf_t Quatf_null;
+extern Quaternionf Quatf_null;
 
 /*
  * @brief Initializes a quaternion with given components.
  * @param x, y, z The components of the vector.
  * @return The Vector3f structure initialized with the given components.
  */
-Quatf_t vector3f_init(float x, float y, float z);
+Quaternionf Quaternionf_init(float q, float x, float y, float z);
 
 /**
  * @brief Adds two 3D vectors component-wise.
@@ -96,7 +96,7 @@ Quatf_t vector3f_init(float x, float y, float z);
  * @param v2 The second vector.
  * @return The component-wise sum of v1 and v2.
  */
-Quatf_t vector3f_add(Quatf_t v1, Quatf_t v2);
+Quaternionf Quaternionf_add(Quaternionf v1, Quaternionf v2);
 
 /**
  * @brief Subtracts the second 3D vector from the first, component-wise.
@@ -105,7 +105,7 @@ Quatf_t vector3f_add(Quatf_t v1, Quatf_t v2);
  * @param v2 The vector to subtract.
  * @return The component-wise difference v1 - v2.
  */
-Quatf_t vector3f_sub(Quatf_t v1, Quatf_t v2);
+Quaternionf Quaternionf_sub(Quaternionf v1, Quaternionf v2);
 
 /**
  * @brief Computes the cross product of two 3D vectors.
@@ -116,7 +116,7 @@ Quatf_t vector3f_sub(Quatf_t v1, Quatf_t v2);
  * @param v2 The second vector.
  * @return The cross product vector.
  */
-Quatf_t vector3f_getCrossProduct(Quatf_t v1, Quatf_t v2);
+Quaternionf Quaternionf_getCrossProduct(Quaternionf v1, Quaternionf v2);
 
 /**
  * @brief Computes the dot product (scalar product) of two 3D vectors.
@@ -127,7 +127,7 @@ Quatf_t vector3f_getCrossProduct(Quatf_t v1, Quatf_t v2);
  * @param v2 The second vector.
  * @return The scalar dot product.
  */
-float vector3f_getDotProduct(Quatf_t v1, Quatf_t v2);
+Quaternionf Quaternionf_mul(Quaternionf v1, Quaternionf v2);
 
 /**
  * @brief Multiplies a 3D vector by a scalar.
@@ -138,7 +138,7 @@ float vector3f_getDotProduct(Quatf_t v1, Quatf_t v2);
  * @param a The scalar value.
  * @return The scaled vector.
  */
-Quatf_t vector3f_getScaled(Quatf_t v, float a);
+Quaternionf Quaternionf_getScaled(Quaternionf v, float a);
 
 /**
  * @brief Computes the Euclidean norm ("length") of a 3D vector.
@@ -148,7 +148,7 @@ Quatf_t vector3f_getScaled(Quatf_t v, float a);
  * @param v The input vector.
  * @return The Euclidean norm of the vector.
  */
-float vector3f_getNorm(Quatf_t v);
+float Quaternionf_getNorm(Quaternionf v);
 
 /**
  * @brief Normalizes a 3D vector to have a length of 1.
@@ -158,7 +158,7 @@ float vector3f_getNorm(Quatf_t v);
  * @param v The input vector.
  * @return The normalized vector (unit vector), or the zero vector if the input is zero.
  */
-Quatf_t vector3f_getNormalized(Quatf_t v);
+Quaternionf Quaternionf_getNormalized(Quaternionf v);
 
 /*
  @ brief Computes the difference between two 3D vectors and checks if it is within a threshold.

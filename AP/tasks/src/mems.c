@@ -22,12 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#define DBG_PRINT_RAW_VALUES_ACC(X) (X)
+#define DBG_PRINT_RAW_VALUES_ACC(X)
 #define DBG_PRINT_RAW_VALUES_GYR(X)
-#define DBG_PRINT_RAW_VALUES_MAG(X) (X)
-#define DBG_PRINT_MEAN_RAW_VALUES(X)  (X)
-#define DBG_PRINT_MEAN_CORR_VALUES(X) (X)
+#define DBG_PRINT_RAW_VALUES_MAG(X)
+#define DBG_PRINT_MEAN_RAW_VALUES(X)
+#define DBG_PRINT_MEAN_CORR_VALUES(X) 
 #define DBG_PRINT_ATTITUDE(X) (X)
+#define DBG_PRINT_QUATERNION(X) (X)
+#define DBG_PRINT_MADGWICK(X)
 
 #define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ /* mag and acc ouptut data rate */
 #define LSM9DS1_FS_G LSM9DS1_FS_G_500_DPS /* gyro full scale */
@@ -42,7 +44,7 @@ SOFTWARE.
 // #define LSM9DS1_MAG_I2C_ADDR (0x1E) /* Magnetometer device address */
 // #define LSM9DS1_XLG_I2C_ADDR (0x6B) /* Accelerometer and gyrometer device address */
 #define MEMS_PERIOD_MS 100
-#define MEMS_PERIOD_POLL 10
+#define MEMS_PERIOD_POLL 20
 #define MEMS_PERIOD_S ((float)MEMS_PERIOD_MS / 1000.0F)
 /*
  * Magnetometer register addresses
@@ -219,6 +221,8 @@ SOFTWARE.
 #include "mems.h"
 
 #include "geom.h"
+#include "quat.h"
+#include "madgwick.h"
 #include "autopilot.h"
 #include "imu.h"
 
@@ -242,7 +246,7 @@ SOFTWARE.
 #define LSM9DS1_CVT_MKS_FACTOR_GYR ((M_PI / 180.) * 245.F / 32768.F)
 #endif
 #if LSM9DS1_FS_G == LSM9DS1_FS_G_500_DPS
-#define LSM9DS1_CVT_MKS_FACTOR_GYR ((M_PI / 180.) * 500.F / 32768.F)
+#define LSM9DS1_CVT_MKS_FACTOR_GYR ((M_PI / 180.) * (500.F / 32768.F) * 1.17F)
 #endif
 #if LSM9DS1_FS_G == LSM9DS1_FS_G_2000_DPS
 #define LSM9DS1_CVT_MKS_FACTOR_GYR ((M_PI / 180.) * 2000.F / 32768.F)
@@ -290,9 +294,9 @@ SOFTWARE.
 #define MEMS_MAG_GAIN_X (.3675F)
 #define MEMS_MAG_GAIN_Y (.3585F)
 #define MEMS_MAG_GAIN_Z (.3571F)
-//#define MEMS_MAG_GAIN_X (1.F)
-//#define MEMS_MAG_GAIN_Y (1.F)
-//#define MEMS_MAG_GAIN_Z (1.F)
+// #define MEMS_MAG_GAIN_X (1.F)
+// #define MEMS_MAG_GAIN_Y (1.F)
+// #define MEMS_MAG_GAIN_Z (1.F)
 
 void timerMEMsCallback(TimerHandle_t xTimer);
 void timerPOLLCallback(TimerHandle_t xTimer);
@@ -312,9 +316,9 @@ static TimerHandle_t timerPoll = (TimerHandle_t)0;
 /* Semaphore pour SPI lock */
 SemaphoreHandle_t semspi2 = (SemaphoreHandle_t)0;
 
-//void MEMS_Correction(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
+// void MEMS_Correction(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
 //{
-    //;
+//;
 //}
 
 /*
@@ -322,7 +326,7 @@ SemaphoreHandle_t semspi2 = (SemaphoreHandle_t)0;
  */
 void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
 {
-    float val;
+    // float val;
 
     /* Correct the accelerometer values */
     acc->x = (acc->x - MEMS_ACC_CORR_OFFSET_X) * MEMS_ACC_CORR_GAIN_X;
@@ -335,17 +339,20 @@ void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
     gyr->z -= MEMS_GYR_OFFSET_Z;
 
     /* Correct the magnetometer values */
-    mag->x = (mag->x - MEMS_MAG_OFFSET_X) * (1./MEMS_MAG_GAIN_X);
-    mag->y = (mag->y - MEMS_MAG_OFFSET_Y) * (1./MEMS_MAG_GAIN_Y);
-    mag->z = (mag->z - MEMS_MAG_OFFSET_Z) * (1./MEMS_MAG_GAIN_Z);
+    mag->x = (mag->x - MEMS_MAG_OFFSET_X) * (1. / MEMS_MAG_GAIN_X);
+    mag->y = (mag->y - MEMS_MAG_OFFSET_Y) * (1. / MEMS_MAG_GAIN_Y);
+    mag->z = (mag->z - MEMS_MAG_OFFSET_Z) * (1. / MEMS_MAG_GAIN_Z);
+
+    /* North East Down (NED) convention */
+    /* accelerometer and gyro has same coordinates */
+    /* z axis has to be inverted */
+    acc->z *= -1.F;
+    gyr->z *= -1.F;
 
     /* Mag has different coordinates than mag and gyro */
-    /* invert x and y and change sign of y */
-    /* magz unchanged */
-    //val = mag->x;
-    //mag->x  = mag->y;
-    //mag->y = -val;
+    /* invert sign of x and z */
     mag->x *= -1.F;
+    mag->z *= -1.F;
 }
 
 /**
@@ -358,7 +365,7 @@ void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
  */
 HAL_StatusTypeDef SPI_DMA_Transfer(SPI_HandleTypeDef *hspi, uint8_t *txBuffer, uint8_t *rxBuffer, uint16_t size, TickType_t timeout)
 {
-    //BaseType_t ret;
+    // BaseType_t ret;
     HAL_StatusTypeDef status;
 
     // ret = xSemaphoreTake(semspi2, timeout);
@@ -385,12 +392,12 @@ HAL_StatusTypeDef SPI_DMA_Transfer(SPI_HandleTypeDef *hspi, uint8_t *txBuffer, u
  */
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-    //BaseType_t ret;
-    //unsigned errCode = HAL_SPI_ERROR_NONE;
+    // BaseType_t ret;
+    // unsigned errCode = HAL_SPI_ERROR_NONE;
 
-    //if (hspi->ErrorCode != HAL_SPI_ERROR_NONE)
+    // if (hspi->ErrorCode != HAL_SPI_ERROR_NONE)
     //{
-        //errCode = hspi->ErrorCode;
+    // errCode = hspi->ErrorCode;
     //}
     if (hspi->Instance == SPI2)
     {
@@ -532,7 +539,7 @@ int init_taskMEMs()
     xSemaphoreGive(semspi2);
 
     /* MEMs task queue creation */
-    msgQueueMEMs = xQueueCreate(100, sizeof(MEMS_MsgType_t));
+    msgQueueMEMs = xQueueCreate(100, sizeof(MEMS_Msg_t));
 
     /* create tick timer  (without starting it) */
     timerMEMs = xTimerCreate("MEMs",
@@ -665,6 +672,9 @@ void taskMEMs(void *param)
     uint8_t value;
     TickType_t tickPast = 0U;
     TickType_t tickCurrent = 0U;
+    // TickType_t tickDelta = 0U;
+
+    float deltat = 0.;
 
     /* Numbers of samples since start of task, for debugging purposes */
     unsigned accNbTot = 0U;
@@ -682,6 +692,8 @@ void taskMEMs(void *param)
     Vector3f accCumul = Vector3f_null;
     Vector3f gyrCumul = Vector3f_null;
     Vector3f magCumul = Vector3f_null;
+
+    float roll, pitch, heading;
 
     IMU_Status_t imu;
     MsgAutoPilot_t msgAutopilot;
@@ -808,7 +820,7 @@ void taskMEMs(void *param)
                 DBG_PRINT_MEAN_RAW_VALUES((
                     snprintf(message, sizeof(message),
                              "MEMS raw mean %u %d %d %d %d %+7.3f %+7.3f %+7.3f %+7f %+7f %+7f %+7.4f %+7.4f %+7.4f\n",
-                             xTaskGetTickCount(),
+                             tickCurrent,
                              tickCurrent - tickPast,
                              accNb, gyrNb, magNb,
                              accComp.x, accComp.y, accComp.z,
@@ -829,7 +841,12 @@ void taskMEMs(void *param)
                              magComp.x, magComp.y, magComp.z),
                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
-                IMU_new_values(&imu, &accComp, &gyrComp, &magComp, ((float)(tickCurrent - tickPast)) / 1000.);
+                deltat = ((float)(tickCurrent - tickPast)) / 1000.F;
+
+                //IMU_new_values(&imu, &accComp, &gyrComp, &magComp, deltat);
+
+                IMU_update_quat(&imu, &accComp, &gyrComp, &magComp, deltat);
+
                 DBG_PRINT_ATTITUDE((
                     snprintf(message, sizeof(message),
                              "ATTITUDE %+f %+f %+f\n",
@@ -838,6 +855,28 @@ void taskMEMs(void *param)
                              IMU_get_pitch(&imu)),
                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
+                Quaternionf orient;
+                orient = IMU_getQuaternion(&imu);
+                (void)orient;
+                DBG_PRINT_QUATERNION((
+                    snprintf(message, sizeof(message),
+                             "QUATERNION %+f %+f %+f %+f\n",
+                             orient.w, orient.x, orient.y, orient.z),
+                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+
+                // madgwick_update(gyr.x, gyr.y, gyr.z, acc.x, acc.y, acc.z, mag.x, mag.y, mag.z, deltat);
+                madgwick_update(gyr.x, gyr.y, gyr.z,
+                                acc.x, acc.y, acc.z,
+                                mag.x, mag.y, mag.z,
+                                deltat);
+                // Quaternionf qmadgwick;
+                // qmadgwick = madgwick_get_quaternion();
+                madgwick_get_Euler_angles(&roll, &pitch, &heading);
+                DBG_PRINT_MADGWICK((
+                    snprintf(message, sizeof(message),
+                             "MADGWICK %+f %+f %+f\n",
+                             roll, pitch, heading),
+                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                 tickPast = tickCurrent;
                 accNb = 0U;
                 gyrNb = 0U;
@@ -845,7 +884,7 @@ void taskMEMs(void *param)
 
                 msgAutopilot.msgType = AP_MSG_AHRS;
                 msgAutopilot.data.IMUData.heading = IMU_get_heading(&imu);
-                msgAutopilot.data.IMUData.roll  = IMU_get_roll(&imu);
+                msgAutopilot.data.IMUData.roll = IMU_get_roll(&imu);
                 msgAutopilot.data.IMUData.pitch = IMU_get_pitch(&imu);
                 msgAutopilot.data.IMUData.yawRate = IMU_get_yawRate(&imu);
                 xQueueSend(msgQueueAutoPilot, &msgAutopilot, pdMS_TO_TICKS(10));
@@ -855,6 +894,12 @@ void taskMEMs(void *param)
             case MEMS_MSG_CALIBRATE: /* Calibrate the sensors */
 
                 /* TODO Calibration */
+
+                break;
+
+            case MEMS_MSG_SET_MAG_VS_GYR:
+
+                IMU_set_mag_vs_gyr_prop(&imu, MEMS_Msg.data.mag_vs_gyr);
 
                 break;
 

@@ -191,16 +191,4 @@ float cvt_dir_rad_deg(float angle);
 float cvt_dir_norm_rad(float angle);
 float cvt_dir_norm_deg(float angle);
 
-/**
- * @brief Structure representing a Quaternion with float components.
- *  componants are named x, y z and w
- */
-typedef struct
-{
-    float x;
-    float y;
-    float z;
-    float w;
-} Quaternionf;
-
 #endif /* GEOM_H */

@@ -56,7 +56,7 @@ SOFTWARE.
 #include "apdialog.h"
 
 #define DBG_MOTOR_PRINT(X) (X)
-#define DBG_ADC_PRINT(X) 
+#define DBG_ADC_PRINT(X)
 
 extern TIM_HandleTypeDef htim3;
 
@@ -161,6 +161,7 @@ typedef struct
     float vPowerMin;       /* Minimum power voltage */
     float vPowerMax;       /* Maximum power voltage */
     float timeStartStop;   /* Time to start or stop the motor */
+    float cvt_angle_time;  /* Conversion helm angle to time */
 
     float currentStalled; /* Current when motor is stalled */
 
@@ -185,12 +186,15 @@ MotorData motorData = {
     .vcurrentBlocked = MOTOR_V_CURRENT_BLOCKED,
     .timeStartStop = 0.1F,
     .currentStalled = 1.0F,
+    .cvt_angle_time = MOTOR_CVT_ANGLE_TIME,
 
-    .vPowerStandard = 12.F,
+.vPowerStandard = 12.F,
     .vPowerMin = 10.,
     .vPowerMax = 15.F,
     .vPower = 0.F,
-    .vCurrent = 0.F};
+    .vCurrent = 0.F
+}
+;
 
 /*
     Motor and clutch commands are connected to GPIOA pins as follows :
@@ -357,7 +361,7 @@ unsigned Motor_newValues(float deltat, float vPower, float iMotor)
 
     case MotorMoveAngle:
 
-        motorData.turnAngleRemaining -= MOTOR_CVT_ANGLE_TIME * deltat;
+        motorData.turnAngleRemaining -= motorData.cvt_angle_time * deltat;
         if (motorData.turnAngleRemaining <= 0.F)
         {
             Motor_LL_stop();
@@ -506,6 +510,11 @@ void Motor_moveTime(float timeToMove)
     return;
 }
 
+void Motor_set_cvt_angle_time(float cat)
+{
+    motorData.cvt_angle_time = cat;
+}
+
 void Motor_engageTiller()
 {
     Motor_LL_tillerEngage();
@@ -600,7 +609,7 @@ void taskMotor(void *parameters)
                 if (counter % 5 == 0)
                 {
                     DBG_ADC_PRINT((
-                        snprintf(message, sizeof(message), "ADC  %u  %6f  %6f\n", xTaskGetTickCount(),   motorData.vPower, motorData.vCurrent),
+                        snprintf(message, sizeof(message), "ADC  %u  %6f  %6f\n", xTaskGetTickCount(), motorData.vPower, motorData.vCurrent),
                         svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
                     // snprintf(message, sizeof(message), "ADC %u %6u  %6u\n",
                     // xTaskGetTickCount(),

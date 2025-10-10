@@ -57,7 +57,8 @@ typedef enum
     AP_PARAM_NONE = 0,
     AP_PARAM_PROPORTIONNAL,
     AP_PARAM_INTEGRAL,
-    AP_PARAM_DERIVATIVE
+    AP_PARAM_DERIVATIVE,
+    AP_PARAM_MOTOR_THRESHOLD,
 } APParam_t;
 
 typedef struct
