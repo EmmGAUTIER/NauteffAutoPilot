@@ -221,151 +221,45 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Ve
     return 0;
 }
 
-#if 0
-int IMU_new_values_ref(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
-{
-
-    Vector3f m_h; /* Horizontal part of magnétic field */
-    Vector3f m_v; /* Vertical part of magnétic field */
-    // Vector3f f_v;       /* Vertical part of forward idirection */
-    Vector3f starboard_h; /* Horizontal part of forward idirection */
-    Vector3f east;        /* East horizontal dir to East */
-    Vector3f north;       /* North horizontal direction  to North */
-    Vector3f gravity;     /* Gravity */
-    Vector3f dir1;
-    Vector3f dir2;
-    Vector3f dir3;
-    float cos_hdg;
-    float sin_hdg;
-
-    char message[80]; /* TODO remove after debugging */
-
-    dir1 = vector3f_getCrossProduct(*acc, *mag);
-    dir1 = vector3f_getNormalized(dir1);
-    dir2 = vector3f_getCrossProduct(*acc, unitmxf);
-    dir2 = vector3f_getNormalized(dir2);
-
-    dir3 = vector3f_getCrossProduct(dir1, dir2);
-
-    mstatus->heading = atan2f(vector3f_getNorm(dir3), vector3f_getDotProduct(dir1, dir2));
-#if 0
-    snprintf(message, sizeof(message), "IMU att1  %+f\n", mstatus->heading);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-
-    // mstatus->heading = acos(vector3f_getDotProduct(dir1, dir2));
-
-#if 0
-    snprintf(message, sizeof(message), "IMU dir1  %+f %+f %+f\n", dir1.x, dir1.y, dir1.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-#if 0
-    snprintf(message, sizeof(message), "IMU dir2  %+f %+f %+f\n", dir2.x, dir2.y, dir2.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-#if 0
-    snprintf(message, sizeof(message), "IMU dir3  %+f %+f %+f\n", dir3.x, dir3.y, dir3.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-
-    /* Compute gravity; gravity is a normalized vector downward */
-    gravity = vector3f_getNormalized(*acc);
-
-#if 1
-    snprintf(message, sizeof(message), "IMU gravity  %+f %+f %+f\n", gravity.x, gravity.y, gravity.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-    /* horizontal part of forward relative to device */
-    starboard_h = vector3f_getCrossProduct(unitmyf, gravity);
-    // forward_h = vector3f_sub(unitmxf, f_v);
-    starboard_h = vector3f_getNormalized(starboard_h);
-#if 1
-    snprintf(message, sizeof(message), "IMU stbd horizontal  %+f %+f %+f\n", starboard_h.x, starboard_h.y, starboard_h.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-
-    /* Vertical part of magnetic field */
-    /* (mag dot gravity) * gravity  */
-    m_v = vector3f_getScaled(gravity, vector3f_getDotProduct(*mag, gravity));
-    m_h = vector3f_sub(*mag, m_v);
-#if 0
-    snprintf(message, sizeof(message), "IMU m horizontal  %+f %+f %+f\n", m_h.x, m_h.y, m_h.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-#if 0
-    snprintf(message, sizeof(message), "IMU m vertical  %+f %+f %+f\n", m_v.x, m_v.y, m_v.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-
-    east = vector3f_getCrossProduct(*mag, gravity);
-    east = vector3f_getNormalized(east);
-
-    // north = vector3f_getCrossProduct(gravity, east);
-#if 1
-    snprintf(message, sizeof(message), "IMU East  %+f %+f %+f\n", east.x, east.y, east.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-#if 0
-    snprintf(message, sizeof(message), "IMU North  %+f %+f %+f\n", north.x, north.y, north.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-
-    cos_hdg = vector3f_getDotProduct(vector3f_getCrossProduct(starboard_h, east), gravity);
-    sin_hdg = vector3f_getDotProduct(starboard_h, east);
-
-#if 1
-    snprintf(message, sizeof(message), "IMU cos & sin : %+f %+f\n", cos_hdg, sin_hdg);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-
-    mstatus->acc = *acc;
-    mstatus->gyr = *gyr;
-    mstatus->mag = *mag;
-
-    dir3 = vector3f_getCrossProduct(gravity, unitzf);
-    mstatus->roll = -acosf(dir3.x) + M_PI_2F;
-    mstatus->pitch = acosf(dir3.y) - M_PI_2F;
-    float me = vector3f_getDotProduct(m_h, east);
-    float mn = vector3f_getDotProduct(m_h, north);
-#if 0
-    snprintf(message, sizeof(message), "IMU me & mn : %+f %+f\n", me, mn);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#endif
-
-    mstatus->heading = atan2f(cos_hdg, sin_hdg);
-    mstatus->yawRate = gyr->z;
-    ;
-}
-#endif
-
-#if 1
 
 int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
 {
-    Vector3f dir1, dir3;
-    float heading_mag;
-    float gyrhdg; /* gyr->z over water, ie with roll and pitch compensation */
-    float delta_heading_mag;
+    Vector3f east, north;
     static char message[100];
-    // float accnorm;
+    float gyrturn;
+    float newdir_x, newdir_y;
+    float hdgestim;
+    float hdgmag;
+    float dirmag_x, dirmag_y;
+    float direstim_x, direstim_y;
 
     mstatus->acc = *acc;
     mstatus->gyr = *gyr;
     mstatus->mag = *mag;
 
-    dir1 = vector3f_getCrossProduct(*mag, *acc);
-    dir3 = vector3f_getCrossProduct(dir1, unitmzf);
+    east = vector3f_getCrossProduct(*mag, *acc);
+    north = vector3f_getCrossProduct(unitmzf, east);
+    north = vector3f_getNormalized(north);
+
+    hdgmag = atan2f(north.x, -north.y);
+
 #if 0
-    nbcar = snprintf(message, sizeof(message) - 1, "MEMS magacc %+6f %+6f %+6f   %+6f %+6f %+6f    %+6f %+6f %+6f\n",
-                     acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, dir1.x, dir1.y, dir1.z);
-    svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+    snprintf(message, sizeof(message) - 1, "IMU mag %+6f %+6f %+6f   acc %+6f %+6f %+6f    east%+6f %+6f %+6f\n",
+                     acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, east.x, east.y, east.z);
+    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+#endif
+
+#if 1
+    snprintf(message, sizeof(message) - 1, "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
+             east.x, east.y, east.z, north.x, north.y, north.z);
+    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
     if ((!mstatus->initialized) || isnan(mstatus->heading))
     {
         /* First call heading unknown */
         /* Let's start with magnetometer value */
-        mstatus->heading = M_PI + atan2f(dir3.y, dir3.x);
+        mstatus->heading = hdgmag;
         mstatus->initialized = true;
     }
     else
@@ -374,41 +268,51 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
         {
             gyr->z = 0.F;
         }
-        heading_mag = (M_PI / 2.) + atan2f(dir3.y, dir3.x);
-        heading_mag = cvt_dir_norm_rad(heading_mag);
-        float delta_mag = heading_mag - mstatus->heading;
 
-        // accnorm = vector3f_getNorm(*acc);
-        //  float ax2 = acc->x * acc->x;
-        // float ay2 = acc->y * acc->y;
-        // float az2 = acc->z * acc->z;
-        // float cosphi = acc->y / sqrtf(ay2 + az2);
-        // float sinphi = acc->z / sqrtf(ay2 + az2);
-        // float costetha = -acc->x / accnorm;
-        // float sintetha = sqrtf(ay2 + az2) / accnorm;
+        /* Angle turned since last update : w_z * time since last update */
+        gyrturn = -gyr->z * deltat;
 
-        gyrhdg = gyr->z * deltat;
-        gyrhdg = cvt_dir_norm_rad(gyrhdg);
+        /* Heading estimated */
+        hdgestim = mstatus->heading + gyrturn;
 
-        mstatus->heading = mstatus->heading + (1.F - mstatus->magVsGyr) * gyrhdg + mstatus->magVsGyr * delta_mag;
-        mstatus->heading = cvt_dir_norm_rad(mstatus->heading);
-    }
+        /* The heading is an angle that varies abruptly when crossing x axis */
+        /* the difference values may be wrong so we use 2D vectors  */
+        /* compute x and y of magnetic direction */
+        dirmag_x = cosf(hdgmag);
+        dirmag_y = sinf(hdgmag);
 
-#if 1
-    snprintf(message, sizeof(message) - 1, "IMU Calc %6f  %+8f  %+8f  %+8f\n",
-             deltat, mstatus->heading, heading_mag, delta_heading_mag);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+        /* compute x and y of estimated direction */
+        direstim_x = cosf(hdgestim);
+        direstim_y = sinf(hdgestim);
+
+        /* compute the vector beta magnetic value + (1-beta) estimated direction */
+        newdir_x =  mstatus->magVsGyr * dirmag_x +(1.F - mstatus->magVsGyr)  * direstim_x;
+        newdir_y =  mstatus->magVsGyr * dirmag_y +(1.F - mstatus->magVsGyr)  * direstim_y;
+        /* newdir_x,y points to the direction */
+     
+#if 0
+        snprintf(message, sizeof(message) - 1, "IMU gyr turn  %+6f  north %+7f %+7f dir heading %+7f %+7f\n",
+                 gyrturn, north.x, north.y, cosgyr, singyr);
+        svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+#endif
+#if 0
+        snprintf(message, sizeof(message) - 1, "IMU hdgprev  %+6f hdg mag %+6f gyr turn %+6f  direstim %+6f\n",
+                 mstatus->heading, hdgmag, gyrturn, hdgestim);
+        svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
-    dir1 = vector3f_getNormalized(*acc);
-    dir3 = vector3f_getCrossProduct(dir1, unitzf);
-    mstatus->roll = -acosf(dir3.x) + M_PI_2F;
-    mstatus->pitch = acosf(dir3.y) - M_PI_2F;
+        /* compute new heading, no need to normalize newdir_x,y for anat2f */
+        mstatus->heading = atan2f(newdir_y, newdir_x);
+    }
+
+    east = vector3f_getNormalized(*acc);
+    north = vector3f_getCrossProduct(east, unitzf);
+    mstatus->roll = -acosf(north.x) + M_PI_2F;
+    mstatus->pitch = M_PI_2F - acosf(north.y);
     mstatus->yawRate = gyr->z;
 
     return 1;
 }
-#endif
 
 Quaternionf calculer_orientation_navire(Vector3f nord, Vector3f est, Vector3f bas)
 {
@@ -497,7 +401,7 @@ void quaternion_vers_euler(Quaternionf q, float *roll, float *pitch, float *yaw)
  */
 void IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
 {
-    char message[100];  /* for debugging only */
+    // char message[100];  /* for debugging only */
     Quaternionf q_new;  /* new quaternion */
     Vector3f down;      /* -acc, normalized*/
     Vector3f east;      /* east, normalized */

@@ -29,7 +29,7 @@ SOFTWARE.
 #define DBG_PRINT_MEAN_CORR_VALUES(X) 
 #define DBG_PRINT_ATTITUDE(X) (X)
 #define DBG_PRINT_QUATERNION(X) (X)
-#define DBG_PRINT_MADGWICK(X)
+#define DBG_PRINT_MADGWICK(X) (X)
 
 #define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ /* mag and acc ouptut data rate */
 #define LSM9DS1_FS_G LSM9DS1_FS_G_500_DPS /* gyro full scale */
@@ -44,7 +44,7 @@ SOFTWARE.
 // #define LSM9DS1_MAG_I2C_ADDR (0x1E) /* Magnetometer device address */
 // #define LSM9DS1_XLG_I2C_ADDR (0x6B) /* Accelerometer and gyrometer device address */
 #define MEMS_PERIOD_MS 100
-#define MEMS_PERIOD_POLL 20
+#define MEMS_PERIOD_POLL 10
 #define MEMS_PERIOD_S ((float)MEMS_PERIOD_MS / 1000.0F)
 /*
  * Magnetometer register addresses
@@ -281,7 +281,7 @@ SOFTWARE.
 
 #define MEMS_GYR_OFFSET_X (0.008707F)
 #define MEMS_GYR_OFFSET_Y (0.013293F)
-#define MEMS_GYR_OFFSET_Z (0.038751F)
+#define MEMS_GYR_OFFSET_Z (0.051001F)
 
 #define MEMS_GYR_CORR_GAIN_X (1.0F)
 #define MEMS_GYR_CORR_GAIN_Y (1.0F)
@@ -844,8 +844,8 @@ void taskMEMs(void *param)
                 deltat = ((float)(tickCurrent - tickPast)) / 1000.F;
 
                 //IMU_new_values(&imu, &accComp, &gyrComp, &magComp, deltat);
-
-                IMU_update_quat(&imu, &accComp, &gyrComp, &magComp, deltat);
+                //IMU_update_quat(&imu, &accComp, &gyrComp, &magComp, deltat);
+                IMU_new_values(&imu, &accComp, &gyrComp, &magComp, deltat);
 
                 DBG_PRINT_ATTITUDE((
                     snprintf(message, sizeof(message),
@@ -865,8 +865,8 @@ void taskMEMs(void *param)
                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 // madgwick_update(gyr.x, gyr.y, gyr.z, acc.x, acc.y, acc.z, mag.x, mag.y, mag.z, deltat);
-                madgwick_update(gyr.x, gyr.y, gyr.z,
-                                acc.x, acc.y, acc.z,
+                madgwick_update(gyr.x, -gyr.y, -gyr.z,
+                                -acc.x, acc.y, acc.z,
                                 mag.x, mag.y, mag.z,
                                 deltat);
                 // Quaternionf qmadgwick;

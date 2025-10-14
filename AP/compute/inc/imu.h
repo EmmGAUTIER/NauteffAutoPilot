@@ -32,6 +32,7 @@ typedef struct
     bool initialized;
     float magVsGyr;
     Quaternionf orientation;
+    float  hdg_x, hdg_y;
 } IMU_Status_t;
 
 void IMU_init_status(IMU_Status_t *mstatus);
