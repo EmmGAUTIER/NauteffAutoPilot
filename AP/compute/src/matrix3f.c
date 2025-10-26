@@ -1,5 +1,7 @@
 
 
+#include <math.h>
+
 #include "matrix3f.h"
 
 Matrix3f Matrix3f_unit = {
@@ -143,6 +145,8 @@ int Matrix3f_inverse(Matrix3f minv, Matrix3f m)
     minv.a[2][0] = invDet * (m.a[1][0] * m.a[2][1] - m.a[1][1] * m.a[2][0]);
     minv.a[2][1] = invDet * (m.a[0][1] * m.a[2][0] - m.a[0][0] * m.a[2][1]);
     minv.a[2][2] = invDet * (m.a[0][0] * m.a[1][1] - m.a[0][1] * m.a[1][0]);
+
+    return 1;
 }
 
 /*

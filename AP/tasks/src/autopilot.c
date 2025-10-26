@@ -130,19 +130,6 @@ int init_taskAutoPilot(void)
         return -1;
     }
 
-#if 0
-    /* create tick timer */
-    timerAP = xTimerCreate("MEMs",
-                           pdMS_TO_TICKS(AP_PERIOD_TICKS),
-                           pdTRUE,    /* Auto reload (repeat indefinitely) */
-                           (void *)0, /* Timer ID, not used */
-                           timerAPCallback);
-    if (timerAP == (TimerHandle_t)0)
-    {
-        return -1;
-    }
-#endif
-
     return 1;
 }
 
@@ -401,7 +388,9 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
         aps->integratedGap += aps->currentGap * deltat;
         aps->yawRate = yawRate;
 
-        steerReq = aps->currentGap * aps->kp + aps->integratedGap * aps->ki + aps->yawRate * aps->kd;
+        steerReq = (aps->currentGap * aps->kp)    /* Proportional */
+                 + (aps->integratedGap * aps->ki) /* Integral */
+                 + (aps->yawRate * aps->kd);      /* Derivative */
 
         DB_PRINT_PID((
             nbcar = snprintf(message, sizeof(message) - 1,
@@ -414,7 +403,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
 
         if (fabsf(steerReq - aps->steerAngle) > aps->motorThreshold)
         {
-            MOTOR_order_move_angle(steerReq);
+            MOTOR_order_set_angle(steerReq);
             aps->steerAngle += steerReq;
         }
     }

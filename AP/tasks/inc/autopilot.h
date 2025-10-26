@@ -136,6 +136,41 @@ typedef struct
     } data;
 } MsgAutoPilot_t;
 
+/*
+* @brief Initialize the components of the autopilot and prepare autopilot task
+* @param none
+* @return 0 if success, -1 if error
+* @note This function has to be called once before starting the autopilot task.
+* @note the autopilot uses static variables because there is only one instance
+* of the autopilot, the memory is used more efficiently.
+*/
 int init_taskAutoPilot(void);
+
+/*
+* @brief Autopilot task
+* @param not used
+* @return none
+* @see note about tasks
+*/
 void taskAutoPilot(void *parameters);
+
+/*
+* @brief Send AHRS values to autopilot task
+*
+* @param timeStamp TickType_t timestamp of the values
+* @param heading float heading in degrees
+* @param roll float roll in degrees
+* @param pitch float pitch in degrees
+* @param yawRate float yaw rate in degrees per second
+*
+* @return 0 if success, -1 if error
+*/
 int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
+
+/*
+* @brief Send motor stall message to autopilot task
+* @param none
+* @return 0 if success, -1 if error
+* This function is called by motor task when motor is stalled
+*/
+int autopilot_sendMsgMotorStall();

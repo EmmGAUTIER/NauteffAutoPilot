@@ -99,17 +99,9 @@ int rbuffer_getNextBlock(RBuffer_t *buffer, void **data, unsigned *len)
  */
 int rbuffer_skip(RBuffer_t *buffer, unsigned len)
 {
-#if 0
-    unsigned available = (buffer->idxEnd >= buffer->idxStart)
-                             ? (buffer->idxEnd - buffer->idxStart)
-                             : (RBUFFER_SIZE - buffer->idxStart + buffer->idxEnd);
-
-    unsigned to_skip = (len < available) ? len : available;
-    buffer->idxStart = (buffer->idxStart + to_skip) % RBUFFER_SIZE;
-    return to_skip;
-#else
     buffer->idxStart = (buffer->idxStart + len) % RBUFFER_SIZE;
-#endif
+
+    return buffer->idxStart;
 }
 
 /**

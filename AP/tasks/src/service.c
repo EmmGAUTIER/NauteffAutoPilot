@@ -204,12 +204,12 @@ int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, 
         rbuffer_write(&svc_uart->bufferTx, data, len);
         if (svc_uart->dma_tx_busy == 0)
         {
-            char deb[4];
+            //char deb[4];
             rbuffer_getNextBlock(&svc_uart->bufferTx, &dataDMA, &lenDMA);
-            deb[0] = *((char*)dataDMA);
-            deb[1] = *((char*)dataDMA+1);
-            deb[2] = *((char*)dataDMA+2);
-            deb[3] = *((char*)dataDMA+3);
+            //deb[0] = *((char*)dataDMA);
+            //deb[1] = *((char*)dataDMA+1);
+            //deb[2] = *((char*)dataDMA+2);
+            //deb[3] = *((char*)dataDMA+3);
             HAL_UART_Transmit_DMA(huart, dataDMA, lenDMA);
             svc_uart->dma_tx_busy = lenDMA; /* Set DMA transfer busy flag */
             relance++;
@@ -342,6 +342,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
     if (svc_uart != NULL)
     {
         BaseType_t res = HAL_UART_GetState(svc_uart->huart);
+        (void)res;
 
         request.deviceHandle = svc_uart;
         xQueueSendFromISR(svcQueueRequests, &request, &xHigherPriorityTaskWoken);

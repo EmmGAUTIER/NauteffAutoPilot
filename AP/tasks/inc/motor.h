@@ -71,10 +71,10 @@ typedef struct
             /* Elles ne doivent pas être de type float */
             uint16_t adc_power;   /* Tension d'alimentation */
             uint16_t adc_current; /* Courant moteur */
-            uint32_t SR;          /* Status register */
         } adcValues;
         float moveTime;
         float moveAngle;
+        float cvtAngleTime;
     } data;
 } MsgMotor_t;
 
@@ -102,7 +102,7 @@ void MOTOR_order_disengage();
  * @param angle to move radians counterclockwise (as in trigonometric functions)
  * @return none
  */
-void MOTOR_order_move_angle(float angle);
+void MOTOR_order_set_angle(float angle);
 
 /**
  * @brief send the order move for a time
@@ -127,4 +127,4 @@ void MOTOR_stop();
  * @param cat Conversion factor angle to time
  * @return void
  */
-void Motor_set_cvt_angle_time(float cat);
+void MOTOR_order_set_cvt_angle_time(float cvt);

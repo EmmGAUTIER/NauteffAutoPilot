@@ -55,7 +55,7 @@ int entree()
 #endif
 
 /* Maximum length for a token (word or number) */
-#define MAX_TOKEN_LEN 16
+#define MAX_TOKEN_LEN 20
 
 /* Maximum tokens per command line.
    According to the grammar, the maximum is 3 or 4 tokens. */
@@ -111,7 +111,7 @@ static const TokenEntry tokenTable[] = {
     {"derivative", TOKEN_DERIVATIVE},
     {"proportional", TOKEN_PROPORTIONAL},
     {"integral", TOKEN_INTEGRAL},
-    {"motor_cvt_angle_time", TOKEN_MOTOR_CVT_ANGLE_TIME},
+    {"motor_angletime", TOKEN_MOTOR_CVT_ANGLE_TIME},
     {"mag_vs_gyr", TOKEN_MAG_VS_GYR},
     {"motor_threshold", TOKEN_MOTOR_THESHOLD},
     {"AHRS", TOKEN_AHRS},
@@ -510,11 +510,11 @@ void parse_command_line(void)
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
 
-        /* Parameter : ration helm move in degrees and command time */
+        /* Parameter : ratio helm move in degrees and command time */
         else if (tokenTypes[1] == TOKEN_MOTOR_CVT_ANGLE_TIME && tokenTypes[2] == TOKEN_NUMBER)
         {
             convert_float(tokens[2], &coeff);
-            Motor_set_cvt_angle_time(coeff);
+            MOTOR_order_set_cvt_angle_time(coeff);
             DBG_DIALOG_PRINT((
                 nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient cvt angle time %f\n", coeff),
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));

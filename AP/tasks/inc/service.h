@@ -1,5 +1,6 @@
 
 #include "rbuffer.h"
+#include "stm32l4xx_hal.h"
 
 #define SERVICE_QUEUE_LENGTH 20
 #define SERVICE_USART_BUFFER_SIZE 1024
