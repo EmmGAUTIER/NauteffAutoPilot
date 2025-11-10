@@ -1,0 +1,10 @@
+<map id="int" name="int">
+<area shape="rect" id="node1" title=" " alt="" coords="5,77,44,104"/>
+<area shape="rect" id="node2" href="$a00032.html#af0b843e95b71e99f178f067d104c34c1" title=" " alt="" coords="92,40,332,66"/>
+<area shape="rect" id="node6" href="$a00032.html#a36c7605fe943636b66f8f5b411f81136" title=" " alt="" coords="119,102,305,129"/>
+<area shape="rect" id="node3" href="$a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="380,77,540,104"/>
+<area shape="rect" id="node4" href="$a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="607,65,733,92"/>
+<area shape="rect" id="node5" href="$a00005.html#ab3e01b9f2d18902b5ae589d07c638dd8" title="Skips len bytes in the buffer (advances idxStart)." alt="" coords="411,26,509,53"/>
+<area shape="rect" id="node7" href="$a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="588,141,752,168"/>
+<area shape="rect" id="node8" href="$a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="407,178,513,205"/>
+</map>

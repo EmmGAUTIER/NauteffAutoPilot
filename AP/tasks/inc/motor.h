@@ -45,13 +45,9 @@ typedef enum
 {
     MSG_MOTOR_NONE = 0,
     MSG_MOTOR_ADC_VALUES,
-    // MSG_MOTOR_START,
-    // MSG_MOTOR_STOP,
     MSG_MOTOR_EMBRAYE,
     MSG_MOTOR_DEBRAYE,
-    // MSG_MOTOR_ERROR,
-    // MSG_MOTOR_EFFORT,
-    MSG_MOTOR_MOVE_ANGLE,
+    MSG_MOTOR_SET_HELM_ANGLE,
     MSG_MOTOR_MOVE_TIME,
     MSG_MOTOR_MOVE_DONE,
     MSG_MOTOR_SET_CVT_ANGLE_TIME,
@@ -73,7 +69,7 @@ typedef struct
             uint16_t adc_current; /* Courant moteur */
         } adcValues;
         float moveTime;
-        float moveAngle;
+        float steerAngle;
         float cvtAngleTime;
     } data;
 } MsgMotor_t;
@@ -86,7 +82,7 @@ void taskMotor(void *);
  * Motor task stops motor if it is running and engage clutch.
  * @return none
  */
-void MOTOR_order_engage();
+void MOTOR_MSG_letInClutch();
 
 /**
  * @brief send the order disengage clutch to motor task
@@ -95,36 +91,33 @@ void MOTOR_order_engage();
  * Task motor sends a message later when motor is stopped if it was moving.
  * @return none
  */
-void MOTOR_order_disengage();
+void MOTOR_MSG_letOutClutch();
 
 /**
  * @brief send the order move angle
- * @param angle to move radians counterclockwise (as in trigonometric functions)
+ * @param angle to move radians clockwise if positive, counterclockwise if negative
+ * @note The direction to steer is usually indicated clockwise.
+ * @note To turn starboard, i.e. right, helm has to be moved to port and vice versa.
+ * 
  * @return none
  */
-void MOTOR_order_set_angle(float angle);
+void MOTOR_MSG_setHelmAngle(float angle);
 
 /**
  * @brief send the order move for a time
- * @param time to move in seconds  counterclockwise if positive, clockwise if negative
- * Used to move tiller when not in auto mode.
+ * @param time to move in seconds  counterclockwise if negative, clockwise if positive
+ * Used to move helm when not in auto mode.
  * Task motor send a message when move done.
- * Previous move order for time is discarded if motor was running.
+ * Previous move order for time is discarded if motor was running same direction.
+ * Move order is ignored if if motor is running oposite direction.
  * Used for moving continuously with repeated pushes on button.
  * @return none
  */
-void MOTOR_order_move_time(float time);
-
-/**
- * @brief send the order "stop motor"
- * @param none
- * @return none
- */
-void MOTOR_stop();
+void MOTOR_MSG_moveTime(float time);
 
 /*
  * @brief Set the conversion factor between helm angle and time
  * @param cat Conversion factor angle to time
  * @return void
  */
-void MOTOR_order_set_cvt_angle_time(float cvt);
+void MOTOR_MSG_set_cvt_angle_time(float cvt);

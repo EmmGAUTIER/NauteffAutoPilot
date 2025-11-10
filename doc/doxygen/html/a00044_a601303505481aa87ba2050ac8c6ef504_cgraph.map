@@ -1,0 +1,4 @@
+<map id="AP_turn" name="AP_turn">
+<area shape="rect" id="node1" title="Turn helm or change direction to steer." alt="" coords="5,5,77,32"/>
+<area shape="rect" id="node2" href="$a00041.html#a39aba34c5e0746953b9dce97e9bc7c68" title="send the order move for a time" alt="" coords="125,5,311,32"/>
+</map>

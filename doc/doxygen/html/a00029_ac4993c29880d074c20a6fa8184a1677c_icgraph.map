@@ -1,0 +1,4 @@
+<map id="LSM9DS1_WriteRegister" name="LSM9DS1_WriteRegister">
+<area shape="rect" id="node1" title="Écrit une valeur dans un registre du LSM9DS1 (SPI)." alt="" coords="164,5,343,32"/>
+<area shape="rect" id="node2" href="$a00029.html#a5294868e32077d594c618fe1918ad28e" title=" " alt="" coords="5,5,116,32"/>
+</map>

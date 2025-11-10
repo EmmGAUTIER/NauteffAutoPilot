@@ -24,11 +24,12 @@ SOFTWARE.
 
 /* PID coefficients */
 #define AP_KP 1.0F /* Proportional coefficient */
-#define AP_KI 1.0F /* Integral coefficient */
-#define AP_KD 1.0F /* Derivative coefficient */
+#define AP_KI 0.0F /* Integral coefficient */
+#define AP_KD 0.0F /* Derivative coefficient */
 
 /* minimum angle to send an order to motor */
 #define AP_MOTOR_THRESHOLD (0.2F * (M_PI / 180.F))
+#define AP_TIME_ONE_MOVE (0.2F) /* time to move for one order to motor in seconds */
 
 #define DB_PRINT_ORDERS(X) (X)
 #define DB_PRINT_MEMS_MSGS(X) (X)
@@ -92,7 +93,7 @@ int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float 
     return 0; // Success
 }
 
-int autopilot_sendMsgMotorStall()
+int AP_MSG_MotorStalled()
 {
     MsgAutoPilot_t msg = {
         .msgType = AP_MSG_MOTOR_STALLED,
@@ -105,7 +106,7 @@ int autopilot_sendMsgMotorStall()
     return 1;
 }
 
-int autopilot_sendMsgMotorStop()
+int AP_MSG_MotorStopped()
 {
     MsgAutoPilot_t msg = {
         .msgType = AP_MSG_MOTOR_STALLED,
@@ -328,7 +329,7 @@ int AP_set_mode_idle(APStatus_t *aps)
     aps->currentGap = 0.F;
     aps->integratedGap = 0.F;
 
-    MOTOR_order_disengage();
+    MOTOR_MSG_letOutClutch();
 
     return 0;
 }
@@ -345,17 +346,24 @@ int AP_set_mode_heading(APStatus_t *aps)
         aps->integratedGap = 0;
         aps->steerAngle = 0.F;
 
-        MOTOR_order_engage();
+        MOTOR_MSG_letInClutch();
     }
     /* else : Already engaged, Nothing to do*/
     return 0;
 }
 
+/**
+    * @brief Turn helm or change direction to steer
+    * @param APStatus_t *aps AutoPilot structure
+    * @param angle Angle to turn in radians counterclockwise
+    * If autopilot is disengaged, send order to motor task to move for a time
+    * If autopilot is engaged, update heading to steer
+ */
 int AP_turn(APStatus_t *aps, float angle)
 {
     if (aps->engaged == 0)
     {
-        MOTOR_order_move_time(angle >= 0. ? -.2F : .2F);
+        MOTOR_MSG_moveTime(angle >= 0. ? - AP_TIME_ONE_MOVE: AP_TIME_ONE_MOVE);
     }
     else
     { /* AP idle, send move order to motor task */
@@ -384,9 +392,9 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
     aps->currentHeading = heading;
     if (aps->engaged)
     {
-        aps->currentGap = (heading - aps->headingToSteerRadians);
+        aps->currentGap = (aps->headingToSteerRadians - heading);
         aps->integratedGap += aps->currentGap * deltat;
-        aps->yawRate = yawRate;
+        aps->yawRate = -yawRate;
 
         steerReq = (aps->currentGap * aps->kp)    /* Proportional */
                  + (aps->integratedGap * aps->ki) /* Integral */
@@ -401,11 +409,9 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
                              steerReq),
             svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
-        if (fabsf(steerReq - aps->steerAngle) > aps->motorThreshold)
-        {
-            MOTOR_order_set_angle(steerReq);
+            MOTOR_MSG_setHelmAngle(steerReq);
+
             aps->steerAngle += steerReq;
-        }
     }
 
     return 0;

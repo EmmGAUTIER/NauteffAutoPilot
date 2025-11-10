@@ -173,4 +173,4 @@ int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float 
 * @return 0 if success, -1 if error
 * This function is called by motor task when motor is stalled
 */
-int autopilot_sendMsgMotorStall();
+int AP_MSG_MotorStalled();

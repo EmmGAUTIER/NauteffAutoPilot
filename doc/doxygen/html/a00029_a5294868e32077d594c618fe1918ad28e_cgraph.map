@@ -1,0 +1,6 @@
+<map id="LSM9DS1_init" name="LSM9DS1_init">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,116,57"/>
+<area shape="rect" id="node2" href="$a00029.html#a5fb6671548b30dd6c1fbe1cd793c6791" title=" " alt="" coords="165,5,342,32"/>
+<area shape="rect" id="node4" href="$a00029.html#ac4993c29880d074c20a6fa8184a1677c" title="Écrit une valeur dans un registre du LSM9DS1 (SPI)." alt="" coords="164,56,343,83"/>
+<area shape="rect" id="node3" href="$a00029.html#a0e21cdfa6bbe2e3cce537fa2b17deeaa" title="Fonction d’échange SPI en DMA (full&#45;duplex)." alt="" coords="391,31,529,57"/>
+</map>

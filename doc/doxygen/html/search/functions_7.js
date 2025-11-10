@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['imu_5fcorrect_0',['imu_correct',['../a00029.html#a2c0ca45963ed9398bf09b6ea6771fd4c',1,'mems.c']]],
+  ['imu_5fget_5fheading_1',['IMU_get_heading',['../a00026.html#ac4c3d533b93b9afa58de608b99b4c4ae',1,'IMU_get_heading(IMU_Status_t *mstatus):&#160;imu.c'],['../a00071.html#ac4c3d533b93b9afa58de608b99b4c4ae',1,'IMU_get_heading(IMU_Status_t *mstatus):&#160;imu.c']]],
+  ['imu_5fget_5fheading_5fquat_2',['IMU_get_heading_quat',['../a00071.html#a0cfe211e551b59ad286e8a759f8989eb',1,'imu.h']]],
+  ['imu_5fget_5fpitch_3',['IMU_get_pitch',['../a00026.html#ae3ce804e8bff21abd7c7ee6b72275786',1,'IMU_get_pitch(IMU_Status_t *mstatus):&#160;imu.c'],['../a00071.html#ae3ce804e8bff21abd7c7ee6b72275786',1,'IMU_get_pitch(IMU_Status_t *mstatus):&#160;imu.c']]],
+  ['imu_5fget_5fpitch_5fquat_4',['IMU_get_pitch_quat',['../a00071.html#aba62f5db867aea66068ea4e8280967a3',1,'imu.h']]],
+  ['imu_5fget_5froll_5',['IMU_get_roll',['../a00026.html#a5e1486abd233e1907ec5440a3c19386c',1,'IMU_get_roll(IMU_Status_t *mstatus):&#160;imu.c'],['../a00071.html#a5e1486abd233e1907ec5440a3c19386c',1,'IMU_get_roll(IMU_Status_t *mstatus):&#160;imu.c']]],
+  ['imu_5fget_5froll_5fquat_6',['IMU_get_roll_quat',['../a00071.html#a885da5888abd8bcedee34b465ce3a487',1,'imu.h']]],
+  ['imu_5fget_5fyawrate_7',['IMU_get_yawRate',['../a00026.html#a83493784c187e5820d30f7f73028ae54',1,'IMU_get_yawRate(IMU_Status_t *mstatus):&#160;imu.c'],['../a00071.html#a83493784c187e5820d30f7f73028ae54',1,'IMU_get_yawRate(IMU_Status_t *mstatus):&#160;imu.c']]],
+  ['imu_5fgetquaternion_8',['IMU_getQuaternion',['../a00026.html#a2d84f12a7e19493187661898475de01d',1,'IMU_getQuaternion(IMU_Status_t *mstatus):&#160;imu.c'],['../a00071.html#a2d84f12a7e19493187661898475de01d',1,'IMU_getQuaternion(IMU_Status_t *mstatus):&#160;imu.c']]],
+  ['imu_5finit_5fstatus_9',['IMU_init_status',['../a00026.html#a11aee04831daa8c298362da0b453aa49',1,'IMU_init_status(IMU_Status_t *mstatus):&#160;imu.c'],['../a00071.html#a11aee04831daa8c298362da0b453aa49',1,'IMU_init_status(IMU_Status_t *mstatus):&#160;imu.c']]],
+  ['imu_5fnew_5fvalues_10',['IMU_new_values',['../a00026.html#a212785a20157f9f72833269483fbbdbc',1,'IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat):&#160;imu.c'],['../a00071.html#a212785a20157f9f72833269483fbbdbc',1,'IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat):&#160;imu.c']]],
+  ['imu_5fnew_5fvalues_5fessai_11',['IMU_new_values_essai',['../a00026.html#ab565c5a9ef974d7ae8873525de16cb95',1,'imu.c']]],
+  ['imu_5fnew_5fvalues_5fold_12',['IMU_new_values_old',['../a00071.html#aa9c29b36585e0b7e75c90c533525fd7b',1,'imu.h']]],
+  ['imu_5fnew_5fvalues_5fst_13',['IMU_new_values_st',['../a00026.html#a3355081da20003ab59504d34cb8464dc',1,'IMU_new_values_st(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat):&#160;imu.c'],['../a00071.html#a3355081da20003ab59504d34cb8464dc',1,'IMU_new_values_st(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat):&#160;imu.c']]],
+  ['imu_5fset_5fmag_5fvs_5fgyr_5fprop_14',['IMU_set_mag_vs_gyr_prop',['../a00026.html#a953000917f0453d51097e887e5d3ac06',1,'IMU_set_mag_vs_gyr_prop(IMU_Status_t *mstatus, float prop):&#160;imu.c'],['../a00071.html#a953000917f0453d51097e887e5d3ac06',1,'IMU_set_mag_vs_gyr_prop(IMU_Status_t *mstatus, float prop):&#160;imu.c']]],
+  ['imu_5fupdate_5fquat_15',['IMU_update_quat',['../a00026.html#a64f87dbfe86c917f34bd87c289857b08',1,'IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat):&#160;imu.c'],['../a00071.html#a64f87dbfe86c917f34bd87c289857b08',1,'IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat):&#160;imu.c']]],
+  ['init_5ftaskautopilot_16',['init_taskAutoPilot',['../a00044.html#affd23c1322b86a721168bad5fe074241',1,'init_taskAutoPilot(void):&#160;autopilot.c'],['../a00098.html#affd23c1322b86a721168bad5fe074241',1,'init_taskAutoPilot(void):&#160;autopilot.c']]],
+  ['init_5ftaskdialogin_17',['init_taskDialogIn',['../a00038.html#aba1fed95c25f958dfba1f4c345d56455',1,'init_taskDialogIn():&#160;apdialog.c'],['../a00095.html#aba1fed95c25f958dfba1f4c345d56455',1,'init_taskDialogIn():&#160;apdialog.c']]],
+  ['init_5ftaskmems_18',['init_taskMEMs',['../a00029.html#a03a68e8118b4198d186efd0f72c23743',1,'init_taskMEMs():&#160;mems.c'],['../a00089.html#a5e9a97e8107336f2f03804f9b5b9e55f',1,'init_taskMEMs(void):&#160;mems.c']]],
+  ['init_5ftaskmotor_19',['init_taskMotor',['../a00041.html#ae19d085f29c9892a207cb1610d51e3c8',1,'init_taskMotor():&#160;motor.c'],['../a00092.html#ae19d085f29c9892a207cb1610d51e3c8',1,'init_taskMotor():&#160;motor.c']]],
+  ['init_5ftaskservice_20',['init_taskService',['../a00032.html#ae2a582359ece075b3c413dd39e7a2750',1,'init_taskService():&#160;service.c'],['../a00086.html#ae2a582359ece075b3c413dd39e7a2750',1,'init_taskService():&#160;service.c']]],
+  ['int_21',['int',['../a00032.html#a8866b5421a676559242721d47fc1fcdc',1,'service.c']]]
+];

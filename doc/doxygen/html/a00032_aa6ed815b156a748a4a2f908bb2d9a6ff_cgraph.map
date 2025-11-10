@@ -1,0 +1,4 @@
+<map id="svc_init_UART" name="svc_init_UART">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,120,32"/>
+<area shape="rect" id="node2" href="$a00005.html#ab374bad8d7900bcfd9643b48ea576785" title="Initializes the ring buffer." alt="" coords="168,5,261,32"/>
+</map>

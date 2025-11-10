@@ -1,0 +1,4 @@
+<map id="AP_set_mode_idle" name="AP_set_mode_idle">
+<area shape="rect" id="node1" title="Set Idle mode." alt="" coords="5,5,147,32"/>
+<area shape="rect" id="node2" href="$a00041.html#a5ee69017e45f41a438fd76673da6e113" title="send the order disengage clutch to motor task" alt="" coords="195,5,391,32"/>
+</map>

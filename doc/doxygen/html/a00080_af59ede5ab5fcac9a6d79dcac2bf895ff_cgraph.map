@@ -1,0 +1,5 @@
+<map id="vector3f_getNormalized" name="vector3f_getNormalized">
+<area shape="rect" id="node1" title="Normalizes a 3D vector to have a length of 1." alt="" coords="5,31,184,57"/>
+<area shape="rect" id="node2" href="$a00014.html#ad715d385b8495561a0a2f6c97d157229" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="235,5,375,32"/>
+<area shape="rect" id="node3" href="$a00014.html#a210fc338c3a1e2833060cfb6e5c346be" title="Multiplies a 3D vector by a scalar." alt="" coords="232,56,379,83"/>
+</map>

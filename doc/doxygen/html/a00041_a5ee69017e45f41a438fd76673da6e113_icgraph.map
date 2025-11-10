@@ -1,0 +1,5 @@
+<map id="MOTOR_MSG_letOutClutch" name="MOTOR_MSG_letOutClutch">
+<area shape="rect" id="node1" title="send the order disengage clutch to motor task" alt="" coords="349,5,545,32"/>
+<area shape="rect" id="node2" href="$a00044.html#af6663ef3860cc9454511614ab488900a" title="Set Idle mode." alt="" coords="160,5,301,32"/>
+<area shape="rect" id="node3" href="$a00044.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
+</map>

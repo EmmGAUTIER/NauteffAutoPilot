@@ -1,0 +1,537 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+%\usepackage[xindy]{glossaries}
+\usepackage{glossaries}
+\usepackage{graphicx}
+\usepackage[autostyle]{csquotes}
+%\usepackage{parskip}
+
+%\usepackage[backend=biber,style=authoryear]{biblatex}
+\usepackage[backend=biber, style=numeric]{biblatex}
+\bibliography{Nauteff-Biblio.bib}
+
+\title{Nauteff Conception du matériel et du logiciel}
+\author{Emmanuel Gautier}
+
+%% Commande pour la génération du glossaire
+\input{Nauteff-Glossaire.tex}
+%%\input{Nauteff-Biblio.bib}
+%\renewcommand*{\glossarymark}[1]{}  % pour enlever le titre de chapitre
+
+
+\makeglossaries
+%\makeglossary
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Nauteff~P-1 est une maquette de pilote automatique pour navires.
+Il est destiné à développer et tester son matériel et ses algorithmes.
+Ce document contient les informations relatives à la conception
+de cette maquette.
+\end{abstract}
+\chapter*{Historique du document}
+\begin{tabular}{|c|c|l|}
+	\hline 
+	 Version & Date & Description \\ 
+	\hline 
+	  & 15 avril 2020 &  Début de rédaction \\ 
+	  & 16 février 2022 & Début rédaction pour P2 \\ 
+	  &  &  \\ 
+	  &  &  \\ 
+	\hline 
+\end{tabular}
+
+\tableofcontents
+\listoffigures
+
+\chapter{Buts du document}
+\section{But}
+Ce document contient les informations de la conception du Nauteff~P-1 et vise à en permettre un développement et une maintenance efficace.
+Il est principalement destiné au développeurs.
+
+\section{Guide de lecture}
+
+La documentation nécessaire à la maîtrise du STM32 est volumineuse et répartie
+dans plusieurs documents mentionnés dans le chapitre suivant.
+
+\chapter{Documents applicables et de référence}
+
+\section{Documents applicables}
+%\printbibliography[keyword=APP, heading=none]
+%\sectionmirrors.ctan.org/{Documents de référence}
+\printbibliography[keyword=REF, heading=none]
+%\printbibliography[heading=none]
+%%refsection=none
+%\nocite{*}
+
+Liste 1 des documents de référence
+\cite{STM32F446RM}
+\cite{LSM6DS33}
+\cite{STM32F446xCE}
+\cite{Nauteff-Spec}
+\cite{Nauteff-Algo}
+\cite{NMEARevealed} 
+\cite*{STM32M4PM}
+
+La documentation des STM32 est répartie dans plusieurs documents.
+Le principal document intitulé reference manuel \cite{STM32F446RM} contient
+la description détaillée des mémoires, périphériques, horloges. 
+Le document Datasheet production data \cite{STM32F446xCE} contient, en particulier, les adresses et disponibilité des périphériques.
+Le document programming manual\cite{STM32M4PM} contient, en particulier
+la description des registres NVIC.
+Les documentations de ST Microelectronics comportent peu de renvois,
+le lecteur ne devra pas hésiter à naviguer dans ces sources.
+La documentation d'ARM, par exemple \cite{CORTEXM4TRM}, est source
+complémentaire d'informations.
+
+
+\section{Documents de référence}
+\printbibliography[keyword=REF, heading=none]
+
+%\chapter{Terminologie}
+\printglossary[numberedsection, title=Terminologie]
+
+\newglossaryentry{MEMS}
+{
+  name={MEMS},
+  description={Micro Electromechanical Systems, microsystème électromécanique en français.}
+}
+
+\chapter{Matériel}
+\section{STM32F446RE}
+Nauteff-P2 est réalisé avec une carte Nucleo~446~RE, cette carte comporte un ST-Link~V2 et fournit un signal d'horloge à 8 Mhz au microcontrôleur. La plupart des broches de signaux sont disponibles.
+\subsection{Cœur}
+
+le tableau suivant donne les principales caractéristiques du microcontrôleur:
+\\
+\begin{tabular}{|c|c|}
+	\hline 
+	Cœur& CORTEX M4F  \\ 
+	\hline 
+	Architecture & armv7e-m \\ 
+	\hline 
+	FPU & Simple précision \\
+	\hline 
+	Fréquence & jusqu'à 180 Mhz \\ 
+	\hline 
+\end{tabular} 
+\\
+\subsection{Mémoire}
+
+\begin{tabular}{|c|c|c|c|p{5cm}|}
+	\hline 
+	Mémoire & Adresse     & Taille & Usage &  \\ 
+	\hline 
+	FLASH   & 0x0800 0000 & 512K &  &  Permanente \\ 
+	SRAM1   & 0x2000 0000 & 112K &  &  principale \\ 
+	SRAM2   & 0x1000 0000 &  16K &  &  supplémentaire, non utilisée\\ 
+	\hline
+\end{tabular}
+
+\subsection{Horlogerie}
+Nauteff-P2 utilise l'horloge externe fournie par le ST-Link à 8 Mhz
+
+\subsection{Interruptions}
+\subsubsection{Liste}
+\begin{tabular}{|c|c|p{7cm}|}
+\hline
+Interruption   & \no & Usage\\
+\hline
+\multicolumn{3}{|c|}{Exceptions du système}  \\
+\hline
+Reset               &  & appel de la fct main() \\
+NMI                 &  &                      \\
+HardFault           &  &                      \\
+MemManage           &  &                      \\
+BusFault            &  &                      \\
+UsageFault          &  &                      \\
+SVCall              &  & vPortSVCHandler  (fct de FreeRTOS)     \\
+PendSV              &  & xPortPendSVHandler (fct de FreeRTOS)  \\
+SysTick             &  & xPortSysTickHandler  (fct de FreeRTOS )\\
+\hline
+\multicolumn{3}{|c|}{Événements extérieurs}   \\
+\hline
+EXTI0          &  & Bouton Marche          \\
+EXTI1          &  & Bouton Veille          \\
+EXTI2          &  & Touche +1              \\
+EXTI3          &  & Touche -1              \\
+EXTI4          &  & Touche +10             \\
+EXTI10\_15     &  & Touche -10             \\
+I2C1\_Event    &  & Évènement I2C1         \\
+I2C1\_Error    &  & Erreur I2C1            \\
+USART1\_Event  &  & Événement USART 1      \\
+\hline 
+\end{tabular} 
+\subsubsection{USART}
+\subsubsection{I2C1}
+Le bus I2C1 sert à la communication avec les capteurs \gls{MEMS}.
+\subsection{Affectation des broches du STM32}
+Le STM32F303K8 comporte 32 broches.
+\\
+
+   \begin{tabular}{|l|l|l|c|l|}
+   \hline
+   STM & Nucleo& Fonction & Périphérique & Usage\\
+   \hline
+   PA0  & CN7,  28  & Entrée analogique & ADC1, IN0   & Tension alimentation  \\
+   PA1  & CN7,  30  & Entrée analogique & ADC2, IN1   & Courant moteur        \\
+   PA2  & CN10, 35  & Alt. fct. \no 7   & USART2 TX   & Sortie NMEA 0183      \\
+   PA3  & CN10, 37  & Alt. fct. \no 7   & USART2 RX   & Entrée NMEA 0183      \\
+   PA4  & CN7,  32  & GPIO Output       &             & Motor                 \\
+   PA5  & CN10, 11  & GPIO Output       &             & Clutch and LED        \\
+   PA6  & CN10, 13  & GPIO Output       &             & Motor INA             \\
+   PA7  & CN10, 15  & GPIO Output       &             & Motor INB             \\
+   PA8  & CN10, 23  & Alt. fct. \no 4   & I2C3 SCL    & I2C3 serial clock     \\
+   PA9  & CN10, 21  & Alt. fct. \no 7   & USART1 TX   & Sortie Série          \\
+   PA10 & CN10, 33  & Alt. fct. \no 7   & USART1 RX   & Entrée série          \\
+   PA11 & CN10, 12  & Alt. fct. \no 9   & CAN1 RX     & Sortie NMEA2000 / CAN \\
+   PA12 & CN10, 10  & Alt. fct. \no 9   & CAN1 TX     & Entrée NMEA2000 / CAN \\
+   PA13 & NC        & -                 &             & SYS\_JTMS-SWDIO        \\
+   PA14 & NC        & -                 &             & SYS\_JTCK-SWCLK        \\
+   PA15 & Réservé   & Anti-noise        &             & Réservé               \\
+   \hline
+   PB0  & CN7, 34   & GPIO Output PU    &             & Buzzer alarme         \\
+   PB1  & CN10, 24  & GPIO input        &             & Gyro/Acc data ready   \\
+   PB2  & CN10, 22  & GPIO input        &             & Mag. data ready       \\
+   PB3  & NC        & -                 &             & SYS\_JTDO-SWO          \\
+   PB4  & CN10, 27  & Alt. fct. \no 4   & I2C3 SDA    & I2C3 serial data      \\
+   PB5  & CN10, 29  & Alt. fct. \no 9   & CAN2 RX     & Entrée NMEA2000/CAN   \\
+   PB6  & CN10, 17  & Alt. fct. \no 9   & CAN2 TX     & sortie NMEA2000/CAN   \\
+   PB7  & CN7,  21  & GPIO Output       &             & LSM9DS1 CS\_M          \\
+   PB8  & CN10,  3  & GPIO Output       &             & LSM9DS1 CS\_A/G        \\
+   PB9  & CN10,  5  & Anti noise        &             & Réservé               \\
+   PB10 & CN10, 25  & Alt. fct. \no 7   & USART3 TX   & bus seatalk TX\&RX    \\
+   PB11 & -         & ??                &             & Relié à une capa      \\
+   PB12 & CN10, 16  &                   &             & Réservé               \\
+   PB13 & CN10, 30  & Alt. fct. \no 5   & SPI2 SCK    & SPI serial clock      \\
+   PB14 & CN10, 28  & Alt. fct. \no 5   & SPI2 MISO   & LSM9DS1 SDO\_M \& SDO\_A/G \\
+   PB15 & CN10, 26  & Alt. fct. \no 5   & SPI2 MOSI   & LSM9DS1 DSI           \\ 
+   \hline
+   PC0  &  CN7,  38 & Entrée GPIO, PU   & EXTI0       & Bouton marche         \\
+   PC1  &  CN7,  36 & Entrée GPIO, PU   & EXTI1       & Bouton veille         \\
+   PC2  &  CN7,  35 & Entrée GPIO, PU   & EXTI2       & Touche +1             \\
+   PC3  &  CN7,  37 & Entrée GPIO, PU   & EXTI3       & Touche -1             \\
+   PC4  &  CN10, 34 & Entrée GPIO, PU   & EXTI4       & Touche +10            \\
+   PC5  &  CN10, 6  & Entrée GPIO, PU   & EXTI5       & Touche -10            \\
+   PC6  &  CN10, 4  & Entrée GPIO, PU   & EXTI ?      & Touche auxiliaire 1   \\
+   PC7  &  CN10, 4  & Entrée GPIO, PU   & EXTI ?      & Touche auxiliaire 2   \\
+   PC8  &  CN10, 2  & Inutilisée        &             & Libre                 \\
+   PC9  &  CN10, 1  & Sortie GPIO       & MCO         & Sortie horloge (mise au point) \\
+   PC10 &  CN7,  1  & Alt. fct. \no 8   & UART4 TX    & Sortie série          \\
+   PC11 &  CN7,  2  & Alt. fct. \no 8   & UART4 RX    & Entrée série          \\
+   PC12 &  CN7,  3  & Alt. fct. \no 8   & USART5 TX   & Sortie série          \\
+   PC13 &  CN7, 23  &                   & Bouton bleu & fonction spéciale     \\
+   PC14 &           &                   &             & Quartz 32,768 khz  \\
+   PC15 &           &                   &             & Quartz 32,768 khz  \\
+   \hline
+   PD2  &  CN7,  4  & Alt. fct. \no 8   & USART5 RX   & Sortie Série \\
+   \hline
+\end{tabular}
+   La broche P\textsc{9} sert à observer l'horloge système à l'oscilloscope. Elle pourra servir plus tard à une autre fonction.
+
+\subsection{Organisation de la mémoireSTM32}
+
+\begin{tabular}{|c|c|c|c|p{5cm}|}
+	\hline 
+	Mémoire & Adresse     & taille &  &  \\ 
+	\hline 
+	FLASH   & 0x0800 0000 & 128K &  &  Permanente, plus lente \\ 
+	RAM1    & 0x2000 0000 & 112K &  &  \\ 
+	RAM2    & 0x2000 0000 &  16K &  &  Core coupled memory\\ 
+	\hline
+\end{tabular}
+
+\section{Capteurs MEMS}
+Les capteurs MEMS sont un montés sur une carte d'essai de Polulu AltIMU-10~v5.
+Cette carte contient les circtuits de ST~Microelectronics suivants :
+\begin{itemize}
+	\item un compas LIS3MDL;
+	\item un gyromètre et accéléromètre LSMDS33;
+	\item un baromètre LPS25H, non utilisé.
+\end{itemize}
+
+\section{Commande de l'actionneur}
+La commande de l'actionneur est réalisée par un circuit VNH~5019 de ST~Microelectronics monté sur une plaque d'essai de Pololu.
+Ce circuit comprend un pont en H pouvant délivrer un courant de 12A en permanence avec des protections contre les surcharges et court-circuits,
+des signaux de diagnostic et une tension proportionnelle au courant.
+Ce circuit a un partie logique et contrôle alimentée avec la carte Nucleo
+et une partie de puissance alimentée par une source de 12V.
+
+Les signaux suivants sont utilisés:
+\begin{itemize}
+	\item INA ,sens pont A) relié à B4;
+	\item INB (sens pont B) relié à B5;
+	\item CS relié PA7 (ADC2\_IN4);
+	\item PWM relié à PB0.
+\end{itemize}
+L'actuel STM32~F303K8 n'a pas suffisamment de broches pour y raccorder ENA/DIAG et ENB/DIAG.
+
+\chapter{Architecture générale de l'application}
+\section{Architecture statique}
+\subsection{Système}
+\subsection{Pilotes de périphériques}
+\subsection{Tâches}
+\subsection{Calculs}
+\subsection{Traitements des trames NMEA0183}
+\subsection{IMU}
+0
+\section{Relations dynamiques}
+
+
+\section{Justification des choix d'architecture}
+
+\chapter{Contexte de la conception}
+\section{présentation de l'application}
+Nauteff est un pilote automatique pour navires.
+\section{Principales exigences applicables}
+\subsection{Exigences liées à la sûreté de fonctionnement}
+Le navigateur, confiant la timonerie de son navire à Nauteff,
+attend de ce dernier un fonctionnement fiable et sûr.
+Il doit être conçu pour éviter toute panne ou
+comportement mettant en danger le navire et son équipage.
+
+Les principes suivants sont adoptés:
+\begin{itemize}
+    \item commentaires précis et détaillés dans le code;
+    \item Utilisation réduite de librairies extérieurs et programmation "bare metal";
+    
+	\item Absence d'allocation dynamique après la phase d'initialisation;
+	\item Usage réduit de variables locales dans les fonctions et utilisation de variables statiques ;
+	\item application des règles MISRA-C:2004 \cite{MISRAC};
+	\item Adoption du principe KISS ("Keep It Simple Stupid");
+    \item Adoption de programmation défensive;
+    \item Usage du langage C sans.
+\end{itemize}
+L'absence d'allocation dynamique permet d'éviter un arrêt brutal par
+manque de mémoire disponible. 
+
+\subsection{Architecture matérielle opérationnelle}
+Nauteff utilise une carte Nucleo dotée d'un STM32~F446RE
+et d'une sonde ST-Link accessible par prise USB.
+Le STM32~F446RE comporte que 32 broches, le prochain Nauteff
+
+\subsection{Logiciels imposés}
+Néant.
+\subsection{Interface avec d'autres applications}
+Interfaces NMEA 0183
+Cette interface est aussi utilisée pour la sortie de messages
+pendant le développement.
+\section{Contraintes de développement}
+\subsection{Méthode et formalisme}
+L'organisation du développement est principalement celle de cycle en V.
+La programmation est essentiellement fonctionnelle et 
+les concepts objets ne sont pas utilisés.
+
+\subsection{Langage de programmation}
+La programmation est réalisée entièrement avec le langage C11.
+Le langage C permet d'accéder très facilement à la mémoire et à tous les registres.
+Le recours à l'assembleur n'est pas envisagé.
+
+\subsection{Logiciels extérieurs}
+Nauteff-P2 utilise FreeRTOS V 10.0.1 qui fournit le noyau temps réel, les horloges,
+les sémaphores et les canaux de communication 
+Nauteff P-2 utilise la librairie standard libc et la librairie mathématiques lm.
+Nauteff P-2 utilise les fonctions les plus simples de la libc, il utilise sprintf uniquement dans les versions expérimentales.
+\subsection{Outils}
+
+\begin{tabular}{|c|c|c|}
+	\hline 
+	EDI, au bureau & Eclipse C/C++ & eclipse.org    \\ 
+	\hline 
+	Compilation & arm-none-eabi-gcc & chaîne du GNU, compilation croisée \\ 
+	\hline 
+	sonde & ST-Link & intégrée sur carte Carte Nucleo   \\ 
+	\hline 
+	Accès sonde & openocd 0.10.0 &   \\ 
+	\hline 
+	Documentation & Latex &  avec TeXstudio\\
+	\hline 
+\end{tabular}
+
+\subsection{Environnement matériel de développement}
+Le développement au bureau est réalisé avec les matériels suivant :
+\begin{itemize}
+	\item un PC de bureau permettant de faire fonctionner eclipse, la chaine de compilation\dots;
+	\item un oscilloscope à deux voies minimun;
+	\item occasionnellement un voltmètre;
+	\item petit outillage: pinces, tournevis, dénudeuse,\ldots;
+\end{itemize}
+Lors des essais en mer du prototype un petit PC consommant peu
+mais ne permettant pas d'utiliser eclipse permet de faire des
+modifications du logiciel et, en particulier, des ajustements
+de paramètres.Il embarque la chaîne de compilation et openocd.
+L'édition est faite avec vi et la compilation avec la commande make.
+
+
+\chapter{Architecture du logiciel}
+\section{architecture statique}
+\subsection{Noyau temps réel : FreeRTOS}
+\subsection{fonctions système sys}
+\subsubsection{I2C}
+\subsubsection{UART}
+\subsubsection{SPI}
+\subsubsection{CAN Control Area Network, pour NMEA 2000}
+\subsubsection{Initialisations}
+\subsection{fonctions auxiliaires d'accès au matériel}
+\subsubsection{Calculs et géométrie}
+\subsection{Gestionnaires de capteurs}
+
+\subsection{nauteff}
+\subsubsection{moteur}
+Cette tâche reçoit les ordres de la tâche de gestion,
+elle commande l'embrayage du moteur et son fonctionnement : sens et durée.
+Elle corrige la durée de fonctionnement en fonction de l'effort du moteur.
+Lorsque le moteur tourne, elle mesure le courant du moteur,
+vérifie que le moteur n'est pas bloqué ou débranché et
+renvoie une estimation de l'effort du moteur. Elle informe la tâche principale
+lorsque le moteur a fini un mouvement demandé.
+Les entrées sont les suivantes:
+\begin{itemize}
+	\item Ordres de commande du moteur et de l'embrayage en provenance de la tâche principale;
+	\item valeurs du courant et de la tension en provenance de l'ADC;
+	\item horloge (à définir).
+\end{itemize}
+Les sorties sont les suivantes:
+\begin{itemize}
+	\item ordres vers le moteur mise en marche et sens;
+	\item ordres vers l'embrayage : enclenchement et désenclenchement ;
+	\item informations vers la tâche principale sur le fonctionnement du moteur estimation de l'effort, de la position, blocage ou court-circuit.
+\end{itemize}
+\subsubsection{mems : Gestion des capteurs MEMS}
+Cette tâche lit les informations des capteurs MEMs, les filtre,
+calcule le cap et le lacet et envoie les informations traitées à la tâche principale.
+Les documents de ré
+
+Le signal d'interruption n'étant pas disponible sur la carte de Pololu
+la tâche fonctionne par scrutation.
+
+La tâche envoie les données vers la tâche principale.
+
+\subsubsection{keyboard}
+La tâche utilise la fonction nommée TaskKeyboard qui n'utilise aucun argument.
+Elle fonctionne par scrutation périodique des entrées sur lesquelles sont branchées les touches.
+La scrutation périodique est utilisée car les touches provoquaient de très nombreux
+rebonds parasites. 
+Elle envoie les ordres à la tâche de gestion de l'état
+par l'intermédiaire d'un \texttt{MessageBuffer\_t} nommé buffclav.
+\subsubsection{NMEA 0183/2000}
+\subsubsection{Étalonnage}
+\subsubsection{Seatalk}
+\subsubsection{AutoPilot}
+\subsection{Tâches}
+\begin{tabular}{|l|c|l|}
+\hline 
+Tâche & Priorité & Nom \\
+\hline 
+Gestion du clavier & 6 & \texttt{TaskKeyboard}\\
+Contrôle du moteur & 5 & \texttt{TaskMotor}\\
+Gestion de l'état & 3 & \texttt{TaskCore}\\
+Gestion des capteurs MEMs & 3 & \texttt{TaskMEMs}\\
+\hline
+\end{tabular} 
+
+%\begin{figure}[!h]
+%    \includegraphics[scale=0.3]{diagram-Taches}
+%	\caption{Flots de données entre les tâches}
+%\end{figure}
+
+
+\subsection{Tâche principale}
+\subsubsection{Entrées}
+\begin{itemize}
+  \item Commandes en provenance du clavier;
+  \item Informations du moteur;
+  \item Informations des capteurs MEMS ;
+  \item Informations en provenance des interfaces NMEA
+  \item horloge (à définir).
+\end{itemize}
+\subsubsection{Sorties}
+\begin{itemize}
+  \item Commandes moteurs;
+  \item alarmes;
+\end{itemize}
+
+\section{Canaux de communications}
+
+\begin{tabular}{|l|c|c|c|}
+\hline
+Canal & Nom & Type & Taille \\
+\hline
+Messages vers le gestionnaire principal & \texttt{bufferCore} & \texttt{MessageBuffer\_t} & 10 \\
+\hline 
+Ordres vers le moteur & \texttt{bufferMotor} & \texttt{MessageBuffer\_t} & 5 \\ 
+\hline
+\end{tabular}
+\subsection{Message gestionnaire principal}
+Ces messages sont envoyés par les tâches TaskKeyboard, TaskMotor et TaskMEMs.
+Il sont stockés dans une structure dont les deux premiers octets comportent
+un code indiquant la nature du message et, en option, d'autres informations.
+\\
+\begin{tabular}{|l|l|}
+\hline 
+Ordre & Code et valeurs optionnelles \\
+\hline
+\multicolumn{2}{|c|}{Ordres en provenance de la tâche du clavier vers la tâche principale} \\
+\hline 
+Mise en mode automatique & MSG\_KBD\_AUTO \\ 
+Mise en veille & MSG\_KBD\_STDBY \\ 
++1 & MSG\_KBD\_STARBOARD\_ONE \\ 
+-1 & MSG\_KBD\_PORT\_ONE \\ 
++10 & MSG\_KBD\_STARBOARD\_TEN \\ 
+-10 & MSG\_KBD\_PORT\_TEN \\ 
++1 relachée & MSG\_KBD\_STARBOARD\_ONE\_END \\ 
+-1 relachée & MSG\_KBD\_PORT\_ONE\_END \\ 
+\hline 
+\multicolumn{2}{|c|}{Informations en provenance de la tâche de gestion du moteur} \\
+\hline
+Position estimée du moteur & MSG\_MOT\_POSITION\_ESTIMEE \\
+Effort moteur & MSG\_MOT\_EFFORT + float effort\\ 
+Moteur bloqué ou en butée & MSG\_MOT\_BLOCKED \\
+Court-circuit sortie moteur & MSG\_MOT\_SHORT\_CIRCUIT \\
+Fin de déplacement actuateur & MSG\_MOT\_END\_MOVE + float : effort \\
+\hline
+\multicolumn{2}{|c|}{Informations des capteurs MEMs}\\
+\hline
+Info Capteurs MEMs & MSG\_MEMS\_VALUES + 2 floats : cap et lacet \\
+Info MEMs indisponible & MSG\_MEMS\_FAILURE \\
+
+\hline
+\end{tabular} 
+\subsection{Commandes envoyées à la tâche de gestion du moteur}
+Ces messages sont envoyés par la tâche principale ou un timer
+à la tâche de gestion du moteur.
+\\
+\begin{tabular}{|l|l|}
+	\hline 
+	Ordre & Code et valeurs optionnelles \\ 
+	\hline
+	\multicolumn{2}{|c|}{Commande de la tâche principale} \\
+	\hline 
+    Enclenchement de l'embrayage & MSG\_MOT\_EMBRAYE\\
+    Désenclenchement de l'embrayage & MSG\_MOT\_DEBRAYE\\
+    Mise en marche vers tribord & MSG\_MOT\_STARBOARD\\
+    Mise en marche vers babord  & MSG\_MOT\_PORT\\
+    Mouvement vers tribord & MSG\_MOT\_MOVE\_STARBOARD + float : valeur\\
+    Mouvement vers babord  & MSG\_MOT\_MOVE\_PORT + float: valeur\\
+    Arrêt du moteur & MSG\_MOT\_STOP\\
+    Demande de mesure d'effort & MSG\_MOT\_DMD\_EFFORT\\
+    \hline
+	\multicolumn{2}{|c|}{commande du timer} \\
+	\hline
+	Commande du TIMER & MSG\_MOT\_MOVING\_CONTROL\\
+    \hline
+\end{tabular} 
+
+La tâche de gestion du moteur effectue les déplacements
+dont l'amplitude doit être proportionnelle à la valeur en paramètre,
+elle adapte la durée au courant du moteur.
+
+
+\end{document}
+

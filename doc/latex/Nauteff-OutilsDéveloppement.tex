@@ -1,0 +1,162 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+%%\usepackage[francais]{babel}
+\usepackage[french]{babel}
+\usepackage{numprint}
+\usepackage{glossaries}
+\title{Nauteff P-1 Chaînes de compilation}
+\author{Emmanuel Gautier}
+\makeglossaries
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Ce document contient les informations permettant la génération des codes du prototype Nauteff P-1 et des documentations.
+\end{abstract}
+
+\tableofcontents
+\chapter{Buts du document}
+Ce document contient les informations permettant d'installer, de configurer et utiliser les outils de développement. Ces outils sont la chaîne de compilation croisée GCC, eclipse et openocd. 
+\chapter{Documents applicables et de référence}
+\chapter{Terminologie}
+\newglossaryentry{NMEA}
+{
+	name={NMEA}, % le terme à référencer (l'entrée qui apparaitra dans le glossaire)
+	description={National Marine Electronics Association}, % la description du terme(sans retour à la ligne)
+	sort={NMEA}, % si le mot contient des caractère spéciaux, ils ne seront pas pris en compte
+	plural={NMEA} % la forme plurielle du terme
+}
+\newglossaryentry{I2C}{name=I2C, description={Inter-Integrated Circuit en englais. C'est un bus de communication série à 2 fils à courte distance}}
+
+\printglossary
+
+\chapter{Environnement de développement}
+Le développement est réalisé avec des PC fonctionnant sous Linux/debian.
+Au bureau il est réalisé avec les matériels suivant :
+\begin{itemize}
+	\item un PC permettant de faire fonctionner eclipse et la chaîne de compilation;
+	\item un oscilloscope pour certaines mise au point ;
+	\item occasionnellement un voltmètre;
+	\item petit outillage: pinces tournevis, pince à dénuder,\ldots;
+\end{itemize}
+
+Lors des essais en mer du prototype un petit PC consommant peu
+mais ne permettant pas d'utiliser eclipse permet de faire des
+modifications du logiciel et, en particulier, des ajustements
+de paramètres.Il embarque la chaîne de compilation et openocd.
+La compilation est réalisée avec la commande make.
+
+\begin{tabular}{|rcl|}
+	\hline 
+	&  &  \\ 
+	\hline 
+	OS & : & Debian Burster / amd64 \\ 
+	eclipse& : & 2021 mars \\ 
+	& : &  \\ 
+	& : &  \\ 
+	& : &  \\ 
+	\hline 
+\end{tabular} 
+
+\chapter{Outils de développement}
+\section{Compilateur et éditeur de liens arm-none-eabi-gcc}
+\subsection{Installation}
+L'installation est faite avec apt-get ou synaptic ou autre. Il faut les paquets suivants: 
+
+\begin{tabular}{|c|p{6cm}|}
+	\hline 
+    binutils-arm-none-eabi & assembleur, éditeur de liens et outils binaires GNU pour les processeurs ARM Cortex-A/R/M\\
+    \hline
+    gcc-arm-none-eabi & GCC cross compiler for ARM Cortex-A/R/M processors\\
+    \hline
+    gdb-arm-none-eabi & GNU debugger for ARM Cortex-A/R/M processors\\
+    \hline
+    libstdc++-arm-none-eabi-newlib & GNU Standard C++ Library v3 for ARM Cortex-A/R/M processors (newlib)\\
+    \hline
+    libnewlib-arm-none-eabi & C library and math library compiled for bare metal using Cortex A/R/M\\
+	\hline 
+\end{tabular} 
+
+\section{EDI eclipse}
+l'EDI est Eclipse C++ téléchargeable sur le site eclipse.org.
+\paragraph{}
+Choisir "Eclipse IDE for Embedded C/C++ developers".
+
+Plugins : TexLipse
+
+Ajouter le plugin     C/C++ GDB Hardware Debugging Developer Resources.
+Ce plugin est accessible a http://download.eclipse.org/tools/cdt/releases/NN.MM.
+il faut utiliser le filtre gdb
+
+\paragraph{}
+Dans Eclipse marketplace demandes openocd et choisir GNU MCU Eclipse
+
+\section{openocd}
+Le logiciel qui permet d'accéder à la sonde est openocd version 0.9.0.
+
+\chapter{Génération du projet}
+
+<File>, <New project>, <C/C++ Project>, <C managed build>, <Debug> \& <Release>,
+
+Project Name: NauteffAutopilot, <ARM Cross GCC>\\
+\begin{tabular}{|l|l|}
+	\hline 
+	Chip Family &  STM30x/31x\\ 
+	Flash size & 64k \\ 
+	RAM size &  12k \\ 
+	CCM size &  4k \\ 
+	External clock&   8000000\\ 
+	Content & Empty \\ 
+	Use system calls & Freestanding (no Posix system calls) \\ 
+	Trace output & ARM ITM (SWIO) pour essayer \\ 
+	Check some \& most warnings & Oui \\ 
+	Enable -Werror & Non \\ 
+	Use -Og on debug & Oui \\ 
+	Use newlib nano &  Oui\\ 
+	Exclude unused & Oui \\ 
+	Use link optimizations & Non \\ 
+	Include folder & inc\\
+	Source folder & src\\
+	System folder & system\\
+	CMSIS Library folder & cmsis \\
+	C library folder & newlib\\
+	linker script folder & ldscripts\\
+	Select configuration & Debug \& release \\
+	\hline 
+\end{tabular} 
+Dans <C/C++> <Build> <Tools settings>
+\begin{tabular}{|l|l|}
+	\hline 
+	ARM family & cortex-m4\\ 
+	Instruction set & Thumb\\ 
+	Float ABI & FP instructions (hard)\\ 
+	& \\ 
+	& \\ 
+	& \\ 
+	& \\ 
+	& \\ 
+	& \\ 
+	\hline 
+\end{tabular} 
+
+
+
+
+Créer les répertoires src et inc avec <File> <New Folder>
+
+Dans la vue Project explorer sélectionner le projet puis <Project>, <Properties>
+<C/C++ Build>, <Settings>
+<Cross Settings> Prefix : arm-none-eabi- Path /usr/bin
+<Cross GCC Compiler> All options : "-O0 -g3 -Wall -c -fmessage-length=0"
+
+
+Commande de compilation :
+arm-none-eabi-gcc -g3 -Wall -fno-math-errno -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -fsingle-precision-constant -mfpu=fpv4-sp-d16 -specs=nosys.specs -specs=nano.specs -Iinclude -lm -lg -lc -Tnauteff.ld -Xlinker -Map -Xlinker nauteff.map
+
+
+
+\end{document}

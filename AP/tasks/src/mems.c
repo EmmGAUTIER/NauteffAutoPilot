@@ -28,8 +28,8 @@ SOFTWARE.
 #define DBG_PRINT_MEAN_RAW_VALUES(X)
 #define DBG_PRINT_MEAN_CORR_VALUES(X) 
 #define DBG_PRINT_ATTITUDE(X) (X)
-#define DBG_PRINT_QUATERNION(X) (X)
-#define DBG_PRINT_MADGWICK(X) (X)
+#define DBG_PRINT_QUATERNION(X)
+#define DBG_PRINT_MADGWICK(X) 
 
 #define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ /* mag and acc ouptut data rate */
 #define LSM9DS1_FS_G LSM9DS1_FS_G_500_DPS /* gyro full scale */

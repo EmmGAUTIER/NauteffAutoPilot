@@ -1,0 +1,17 @@
+var searchData=
+[
+  ['calculer_5forientation_5fnavire_0',['calculer_orientation_navire',['../a00026.html#ab0392b2b73cc528afe88dce2ae8ab89e',1,'imu.c']]],
+  ['calibrate_5fellipsoid_1',['calibrate_ellipsoid',['../a00011.html#ad90292fd732b5b5b7b890124356e7490',1,'calculs.c']]],
+  ['calibreur_5faddsample_2',['calibreur_addSample',['../a00026.html#ae3c81f1a17cf5655dc1a1160c93ee6e4',1,'calibreur_addSample(Calibreur_t *calibreur, float currTime, Vector3f *acc, Vector3f *gyr, Vector3f *mag):&#160;imu.c'],['../a00071.html#ae3c81f1a17cf5655dc1a1160c93ee6e4',1,'calibreur_addSample(Calibreur_t *calibreur, float currTime, Vector3f *acc, Vector3f *gyr, Vector3f *mag):&#160;imu.c']]],
+  ['calibreur_5fcalibrate_3',['calibreur_calibrate',['../a00026.html#a1ce9e6bdd764cb1ed1a2b26fdcdb7e0a',1,'calibreur_calibrate(Calibreur_t *calibreur, Vector3f *offset, float M[3][3], float *quality):&#160;imu.c'],['../a00071.html#a1ce9e6bdd764cb1ed1a2b26fdcdb7e0a',1,'calibreur_calibrate(Calibreur_t *calibreur, Vector3f *offset, float M[3][3], float *quality):&#160;imu.c']]],
+  ['calibreur_5fcreate_4',['calibreur_create',['../a00026.html#a355b19e963be988337d02ecfb4e3a0ef',1,'calibreur_create(int numberOfSamples):&#160;imu.c'],['../a00071.html#a355b19e963be988337d02ecfb4e3a0ef',1,'calibreur_create(int numberOfSamples):&#160;imu.c']]],
+  ['calibreur_5fdestroy_5',['calibreur_destroy',['../a00026.html#a6639430162adb813f6ebd1d1b04ea9b3',1,'calibreur_destroy(Calibreur_t *calibreur):&#160;imu.c'],['../a00071.html#a6639430162adb813f6ebd1d1b04ea9b3',1,'calibreur_destroy(Calibreur_t *calibreur):&#160;imu.c']]],
+  ['calibreur_5fgetnumberofsamples_6',['calibreur_getNumberOfSamples',['../a00026.html#ade1fcd3b6cc623834503ac5615e8bd53',1,'calibreur_getNumberOfSamples(Calibreur_t *calibreur):&#160;imu.c'],['../a00071.html#ade1fcd3b6cc623834503ac5615e8bd53',1,'calibreur_getNumberOfSamples(Calibreur_t *calibreur):&#160;imu.c']]],
+  ['calibreur_5fisfull_7',['calibreur_isFull',['../a00026.html#ad9bd0e15cff5118934412615f3e337bb',1,'calibreur_isFull(Calibreur_t *calibreur):&#160;imu.c'],['../a00071.html#ad9bd0e15cff5118934412615f3e337bb',1,'calibreur_isFull(Calibreur_t *calibreur):&#160;imu.c']]],
+  ['convert_5ffloat_8',['convert_float',['../a00038.html#ae2fd86edfbe772063129bca4abbd1eb1',1,'apdialog.c']]],
+  ['convert_5fnumber_9',['convert_number',['../a00038.html#a876d26799b33d1d1c13397656e391bdd',1,'apdialog.c']]],
+  ['cvt_5fdir_5fdeg_5frad_10',['cvt_dir_deg_rad',['../a00014.html#a0a6260adb84f7a2364745069d05ca3b2',1,'cvt_dir_deg_rad(float angle):&#160;geom.c'],['../a00080.html#a0a6260adb84f7a2364745069d05ca3b2',1,'cvt_dir_deg_rad(float angle):&#160;geom.c']]],
+  ['cvt_5fdir_5fnorm_5fdeg_11',['cvt_dir_norm_deg',['../a00014.html#a9ee7a9700c32ef3525d0b435edeb83ef',1,'cvt_dir_norm_deg(float angle):&#160;geom.c'],['../a00080.html#a9ee7a9700c32ef3525d0b435edeb83ef',1,'cvt_dir_norm_deg(float angle):&#160;geom.c']]],
+  ['cvt_5fdir_5fnorm_5frad_12',['cvt_dir_norm_rad',['../a00014.html#a9262b9b8f900f512fa47609d84c364e8',1,'cvt_dir_norm_rad(float angle):&#160;geom.c'],['../a00080.html#a9262b9b8f900f512fa47609d84c364e8',1,'cvt_dir_norm_rad(float angle):&#160;geom.c']]],
+  ['cvt_5fdir_5frad_5fdeg_13',['cvt_dir_rad_deg',['../a00014.html#a166a380c966b5df7d57389f9a174ccd3',1,'cvt_dir_rad_deg(float angle):&#160;geom.c'],['../a00080.html#a166a380c966b5df7d57389f9a174ccd3',1,'cvt_dir_rad_deg(float angle):&#160;geom.c']]]
+];

@@ -1,0 +1,5 @@
+<map id="LSM9DS1_ReadMag" name="LSM9DS1_ReadMag">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,156,32"/>
+<area shape="rect" id="node2" href="$a00029.html#a8c6a179a8f1e84f41302cccd3511c6cb" title=" " alt="" coords="204,5,351,32"/>
+<area shape="rect" id="node3" href="$a00029.html#a0e21cdfa6bbe2e3cce537fa2b17deeaa" title="Fonction d’échange SPI en DMA (full&#45;duplex)." alt="" coords="399,5,537,32"/>
+</map>

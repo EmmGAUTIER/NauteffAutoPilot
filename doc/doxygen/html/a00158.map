@@ -1,0 +1,5 @@
+<map id="IMU_Status_t" name="IMU_Status_t">
+<area shape="rect" id="node1" title=" " alt="" coords="45,219,153,399"/>
+<area shape="rect" id="node2" href="$a00108.html" title="Structure representing a 3D vector with float components." alt="" coords="5,13,81,119"/>
+<area shape="rect" id="node3" href="$a00168.html" title="Structure representing a quaternion with float components." alt="" coords="106,5,205,127"/>
+</map>

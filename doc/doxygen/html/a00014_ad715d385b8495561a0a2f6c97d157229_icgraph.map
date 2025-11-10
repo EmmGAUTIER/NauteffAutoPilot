@@ -1,0 +1,8 @@
+<map id="vector3f_getNorm" name="vector3f_getNorm">
+<area shape="rect" id="node1" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="453,31,593,57"/>
+<area shape="rect" id="node2" href="$a00014.html#ab6260eeb10eab0a3c585e649095accbd" title=" " alt="" coords="242,5,390,32"/>
+<area shape="rect" id="node3" href="$a00014.html#af59ede5ab5fcac9a6d79dcac2bf895ff" title="Normalizes a 3D vector to have a length of 1." alt="" coords="227,56,405,83"/>
+<area shape="rect" id="node4" href="$a00026.html#a212785a20157f9f72833269483fbbdbc" title=" " alt="" coords="26,5,158,32"/>
+<area shape="rect" id="node5" href="$a00026.html#ab565c5a9ef974d7ae8873525de16cb95" title=" " alt="" coords="5,56,179,83"/>
+<area shape="rect" id="node6" href="$a00026.html#a64f87dbfe86c917f34bd87c289857b08" title=" " alt="" coords="24,107,160,133"/>
+</map>

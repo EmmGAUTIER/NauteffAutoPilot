@@ -1,0 +1,4 @@
+<map id="rbuffer_write" name="rbuffer_write">
+<area shape="rect" id="node1" title="Writes data to the ring buffer." alt="" coords="5,5,111,32"/>
+<area shape="rect" id="node2" href="$a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="159,5,323,32"/>
+</map>

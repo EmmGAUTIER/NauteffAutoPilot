@@ -1,0 +1,87 @@
+# Nom du projet
+PROJECT_NAME           = "Nauteff auto pilot"
+
+# Brief 
+PROJECT_BRIEF          = "Autopilot for boat using STM32L4"
+
+# Nom du fichier de configuration (habituellement le même nom que le fichier lui-même)
+DOXYFILE_ENCODING      = UTF-8
+
+# Répertoire source du projet
+INPUT                  = AP/aux/src AP/compute/src AP/tasks/src \ 
+                         AP/aux/inc AP/compute/inc AP/tasks/inc 
+
+# Extensions des fichiers sources à documenter (pour le C/C++)
+FILE_PATTERNS          = *.c *.h
+
+# Répertoires à exclure si nécessaire
+EXCLUDE_PATTERNS       = */test/*
+
+# Sortie HTML activée
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+LATEX_OUTPUT           = lalatex  # Répertoire de sortie pour les fichiers LaTeX
+PDF_HYPERLINKS         = NO    # Pour activer les hyperliens dans le PDF
+LATEX_BATCHMODE        = NO    # Pour une génération plus silencieuse
+USE_PDFLATEX           = No
+
+# Répertoire de sortie de la documentation HTML
+OUTPUT_DIRECTORY       = doc/doxygen/
+
+# Extraction automatique des commentaires des fichiers sources
+EXTRACT_ALL            = YES
+
+# Génère un diagramme de collaboration des classes (utile pour les projets orientés objet)
+HAVE_DOT               = YES
+DOT_PATH               = /usr/bin/dot
+GENERATE_UML           = YES
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+DOT_CLEANUP            = YES
+
+# Inclut des informations détaillées sur chaque fonction
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = NO
+EXTRACT_LOCAL_METHODS  = YES
+
+# Filtre les fichiers non documentés (utile pour ne documenter que les fichiers avec des commentaires)
+WARN_IF_UNDOCUMENTED   = NO
+
+# Inclut les informations de protection des threads
+INLINE_INHERITED_MEMB  = NO
+
+# Nombre de niveaux d'inclusion des fichiers .h
+MAX_INCLUDE_DEPTH      = 5
+
+# Génération d'un index complet
+FULL_PATH_NAMES        = NO
+SHORT_NAMES            = YES
+
+# Options de documentation pour les graphiques et les diagrammes
+DOT_GRAPH_MAX_NODES    = 50
+DOT_TRANSPARENT        = YES
+DOT_MULTI_TARGETS      = YES
+UML_LOOK               = YES
+
+# Génère la documentation pour les macros, les typedefs, etc.
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = NO
+
+# Active les commandes de documentation du style Javadoc (/** */)
+JAVADOC_AUTOBRIEF      = YES
+
+# Documentation des paramètres et des retours de fonction
+PARAMS_AS_TEXT         = YES
+ALWAYS_DETAILED_SEC    = NO
+
+# Fichier de log des avertissements
+WARN_LOGFILE           = doc/doxygen/doxygen_warnings.log
+
+# Options pour générer les fichiers XML si nécessaire (désactivé par défaut)
+GENERATE_XML           = NO
+
+# Options avancées (désactivées par défaut)
+GENERATE_MAN           = NO
+GENERATE_RTF           = NO
+GENERATE_DOCBOOK       = NO

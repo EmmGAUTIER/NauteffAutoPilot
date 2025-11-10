@@ -1,0 +1,5 @@
+<map id="MOTOR_MSG_setHelmAngle" name="MOTOR_MSG_setHelmAngle">
+<area shape="rect" id="node1" title="send the order move angle" alt="" coords="331,5,537,32"/>
+<area shape="rect" id="node2" href="$a00044.html#afa8c4bb9dc2009e2a7dee4f0e290c8c5" title=" " alt="" coords="160,5,283,32"/>
+<area shape="rect" id="node3" href="$a00044.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
+</map>

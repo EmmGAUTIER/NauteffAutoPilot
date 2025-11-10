@@ -1,0 +1,5 @@
+<map id="Quaternionf_getNormalized" name="Quaternionf_getNormalized">
+<area shape="rect" id="node1" title="Normalizes a 3D vector to have a length of 1." alt="" coords="5,31,208,57"/>
+<area shape="rect" id="node2" href="$a00020.html#aa19acb4a5290918456252d10d5b73889" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="260,5,423,32"/>
+<area shape="rect" id="node3" href="$a00020.html#abce25aad0a3b19a90258445d1f520906" title="Multiplies a 3D vector by a scalar." alt="" coords="256,56,427,83"/>
+</map>

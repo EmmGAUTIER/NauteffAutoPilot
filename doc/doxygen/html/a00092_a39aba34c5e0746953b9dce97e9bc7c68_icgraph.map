@@ -1,0 +1,5 @@
+<map id="MOTOR_MSG_moveTime" name="MOTOR_MSG_moveTime">
+<area shape="rect" id="node1" title="send the order move for a time" alt="" coords="280,5,465,32"/>
+<area shape="rect" id="node2" href="$a00044.html#a601303505481aa87ba2050ac8c6ef504" title="Turn helm or change direction to steer." alt="" coords="160,5,232,32"/>
+<area shape="rect" id="node3" href="$a00044.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
+</map>

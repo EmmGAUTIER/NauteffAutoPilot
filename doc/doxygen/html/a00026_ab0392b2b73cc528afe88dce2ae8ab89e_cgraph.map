@@ -1,0 +1,6 @@
+<map id="calculer_orientation_navire" name="calculer_orientation_navire">
+<area shape="rect" id="node1" title=" " alt="" coords="5,23,156,65"/>
+<area shape="rect" id="node2" href="$a00020.html#a7079c3ac4ae2b37c622a486f320e4750" title="Normalizes a 3D vector to have a length of 1." alt="" coords="204,31,407,57"/>
+<area shape="rect" id="node3" href="$a00020.html#aa19acb4a5290918456252d10d5b73889" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="459,5,621,32"/>
+<area shape="rect" id="node4" href="$a00020.html#abce25aad0a3b19a90258445d1f520906" title="Multiplies a 3D vector by a scalar." alt="" coords="455,56,625,83"/>
+</map>

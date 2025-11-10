@@ -1,0 +1,5 @@
+<map id="vector3f_getCosine" name="vector3f_getCosine">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,153,57"/>
+<area shape="rect" id="node2" href="$a00014.html#a903310051218f6081c3491f6c5f5fe45" title="Computes the dot product (scalar product) of two 3D vectors." alt="" coords="201,5,377,32"/>
+<area shape="rect" id="node3" href="$a00014.html#ad715d385b8495561a0a2f6c97d157229" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="219,56,359,83"/>
+</map>

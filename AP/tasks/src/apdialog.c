@@ -514,7 +514,7 @@ void parse_command_line(void)
         else if (tokenTypes[1] == TOKEN_MOTOR_CVT_ANGLE_TIME && tokenTypes[2] == TOKEN_NUMBER)
         {
             convert_float(tokens[2], &coeff);
-            MOTOR_order_set_cvt_angle_time(coeff);
+            MOTOR_MSG_set_cvt_angle_time(coeff);
             DBG_DIALOG_PRINT((
                 nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient cvt angle time %f\n", coeff),
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));

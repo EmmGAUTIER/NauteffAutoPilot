@@ -1,0 +1,4 @@
+<map id="LSM9DS1_WriteRegister" name="LSM9DS1_WriteRegister">
+<area shape="rect" id="node1" title="Écrit une valeur dans un registre du LSM9DS1 (SPI)." alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node2" href="$a00029.html#a0e21cdfa6bbe2e3cce537fa2b17deeaa" title="Fonction d’échange SPI en DMA (full&#45;duplex)." alt="" coords="232,5,371,32"/>
+</map>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="18cm" height="12cm" viewBox="468 231 356 240" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs/>
+  <g id="Arrière-plan">
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="470" y="232" width="89" height="73" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="514.5" y="268.5">
+      <tspan x="514.5" y="268.5">MOTOR</tspan>
+      <tspan x="514.5" y="284.5"></tspan>
+    </text>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="740.8" y="233.4" width="82.2" height="70.6" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="781.9" y="268.7">
+      <tspan x="781.9" y="268.7">AP : </tspan>
+      <tspan x="781.9" y="284.7">Autopilot</tspan>
+      <tspan x="781.9" y="300.7"></tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="571.004" y1="268.55" x2="731.064" y2="268.691"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="571.009,263.55 561.004,268.541 571,273.55 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="738.564,268.698 728.56,273.689 731.064,268.691 728.568,263.689 "/>
+    </g>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="469.8" y="396.4" width="89" height="73" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="514.3" y="432.9">
+      <tspan x="514.3" y="432.9">MEMS</tspan>
+      <tspan x="514.3" y="448.9"></tspan>
+    </text>
+    <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="740.8" y="391.4" width="82.2" height="70.6" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="781.9" y="426.7">
+      <tspan x="781.9" y="426.7">DIALOG</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="781.9" y1="391.4" x2="781.9" y2="313.736"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="781.9,306.236 786.9,316.236 781.9,313.736 776.9,316.236 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="514.3" y1="396.4" x2="514.479" y2="314.736"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="514.495,307.236 519.473,317.247 514.479,314.736 509.473,317.225 "/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="21cm" height="24cm" viewBox="339 -1 402 462" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Arrière-plan">
+    <rect style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="660" y="160" width="80" height="60" rx="0" ry="0"/>
+    <rect style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="500" y="280" width="80" height="60" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="540" y="314.95">
+      <tspan x="540" y="314.95">Repos</tspan>
+    </text>
+    <rect style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="640" y="340" width="80" height="60" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="680" y="358.731">
+      <tspan x="680" y="358.731">Arrêt</tspan>
+      <tspan x="680" y="374.731">en cours</tspan>
+      <tspan x="680" y="390.731">vers tribord</tspan>
+    </text>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="700" y="186.95">
+      <tspan x="700" y="186.95">Tourne </tspan>
+      <tspan x="700" y="202.95">vers tribord</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="695.342" y1="231.925" x2="684.519" y2="329.331"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="700.311,232.477 696.446,221.986 690.372,231.373 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="683.691,336.785 679.825,326.294 684.519,329.331 689.764,327.398 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="580.977" y1="279.268" x2="651.235" y2="226.574"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="657.235,222.074 652.235,232.074 651.235,226.574 646.235,224.074 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="639.258" y1="352.539" x2="589.691" y2="331.296"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="582.797,328.342 593.959,327.685 589.691,331.296 590.019,336.877 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="659.102" y1="169.551" x2="588.708" y2="134.354"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="582,131 593.18,131 588.708,134.354 588.708,139.944 "/>
+    </g>
+    <rect style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="500" y="100" width="80" height="60" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="540" y="126.95">
+      <tspan x="540" y="126.95">Bloqué</tspan>
+      <tspan x="540" y="142.95">à tribord</tspan>
+    </text>
+    <rect style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="340" y="160" width="80" height="60" rx="0" ry="0"/>
+    <rect style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="360" y="340" width="80" height="60" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="400" y="358.731">
+      <tspan x="400" y="358.731">Arrêt</tspan>
+      <tspan x="400" y="374.731">en cours</tspan>
+      <tspan x="400" y="390.731">vers babord</tspan>
+    </text>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="380" y="186.731">
+      <tspan x="380" y="186.731">Tourne </tspan>
+      <tspan x="380" y="202.731">vers babord</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="384.658" y1="231.925" x2="395.481" y2="329.331"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="389.628,231.373 383.554,221.986 379.689,232.477 "/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="396.309,336.785 390.236,327.398 395.481,329.331 400.175,326.294 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="570.977" y1="60.9766" x2="662.139" y2="152.139"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="667.442,157.442 656.836,153.907 662.139,152.139 663.907,146.836 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="440.742" y1="352.539" x2="490.309" y2="331.296"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="497.203,328.342 489.981,336.877 490.309,331.296 486.041,327.685 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="380" y1="160" x2="492.61" y2="63.4132"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="498.303,58.5304 493.967,68.836 492.61,63.4132 487.457,61.2456 "/>
+    </g>
+    <rect style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="500" y="0" width="80" height="60" rx="0" ry="0"/>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="540" y="26.95">
+      <tspan x="540" y="26.95">bloqué</tspan>
+      <tspan x="540" y="42.95">à babord</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="500" y1="280" x2="427.789" y2="225.842"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="421.789,221.342 432.789,223.342 427.789,225.842 426.789,231.342 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="499.023" y1="145.366" x2="430.093" y2="171.215"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="423.07,173.849 430.678,165.656 430.093,171.215 434.189,175.019 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="540" y1="460" x2="540" y2="349.736"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="540,342.236 545,352.236 540,349.736 535,352.236 "/>
+    </g>
+  </g>
+</svg>

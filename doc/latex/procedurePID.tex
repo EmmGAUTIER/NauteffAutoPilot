@@ -1,0 +1,125 @@
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=20mm}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{courier}
+\usepackage{titlesec}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
+
+\title{Fiche: Pilote automatique - voilier \(\approx 9\ \mathrm{m}\)}
+\author{Généré automatiquement}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Résumé rapide}
+Valeurs initiales recommandées pour un voilier d'environ 9\,m, mesures à \(\,T_s = 0.05\ \mathrm{s}\) (20\,Hz). Un contrôleur en cascade est utilisé : boucle interne PD (vitesse de lacet \(r\)) et boucle externe PI (cap \(\psi\)).
+
+\section{Notations et symboles}
+\begin{description}[leftmargin=2.5cm]
+  \item[$\delta(t)$] angle de gouvernail (rad).
+  \item[$r(t)=\dot\psi(t)$] vitesse de lacet (rad/s).
+  \item[$\psi(t)$] cap (rad).
+  \item[$r_{\mathrm{ref}}(t)$] consigne de vitesse de lacet (rad/s).
+  \item[$e_r(t)=r_{\mathrm{ref}}(t)-r(t)$] erreur de vitesse de lacet (rad/s).
+  \item[$e_\psi(t)=\psi_{\mathrm{ref}}(t)-\psi(t)$] erreur de cap (rad).
+  \item[$K_{p,r}$] gain proportionnel boucle interne (numérique).
+  \item[$\tau_d$] constante de temps du filtre dérivé (s).
+  \item[$K_{d,\mathrm{eff}} = K_{p,r}\,\tau_d$] gain dérivé effectif (numérique).
+  \item[$K_{p,\psi}$] gain proportionnel boucle externe (s$^{-1}$).
+  \item[$K_{i,\psi}$] gain intégral boucle externe (s$^{-2}$).
+  \item[$K_{ff}$] gain feed-forward sur $r_{\mathrm{ref}}$ (numérique).
+  \item[$T_s$] période d'échantillonnage (s).
+\end{description}
+
+\section{Correcteurs (formes continues)}
+\subsection*{Boucle interne -- PD filtré}
+\begin{align*}
+\delta(t) &= K_{p,r}\, e_r(t) + K_{d,\mathrm{eff}} \,\frac{d e_r}{dt},\\[4pt]
+\text{avec}\quad & K_{d,\mathrm{eff}} = K_{p,r}\,\tau_d,\\[4pt]
+\text{et filtrage du dérivé}\quad & \frac{\tau_d s}{1+\tau_d s}\, E_r(s).
+\end{align*}
+
+\subsection*{Boucle externe -- PI}
+\begin{align*}
+r_{\mathrm{ref}}(t) &= K_{p,\psi}\, e_\psi(t) + K_{i,\psi}\int e_\psi(t)\,dt.
+\end{align*}
+
+\section{Valeurs initiales recommandées (chargées telles quelles)}
+\subsection*{Boucle interne (PD)}
+\begin{align*}
+K_{p,r} &= 4.5, \\
+\tau_d &= 0.20\ \mathrm{s}, \\
+K_{d,\mathrm{eff}} &= K_{p,r}\,\tau_d = 0.9.
+\end{align*}
+Saturations : $\lvert\delta\rvert \le 0.52\ \mathrm{rad}$ (\ang{30}), $\lvert\dot\delta\rvert \le 0.87\ \mathrm{rad/s}$ (\ang{50}/s).
+
+\subsection*{Boucle externe (PI)}
+\begin{align*}
+K_{p,\psi} &= 0.06\ \mathrm{s}^{-1}, \\
+K_{i,\psi} &= 0.01\ \mathrm{s}^{-2}.
+\end{align*}
+Deadband cap : $\pm 0.0087\ \mathrm{rad}$ (\ang{0.5}). Limite $|r_{\mathrm{ref}}|\le 0.14\ \mathrm{rad/s}$.
+
+\subsection*{Feed-forward (optionnel)}
+\begin{align*}
+\delta(t) &\mathrel{+}= K_{ff}\, r_{\mathrm{ref}}(t),\quad K_{ff}\approx 0.4.
+\end{align*}
+
+\section{Discrétisation (échantillonnage $T_s = 0.05\ \mathrm{s}$)}
+\subsection*{Terme dérivé filtré (discret)}
+\begin{align*}
+\alpha &= \frac{\tau_d}{\tau_d + T_s},\\[4pt]
+d_{\mathrm{filtrée}}[n] &= \alpha\, d_{\mathrm{filtrée}}[n-1] + (1-\alpha)\,\frac{e_r[n]-e_r[n-1]}{T_s},\\[4pt]
+\delta[n] &= K_{p,r}\, e_r[n] + K_{p,r}\,\tau_d\, d_{\mathrm{filtrée}}[n].
+\end{align*}
+
+\subsection*{Intégrateur PI (discret)}
+\begin{align*}
+I_\psi[n] &= I_\psi[n-1] + K_{i,\psi}\,T_s\, e_\psi[n],\\[4pt]
+r_{\mathrm{ref}}[n] &= K_{p,\psi}\,e_\psi[n] + I_\psi[n].
+\end{align*}
+\textit{Anti-windup} : appliquer un clamp sur $I_\psi$ si $r_{\mathrm{ref}}$ dépasse sa limite.
+
+\section{Procédure d'optimisation sur l'eau (sûre)}
+\begin{enumerate}
+  \item Préparation : vérifier capteurs et sécurité, imposer limites conservatrices : $\lvert\delta\rvert\le 15^\circ,\ |r_{\mathrm{ref}}|\le 0.05\ \mathrm{rad/s}$.
+  \item Réglage boucle interne (r):
+    \begin{enumerate}[label=(\alph*)]
+      \item Désactiver $K_{i,\psi}$.
+      \item Appliquer des pas de consigne $r_{\mathrm{ref}}=\pm 0.05\ \mathrm{rad/s}$.
+      \item Augmenter $K_{p,r}$ par pas de 10--20\% jusqu'à atteindre 90\% de la consigne en $<1\ \mathrm{s}$ sans oscillation notable.
+      \item Ajuster $\tau_d$ si dépassement ou bruit excessif.
+    \end{enumerate}
+  \item Réglage boucle externe (psi):
+    \begin{enumerate}[label=(\alph*)]
+      \item Réactiver $K_{i,\psi}$ (valeur initiale donnée).
+      \item Faire un pas de cap d'environ $10^\circ$ ($\approx 0.17\ \mathrm{rad}$).
+      \item Ajuster $K_{p,\psi}$ pour obtenir une correction douce (durée cible 60--120\,s).
+      \item Ajuster $K_{i,\psi}$ pour annuler la dérive en 1--3\,min sans pompage.
+    \end{enumerate}
+  \item Validation : remettre limites nominales, activer feed-forward, tester en différentes conditions et logger abondamment.
+\end{enumerate}
+
+\section{Critères mesurables}
+\begin{itemize}
+  \item Temps de réponse interne : T{90} pour un pas de $r_{\mathrm{ref}}$ < 1\,s.
+  \item Taux de saturation du gouvernail : idéalement $<1\%$ en croisière.
+  \item Absence d'oscillations rapides ou lentes non désirées.
+  \item Dérive d'erreur nulle après intégration (test de 2--5\,min).
+\end{itemize}
+
+\vfill
+\noindent\textbf{Notes :} Emportez cette fiche imprimée, les logs et un bouton ``disengage'' accessible. Bon essais !
+
+\end{document}
