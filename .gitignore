@@ -1,6 +1,7 @@
 .vscode
 .settings
 NauteffAutoPilot.geany
+CMakeCache.txt
 build
 op.txt
 .mxproject

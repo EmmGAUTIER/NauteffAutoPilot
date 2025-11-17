@@ -56,8 +56,9 @@ Ce document sert de référence pour le développement du Nauteff~P-1.
 Nauteff P-1 est une maquette de pilote automatique pour navires à voile ou à moteur d'une taille comprise entre 5m et 24m.
 Cette maquette sert à évaluer et mettre au point le pilote automatique et améliorer son logiciel.
 
-L'objectif du Pilote automatique est d'agir sur sa barre afin de maintenir
-le cap d'un navire. Il doit aussi traiter des informations sur les conditions
+L'objectif d'un Pilote automatique sur un bateau 
+est d'agir sur sa barre afin de maintenir le cap d'un navire.
+Il doit aussi traiter des informations sur les conditions
 de navigation et le fournir à d'autres appareils.
 Il utilise les informations de ses capteurs, et lorsqu'elles
 sont disponibles celles d'autres appareils.
@@ -68,7 +69,7 @@ L'environnement du Nauteff~P-1 comprend:
 	\item un ordinateur avec les outils de développement et la sonde;
 	\item un alimentation 12V;
 	\item un vérin électrique;
-	\item d'autres instruments de navigation: GPS, loch, gyrouette,\dots
+	\item des instruments de navigation: GPS, loch, gyrouette,\dots
 	\item un ou plusieurs équipiers du navire.
 \end{itemize}
 
@@ -126,15 +127,17 @@ Nauteff comporte une unité de commande et de contrôle du moteur de l'actionneu
 Cette unité permet de commander la marche du moteur de l'actionneur
 dans les deux sens et de mesurer l'effort du moteur (couple),
 de détecter la butée, un courant excessif ou un court-circuit et un courant nul
-ou anormalement faible.
+ou anormalement faible et de surveiller la tension d'alimentation.
+La commande du moteur comprend aussi une estimation de la position du moteur.
+
 \subsubsection{Alarme sonore}
 L'alarme sonore appelle l'attention du navigateur que le Nauteff ne peut plus
 assurer ses fonctions ou que des valeurs sont en dehors des limites fixées
 et que la navigateur doit intervenir.
 
 \subsubsection{Écran}
-Dans la version d'évaluation Nauteff P-1 n'a pas d'écran et  sort les information
-sur la ligne RS-232 pour un affichage sur l'écran de l'ordinateur de développement.
+Dans la version d'évaluation Nauteff P-1 n'a pas d'écran et sort les information
+sur USART2 pour un affichage sur l'écran de l'ordinateur de développement.
 Ça serait dommage de se priver d'un écran, il en faudra au moins un petit avec quelques caractères.
 
 \subsubsection{Voyants}
@@ -143,11 +146,15 @@ Nauteff P-1 comporte les voyants suivant :
 	\item Voyants de mise sous tension;
 	\item Voyant vert indiquant l'enclenchement du pilote;
 	\item Voyant rouge lors d'un mouvement vers tribord de l'actionneur;
+	\item Voyant vert lors d'un mouvement vers tribord de l'actionneur;
 	\item Voyant indiquant le fonctionnement de l'USART;
 	\item Selon les besoins de mise au point.
 \end{itemize}
+Rappel : Le rouge indique le côté bâbord (gauche) et le vert indique le côté tribord.
 
 \subsection{Utilisateurs}
+Les utilisateurs sont les concepteurs du système ou des navigateurs prenant part à son développement.
+Le prototype n'est pas destiné aux utilisateurs.
 
 \subsection{Environnement en contexte opérationnel}
 
@@ -164,7 +171,7 @@ Nauteff comporte un mode veille, un mode Automatique et un mode paramétrage.
 \subsection{Transition entre modes}
 \subsection{Exigences de l'environnement}
 Nauteff P-1 est conçu pour supporter une ambiance saline avec une humidité
-saturante permanente et un température de fonctionnement comprise entre   -10\degres C et +50\degres C.
+saturante permanente et un température de fonctionnement comprise entre   0\degres C et +30\degres C.
 Nauteff doit aussi supporter des vibrations.
 La tension d'alimentation du Nauteff doit être comprise entre 10V et 20V, il consomme moins de 50~mA en fonctionnement, hors moteur.
 Il permet de commander un actionneur avec une charge inductive consommant jusqu'à
@@ -177,7 +184,7 @@ contre les inversions de polarité de l'alimentation.
 	\hline 
 	Temps de démarrage &  < 2s \\ 
 	\hline 
-	Entrée NMEA& décodage de trames transmises à \numprint{38400} bps \\ 
+	Entrée NMEA& décodage de trames transmises à \numprint{230400} bps \\ 
 	\hline 
 	Réaction à une embardée & 1s max \\ 
 	\hline 
@@ -193,7 +200,6 @@ Le Nauteff P-1 comporte des paramètres suivants:
 \begin{itemize}
 	\item caractéristiques du moteur: courants en butée et à vide, inertie;
 	\item valeurs d'étalonnage des capteurs;
-	\item Caractéristiques du navire: longueur, masse;
 	\item vitesse de réaction;
 	\item amplitude de réaction;
 	\item compensation d'\gls{embardee};

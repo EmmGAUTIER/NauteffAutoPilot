@@ -10,9 +10,11 @@
 \usepackage[autostyle]{csquotes}
 %\usepackage{parskip}
 
-%\usepackage[backend=biber,style=authoryear]{biblatex}
-\usepackage[backend=biber, style=numeric]{biblatex}
-\bibliography{Nauteff-Biblio.bib}
+\usepackage[style=authoryear,backend=biber]{biblatex}
+
+%\addbibresource{Nauteff-Biblio.bib}
+\addbibresource{bibliography.bib}
+
 
 \title{Nauteff Conception du matériel et du logiciel}
 \author{Emmanuel Gautier}
@@ -68,16 +70,17 @@ dans plusieurs documents mentionnés dans le chapitre suivant.
 \printbibliography[keyword=REF, heading=none]
 %\printbibliography[heading=none]
 %%refsection=none
-%\nocite{*}
+%\non{*}
 
 Liste 1 des documents de référence
-\cite{STM32F446RM}
-\cite{LSM6DS33}
-\cite{STM32F446xCE}
-\cite{Nauteff-Spec}
-\cite{Nauteff-Algo}
-\cite{NMEARevealed} 
-\cite*{STM32M4PM}
+
+%\cite{STM32F446RM}
+%\cite{LSM6DS33}
+%\cite{STM32F446xCE}
+%\cite{Nauteff-Spec}
+%\cite{Nauteff-Algo}
+%\autocite{NMEARevealed} 
+%\autocite*{STM32M4PM}
 
 La documentation des STM32 est répartie dans plusieurs documents.
 Le principal document intitulé reference manuel \cite{STM32F446RM} contient
@@ -531,6 +534,13 @@ Ces messages sont envoyés par la tâche principale ou un timer
 La tâche de gestion du moteur effectue les déplacements
 dont l'amplitude doit être proportionnelle à la valeur en paramètre,
 elle adapte la durée au courant du moteur.
+
+\autocite{key}
+\\
+\autocite{key}
+
+
+\printbibliography
 
 
 \end{document}
