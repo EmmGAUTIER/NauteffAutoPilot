@@ -1,7 +1,0 @@
-/home/manu/workspace/NauteffAutoPilot/CMakeFiles/NauteffAutoPilot.dir
-/home/manu/workspace/NauteffAutoPilot/CMakeFiles/edit_cache.dir
-/home/manu/workspace/NauteffAutoPilot/CMakeFiles/rebuild_cache.dir
-/home/manu/workspace/NauteffAutoPilot/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
-/home/manu/workspace/NauteffAutoPilot/cmake/stm32cubemx/CMakeFiles/FreeRTOS.dir
-/home/manu/workspace/NauteffAutoPilot/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
-/home/manu/workspace/NauteffAutoPilot/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir

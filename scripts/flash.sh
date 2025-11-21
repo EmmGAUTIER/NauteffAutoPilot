@@ -8,9 +8,21 @@
 # 
 #
 
-echo "Copie :"
-pwd
-cp NauteffAutoPilot.elf $NAUTEFF_AP_DIR_REMOTE/build/NauteffAutoPilot.elf 
+if [ -n $NAUTEFF_AP_DIR_REMOTE ]
+then
+    echo "Copie :"
+    cp build/NauteffAutoPilot.elf $NAUTEFF_AP_DIR_REMOTE/build/NauteffAutoPilot.elf 
+fi
+
+if [ $NAUTEFF_AP_HOST_OPENOCD ]
+then
+    export HOST_OPENOCD=${NAUTEFF_AP_HOST_OPENOCD}
+else
+    export HOST_OPENOCD="localhost"
+fi
+
+#echo "Dir. distant : " ${NAUTEFF_AP_DIR_REMOTE}
+#echo "Hôte openocd : " ${HOST_OPENOCD}
 
 
     (
@@ -19,4 +31,4 @@ cp NauteffAutoPilot.elf $NAUTEFF_AP_DIR_REMOTE/build/NauteffAutoPilot.elf
     echo "verify_image build/NauteffAutoPilot.elf";\
     echo "reset run ";\
     echo "exit ";\
-    ) | nc ${NAUTEFF_OPENOCD_HOST} 4444
+    ) | nc ${HOST_OPENOCD} 4444

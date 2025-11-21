@@ -1,16 +1,24 @@
 #!/bin/bash
 
-# DIALOG=${DIALOG=dialog}
-DIALOG=dialog
+##############################################################################
+# Main menu for scripts
+##############################################################################
 
+# The hostname of the openocd server may be set in OPENOCD_HOSTNAME 
+# if undefined localhost is used
+# menu.sh sets :
+# NAUTEFF_AP_PATH wich points to directory of preject,
+# NAUTEFF_AP_BUILD_DIR wich point to build,
+# Determine the path to project, it the parent directory of menu.sh
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
-export NAUTEFFAUTOPILOT_PATH=`dirname $SCRIPT_DIR`
-cd  $NAUTEFFAUTOPILOT_PATH
-export TARGET_DIR=$NAUTEFFAUTOPILOT_PATH/build
+export NAUTEFF_AP_PATH=`dirname $SCRIPT_DIR`
+export NAUTEFF_AP_BUILD_DIR=$NAUTEFF_AP_PATH/build
+
+cd  $NAUTEFF_AP_PATH
 
 main_menu() {
     while true; do
-        CHOICE=$($DIALOG --clear --backtitle "Menu Principal" \
+        CHOICE=$(dialog --clear --backtitle "Menu Principal" \
             --title "Menu" \
             --menu "Sélectionnez une option :" 15 50 5 \
             1 "Compilation" \
@@ -25,33 +33,35 @@ main_menu() {
 
         case $CHOICE in
             1)  echo "Compilation :"
-                cd ${NAUTEFFAUTOPILOT_PATH}
-                cmake --build build
+                cd ${NAUTEFF_AP_PATH}
+                make -j -f Makefile.user
                 read -p "Appuyez sur <Return> pour continuer" rep
                 ;;
 
-            2)  echo "Compilation Totale"
-                cd ${NAUTEFFAUTOPILOT_PATH}
-                cmake --build build --target clean
-                cmake --build build
+            2)  echo "Compilation Totale clean and complete build"
+                cd ${NAUTEFF_AP_PATH}
+                make -j -f Makefile.user clean
+                make -j -f Makefile.user
                 read -p "Appuyez sur <Return> pour continuer" rep
                 ;;
 
             3)  echo "Carte mémoire"
-                ${NAUTEFFAUTOPILOT_PATH}/scripts/carte.py ${NAUTEFFAUTOPILOT_PATH}/build/NauteffAutoPilot.elf | less
+                ${NAUTEFF_AP_PATH}/scripts/carte.py ${NAUTEFF_AP_PATH}/build/NauteffAutoPilot.elf | less
                 read -p "Appuyez sur <Return> pour continuer" rep
                 ;;
 
-            4) ${NAUTEFFAUTOPILOT_PATH}/scripts/debug.sh
+            4) ${NAUTEFF_AP_PATH}/scripts/debug.sh
                 ;;
 
             5)  echo "Génération de documentation (doxygen)"
-                ${NAUTEFFAUTOPILOT_PATH}/scripts/mk_doxy.sh
+		pwd
+		read
+                ${NAUTEFF_AP_PATH}/scripts/mk_doxy.sh
                 read -p "Appuyez sur <Return> pour continuer" rep
                 ;;
 
             6)  echo "Génération de documentation (latex)"
-                ${NAUTEFFAUTOPILOT_PATH}/scripts/mk_latex.sh
+                ${NAUTEFF_AP_PATH}/scripts/mk_latex.sh
                 read -p "Appuyez sur <Return> pour continuer" rep
                 ;;
 
@@ -81,17 +91,17 @@ test_menu() {
 
         case $CHOICE in
             1)  echo "Test NMEA 0183"
-                ${NAUTEFFAUTOPILOT_PATH}/scripts/test_nmea.sh
+                ${NAUTEFF_AP_PATH}/scripts/test_nmea.sh
                 read -p "Fin de test. Appuyez sur <Return> pour continuer" rep
                 ;;
 
             2)  echo "Test conversions"
-                ${NAUTEFFAUTOPILOT_PATH}/scripts/test_any.sh cvt
+                ${NAUTEFF_AP_PATH}/scripts/test_any.sh cvt
                 read -p "Fin de test. Appuyez sur <Return> pour continuer" rep
                 ;;
 
             3)  echo "Test Géométrie"
-                ${NAUTEFFAUTOPILOT_PATH}/scripts/test_any.sh geom
+                ${NAUTEFF_AP_PATH}/scripts/test_any.sh geom
                 read -p "Fin de test. Appuyez sur <Return> pour continuer" rep
                 ;;
             4) break ;;

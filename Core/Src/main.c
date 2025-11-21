@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "apmain.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -130,7 +131,9 @@ int main(void)
   MX_UART4_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  
   apmain();
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -173,10 +176,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_Delay(500);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-    HAL_Delay(500);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

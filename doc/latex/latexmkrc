@@ -1,0 +1,22 @@
+# Répertoires
+$aux_dir = 'aux';
+$out_dir = 'pdf';
+$img_dir = 'img';
+
+# Activation gestion glossaires
+$makeglossaries = 1;
+
+# Chemin des sources (images, glossaire, etc.)
+$ENV{'TEXINPUTS'} = "src:img:" . ($ENV{'TEXINPUTS'} // "");
+
+# Fichiers à construire quand on lance simplement "latexmk"
+@default_files = (
+    'src/Nauteff-Specification.tex',
+    'src/Nauteff-Conception_Logiciel.tex',
+    'src/Nauteff-OutilsDéveloppement.tex',
+    'src/Nauteff-ReflexionsPreliminaires.tex'
+);
+
+# Commande de compilation pdflatex avec répertoires dédiés
+$pdflatex = "pdflatex -interaction=nonstopmode -aux-directory=$aux_dir -output-directory=$out_dir %O %S";
+
