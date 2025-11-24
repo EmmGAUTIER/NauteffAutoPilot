@@ -13,3 +13,4 @@ build/*.o
 build/*.d
 build/*.lst
 
+aux
