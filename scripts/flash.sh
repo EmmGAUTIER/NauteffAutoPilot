@@ -8,9 +8,9 @@
 # 
 #
 
-if [ -n $NAUTEFF_AP_DIR_REMOTE ]
+if [ -n "$NAUTEFF_AP_DIR_REMOTE" ]
 then
-    echo "Copie :"
+    echo "Copie sur machine distante :"
     cp build/NauteffAutoPilot.elf $NAUTEFF_AP_DIR_REMOTE/build/NauteffAutoPilot.elf 
 fi
 
