@@ -59,7 +59,7 @@ INLINE float IMU_get_heading_quat(IMU_Status_t *mstatus)
     return atan2f(2.0f * (q.w * q.z + q.x * q.y), 1.0f - 2.0f * (q.y * q.y + q.z * q.z));
 }
 
-int IMU_set_mag_vs_gyr_prop(IMU_Status_t *mstatus, float prop);
+int IMU_set_mag_vs_gyr_prop (IMU_Status_t *mstatus, float prop);
 int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
 int IMU_new_values_old(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
 int IMU_new_values_st(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);

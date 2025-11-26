@@ -20,7 +20,7 @@ main_menu() {
     while true; do
         CHOICE=$(dialog --clear --backtitle "Menu Principal" \
             --title "Menu" \
-            --menu "Sélectionnez une option :" 15 50 5 \
+            --menu "Sélectionnez une option :" 18 50 5 \
             1 "Compilation" \
             2 "Compilation totale" \
             3 "Carte mémoire" \
@@ -28,6 +28,7 @@ main_menu() {
             5 "Documentation Auto doxygen" \
             6 "Documentation latex" \
             t "tests" \
+	    f "Format code" \
             z "Fin" \
             2>&1 >/dev/tty)
 
@@ -63,6 +64,11 @@ main_menu() {
             6)  echo "Génération de documentation (latex)"
                 ${NAUTEFF_AP_PATH}/scripts/mk_latex.sh
                 read -p "Appuyez sur <Return> pour continuer" rep
+                ;;
+
+            f)  echo "Formatage des fichiers sources"
+                ${NAUTEFF_AP_PATH}/scripts/format.sh
+		read -p "Appuyez sur une touche pour continuer" rep
                 ;;
 
             t) test_menu

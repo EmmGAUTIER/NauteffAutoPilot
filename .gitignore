@@ -12,5 +12,5 @@ doc/latex/tmp
 build/*.o
 build/*.d
 build/*.lst
-
+NauteffAutoPilot.geany
 aux

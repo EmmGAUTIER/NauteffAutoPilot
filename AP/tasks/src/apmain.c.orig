@@ -24,8 +24,7 @@ void taskBlink(void *param)
     (void)param;
     unsigned cnt; // pour mise au point
 
-    for(;;)
-    {
+    for(;;) {
 
         LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
         vTaskDelay(pdMS_TO_TICKS(100));

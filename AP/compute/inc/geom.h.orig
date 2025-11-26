@@ -21,9 +21,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#if 1
-#ifndef QUAT_H
-#define QUAT_H
+
+#ifndef GEOM_H
+#define GEOM_H
 
 #include <stdint.h>
 
@@ -48,48 +48,48 @@ SOFTWARE.
 #endif
 
 /**
- * @brief Structure representing a quaternion with float components.
+ * @brief Structure representing a 3D vector with float components.
  *  componants are named x, y and z
  */
 typedef struct
 {
-    float w; /* Omega component, real part */
-    float x; /* imaginary i */
-    float y; /* imaginary j */
-    float z; /* imaginary k */
-} Quaternionf;
+    float x; /**< X component */
+    float y; /**< Y component */
+    float z; /**< Z component */
+} Vector3f;
 
-typedef struct
-{
-    int16_t w;
+typedef struct{
     int16_t x;
     int16_t y;
     int16_t z;
-} Quati16_t;
+} Vector3i16;
 
-typedef struct
-{
-    int32_t w;
+typedef struct{
     int32_t x;
     int32_t y;
     int32_t z;
-} Quati32_t;
+} Vector3i32;
 /*
  * @brief Unity 3D vectors
  * those vectors are used to determine directions of vectors
  */
 
-// extern Vector3f unitxf;
-// ...
+extern Vector3f unitxf;
+extern Vector3f unityf;
+extern Vector3f unitzf;
 
-extern Quaternionf Quatf_null;
+extern Vector3f unitmxf;
+extern Vector3f unitmyf;
+extern Vector3f unitmzf;
+
+extern Vector3f Vector3f_null;
 
 /*
- * @brief Initializes a quaternion with given components.
+ * @brief Initializes a 3D vector with given components.
  * @param x, y, z The components of the vector.
  * @return The Vector3f structure initialized with the given components.
  */
-Quaternionf Quaternionf_init(float q, float x, float y, float z);
+Vector3f vector3f_init(float x, float y, float z);
 
 /**
  * @brief Adds two 3D vectors component-wise.
@@ -98,7 +98,7 @@ Quaternionf Quaternionf_init(float q, float x, float y, float z);
  * @param v2 The second vector.
  * @return The component-wise sum of v1 and v2.
  */
-Quaternionf Quaternionf_add(Quaternionf v1, Quaternionf v2);
+Vector3f vector3f_add(Vector3f v1, Vector3f v2);
 
 /**
  * @brief Subtracts the second 3D vector from the first, component-wise.
@@ -107,7 +107,7 @@ Quaternionf Quaternionf_add(Quaternionf v1, Quaternionf v2);
  * @param v2 The vector to subtract.
  * @return The component-wise difference v1 - v2.
  */
-Quaternionf Quaternionf_sub(Quaternionf v1, Quaternionf v2);
+Vector3f vector3f_sub(Vector3f v1, Vector3f v2);
 
 /**
  * @brief Computes the cross product of two 3D vectors.
@@ -118,7 +118,7 @@ Quaternionf Quaternionf_sub(Quaternionf v1, Quaternionf v2);
  * @param v2 The second vector.
  * @return The cross product vector.
  */
-Quaternionf Quaternionf_getCrossProduct(Quaternionf v1, Quaternionf v2);
+Vector3f vector3f_getCrossProduct(Vector3f v1, Vector3f v2);
 
 /**
  * @brief Computes the dot product (scalar product) of two 3D vectors.
@@ -129,7 +129,7 @@ Quaternionf Quaternionf_getCrossProduct(Quaternionf v1, Quaternionf v2);
  * @param v2 The second vector.
  * @return The scalar dot product.
  */
-Quaternionf Quaternionf_mul(Quaternionf v1, Quaternionf v2);
+float vector3f_getDotProduct(Vector3f v1, Vector3f v2);
 
 /**
  * @brief Multiplies a 3D vector by a scalar.
@@ -140,7 +140,7 @@ Quaternionf Quaternionf_mul(Quaternionf v1, Quaternionf v2);
  * @param a The scalar value.
  * @return The scaled vector.
  */
-Quaternionf Quaternionf_getScaled(Quaternionf v, float a);
+Vector3f vector3f_getScaled(Vector3f v, float a);
 
 /**
  * @brief Computes the Euclidean norm ("length") of a 3D vector.
@@ -150,7 +150,7 @@ Quaternionf Quaternionf_getScaled(Quaternionf v, float a);
  * @param v The input vector.
  * @return The Euclidean norm of the vector.
  */
-float Quaternionf_getNorm(Quaternionf v);
+float vector3f_getNorm(Vector3f v);
 
 /**
  * @brief Normalizes a 3D vector to have a length of 1.
@@ -160,7 +160,7 @@ float Quaternionf_getNorm(Quaternionf v);
  * @param v The input vector.
  * @return The normalized vector (unit vector), or the zero vector if the input is zero.
  */
-Quaternionf Quaternionf_getNormalized(Quaternionf v);
+Vector3f vector3f_getNormalized(Vector3f v);
 
 /*
  @ brief Computes the difference between two 3D vectors and checks if it is within a threshold.
@@ -172,7 +172,23 @@ Quaternionf Quaternionf_getNormalized(Quaternionf v);
 
 // bool Vector3f_normDiff(Vector3f v1, Vector3f v2, float threshold);
 
+/*
+ * @brief Computes the cosine of the angle between two 3D vectors.
+ *  The cosine is calculated as the dot product of the vectors divided by the product of their norms.
+ *  If either vector has zero length, the function returns 0.0.
+ *  The cosine is usually used to know how two vectors are aligned.
+ * @param v1 The first vector.
+ * @param v2 The second vector.
+ * @return The cosine of the angle between the two vectors.
+ *         Returns 0.0 if either vector has zero length.
+ *
+ */
+float vector3f_getCosine(Vector3f v1, Vector3f v2);
 
-#endif /* QUAT_H */
+float cvt_dir_deg_rad(float angle);
+float cvt_dir_rad_deg(float angle);
 
-#endif
+float cvt_dir_norm_rad(float angle);
+float cvt_dir_norm_deg(float angle);
+
+#endif /* GEOM_H */

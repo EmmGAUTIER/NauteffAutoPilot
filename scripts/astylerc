@@ -1,4 +1,4 @@
---style=linux
+--style=allman
 --indent=spaces=4
 --break-blocks
 --pad-oper

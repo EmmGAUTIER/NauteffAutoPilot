@@ -29,12 +29,13 @@ int rbuffer_write(RBuffer_t *buffer, const void *data, unsigned len)
     unsigned written = 0;
     uint8_t *src = (uint8_t *)data;
 
-    while (written < to_write)
+    while(written < to_write)
     {
         buffer->data[buffer->idxEnd] = src[written];
         buffer->idxEnd = (buffer->idxEnd + 1) % RBUFFER_SIZE;
         written++;
     }
+
     return written;
 }
 
@@ -48,18 +49,19 @@ int rbuffer_write(RBuffer_t *buffer, const void *data, unsigned len)
 int rbuffer_read(RBuffer_t *buffer, void *data, unsigned len)
 {
     unsigned available = (buffer->idxEnd >= buffer->idxStart)
-                             ? (buffer->idxEnd - buffer->idxStart)
-                             : (RBUFFER_SIZE - buffer->idxStart + buffer->idxEnd);
+                         ? (buffer->idxEnd - buffer->idxStart)
+                         : (RBUFFER_SIZE - buffer->idxStart + buffer->idxEnd);
     unsigned toread = (len < available) ? len : available;
     unsigned nbread = 0;
     uint8_t *dst = (uint8_t *)data;
 
-    while (nbread < toread)
+    while(nbread < toread)
     {
         dst[nbread] = buffer->data[buffer->idxStart];
         buffer->idxStart = (buffer->idxStart + 1) % RBUFFER_SIZE;
         nbread++;
     }
+
     return nbread;
 }
 
@@ -72,12 +74,12 @@ int rbuffer_read(RBuffer_t *buffer, void *data, unsigned len)
  */
 int rbuffer_getNextBlock(RBuffer_t *buffer, void **data, unsigned *len)
 {
-    if (rbuffer_isEmpty(buffer))
+    if(rbuffer_isEmpty(buffer))
     {
         *data = (void *)0;
         *len = 0;
     }
-    else if (buffer->idxEnd > buffer->idxStart)
+    else if(buffer->idxEnd > buffer->idxStart)
     {
         *data = &buffer->data[buffer->idxStart];
         *len = buffer->idxEnd - buffer->idxStart;
@@ -87,6 +89,7 @@ int rbuffer_getNextBlock(RBuffer_t *buffer, void **data, unsigned *len)
         *data = &buffer->data[buffer->idxStart];
         *len = RBUFFER_SIZE - buffer->idxStart;
     }
+
     return *len;
 }
 
@@ -111,7 +114,7 @@ int rbuffer_skip(RBuffer_t *buffer, unsigned len)
  */
 unsigned rbuffer_getAvailSpace(RBuffer_t *buffer)
 {
-    if (buffer->idxEnd >= buffer->idxStart)
+    if(buffer->idxEnd >= buffer->idxStart)
         return RBUFFER_SIZE - (buffer->idxEnd - buffer->idxStart) - 1;
     else
         return (buffer->idxStart - buffer->idxEnd) - 1;

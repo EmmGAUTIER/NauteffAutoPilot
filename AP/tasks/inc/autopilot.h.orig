@@ -1,0 +1,167 @@
+/*
+MIT License
+
+Copyright (c) 2025 Emmanuel Gautier / Nauteff
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+// #define AP_PERIOD_TICKS 250
+// #define AP_FREQ_HZ 4.0
+// #define AP_PERIOD_SEC (1.0 / AP_FREQ_HZ)
+
+typedef enum {
+    AP_IDLE = 0,
+    AP_AUTO_HEADING,
+} AP_Mode_t;
+
+typedef enum {
+    AP_MSG_NONE = 0,
+    AP_MSG_TICK,             /* */
+    AP_MSG_ADC,              /* */
+    AP_MSG_MODE_HEADING,     /* Steer current heading */
+    AP_MSG_MODE_HEADING_DIR, /* Steer indicated heading */
+    AP_MSG_MODE_IDLE,        /* set idle */
+    AP_MSG_TURN,             /* turn indicated angle */
+    AP_MSG_AHRS,             /* AHRS data : heading, ...  */
+    AP_MSG_PARAM,            /* set params */
+    AP_MSG_CALIBRATE_MEMS,
+    AP_MSG_MEMS_READY,
+    AP_MSG_MEMS,
+    AP_MSG_MOTOR_STOPPED,
+    AP_MSG_MOTOR_STOPPING,
+    AP_MSG_MOTOR_STALLED,  /* From MOTOR, motor stalled (usually end course) */
+    AP_MSG_DISPLAY_CONFIG, /* From DIALOG, display coefficients, params,... */
+} MsgAutoPilotType_t;
+
+typedef enum {
+    AP_PARAM_NONE = 0,
+    AP_PARAM_PROPORTIONNAL,
+    AP_PARAM_INTEGRAL,
+    AP_PARAM_DERIVATIVE,
+    AP_PARAM_MOTOR_THRESHOLD,
+} APParam_t;
+
+typedef struct {
+    int MEMsReady;
+    int engaged;
+    int headingToSteerDegrees;
+    float headingToSteerRadians;
+    float currentHeading;
+    float currentGap;
+    float integratedGap;
+    float derivedGap;
+    float heading;
+    float roll;
+    float pitch;
+    float yawRate;
+    float rollRate;
+    float pitchRate;
+    float steerThreshold;
+
+    /* constantes du régulateur PID */
+    float kp; /* Proportional */
+    float ki; /* Integrali */
+    float kd; /* Derivate */
+
+    /* Paramètres moteur */
+    float motorThreshold;
+    float steerAngle;
+
+    /* historique */
+    int memorizedHeading;
+    int idxStart;
+    int idxEnd;
+    float headingHistory[1024];
+} APStatus_t;
+
+extern APStatus_t APStatus;
+extern QueueHandle_t msgQueueAutoPilot;
+
+typedef struct {
+    uint16_t msgType;      /* Code de message */
+    uint16_t defaultCodes; /* Overcurrent, voltage drop, ... */
+
+    union {
+
+        int32_t reqHeading; /* requested heading to steer */
+
+        // float helmAngle;   /* Helm angle to turn */
+
+        int32_t reqTurnAngle; /* requested angle to turn */
+
+        struct {
+            float heading;
+            float roll;
+            float pitch;
+            float yawRate;
+            // float rollRate;
+            // float pitchRate;
+            // float cavalement;
+            // float embardee;
+            // float pilonnement;
+        } IMUData;
+        struct {
+            unsigned param_number;
+            float param_value;
+        } coefficient;
+        struct {
+            float effort;
+        } moveReport;
+    } data;
+} MsgAutoPilot_t;
+
+/*
+* @brief Initialize the components of the autopilot and prepare autopilot task
+* @param none
+* @return 0 if success, -1 if error
+* @note This function has to be called once before starting the autopilot task.
+* @note the autopilot uses static variables because there is only one instance
+* of the autopilot, the memory is used more efficiently.
+*/
+int init_taskAutoPilot(void);
+
+/*
+* @brief Autopilot task
+* @param not used
+* @return none
+* @see note about tasks
+*/
+void taskAutoPilot(void *parameters);
+
+/*
+* @brief Send AHRS values to autopilot task
+*
+* @param timeStamp TickType_t timestamp of the values
+* @param heading float heading in degrees
+* @param roll float roll in degrees
+* @param pitch float pitch in degrees
+* @param yawRate float yaw rate in degrees per second
+*
+* @return 0 if success, -1 if error
+*/
+int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
+
+/*
+* @brief Send motor stall message to autopilot task
+* @param none
+* @return 0 if success, -1 if error
+* This function is called by motor task when motor is stalled
+*/
+int AP_MSG_MotorStalled();

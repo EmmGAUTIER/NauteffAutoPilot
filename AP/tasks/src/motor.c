@@ -96,7 +96,8 @@ extern TIM_HandleTypeDef htim3;
 #define MOTOR_STATUS_STALLED       (0x1 << 8) /* motor stalled */
 
 #if 0
-typedef enum {
+typedef enum
+{
     MotorIdle,
     MotorMovingToAngle,
     MotorMovingForTime,
@@ -105,13 +106,15 @@ typedef enum {
     MotorDefault,
 } MotorState_t;
 
-typedef enum {
+typedef enum
+{
     MotorDirNone  = 0,
     MotorDirPort  = 1,
     MotorDirStbd  = -1,
 } MotorDirection_t;
 
-typedef enum {
+typedef enum
+{
     MotorClutchOut = 0,
     MotorClutchIn,
 } MotorClutchStatus_t;
@@ -155,7 +158,8 @@ static uint16_t adc_values[2];
  */
 #endif
 
-typedef struct {
+typedef struct
+{
 
     /* Status */
     uint32_t status;
@@ -187,7 +191,8 @@ typedef struct {
     float vCurrent; /* Actual current */
 } MotorData;
 
-MotorData motorData = {
+MotorData motorData =
+{
 
     .status = MOTOR_STATUS_IDLE,
 
@@ -426,10 +431,12 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
     motorData.vCurrent = iMotor;
 
     /*----- First check for overcurrent -----*/
-    if(iMotor > motorData.currentStalled * .7F) {
+    if(iMotor > motorData.currentStalled * .7F)
+    {
         motorData.overCurrentTime += deltat;
 
-        if(motorData.overCurrentTime > MOTOR_MAX_TIME_OVERCURRENT) {
+        if(motorData.overCurrentTime > MOTOR_MAX_TIME_OVERCURRENT)
+        {
             Motor_LL_stop();
             motorData.status |= MOTOR_STATUS_STALLED;
             motorData.status &= ~(MOTOR_STATUS_STOPPING
@@ -442,19 +449,23 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
             motorData.turnTimeReq = 0.F;
             motorEvent |= MOTOR_EVENT_STALLED;
         }
-    } else {
+    }
+    else
+    {
         motorData.overCurrentTime = 0.F;
     }
 
     /*-----  MOTOR MOVING  HELM TO ANGLE  -----*/
-    if(motorData.status & MOTOR_STATUS_MOVING_ANGLE) {
+    if(motorData.status & MOTOR_STATUS_MOVING_ANGLE)
+    {
         /* estimate new position of motor */
         dirSign = (motorData.status & MOTOR_STATUS_DIR_STARBOARD) ? 1 : -1;
         motorData.HelmAngleEstimated += motorData.cvt_angle_time * deltat * dirSign;
 
         deltaAngle = motorData.helmAngleRequested - motorData.HelmAngleEstimated;
 
-        if(deltaAngle * dirSign < DELTA_ANGLE_THRESHOLD * dirSign) {
+        if(deltaAngle * dirSign < DELTA_ANGLE_THRESHOLD * dirSign)
+        {
             /* Nearly reached requested angle */
             Motor_LL_stop();
             motorData.status &= ~(MOTOR_STATUS_MOVING_TIME | MOTOR_STATUS_RUNNING |
@@ -465,11 +476,13 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
     }
 
     /*-----  MOTOR MOVING FOR TIME  -----*/
-    if(motorData.status & MOTOR_STATUS_MOVING_TIME) {
+    if(motorData.status & MOTOR_STATUS_MOVING_TIME)
+    {
 
         motorData.turnTimeRemaining -= deltat;
 
-        if(motorData.turnTimeRemaining <= 0.F) {
+        if(motorData.turnTimeRemaining <= 0.F)
+        {
             Motor_LL_stop();
             motorData.status &= ~(MOTOR_STATUS_MOVING_TIME | MOTOR_STATUS_RUNNING);
             motorData.status |= MOTOR_STATUS_STOPPING;
@@ -477,11 +490,13 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
     }
 
     /*-----  MOTOR STOPPING  -----*/
-    if(motorData.status & MOTOR_STATUS_STOPPING) {
+    if(motorData.status & MOTOR_STATUS_STOPPING)
+    {
 
         motorData.stopTimeRemaining -= deltat;
 
-        if(motorData.stopTimeRemaining <= 0.F) {
+        if(motorData.stopTimeRemaining <= 0.F)
+        {
             motorData.status &=
                 ~(MOTOR_STATUS_STOPPING | MOTOR_STATUS_STALLED |
                   MOTOR_STATUS_MOVING_TIME | MOTOR_STATUS_MOVING_ANGLE |
@@ -518,7 +533,8 @@ void Motor_moveTime(float timeToMove)
     dirSignMoving = (motorData.status & MOTOR_STATUS_DIR_STARBOARD) ? +1 : -1;
 
     switch(motorData.status &
-           (MOTOR_STATUS_DIR_STARBOARD | MOTOR_STATUS_DIR_PORT)) {
+            (MOTOR_STATUS_DIR_STARBOARD | MOTOR_STATUS_DIR_PORT))
+    {
     case MOTOR_STATUS_DIR_STARBOARD:
         dirSignMoving = +1;
         break;
@@ -534,31 +550,39 @@ void Motor_moveTime(float timeToMove)
 
     dirSignToMove = (timeToMove > 0.F) ? +1 : -1;
 
-    if(motorData.status & MOTOR_STATUS_STALLED) {
+    if(motorData.status & MOTOR_STATUS_STALLED)
+    {
         if(dirSignMoving * dirSignToMove < 0)
             ok_to_turn = 1;
-    } else {
+    }
+    else
+    {
         if(((motorData.status & (MOTOR_STATUS_MOVING_TIME
                                  | MOTOR_STATUS_IDLE
                                  | MOTOR_STATUS_STOPPING))
-            && (dirSignMoving * dirSignToMove >= 0))) {
+                && (dirSignMoving * dirSignToMove >= 0)))
+        {
             ok_to_turn = 1;
         }
     }
 
-    if(ok_to_turn == 1) {
+    if(ok_to_turn == 1)
+    {
         motorData.turnTimeReq = timeToMove;
 
         motorData.turnTimeRemaining = fabs(timeToMove);
 
-        if(timeToMove > ADC_PERIOD * 2.F) {
+        if(timeToMove > ADC_PERIOD * 2.F)
+        {
             Motor_LL_runToStarboard();
             motorData.status |= MOTOR_STATUS_DIR_STARBOARD | MOTOR_STATUS_RUNNING |
                                 MOTOR_STATUS_MOVING_TIME;
             motorData.status &= ~MOTOR_STATUS_DIR_PORT | MOTOR_STATUS_MOVING_ANGLE |
                                 MOTOR_STATUS_IDLE | MOTOR_STATUS_STALLED |
                                 MOTOR_STATUS_STOPPING;
-        } else {
+        }
+        else
+        {
 
             Motor_LL_runToPort();
             motorData.status |= MOTOR_STATUS_DIR_PORT | MOTOR_STATUS_RUNNING |
@@ -576,16 +600,20 @@ void Motor_setHelmAngle(float angle)
 {
     float deltaAngle;
 
-    if(motorData.status & MOTOR_STATUS_ENGAGED) {
+    if(motorData.status & MOTOR_STATUS_ENGAGED)
+    {
         motorData.helmAngleRequested = angle;
         deltaAngle = angle - motorData.HelmAngleEstimated;
 
-        if(fabsf(deltaAngle) > DELTA_ANGLE_THRESHOLD) {
-            if(deltaAngle > 0.F) {
+        if(fabsf(deltaAngle) > DELTA_ANGLE_THRESHOLD)
+        {
+            if(deltaAngle > 0.F)
+            {
                 /* If helm is block at Starboard cannot turn starboard */
                 /* STALLED and STARBORARD mustn't be on together */
                 if((motorData.status & (MOTOR_STATUS_STALLED | MOTOR_STATUS_DIR_STARBOARD))
-                   != (MOTOR_STATUS_STALLED | MOTOR_STATUS_DIR_STARBOARD)) {
+                        != (MOTOR_STATUS_STALLED | MOTOR_STATUS_DIR_STARBOARD))
+                {
                     Motor_LL_runToStarboard();
                     motorData.status |= MOTOR_STATUS_DIR_STARBOARD
                                         | MOTOR_STATUS_RUNNING
@@ -596,11 +624,14 @@ void Motor_setHelmAngle(float angle)
                                         | MOTOR_STATUS_STALLED
                                         | MOTOR_STATUS_STOPPING;
                 }
-            } else {
+            }
+            else
+            {
                 /* If helm is block at Starboard cannot turn starboard */
                 /* STALLED and STARBORARD mustn't be on together */
                 if((motorData.status & (MOTOR_STATUS_STALLED | MOTOR_STATUS_DIR_PORT))
-                   != (MOTOR_STATUS_STALLED | MOTOR_STATUS_DIR_PORT)) {
+                        != (MOTOR_STATUS_STALLED | MOTOR_STATUS_DIR_PORT))
+                {
                     Motor_LL_runToPort();
                     motorData.status |= MOTOR_STATUS_DIR_PORT
                                         | MOTOR_STATUS_RUNNING
@@ -619,15 +650,20 @@ void Motor_setHelmAngle(float angle)
 
 #if 0
 
-    if(motorData.engaged == 1) {
+    if(motorData.engaged == 1)
+    {
         motorData.helmAngleRequested = angle;
         float deltaAngle = angle - motorData.HelmAngleEstimated;
 
-        if(fabsf(deltaAngle) > DELTA_ANGLE_THRESHOLD) {
-            if(deltaAngle > 0.F) {
+        if(fabsf(deltaAngle) > DELTA_ANGLE_THRESHOLD)
+        {
+            if(deltaAngle > 0.F)
+            {
                 Motor_LL_runToPort();
                 motorData.direction = MotorDirPort;
-            } else {
+            }
+            else
+            {
                 Motor_LL_runToStarboard();
                 motorData.direction = MotorDirStbd;
             }
@@ -667,7 +703,8 @@ Motor_stop()
 {
     Motor_LL_stop();
 
-    if(motorData.status != MotorIdle) {
+    if(motorData.status != MotorIdle)
+    {
         motorData.status = MotorStopping;
     }
 }
@@ -681,9 +718,12 @@ int init_taskMotor()
 {
     msgQueueMotor = xQueueCreate(10, sizeof(MsgMotor_t));
 
-    if(msgQueueMotor == (QueueHandle_t)0) {
+    if(msgQueueMotor == (QueueHandle_t)0)
+    {
         return -1;
-    } else {
+    }
+    else
+    {
         return 1;
     }
 }
@@ -711,14 +751,17 @@ void taskMotor(void *parameters)
 
     HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_values, 2);
 
-    for(;;) {
+    for(;;)
+    {
 
         msgMoteur.msgType = MSG_MOTOR_NONE;
 
         ret = xQueueReceive(msgQueueMotor, &msgMoteur, pdMS_TO_TICKS(500));
 
-        if(ret != (size_t)0) {
-            switch(msgMoteur.msgType) {
+        if(ret != (size_t)0)
+        {
+            switch(msgMoteur.msgType)
+            {
 
             case MSG_MOTOR_ADC_VALUES:
 
@@ -732,7 +775,8 @@ void taskMotor(void *parameters)
                                  (float)msgMoteur.data.adcValues.adc_power * ADC_CVT_TO_VOLTAGE,
                                  (float)msgMoteur.data.adcValues.adc_current * ADC_CVT_TO_CURRENT);
 
-                if(counter %(((motorData.status & MOTOR_STATUS_IDLE)) ? 20 : 2) == 0) {
+                if(counter % (((motorData.status & MOTOR_STATUS_IDLE)) ? 20 : 2) == 0)
+                {
                     DBG_ADC_PRINT(
                         (snprintf(message, sizeof(message), "ADC %u %6f %6f\n",
                                   xTaskGetTickCount(), motorData.vPower,
@@ -740,12 +784,14 @@ void taskMotor(void *parameters)
                          svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
                 }
 
-                if(motorEvent & MOTOR_EVENT_STALLED) {
+                if(motorEvent & MOTOR_EVENT_STALLED)
+                {
                     svc_UART_Write(&svc_uart2, "MOTOR stalled\n", 14, 0U);
                     AP_MSG_MotorStalled();
                 }
 
-                if(motorEvent & MOTOR_EVENT_STOP) {
+                if(motorEvent & MOTOR_EVENT_STOP)
+                {
                     svc_UART_Write(&svc_uart2, "MOTOR stop\n", 11, 0U);
                 }
 
@@ -781,7 +827,8 @@ void taskMotor(void *parameters)
 
                 break;
 
-            case MSG_MOTOR_DISPLAY_CONFIG: {
+            case MSG_MOTOR_DISPLAY_CONFIG:
+            {
                 int nbcar = snprintf(message, sizeof(message),
                                      "MOTOR config : not yet implemented\n");
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U);

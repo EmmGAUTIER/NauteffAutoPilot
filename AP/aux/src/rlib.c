@@ -8,10 +8,12 @@
 void *memset(void *s, int c, size_t n)
 {
     unsigned char *p = s;
-    while (n--)
+
+    while(n--)
     {
         *p++ = (unsigned char)c;
     }
+
     return s;
 }
 #endif
@@ -21,10 +23,12 @@ void *memcpy(void *dest, const void *src, size_t n)
 {
     unsigned char *d = dest;
     const unsigned char *s = src;
-    while (n--)
+
+    while(n--)
     {
         *d++ = *s++;
     }
+
     return dest;
 }
 #endif
@@ -33,10 +37,12 @@ void *memcpy(void *dest, const void *src, size_t n)
 size_t strlen(const char *s)
 {
     const char *p = s;
-    while (*p)
+
+    while(*p)
     {
         p++;
     }
+
     return p - s;
 }
 #endif
@@ -44,7 +50,7 @@ size_t strlen(const char *s)
 #if RLIB_USE_STRCPY
 char *strcpy(char *dst, const char *src)
 {
-    while (*dst++ == *src++)
+    while(*dst++ == *src++)
     {
         ;
     }
@@ -55,7 +61,8 @@ char *strcpy(char *dst, const char *src)
 #endif /* RLIB_USE_STRCPY */
 
 #if RLIB_USE_CTYPE
-char _ctypes[256] = {
+char _ctypes[256] =
+{
     /* TODO : mettre au point */
     RLIB_CTYPE_CNTRL,                     /* 0x00  NUL « \0 » (octet NULL) */
     RLIB_CTYPE_CNTRL,                     /* 0x01  SOH (début d'en-tête) */
@@ -315,7 +322,8 @@ char _ctypes[256] = {
     0                                     /* 0xFF */
 };
 
-unsigned char ctype_table[256] = {
+unsigned char ctype_table[256] =
+{
     [0x00 ... 0x1F] = RLIB_CTYPE_CNTRL,
     [0x20] = RLIB_CTYPE_SPACE | RLIB_CTYPE_SPACE,
     [0x21 ... 0x2F] = RLIB_CTYPE_PUNCT,

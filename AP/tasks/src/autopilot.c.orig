@@ -27,9 +27,6 @@ SOFTWARE.
 #define AP_KI 0.0F /* Integral coefficient */
 #define AP_KD 0.0F /* Derivative coefficient */
 
-/* Maximum integrated angle */
-#define AP_MAX_INTEGRAL_GAP  (30.F * (M_PI / 180.))
-
 /* minimum angle to send an order to motor */
 #define AP_MOTOR_THRESHOLD (0.2F * (M_PI / 180.F))
 #define AP_TIME_ONE_MOVE (0.2F) /* time to move for one order to motor in seconds */
@@ -81,8 +78,7 @@ int AP_compute(APStatus_t *aps);
 int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate)
 {
 
-    MsgAutoPilot_t msg =
-    {
+    MsgAutoPilot_t msg = {
         .msgType = AP_MSG_AHRS,
         .data.IMUData.heading = heading,
         .data.IMUData.roll = roll,
@@ -90,8 +86,7 @@ int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float 
         .data.IMUData.yawRate = yawRate
     };
 
-    if(xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS)
-    {
+    if(xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS) {
         return -1; // Failed to send message
     }
 
@@ -100,13 +95,11 @@ int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float 
 
 int AP_MSG_MotorStalled()
 {
-    MsgAutoPilot_t msg =
-    {
+    MsgAutoPilot_t msg = {
         .msgType = AP_MSG_MOTOR_STALLED,
     };
 
-    if(xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS)
-    {
+    if(xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS) {
         return -1; // Failed to send message
     }
 
@@ -115,13 +108,11 @@ int AP_MSG_MotorStalled()
 
 int AP_MSG_MotorStopped()
 {
-    MsgAutoPilot_t msg =
-    {
+    MsgAutoPilot_t msg = {
         .msgType = AP_MSG_MOTOR_STALLED,
     };
 
-    if(xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS)
-    {
+    if(xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS) {
         return -1; // Failed to send message
     }
 
@@ -136,8 +127,7 @@ int init_taskAutoPilot(void)
     /* Create incoming queue */
     msgQueueAutoPilot = xQueueCreate(10, sizeof(MsgAutoPilot_t));
 
-    if(msgQueueAutoPilot == (QueueHandle_t)0)
-    {
+    if(msgQueueAutoPilot == (QueueHandle_t)0) {
         return -1;
     }
 
@@ -157,13 +147,10 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
     // xTimerStart(timerAP, 0);
     timestamp = xTaskGetTickCount();
 
-    for(;;)
-    {
-        if(xQueueReceive(msgQueueAutoPilot, &msg, portMAX_DELAY) == pdPASS)
-        {
+    for(;;) {
+        if(xQueueReceive(msgQueueAutoPilot, &msg, portMAX_DELAY) == pdPASS) {
 
-            switch(msg.msgType)
-            {
+            switch(msg.msgType) {
 
             case AP_MSG_AHRS:
 
@@ -208,14 +195,11 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 
                 AP_turn(&APStatus, msg.data.reqTurnAngle * (-M_PI / 180.F));
 
-                if(AP_get_engaged(&APStatus))
-                {
+                if(AP_get_engaged(&APStatus)) {
                     DB_PRINT_ORDERS((
                                         nbcar = snprintf(message, sizeof(message), "AP Mode heading %8f\n", AP_get_heading_dir(&APStatus)),
                                         svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
-                }
-                else
-                {
+                } else {
                     DB_PRINT_ORDERS((
                                         nbcar = snprintf(message, sizeof(message), "AP turn %8f\n", msg.data.reqTurnAngle),
                                         svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
@@ -237,8 +221,7 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                                     svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
                 // APStatus.headingToSteer = msg.data.reqHeading;
-                switch(msg.data.coefficient.param_number)
-                {
+                switch(msg.data.coefficient.param_number) {
                 case AP_PARAM_PROPORTIONNAL:
                     APStatus.kp = msg.data.coefficient.param_value;
                     break;
@@ -262,14 +245,11 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 break;
 
             case AP_MSG_CALIBRATE_MEMS:
-                if(APStatus.engaged)
-                {
+                if(APStatus.engaged) {
                     DB_PRINT_ORDERS((
                                         nbcar = snprintf(message, sizeof(message) - 1, "AP MEMS calibrate impossible while AP engaged\n"),
                                         svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
-                }
-                else
-                {
+                } else {
                     DB_PRINT_ORDERS((
                                         nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n"),
                                         svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
@@ -355,8 +335,7 @@ int AP_set_mode_heading(APStatus_t *aps)
 {
     /* change state engage to 1 */
     /* No order to do since heading to steer is actual heading */
-    if(aps->engaged == 0)
-    {
+    if(aps->engaged == 0) {
         aps->engaged = 1;
         aps->headingToSteerRadians = aps->currentHeading;
         aps->currentGap = 0;
@@ -379,12 +358,9 @@ int AP_set_mode_heading(APStatus_t *aps)
  */
 int AP_turn(APStatus_t *aps, float angle)
 {
-    if(aps->engaged == 0)
-    {
+    if(aps->engaged == 0) {
         MOTOR_MSG_moveTime(angle >= 0. ? - AP_TIME_ONE_MOVE : AP_TIME_ONE_MOVE);
-    }
-    else
-    {
+    } else {
         /* AP idle, send move order to motor task */
         aps->headingToSteerRadians += angle;
         // AP_compute(aps);
@@ -411,23 +387,22 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
 
     aps->currentHeading = heading;
 
-    if(aps->engaged)
-    {
+    if(aps->engaged) {
         aps->currentGap = (aps->headingToSteerRadians - heading);
         aps->integratedGap += aps->currentGap * deltat;
         aps->yawRate = -yawRate;
 
-        if(aps->integratedGap > AP_MAX_INTEGRAL_GAP)
-        {
-            aps->integratedGap =  AP_MAX_INTEGRAL_GAP;
+        if(aps->integratedGap > AP_MAX_GAP) {
+            aps->integratedGap =  AP_MAX_GAP;
         }
 
-        if(aps->integratedGap < -AP_MAX_INTEGRAL_GAP)
-        {
-            aps->integratedGap = -AP_MAX_INTEGRAL_GAP;
+        if(aps->integratedGap < -AP_MAX_GAP) {
+            aps->integratedGap
+                = -AP_MAX_GAP;
         }
 
-        steerReq = (aps->currentGap * aps->kp)      /* Proportional */
+
+        steerReq = (aps->currentGap * aps->kp)    /* Proportional */
                    + (aps->integratedGap * aps->ki) /* Integral */
                    + (aps->yawRate * aps->kd);      /* Derivative */
 

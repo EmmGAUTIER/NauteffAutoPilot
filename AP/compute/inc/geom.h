@@ -58,13 +58,15 @@ typedef struct
     float z; /**< Z component */
 } Vector3f;
 
-typedef struct{
+typedef struct
+{
     int16_t x;
     int16_t y;
     int16_t z;
 } Vector3i16;
 
-typedef struct{
+typedef struct
+{
     int32_t x;
     int32_t y;
     int32_t z;

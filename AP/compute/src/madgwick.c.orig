@@ -86,8 +86,8 @@ void madgwick_update(float w_x, float w_y, float w_z,
     float f_1, f_2, f_3, f_4, f_5, f_6;
     // objective function elements
     float J_11or24, J_12or23, J_13or22, J_14or21, J_32, J_33,
-          // objective function Jacobian elements
-          J_41, J_42, J_43, J_44, J_51, J_52, J_53, J_54, J_61, J_62, J_63, J_64; //
+        // objective function Jacobian elements
+        J_41, J_42, J_43, J_44, J_51, J_52, J_53, J_54, J_61, J_62, J_63, J_64; //
     float SEqHatDot_1, SEqHatDot_2, SEqHatDot_3, SEqHatDot_4;
     // estimated direction of the gyroscope error
     float w_err_x, w_err_y, w_err_z;
@@ -172,10 +172,8 @@ void madgwick_update(float w_x, float w_y, float w_z,
     SEqHatDot_3 = J_12or23 * f_2 - J_33 * f_3 - J_13or22 * f_1 - J_43 * f_4 + J_53 * f_5 + J_63 * f_6;
     SEqHatDot_4 = J_14or21 * f_1 + J_11or24 * f_2 - J_44 * f_4 - J_54 * f_5 + J_64 * f_6;
     // normalise the gradient to estimate direction of the gyroscope error
-    norm = sqrt(SEqHatDot_1 * SEqHatDot_1 + SEqHatDot_2 * SEqHatDot_2 + SEqHatDot_3 * SEqHatDot_3 + SEqHatDot_4 *
-                SEqHatDot_4);
-
-    if(norm > 1e-12f)
+    norm = sqrt(SEqHatDot_1 * SEqHatDot_1 + SEqHatDot_2 * SEqHatDot_2 + SEqHatDot_3 * SEqHatDot_3 + SEqHatDot_4 * SEqHatDot_4);
+    if (norm > 1e-12f)
     {
         SEqHatDot_1 = SEqHatDot_1 / norm;
         SEqHatDot_2 = SEqHatDot_2 / norm;
@@ -189,7 +187,6 @@ void madgwick_update(float w_x, float w_y, float w_z,
         SEqHatDot_3 = 0.f;
         SEqHatDot_4 = 0.f;
     }
-
     // compute angular estimated direction of the gyroscope error
     w_err_x = twoSEq_1 * SEqHatDot_2 - twoSEq_2 * SEqHatDot_1 - twoSEq_3 * SEqHatDot_4 + twoSEq_4 * SEqHatDot_3;
     w_err_y = twoSEq_1 * SEqHatDot_3 + twoSEq_2 * SEqHatDot_4 - twoSEq_3 * SEqHatDot_1 - twoSEq_4 * SEqHatDot_2;
@@ -225,16 +222,13 @@ void madgwick_update(float w_x, float w_y, float w_z,
     SEq_3SEq_4 = SEq_3 * SEq_4;
     SEq_2SEq_3 = SEq_2 * SEq_3;
     SEq_2SEq_4 = SEq_2 * SEq_4;
-    h_x = twom_x * (0.5f - SEq_3 * SEq_3 - SEq_4 * SEq_4) + twom_y * (SEq_2SEq_3 - SEq_1SEq_4) + twom_z *
-          (SEq_2SEq_4 + SEq_1SEq_3);
-    h_y = twom_x * (SEq_2SEq_3 + SEq_1SEq_4) + twom_y * (0.5f - SEq_2 * SEq_2 - SEq_4 * SEq_4) + twom_z *
-          (SEq_3SEq_4 - SEq_1SEq_2);
-    h_z = twom_x * (SEq_2SEq_4 - SEq_1SEq_3) + twom_y * (SEq_3SEq_4 + SEq_1SEq_2) + twom_z *
-          (0.5f - SEq_2 * SEq_2 - SEq_3 * SEq_3);
+    h_x = twom_x * (0.5f - SEq_3 * SEq_3 - SEq_4 * SEq_4) + twom_y * (SEq_2SEq_3 - SEq_1SEq_4) + twom_z * (SEq_2SEq_4 + SEq_1SEq_3);
+    h_y = twom_x * (SEq_2SEq_3 + SEq_1SEq_4) + twom_y * (0.5f - SEq_2 * SEq_2 - SEq_4 * SEq_4) + twom_z * (SEq_3SEq_4 - SEq_1SEq_2);
+    h_z = twom_x * (SEq_2SEq_4 - SEq_1SEq_3) + twom_y * (SEq_3SEq_4 + SEq_1SEq_2) + twom_z * (0.5f - SEq_2 * SEq_2 - SEq_3 * SEq_3);
     // normalise the flux vector to have only components in the x and z
     b_x = sqrt((h_x * h_x) + (h_y * h_y));
     b_z = h_z;
-
+    
     /* compute roll pitch and yaw */
     Quaternionf q;
     q.w = SEq_1;

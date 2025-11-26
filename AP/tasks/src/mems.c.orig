@@ -375,14 +375,12 @@ HAL_StatusTypeDef SPI_DMA_Transfer(SPI_HandleTypeDef *hspi, uint8_t *txBuffer, u
     // Lancer l’échange DMA (non bloquant)
     status = HAL_SPI_TransmitReceive_DMA(hspi, txBuffer, rxBuffer, size);
 
-    if(status != HAL_OK)
-    {
+    if(status != HAL_OK) {
         return status;
     }
 
     // Attente de fin via callback et sémaphore
-    if(xSemaphoreTake(semspi2, timeout) != pdTRUE)
-    {
+    if(xSemaphoreTake(semspi2, timeout) != pdTRUE) {
         return HAL_TIMEOUT;
     }
 
@@ -401,8 +399,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     //{
     // errCode = hspi->ErrorCode;
     //}
-    if(hspi->Instance == SPI2)
-    {
+    if(hspi->Instance == SPI2) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(semspi2, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
@@ -414,8 +411,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
  */
 void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
 {
-    if(hspi->Instance == SPI2)
-    {
+    if(hspi->Instance == SPI2) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(semspi2, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
@@ -461,8 +457,7 @@ int LSM9DS1_ReadRegister(int agmag, uint8_t reg, uint8_t *value)
     LL_GPIO_ResetOutputPin(GPIOB, (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
     res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 2, pdMS_TO_TICKS(10));
 
-    if(res == HAL_OK)
-    {
+    if(res == HAL_OK) {
         *value = bufferRx[1];
     }
 
@@ -478,8 +473,7 @@ int LSM9DS1_ReadVec(int agmag, Vector3f *vec)
     uint8_t regaddr;
     uint32_t pin;
 
-    switch(agmag)
-    {
+    switch(agmag) {
     case 1: // Acc
         regaddr = 0x28 | 0x80;
         pin = LL_GPIO_PIN_11;
@@ -505,8 +499,7 @@ int LSM9DS1_ReadVec(int agmag, Vector3f *vec)
     LL_GPIO_ResetOutputPin(GPIOB, pin); // CS_A/G or CS_M low : select device
     res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 7, pdMS_TO_TICKS(100));
 
-    if(res == HAL_OK)
-    {
+    if(res == HAL_OK) {
         vec->x = (int16_t)(bufferRx[1] | (bufferRx[2] << 8));
         vec->y = (int16_t)(bufferRx[3] | (bufferRx[4] << 8));
         vec->z = (int16_t)(bufferRx[5] | (bufferRx[6] << 8));
@@ -576,8 +569,7 @@ void timerMEMsCallback(TimerHandle_t xTimer)
 {
     (void)xTimer;
 
-    static MEMS_Msg_t command =
-    {
+    static MEMS_Msg_t command = {
         .msgType = MEMS_MSG_TICK
     };
 
@@ -598,8 +590,7 @@ void timerPOLLCallback(TimerHandle_t xTimer)
 {
     (void)xTimer;
 
-    static MEMS_Msg_t command =
-    {
+    static MEMS_Msg_t command = {
         .msgType = MEMS_MSG_POLL
     };
 
@@ -622,16 +613,14 @@ int LSM9DS1_init(void)
     whoami = 0x0;
     res = LSM9DS1_ReadRegister(1, 0x0F, &whoami); /* Acc&gyr */
 
-    if(res != HAL_OK || whoami != 0x68)
-    {
+    if(res != HAL_OK || whoami != 0x68) {
         return -1;
     }
 
     whoami = 0x0;
     res = LSM9DS1_ReadRegister(2, 0x0F, &whoami); /* mag */
 
-    if(res != HAL_OK || whoami != 0x3D)
-    {
+    if(res != HAL_OK || whoami != 0x3D) {
         return -1;
     }
 
@@ -650,8 +639,7 @@ int LSM9DS1_init(void)
     /* Set ODR_G output data rate and FS gyrometer full scale */
     res = LSM9DS1_WriteRegister(1, CTRL_REG1_G, LSM9DS1_ODR | LSM9DS1_FS_G);
 
-    if(res != HAL_OK)
-    {
+    if(res != HAL_OK) {
         return -1;
     }
 
@@ -727,15 +715,12 @@ void taskMEMs(void *param)
     magPrevious = mag;
     magPreviousNorm = vector3f_getNorm(mag);
 
-    for(;;)
-    {
+    for(;;) {
         ret = xQueueReceive(msgQueueMEMs, &MEMS_Msg, pdMS_TO_TICKS(500));
 
-        if(ret == pdPASS)
-        {
+        if(ret == pdPASS) {
 
-            switch(MEMS_Msg.msgType)
-            {
+            switch(MEMS_Msg.msgType) {
             case MEMS_MSG_POLL:
 
                 LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9); /* C9 signal synchro */
@@ -759,8 +744,7 @@ void taskMEMs(void *param)
                 // snprintf(message, sizeof(message), "MEMS tick ports %x\n", value);
                 // svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
 
-                if(accReady)
-                {
+                if(accReady) {
                     LSM9DS1_ReadAcc(&acc);
                     DBG_PRINT_RAW_VALUES_ACC((
                                                  snprintf(message, sizeof(message), "ACC :  %f %f %f\n", acc.x, acc.y, acc.z),
@@ -770,8 +754,7 @@ void taskMEMs(void *param)
                     accNbTot++;
                 }
 
-                if(gyrReady)
-                {
+                if(gyrReady) {
                     LSM9DS1_ReadGyr(&gyr);
                     DBG_PRINT_RAW_VALUES_GYR((
                                                  snprintf(message, sizeof(message), "GYR :  %f %f %f\n", gyr.x, gyr.y, gyr.z),
@@ -781,23 +764,19 @@ void taskMEMs(void *param)
                     gyrNbTot++;
                 }
 
-                if(magReady)
-                {
+                if(magReady) {
                     LSM9DS1_ReadMag(&mag);
                     magPreviousNorm = vector3f_getNorm(magPrevious);
                     magMaxDelta = magPreviousNorm * 1.5F;
 
                     if(((fabs(mag.x - magPrevious.x) < magMaxDelta) && (fabs(mag.y - magPrevious.y) < magMaxDelta)
-                            && (fabs(mag.z - magPrevious.z) < magMaxDelta)) || !magok)
-                    {
+                        && (fabs(mag.z - magPrevious.z) < magMaxDelta)) || !magok) {
                         magCumul = vector3f_add(magCumul, mag);
                         magNb++;
                         magNbTot++;
                         magok = true;
                         magPrevious = mag;
-                    }
-                    else
-                    {
+                    } else {
                         magok = false;
                     }
 
@@ -817,20 +796,17 @@ void taskMEMs(void *param)
                 // snprintf(message, sizeof(message), "MEMS tick calcul %u\n", xTaskGetTickCount());
                 // svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
 
-                if(accNb > 0)
-                {
+                if(accNb > 0) {
                     accComp = vector3f_getScaled(accCumul, LSM9DS1_CVT_MKS_FACTOR_ACC / ((float)accNb));
                     accCumul = Vector3f_null;
                 }
 
-                if(gyrNb > 0)
-                {
+                if(gyrNb > 0) {
                     gyrComp = vector3f_getScaled(gyrCumul, LSM9DS1_CVT_MKS_FACTOR_GYR / ((float)gyrNb));
                     gyrCumul = Vector3f_null;
                 }
 
-                if(magNb > 0)
-                {
+                if(magNb > 0) {
                     magComp = vector3f_getScaled(magCumul, LSM9DS1_CVT_MKS_FACTOR_MAG / ((float)magNb));
                     magCumul = Vector3f_null;
                 }
@@ -936,9 +912,7 @@ void taskMEMs(void *param)
 
                 break;
             }
-        }
-        else
-        {
+        } else {
             strcpy(message, "MEMS Error receive from queue\n");
             svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(100));
         }

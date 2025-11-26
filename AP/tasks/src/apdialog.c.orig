@@ -62,8 +62,7 @@ int entree()
 #define MAX_TOKENS 4
 
 /* Enumeration of token types */
-typedef enum
-{
+typedef enum {
     TOKEN_UNKNOWN = 0, /* Unrecognized token */
     TOKEN_TURN,
     TOKEN_MODE,
@@ -92,15 +91,13 @@ typedef enum
 
 /* Structure to map keyword strings to token types.
    This lookup table is used to avoid multiple strcmp calls scattered in the code. */
-typedef struct
-{
+typedef struct {
     const char *keyword;
     TokenType type;
 } TokenEntry;
 
 /* Table of known keywords */
-static const TokenEntry tokenTable[] =
-{
+static const TokenEntry tokenTable[] = {
     {"turn", TOKEN_TURN},
     {"mode", TOKEN_MODE},
     {"idle", TOKEN_IDLE},
@@ -134,12 +131,9 @@ int init_taskDialogIn()
     msgQueueDialogIn = xQueueCreate(10, sizeof(MsgDialog_t));
     msgQueueDialogOut = xQueueCreate(10, sizeof(MsgDialog_t));
 
-    if((msgQueueDialogIn == (QueueHandle_t)0) || (msgQueueDialogOut == (QueueHandle_t)0))
-    {
+    if((msgQueueDialogIn == (QueueHandle_t)0) || (msgQueueDialogOut == (QueueHandle_t)0)) {
         return -1;
-    }
-    else
-    {
+    } else {
         return 1;
     }
 }
@@ -157,16 +151,13 @@ int convert_float(const char *token, float *number)
     float divisor = 10.0f;
     int has_digits = 0;
 
-    if(!token || !number)
-    {
+    if(!token || !number) {
         return 0;
     }
 
     // Gérer le signe éventuel
-    if(token[i] == '+' || token[i] == '-')
-    {
-        if(token[i] == '-')
-        {
+    if(token[i] == '+' || token[i] == '-') {
+        if(token[i] == '-') {
             sign = -1;
         }
 
@@ -174,20 +165,17 @@ int convert_float(const char *token, float *number)
     }
 
     // Partie entière
-    while(token[i] != '\0' && rlib_isdigit((unsigned char)token[i]))
-    {
+    while(token[i] != '\0' && rlib_isdigit((unsigned char)token[i])) {
         result = result * 10.0f + (token[i] - '0');
         i++;
         has_digits = 1;
     }
 
     // Partie fractionnaire
-    if(token[i] == '.')
-    {
+    if(token[i] == '.') {
         i++;
 
-        while(token[i] != '\0' && rlib_isdigit((unsigned char)token[i]))
-        {
+        while(token[i] != '\0' && rlib_isdigit((unsigned char)token[i])) {
             fraction += (token[i] - '0') / divisor;
             divisor *= 10.0f;
             i++;
@@ -195,8 +183,7 @@ int convert_float(const char *token, float *number)
         }
     }
 
-    if(!has_digits)
-    {
+    if(!has_digits) {
         return 0; // Aucun chiffre trouvé
     }
 
@@ -222,10 +209,8 @@ int convert_number(const char *token)
     int i = 0;
 
     /* Check for an optional sign */
-    if(token[i] == '+' || token[i] == '-')
-    {
-        if(token[i] == '-')
-        {
+    if(token[i] == '+' || token[i] == '-') {
+        if(token[i] == '-') {
             sign = -1;
         }
 
@@ -233,8 +218,7 @@ int convert_number(const char *token)
     }
 
     /* Process each digit character until the end of the string */
-    while(token[i] != '\0' && rlib_isdigit((unsigned char)token[i]))
-    {
+    while(token[i] != '\0' && rlib_isdigit((unsigned char)token[i])) {
         /* Multiply current result by 10 and add the numeric value of the digit */
         num = num * 10 + (token[i] - '0');
         i++;
@@ -267,23 +251,19 @@ int read_token(char token[], int max_len)
         ; // do nothing
 
     // If the first non-space char is newline or EOF, return it directly.
-    if(c == '\n' || c == '\r')
-    {
+    if(c == '\n' || c == '\r') {
         token[0] = '\0';
         return c;
     }
 
     // Read characters until a space, tab, newline, or EOF is found.
-    do
-    {
-        if(pos < max_len - 1)
-        {
+    do {
+        if(pos < max_len - 1) {
             token[pos++] = (char)c;
         }
 
         c = YYINPUT;
-    }
-    while(c != ' ' && c != '\t' && c != '\n' && c != '\r');
+    } while(c != ' ' && c != '\t' && c != '\n' && c != '\r');
 
     token[pos] = '\0';
     return c;
@@ -309,33 +289,28 @@ TokenType lookup_token(const char *token)
     /* Check if the token is a number: optional sign and at least one digit.
        We assume that any token starting with a digit or a sign followed by a digit
        is a valid number token. */
-    if(token[0] == '+' || token[0] == '-' || rlib_isdigit((unsigned char)token[0]))
-    {
+    if(token[0] == '+' || token[0] == '-' || rlib_isdigit((unsigned char)token[0])) {
         int pos = (token[0] == '+' || token[0] == '-') ? 1 : 0;
 
-        if(token[pos] != '\0' && rlib_isdigit((unsigned char)token[pos]))
-        {
+        if(token[pos] != '\0' && rlib_isdigit((unsigned char)token[pos])) {
             return TOKEN_NUMBER;
         }
     }
 
     /* Look up in the keyword table */
-    for(i = 0; tokenTable[i].keyword != NULL; i++)
-    {
+    for(i = 0; tokenTable[i].keyword != NULL; i++) {
         int j = 0;
 
         /* Compare the token and the keyword character by character,
            using only functions from ctype for case handling */
-        while(tokenTable[i].keyword[j] != '\0' && token[j] != '\0')
-        {
+        while(tokenTable[i].keyword[j] != '\0' && token[j] != '\0') {
             if(rlib_tolower((unsigned char)token[j]) != rlib_tolower((unsigned char)tokenTable[i].keyword[j]))
                 break;
 
             j++;
         }
 
-        if(tokenTable[i].keyword[j] == '\0' && token[j] == '\0')
-        {
+        if(tokenTable[i].keyword[j] == '\0' && token[j] == '\0') {
             return tokenTable[i].type;
         }
     }
@@ -364,32 +339,27 @@ void parse_command_line(void)
     MEMS_Msg_t msgMEMs;
     MsgMotor_t msgMotor;
 
-    for(int i = 0; i < MAX_TOKENS; i++)
-    {
+    for(int i = 0; i < MAX_TOKENS; i++) {
         tokenTypes[i] = TOKEN_UNKNOWN; // Initialize token strings to empty
     }
 
     /* Read tokens until a newline is encountered.
        Each call to read_token returns the delimiter that terminated the token. */
-    do
-    {
+    do {
         terminator = read_token(tokens[tokenCount], MAX_TOKEN_LEN);
 
         /* If the token string is empty, it means that the newline or EOF was encountered
            before any token was read; we skip processing in that case. */
-        if(tokens[tokenCount][0] != '\0')
-        {
+        if(tokens[tokenCount][0] != '\0') {
             tokenTypes[tokenCount] = lookup_token(tokens[tokenCount]);
             tokenCount++;
 
-            if(tokenCount >= MAX_TOKENS)
-            {
+            if(tokenCount >= MAX_TOKENS) {
                 // We limit to MAX_TOKENS tokens per command
                 break;
             }
         }
-    }
-    while(terminator != '\n' && terminator != '\r');
+    } while(terminator != '\n' && terminator != '\r');
 
     /* Now process the command based on the tokens read.
        The grammar (as described in your file) specifies the following productions:
@@ -409,8 +379,7 @@ void parse_command_line(void)
         return; // Empty line, nothing to process.
 
     /* turn port NNN */
-    if(tokenCount == 3 && tokenTypes[0] == TOKEN_TURN && tokenTypes[1] == TOKEN_PORT && tokenTypes[2] == TOKEN_NUMBER)
-    {
+    if(tokenCount == 3 && tokenTypes[0] == TOKEN_TURN && tokenTypes[1] == TOKEN_PORT && tokenTypes[2] == TOKEN_NUMBER) {
         int angle = convert_number(tokens[2]);
         DBG_DIALOG_PRINT((
                              nbcar = snprintf(message, sizeof(message), "DIALOG Turn port %d\r\n", angle),
@@ -422,8 +391,7 @@ void parse_command_line(void)
     }
     /* turn starboard NNN */
     else if(tokenCount == 3 && tokenTypes[0] == TOKEN_TURN && tokenTypes[1] == TOKEN_STARBOARD
-            && tokenTypes[2] == TOKEN_NUMBER)
-    {
+            && tokenTypes[2] == TOKEN_NUMBER) {
         int angle = convert_number(tokens[2]);
         DBG_DIALOG_PRINT((
                              nbcar = snprintf(message, sizeof(message), "DIALOG Turn starboard %d\r\n", angle),
@@ -432,18 +400,14 @@ void parse_command_line(void)
         msgAutoPilot.msgType = AP_MSG_TURN;
         msgAutoPilot.data.reqTurnAngle = angle;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
-    }
-    else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MODE && tokenTypes[1] == TOKEN_IDLE)
-    {
+    } else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MODE && tokenTypes[1] == TOKEN_IDLE) {
         /* Command: mode idle */
         DBG_DIALOG_PRINT((
                              svc_UART_Write(&svc_uart2, "DIALOG mode idle\r\n", 11, 0U)));
 
         msgAutoPilot.msgType = AP_MSG_MODE_IDLE;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
-    }
-    else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MODE && tokenTypes[1] == TOKEN_HEADING)
-    {
+    } else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MODE && tokenTypes[1] == TOKEN_HEADING) {
         /* Command: mode heading */
 
         DBG_DIALOG_PRINT((
@@ -451,10 +415,8 @@ void parse_command_line(void)
 
         msgAutoPilot.msgType = AP_MSG_MODE_HEADING;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
-    }
-    else if(tokenCount == 3 && tokenTypes[0] == TOKEN_MODE && tokenTypes[1] == TOKEN_HEADING
-            && tokenTypes[2] == TOKEN_NUMBER)
-    {
+    } else if(tokenCount == 3 && tokenTypes[0] == TOKEN_MODE && tokenTypes[1] == TOKEN_HEADING
+              && tokenTypes[2] == TOKEN_NUMBER) {
         /* Command: mode heading NUMBER */
         int heading = convert_number(tokens[2]);
         DBG_DIALOG_PRINT((
@@ -464,33 +426,24 @@ void parse_command_line(void)
         msgAutoPilot.msgType = AP_MSG_MODE_HEADING_DIR;
         msgAutoPilot.data.reqHeading = heading;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
-    }
-    else if(tokenCount == 2 && tokenTypes[0] == TOKEN_CALIBRATE && tokenTypes[1] == TOKEN_AHRS)
-    {
+    } else if(tokenCount == 2 && tokenTypes[0] == TOKEN_CALIBRATE && tokenTypes[1] == TOKEN_AHRS) {
         /* Command: calibrate AHRS */
         DBG_DIALOG_PRINT((
                              svc_UART_Write(&svc_uart2, "DIALOG calibrate AHRS\n", 22, 0U)));
 
         msgAutoPilot.msgType = AP_MSG_CALIBRATE_MEMS;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
-    }
-    else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MOVE && tokenTypes[1] == TOKEN_STARBOARD)
-    {
+    } else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MOVE && tokenTypes[1] == TOKEN_STARBOARD) {
         /* Command: move starboard */
         // svc_UART_Write(&svc_uart2, "DIALOG move starboard\n", 17, 0U);
-    }
-    else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MOVE && tokenTypes[1] == TOKEN_PORT)
-    {
+    } else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MOVE && tokenTypes[1] == TOKEN_PORT) {
         /* Command: move port */
         // svc_UART_Write(&svc_uart2, "DIALOG move port\n", 12, 0U);
-    }
-    else if(tokenCount == 3 && tokenTypes[0] == TOKEN_COEFFICIENT)
-    {
+    } else if(tokenCount == 3 && tokenTypes[0] == TOKEN_COEFFICIENT) {
         float coeff = 2.71F;
         int res;
 
-        if(tokenTypes[1] == TOKEN_DERIVATIVE && tokenTypes[2] == TOKEN_NUMBER)
-        {
+        if(tokenTypes[1] == TOKEN_DERIVATIVE && tokenTypes[2] == TOKEN_NUMBER) {
             res = convert_float(tokens[2], &coeff);
             (void)res;
             msgAutoPilot.msgType = AP_MSG_PARAM;
@@ -500,9 +453,7 @@ void parse_command_line(void)
             DBG_DIALOG_PRINT((
                                  nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient derivative %f\n", coeff),
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
-        }
-        else if(tokenTypes[1] == TOKEN_PROPORTIONAL && tokenTypes[2] == TOKEN_NUMBER)
-        {
+        } else if(tokenTypes[1] == TOKEN_PROPORTIONAL && tokenTypes[2] == TOKEN_NUMBER) {
             res = convert_float(tokens[2], &coeff);
             (void)res;
             DBG_DIALOG_PRINT((
@@ -515,8 +466,7 @@ void parse_command_line(void)
             res = xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
         }
 
-        else if(tokenTypes[1] == TOKEN_INTEGRAL && tokenTypes[2] == TOKEN_NUMBER)
-        {
+        else if(tokenTypes[1] == TOKEN_INTEGRAL && tokenTypes[2] == TOKEN_NUMBER) {
             res = convert_float(tokens[2], &coeff);
             (void)res;
             msgAutoPilot.msgType = AP_MSG_PARAM;
@@ -529,8 +479,7 @@ void parse_command_line(void)
         }
 
         /* Parameter : ratio helm move in degrees and command time */
-        else if(tokenTypes[1] == TOKEN_MOTOR_CVT_ANGLE_TIME && tokenTypes[2] == TOKEN_NUMBER)
-        {
+        else if(tokenTypes[1] == TOKEN_MOTOR_CVT_ANGLE_TIME && tokenTypes[2] == TOKEN_NUMBER) {
             convert_float(tokens[2], &coeff);
             MOTOR_MSG_set_cvt_angle_time(coeff);
             DBG_DIALOG_PRINT((
@@ -539,8 +488,7 @@ void parse_command_line(void)
         }
 
         /* Parameter : prop between magnetometer and gyro */
-        else if(tokenTypes[1] == TOKEN_MAG_VS_GYR && tokenTypes[2] == TOKEN_NUMBER)
-        {
+        else if(tokenTypes[1] == TOKEN_MAG_VS_GYR && tokenTypes[2] == TOKEN_NUMBER) {
             convert_float(tokens[2], &coeff);
             msgMEMs.msgType = MEMS_MSG_SET_MAG_VS_GYR;
             msgMEMs.data.mag_vs_gyr = coeff;
@@ -550,8 +498,7 @@ void parse_command_line(void)
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
 
-        else if(tokenTypes[1] == TOKEN_MOTOR_THESHOLD && tokenTypes[2] == TOKEN_NUMBER)
-        {
+        else if(tokenTypes[1] == TOKEN_MOTOR_THESHOLD && tokenTypes[2] == TOKEN_NUMBER) {
             convert_float(tokens[2], &coeff);
             msgAutoPilot.msgType = AP_MSG_PARAM;
             msgAutoPilot.data.coefficient.param_number = AP_PARAM_MOTOR_THRESHOLD;
@@ -561,12 +508,9 @@ void parse_command_line(void)
                                  nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient motor threshold %f\n", coeff),
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
-    }
-    else if(tokenCount == 3 && tokenTypes[0] == TOKEN_DISPLAY && tokenTypes[1] == TOKEN_CONFIG)
-    {
+    } else if(tokenCount == 3 && tokenTypes[0] == TOKEN_DISPLAY && tokenTypes[1] == TOKEN_CONFIG) {
         // Command: display
-        switch(tokenTypes[2])
-        {
+        switch(tokenTypes[2]) {
         case TOKEN_MEMS:
             DBG_DIALOG_PRINT((svc_UART_Write(&svc_uart2, "DIALOG display config MEMS\n", 27, 0U)));
             msgMEMs.msgType = MEMS_MSG_DISPLAY_CONFIG;
@@ -590,8 +534,7 @@ void parse_command_line(void)
         }
     }
 
-    else
-    {
+    else {
         DBG_DIALOG_PRINT((
                              nbcar = snprintf(message, sizeof(message), "DIALOG Syntax error ! %d tokens\r\n", tokenCount),
                              svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
@@ -605,8 +548,7 @@ void taskDialogIn(void *args __attribute__((unused)))
 {
     // int nb = 0; // pour mise au point
 
-    for(;;)
-    {
+    for(;;) {
         // nb++;
         parse_command_line();
         // vTaskDelay(pdMS_TO_TICKS(100));
@@ -621,12 +563,10 @@ void __attribute__((noreturn)) taskDialogOut(void *args __attribute__((unused)))
     char message[50];
     int nbcar;
 
-    for(;;)
-    {
+    for(;;) {
         nb++;
 
-        if(xQueueReceive(msgQueueDialogOut, &msg, portMAX_DELAY) == pdPASS)
-        {
+        if(xQueueReceive(msgQueueDialogOut, &msg, portMAX_DELAY) == pdPASS) {
             nbcar = snprintf(message, sizeof(message), "Message type %d\r\n", (int)msg.msgType);
             // Process the message
             // For now, just print the message type

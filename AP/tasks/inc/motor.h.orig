@@ -41,8 +41,7 @@ SOFTWARE.
 extern QueueHandle_t msgQueueMotor;
 int init_taskMotor();
 
-typedef enum
-{
+typedef enum {
     MSG_MOTOR_NONE = 0,
     MSG_MOTOR_ADC_VALUES,
     MSG_MOTOR_EMBRAYE,
@@ -55,14 +54,11 @@ typedef enum
     MSG_MOTOR_DEFAULT,
 } MsgMotorType_t;
 
-typedef struct
-{
+typedef struct {
     uint16_t msgType;      /* Code de message */
     uint16_t defaultCodes; /* Overcurrent, voltage drop, ... */
-    union
-    {
-        struct
-        {
+    union {
+        struct {
             /* Ces valeurs sont envoyées par une interruption */
             /* Elles ne doivent pas être de type float */
             uint16_t adc_power;   /* Tension d'alimentation */

@@ -1,5 +1,5 @@
 #ifndef R_LIB_CONFIG_H
-#define R_LIB_CONFIG_H  
+#define R_LIB_CONFIG_H
 
 #define RLIB_USE_STRLEN 1
 #define RLIB_USE_MEMCPY 1

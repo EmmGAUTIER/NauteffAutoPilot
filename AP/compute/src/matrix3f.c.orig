@@ -4,36 +4,28 @@
 
 #include "matrix3f.h"
 
-Matrix3f Matrix3f_unit =
-{
+Matrix3f Matrix3f_unit = {
     .a = {
         {1.0F, 0.0F, 0.0F},
         {0.0F, 1.0F, 0.0F},
-        {0.0F, 0.0F, 1.0F}
-    }
-};
+        {0.0F, 0.0F, 1.0F}}};
 
-Matrix3f Matrix3f_null =
-{
+Matrix3f Matrix3f_null = {
     .a = {
         {0.0F, 0.0F, 0.0F},
         {0.0F, 0.0F, 0.0F},
-        {0.0F, 0.0F, 0.0F}
-    }
-};
+        {0.0F, 0.0F, 0.0F}}};
 
 Matrix3f Matrix3f_init(float *)
 {
     Matrix3f m;
-
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for(int j = 0; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             m.a[i][j] = 0.0F;
         }
     }
-
     return m;
 }
 
@@ -50,15 +42,13 @@ Matrix3f Matrix3f_init(float *)
 Matrix3f Matrix3f_add(Matrix3f m1, Matrix3f m2)
 {
     Matrix3f result;
-
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for(int j = 0; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             result.a[i][j] = m1.a[i][j] + m2.a[i][j];
         }
     }
-
     return result;
 }
 
@@ -73,15 +63,13 @@ Matrix3f Matrix3f_add(Matrix3f m1, Matrix3f m2)
 Matrix3f Matrix3f_sub(Matrix3f m1, Matrix3f m2)
 {
     Matrix3f result;
-
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for(int j = 0; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             result.a[i][j] = m1.a[i][j] - m2.a[i][j];
         }
     }
-
     return result;
 }
 
@@ -97,17 +85,15 @@ Matrix3f Matrix3f_sub(Matrix3f m1, Matrix3f m2)
 Matrix3f Matrix_mul(Matrix3f m1, Matrix3f m2)
 {
     Matrix3f result = Matrix3f_null;
-
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for(int j = 0; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             result.a[i][j] = m1.a[i][0] * m2.a[0][j] +
                              m1.a[i][1] * m2.a[1][j] +
                              m1.a[i][2] * m2.a[2][j];
         }
     }
-
     return result;
 }
 
@@ -120,14 +106,13 @@ Matrix3f Matrix_mul(Matrix3f m1, Matrix3f m2)
  */
 int Matrix3f_transpose(Matrix3f mtp, Matrix3f m)
 {
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for(int j = 0; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             mtp.a[i][j] = m.a[j][i];
         }
     }
-
     return 0; // Success
 }
 
@@ -144,7 +129,7 @@ int Matrix3f_inverse(Matrix3f minv, Matrix3f m)
                 m.a[0][1] * (m.a[1][0] * m.a[2][2] - m.a[1][2] * m.a[2][0]) +
                 m.a[0][2] * (m.a[1][0] * m.a[2][1] - m.a[1][1] * m.a[2][0]);
 
-    if(fabs(det) < 1e-12)
+    if (fabs(det) < 1e-12)
     {
         return -1; // Matrix is singular, cannot be inverted
     }
@@ -176,13 +161,11 @@ int Matrix3f_inverse(Matrix3f minv, Matrix3f m)
 Vector3f Matrix_vector_mul(Matrix3f m, Vector3f v)
 {
     Vector3f result = {0.0F, 0.0F, 0.0F};
-
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         result.x += m.a[i][0] * v.x;
         result.y += m.a[i][1] * v.y;
         result.z += m.a[i][2] * v.z;
     }
-
     return result;
 }
