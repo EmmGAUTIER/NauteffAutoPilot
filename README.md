@@ -20,7 +20,7 @@ et le matériel n'est pas encore disponible.
 ## Premier essai
 
 Le premier essai du pilote a été réalisé le 28 décembre 2025.
-La météo n'était pas favorable a des essais,
+La météo "agitée" était défavorable aux essais,
 cependant le pilote a tenu le cap pendant une heure dans une mer formée.
 
 ## Outils de développement
