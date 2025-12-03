@@ -17,12 +17,19 @@ et le modifier.
 Le logiciel est en cours de développement sur une maquette
 et le matériel n'est pas encore disponible.
 
-## Pour étudier le code 
+## Premier essai
+
+Le premier essai du pilote a été réalisé le 28 décembre 2025.
+La météo n'était pas favorable a des essais,
+cependant le pilote a tenu le cap pendant une heure dans une mer formée.
+
+## Outils de développement
 
 Le développement est fait avec
  - STM32CubeMx ;
  - gcc-arm-none-eabi ;
  - FreeRTOS ;
  - cmake.
+
 
 

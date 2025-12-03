@@ -778,8 +778,8 @@ void taskMotor(void *parameters)
                 if(counter % (((motorData.status & MOTOR_STATUS_IDLE)) ? 20 : 2) == 0)
                 {
                     DBG_ADC_PRINT(
-                        (snprintf(message, sizeof(message), "ADC %u %6f %6f\n",
-                                  xTaskGetTickCount(), motorData.vPower,
+                        (snprintf(message, sizeof(message), "ADC %5f %5f\n",
+                                  motorData.vPower,
                                   motorData.vCurrent),
                          svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
                 }
