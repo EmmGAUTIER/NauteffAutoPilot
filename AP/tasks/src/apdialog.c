@@ -22,6 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+/*****************************************************************************
+ * Dialog task
+ *
+ * Reads from line buffered input
+ *
+ * turn port/starboard <angle>
+ * mode idle|heading : set idle or heading mode
+ *
+ *
+*****************************************************************************/
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
@@ -80,6 +91,7 @@ typedef enum
     TOKEN_MOTOR_CVT_ANGLE_TIME,
     TOKEN_MAG_VS_GYR,
     TOKEN_MOTOR_THESHOLD,
+    TOKEN_MOTOR_HPF,
     TOKEN_AHRS,
     TOKEN_CALIBRATE,
     TOKEN_DISPLAY,
@@ -115,6 +127,7 @@ static const TokenEntry tokenTable[] =
     {"motor_angletime", TOKEN_MOTOR_CVT_ANGLE_TIME},
     {"mag_vs_gyr", TOKEN_MAG_VS_GYR},
     {"motor_threshold", TOKEN_MOTOR_THESHOLD},
+    {"motor_hpf_coeff", TOKEN_MOTOR_THESHOLD},
     {"AHRS", TOKEN_AHRS},
     {"calibrate", TOKEN_CALIBRATE},
     {"display", TOKEN_DISPLAY},
@@ -446,8 +459,7 @@ void parse_command_line(void)
     {
         /* Command: mode heading */
 
-        DBG_DIALOG_PRINT((
-                             svc_UART_Write(&svc_uart2, "DIALOG mode heading\n", 14, 0U)));
+        DBG_DIALOG_PRINT((svc_UART_Write(&svc_uart2, "DIALOG mode heading\n", 20, 0U)));
 
         msgAutoPilot.msgType = AP_MSG_MODE_HEADING;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
@@ -505,9 +517,8 @@ void parse_command_line(void)
         {
             res = convert_float(tokens[2], &coeff);
             (void)res;
-            DBG_DIALOG_PRINT((
-                                 nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient proportional %f\n", coeff),
-                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+            DBG_DIALOG_PRINT((nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient proportional %f\n", coeff),
+                              svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
             msgAutoPilot.msgType = AP_MSG_PARAM;
             msgAutoPilot.data.coefficient.param_number = AP_PARAM_PROPORTIONNAL;
@@ -528,16 +539,6 @@ void parse_command_line(void)
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
 
-        /* Parameter : ratio helm move in degrees and command time */
-        else if(tokenTypes[1] == TOKEN_MOTOR_CVT_ANGLE_TIME && tokenTypes[2] == TOKEN_NUMBER)
-        {
-            convert_float(tokens[2], &coeff);
-            MOTOR_MSG_set_cvt_angle_time(coeff);
-            DBG_DIALOG_PRINT((
-                                 nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient cvt angle time %f\n", coeff),
-                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
-        }
-
         /* Parameter : prop between magnetometer and gyro */
         else if(tokenTypes[1] == TOKEN_MAG_VS_GYR && tokenTypes[2] == TOKEN_NUMBER)
         {
@@ -550,17 +551,31 @@ void parse_command_line(void)
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
 
+        /* Parameter : ratio helm move in degrees and command time */
+        else if(tokenTypes[1] == TOKEN_MOTOR_CVT_ANGLE_TIME && tokenTypes[2] == TOKEN_NUMBER)
+        {
+            convert_float(tokens[2], &coeff);
+            MOTOR_MSG_set_cvt_angle_time(coeff);
+            DBG_DIALOG_PRINT((nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient cvt angle time %f\n", coeff),
+                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+        }
+
         else if(tokenTypes[1] == TOKEN_MOTOR_THESHOLD && tokenTypes[2] == TOKEN_NUMBER)
         {
             convert_float(tokens[2], &coeff);
-            msgAutoPilot.msgType = AP_MSG_PARAM;
-            msgAutoPilot.data.coefficient.param_number = AP_PARAM_MOTOR_THRESHOLD;
-            msgAutoPilot.data.coefficient.param_value = coeff;
-            xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
-            DBG_DIALOG_PRINT((
-                                 nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient motor threshold %f\n", coeff),
+            MOTOR_MSG_set_threshold(coeff);
+            DBG_DIALOG_PRINT((nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient motor threshold %f\n", coeff),
+                              svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+        }
+
+        else if(tokenTypes[1] == TOKEN_MOTOR_HPF && tokenTypes[2] == TOKEN_NUMBER)
+        {
+            convert_float(tokens[2], &coeff);
+            MOTOR_MSG_set_hpf_coeff(coeff);
+            DBG_DIALOG_PRINT((nbcar = snprintf(message, sizeof(message), "DIALOG Coefficient motor high pass filter %f\n", coeff),
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
+
     }
     else if(tokenCount == 3 && tokenTypes[0] == TOKEN_DISPLAY && tokenTypes[1] == TOKEN_CONFIG)
     {

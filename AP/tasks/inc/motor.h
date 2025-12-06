@@ -50,9 +50,11 @@ typedef enum
     MSG_MOTOR_SET_HELM_ANGLE,
     MSG_MOTOR_MOVE_TIME,
     MSG_MOTOR_MOVE_DONE,
-    MSG_MOTOR_SET_CVT_ANGLE_TIME,
     MSG_MOTOR_DISPLAY_CONFIG,
     MSG_MOTOR_DEFAULT,
+    MSG_MOTOR_SET_CVT_ANGLE_TIME,
+    MSG_MOTOR_SET_HPF_COEF,
+    MSG_MOTOR_SET_THRESHOLD,
 } MsgMotorType_t;
 
 typedef struct
@@ -71,6 +73,8 @@ typedef struct
         float moveTime;
         float steerAngle;
         float cvtAngleTime;
+        float hpf_coeff;
+        float threshold;
     } data;
 } MsgMotor_t;
 
@@ -121,3 +125,8 @@ void MOTOR_MSG_moveTime(float time);
  * @return void
  */
 void MOTOR_MSG_set_cvt_angle_time(float cvt);
+
+void MOTOR_MSG_set_hpf_coeff(float cvt);
+
+void MOTOR_MSG_set_threshold(float cvt);
+

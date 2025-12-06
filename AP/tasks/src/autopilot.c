@@ -30,8 +30,6 @@ SOFTWARE.
 /* Maximum integrated angle */
 #define AP_MAX_INTEGRAL_GAP  (30.F * (M_PI / 180.))
 
-/* minimum angle to send an order to motor */
-#define AP_MOTOR_THRESHOLD (0.2F * (M_PI / 180.F))
 #define AP_TIME_ONE_MOVE (0.2F) /* time to move for one order to motor in seconds */
 
 #define DB_PRINT_ORDERS(X) (X)
@@ -149,7 +147,7 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
     MsgAutoPilot_t msg;
     long unsigned int compteur = 0L;
     static char message[200];
-    int nbcar;
+    int nbcar = 0;
     unsigned memsdata = 0;
     float deltat;
     BaseType_t timestamp, timestamp_2;
@@ -190,36 +188,24 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
             case AP_MSG_MODE_HEADING:
 
                 AP_set_mode_heading(&APStatus);
-                DB_PRINT_ORDERS((
-                                    nbcar = snprintf(message, sizeof(message), "AP Mode heading %.1f\n", AP_get_heading_dir(&APStatus)),
-                                    svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP Mode heading %.1f\n", AP_get_heading_dir(&APStatus)),
+                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 timestamp = xTaskGetTickCount();
                 break;
 
             case AP_MSG_MODE_IDLE:
 
-                DB_PRINT_ORDERS((
-                                    nbcar = snprintf(message, sizeof(message), "AP Mode idle\n"),
-                                    svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP Mode idle\n"),
+                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 AP_set_mode_idle(&APStatus);
                 break;
 
             case AP_MSG_TURN:
 
-                AP_turn(&APStatus, msg.data.reqTurnAngle * (-M_PI / 180.F));
+                AP_turn(&APStatus, msg.data.reqTurnAngle * (- M_PI / 180.F));
 
-                if(AP_get_engaged(&APStatus))
-                {
-                    DB_PRINT_ORDERS((
-                                        nbcar = snprintf(message, sizeof(message), "AP Mode heading %8f\n", AP_get_heading_dir(&APStatus)),
-                                        svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
-                }
-                else
-                {
-                    DB_PRINT_ORDERS((
-                                        nbcar = snprintf(message, sizeof(message), "AP turn %8f\n", msg.data.reqTurnAngle),
-                                        svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
-                }
+                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP turn %8f\n", msg.data.reqTurnAngle),
+                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
                 break;
 
@@ -249,10 +235,6 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 
                 case AP_PARAM_DERIVATIVE:
                     APStatus.kd = msg.data.coefficient.param_value;
-                    break;
-
-                case AP_PARAM_MOTOR_THRESHOLD:
-                    APStatus.motorThreshold = msg.data.coefficient.param_value;
                     break;
 
                 default:
@@ -287,13 +269,11 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 break;
 
             case AP_MSG_DISPLAY_CONFIG:
-                DB_PRINT_ORDERS((
-                                    nbcar = snprintf(message, sizeof(message) - 1,
-                                                     "AP config: Kp %8f  Ki %8f  Kd %8f  motor threshold %8f\n",
+                DB_PRINT_ORDERS(nbcar = snprintf(message, sizeof(message) - 1,
+                                                     "AP config: Kp %8f  Ki %8f  Kd %8f\n",
                                                      APStatus.kp,
                                                      APStatus.ki,
                                                      APStatus.kd,
-                                                     APStatus.motorThreshold),
                                     svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 break;
 
@@ -329,7 +309,6 @@ void AP_init(APStatus_t *aps)
     aps->kp = AP_KP;
 
     /*Motor parameters*/
-    aps->motorThreshold = AP_MOTOR_THRESHOLD;
     aps->steerAngle = 0.F;
 
     return;
@@ -405,7 +384,7 @@ float AP_get_heading_dir(APStatus_t *aps)
 
 int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
 {
-    int nbcar;
+    int nbcar = 0;
     static char message[120];
     float steerReq;
 
@@ -431,8 +410,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
                    + (aps->integratedGap * aps->ki) /* Integral */
                    + (aps->yawRate * aps->kd);      /* Derivative */
 
-        DB_PRINT_PID((
-                         nbcar = snprintf(message, sizeof(message) - 1,
+        DB_PRINT_PID((nbcar = snprintf(message, sizeof(message) - 1,
                                           "AP GAP %8f  %8f  %8f  %8f\n",
                                           aps->currentGap,
                                           aps->integratedGap,

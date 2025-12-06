@@ -25,7 +25,7 @@ SOFTWARE.
 #define DBG_PRINT_RAW_VALUES_ACC(X)
 #define DBG_PRINT_RAW_VALUES_GYR(X)
 #define DBG_PRINT_RAW_VALUES_MAG(X)
-#define DBG_PRINT_MEAN_RAW_VALUES(X)
+#define DBG_PRINT_MEAN_RAW_VALUES(X) (X)
 #define DBG_PRINT_MEAN_CORR_VALUES(X)
 #define DBG_PRINT_ATTITUDE(X) (X)
 #define DBG_PRINT_QUATERNION(X)
@@ -681,7 +681,7 @@ void taskMEMs(void *param)
     Vector3f magPrevious;
     float magPreviousNorm = 0.F;
     float magMaxDelta = 0.F;
-    bool magok;
+    bool magok = false;
     uint8_t value;
     TickType_t tickPast = 0U;
     TickType_t tickCurrent = 0U;
@@ -784,11 +784,12 @@ void taskMEMs(void *param)
                 if(magReady)
                 {
                     LSM9DS1_ReadMag(&mag);
+
                     magPreviousNorm = vector3f_getNorm(magPrevious);
                     magMaxDelta = magPreviousNorm * 1.5F;
 
                     if(((fabs(mag.x - magPrevious.x) < magMaxDelta) && (fabs(mag.y - magPrevious.y) < magMaxDelta)
-                            && (fabs(mag.z - magPrevious.z) < magMaxDelta)) || !magok)
+                            && (fabs(mag.z - magPrevious.z) < magMaxDelta)) || !magok )
                     {
                         magCumul = vector3f_add(magCumul, mag);
                         magNb++;

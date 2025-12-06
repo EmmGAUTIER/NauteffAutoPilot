@@ -68,7 +68,7 @@
           <dia:boolean val="true"/>
         </dia:attribute>
         <dia:attribute name="snap-to-grid">
-          <dia:boolean val="true"/>
+          <dia:boolean val="false"/>
         </dia:attribute>
         <dia:attribute name="snap-to-guides">
           <dia:boolean val="true"/>
@@ -88,6 +88,7 @@
       </dia:composite>
     </dia:attribute>
   </dia:diagramdata>
+  <dia:layer name="Arrière-plan" visible="true" connectable="true"/>
   <dia:layer name="Arrière-plan" visible="true" connectable="true" active="true">
     <dia:object type="Standard - Box" version="0" id="O0">
       <dia:attribute name="obj_pos">
@@ -190,7 +191,7 @@
         <dia:point val="34,18.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="32.245,17.2297;35.7769,19.7703"/>
+        <dia:rectangle val="32.245,17.2625;35.755,19.7375"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -206,7 +207,7 @@ vers tribord#</dia:string>
             <dia:real val="0.80000000000000004"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="34,17.9366"/>
+            <dia:point val="34,17.9475"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000ff"/>
@@ -483,7 +484,7 @@ vers tribord#</dia:string>
         <dia:point val="20,18.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.1988,17.2297;21.8231,19.7703"/>
+        <dia:rectangle val="18.1988,17.2625;21.8012,19.7375"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -499,7 +500,7 @@ vers bâbord#</dia:string>
             <dia:real val="0.80000000000000004"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="20,17.9366"/>
+            <dia:point val="20,17.9475"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000ff"/>
@@ -521,7 +522,7 @@ vers bâbord#</dia:string>
         <dia:point val="19,9.5"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="17.1988,8.62969;20.8231,10.3703"/>
+        <dia:rectangle val="17.1988,8.6625;20.8012,10.3375"/>
       </dia:attribute>
       <dia:attribute name="text">
         <dia:composite type="text">
@@ -536,7 +537,7 @@ vers bâbord#</dia:string>
             <dia:real val="0.80000000000000004"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="19,9.33656"/>
+            <dia:point val="19,9.3475"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000ff"/>
