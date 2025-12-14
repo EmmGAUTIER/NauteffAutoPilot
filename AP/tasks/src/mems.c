@@ -25,8 +25,8 @@ SOFTWARE.
 #define DBG_PRINT_RAW_VALUES_ACC(X)
 #define DBG_PRINT_RAW_VALUES_GYR(X)
 #define DBG_PRINT_RAW_VALUES_MAG(X)
-#define DBG_PRINT_MEAN_RAW_VALUES(X) (X)
-#define DBG_PRINT_MEAN_CORR_VALUES(X)
+#define DBG_PRINT_MEAN_RAW_VALUES(X)
+#define DBG_PRINT_MEAN_CORR_VALUES(X) (X)
 #define DBG_PRINT_ATTITUDE(X) (X)
 #define DBG_PRINT_QUATERNION(X)
 #define DBG_PRINT_MADGWICK(X)
@@ -837,8 +837,7 @@ void taskMEMs(void *param)
                 }
 
                 tickCurrent = xTaskGetTickCount();
-                DBG_PRINT_MEAN_RAW_VALUES((
-                                              snprintf(message, sizeof(message),
+                DBG_PRINT_MEAN_RAW_VALUES((snprintf(message, sizeof(message),
                                                        "MEMS raw mean %u %d %d %d %d %+7.3f %+7.3f %+7.3f %+7f %+7f %+7f %+7.4f %+7.4f %+7.4f\n",
                                                        tickCurrent,
                                                        tickCurrent - tickPast,
@@ -850,25 +849,21 @@ void taskMEMs(void *param)
 
                 imu_correct(&accComp, &gyrComp, &magComp);
 
-                DBG_PRINT_MEAN_CORR_VALUES((
-                                               snprintf(message, sizeof(message),
-                                                        "MEMS corrected mean %u %d %d %d %d %+7.3f %+7.3f %+7.3f %+7f %+7f %+7f %+7.4f %+7.4f %+7.4f\n",
-                                                        tickCurrent,
-                                                        tickCurrent - tickPast,
-                                                        accNb, gyrNb, magNb,
-                                                        accComp.x, accComp.y, accComp.z,
-                                                        gyrComp.x, gyrComp.y, gyrComp.z,
-                                                        magComp.x, magComp.y, magComp.z),
+                DBG_PRINT_MEAN_CORR_VALUES((snprintf(message, sizeof(message),
+                                                     "MEMS corrected mean %u %d %d %d %d %+7.3f %+7.3f %+7.3f %+7f %+7f %+7f %+7.4f %+7.4f %+7.4f\n",
+                                                     tickCurrent,
+                                                       tickCurrent - tickPast,
+                                                       accNb, gyrNb, magNb,
+                                                       accComp.x, accComp.y, accComp.z,
+                                                       gyrComp.x, gyrComp.y, gyrComp.z,
+                                                       magComp.x, magComp.y, magComp.z),
                                                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 deltat = ((float)(tickCurrent - tickPast)) / 1000.F;
 
-                //IMU_new_values(&imu, &accComp, &gyrComp, &magComp, deltat);
-                //IMU_update_quat(&imu, &accComp, &gyrComp, &magComp, deltat);
                 IMU_new_values(&imu, &accComp, &gyrComp, &magComp, deltat);
 
-                DBG_PRINT_ATTITUDE((
-                                       snprintf(message, sizeof(message),
+                DBG_PRINT_ATTITUDE((snprintf(message, sizeof(message),
                                                 "ATTITUDE %+f %+f %+f\n",
                                                 IMU_get_heading(&imu),
                                                 IMU_get_roll(&imu),

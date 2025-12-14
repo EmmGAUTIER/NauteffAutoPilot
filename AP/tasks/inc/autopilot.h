@@ -165,7 +165,7 @@ void taskAutoPilot(void *parameters);
 *
 * @return 0 if success, -1 if error
 */
-int autopilot_sendValues(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
+int AP_MSG_send_AHRS_values(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
 
 /*
 * @brief Send motor stall message to autopilot task

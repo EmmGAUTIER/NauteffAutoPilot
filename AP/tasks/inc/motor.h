@@ -130,3 +130,4 @@ void MOTOR_MSG_set_hpf_coeff(float cvt);
 
 void MOTOR_MSG_set_threshold(float cvt);
 
+void MOTOR_stopPanic();

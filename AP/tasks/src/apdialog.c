@@ -90,8 +90,8 @@ typedef enum
     TOKEN_INTEGRAL,
     TOKEN_MOTOR_CVT_ANGLE_TIME,
     TOKEN_MAG_VS_GYR,
-    TOKEN_MOTOR_THESHOLD,
-    TOKEN_MOTOR_HPF,
+    TOKEN_MOTOR_THRESHOLD,
+    TOKEN_MOTOR_HPF_COEFF,
     TOKEN_AHRS,
     TOKEN_CALIBRATE,
     TOKEN_DISPLAY,
@@ -126,8 +126,8 @@ static const TokenEntry tokenTable[] =
     {"integral", TOKEN_INTEGRAL},
     {"motor_angletime", TOKEN_MOTOR_CVT_ANGLE_TIME},
     {"mag_vs_gyr", TOKEN_MAG_VS_GYR},
-    {"motor_threshold", TOKEN_MOTOR_THESHOLD},
-    {"motor_hpf_coeff", TOKEN_MOTOR_THESHOLD},
+    {"motor_threshold", TOKEN_MOTOR_THRESHOLD},
+    {"motor_hpf_coeff", TOKEN_MOTOR_HPF_COEFF},
     {"AHRS", TOKEN_AHRS},
     {"calibrate", TOKEN_CALIBRATE},
     {"display", TOKEN_DISPLAY},
@@ -560,7 +560,7 @@ void parse_command_line(void)
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
 
-        else if(tokenTypes[1] == TOKEN_MOTOR_THESHOLD && tokenTypes[2] == TOKEN_NUMBER)
+        else if(tokenTypes[1] == TOKEN_MOTOR_THRESHOLD && tokenTypes[2] == TOKEN_NUMBER)
         {
             convert_float(tokens[2], &coeff);
             MOTOR_MSG_set_threshold(coeff);
@@ -568,7 +568,7 @@ void parse_command_line(void)
                               svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
 
-        else if(tokenTypes[1] == TOKEN_MOTOR_HPF && tokenTypes[2] == TOKEN_NUMBER)
+        else if(tokenTypes[1] == TOKEN_MOTOR_HPF_COEFF && tokenTypes[2] == TOKEN_NUMBER)
         {
             convert_float(tokens[2], &coeff);
             MOTOR_MSG_set_hpf_coeff(coeff);

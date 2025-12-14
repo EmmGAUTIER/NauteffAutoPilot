@@ -227,7 +227,7 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Ve
 int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
 {
     Vector3f east, north;
-    static char message[100];
+    //static char message[100];
     float gyrturn;
     float newdir_x, newdir_y;
     float hdgestim;
@@ -251,7 +251,7 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
-#if 1
+#if 0
     snprintf(message, sizeof(message) - 1, "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
              east.x, east.y, east.z, north.x, north.y, north.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);

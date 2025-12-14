@@ -15,18 +15,21 @@
 #include "apdialog.h"
 #include "autopilot.h"
 
-void taskBlink(void *param)
+
 /*
- * \brief Blinks the green LED on the Nucleo board.
+ * @brief blink a LED for debugging purpose only
+ *
+ * Blinks the green LED on the Nucleo board.
  * This task is used for debugging and to check if the system is running.
+ *
  */
+void taskBlink(void *param)
 {
     (void)param;
-    unsigned cnt; // pour mise au point
 
-    for(;;)
+    for(;;) /* infinite loop */
     {
-
+        /*set and reset a LED with delays */
         LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
         vTaskDelay(pdMS_TO_TICKS(100));
 
@@ -39,33 +42,42 @@ void taskBlink(void *param)
         LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
         vTaskDelay(pdMS_TO_TICKS(600));
 
-        cnt = TIM3->CNT;
-
-        (void)cnt;
     }
+}
+
+void panic(int panicType)
+{
+    MOTOR_stopPanic();
+    /* Alarm_give(); */
+    /* TODO fire a reset witth special condition */
 }
 
 void apmain()
 {
     int ret;
 
+    /* init_tasksXXX fcts create queues semaphores, timers,...
+     * before starting scheduler
+     */
     init_taskMotor();
     init_taskMEMs();
     init_taskDialogIn();
     init_taskAutoPilot();
     init_taskService();
 
-    ret = xTaskCreate(taskMotor, "Motor", configMINIMAL_STACK_SIZE + 500, (void *)0, 3, (void *)0);
-    ret = xTaskCreate(taskMEMs, "MEMs", configMINIMAL_STACK_SIZE + 1000, (void *)0, 4, (void *)0);
-    ret = xTaskCreate(taskDialogIn, "Dialog", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, (void *)0);
-    ret = xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, (void *)0);
-    ret = xTaskCreate(taskService, "SVC", configMINIMAL_STACK_SIZE + 500, (void *)0, 5, (void *)0);
-    ret = xTaskCreate(taskBlink, "Blink", configMINIMAL_STACK_SIZE + 200, (void *)0, 2, (void *)0);
+    /* Create tasks */
+    ret = xTaskCreate(taskMotor,     "Motor",      configMINIMAL_STACK_SIZE + 1000, (void *)0, 3, (void *)0);
+    ret = xTaskCreate(taskMEMs,      "MEMs",       configMINIMAL_STACK_SIZE + 1000, (void *)0, 4, (void *)0);
+    ret = xTaskCreate(taskDialogIn,  "Dialog",     configMINIMAL_STACK_SIZE + 1000, (void *)0, 2, (void *)0);
+    ret = xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 1000, (void *)0, 2, (void *)0);
+    ret = xTaskCreate(taskService,   "SVC",        configMINIMAL_STACK_SIZE +  500, (void *)0, 5, (void *)0);
+    ret = xTaskCreate(taskBlink,     "Blink",      configMINIMAL_STACK_SIZE +  200, (void *)0, 2, (void *)0);
 
-    vTaskStartScheduler(); /* Start scheduler, should never return */
+    /* Start scheduler, should never return */
+    vTaskStartScheduler();
 
     for(;;)
-        ;
+        ; /* Shall never happen */
 
     (void)ret; // To avoid unused variable warning
 }
