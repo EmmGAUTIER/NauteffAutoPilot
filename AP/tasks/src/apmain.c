@@ -14,7 +14,7 @@
 #include "mems.h"
 #include "apdialog.h"
 #include "autopilot.h"
-
+#include "blink.h"
 
 /*
  * @brief blink a LED for debugging purpose only
@@ -23,6 +23,7 @@
  * This task is used for debugging and to check if the system is running.
  *
  */
+
 void taskBlink(void *param)
 {
     (void)param;
@@ -41,7 +42,6 @@ void taskBlink(void *param)
 
         LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
         vTaskDelay(pdMS_TO_TICKS(600));
-
     }
 }
 
@@ -66,12 +66,12 @@ void apmain()
     init_taskService();
 
     /* Create tasks */
-    ret = xTaskCreate(taskMotor,     "Motor",      configMINIMAL_STACK_SIZE + 1000, (void *)0, 3, (void *)0);
-    ret = xTaskCreate(taskMEMs,      "MEMs",       configMINIMAL_STACK_SIZE + 1000, (void *)0, 4, (void *)0);
-    ret = xTaskCreate(taskDialogIn,  "Dialog",     configMINIMAL_STACK_SIZE + 1000, (void *)0, 2, (void *)0);
-    ret = xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 1000, (void *)0, 2, (void *)0);
-    ret = xTaskCreate(taskService,   "SVC",        configMINIMAL_STACK_SIZE +  500, (void *)0, 5, (void *)0);
-    ret = xTaskCreate(taskBlink,     "Blink",      configMINIMAL_STACK_SIZE +  200, (void *)0, 2, (void *)0);
+    ret = xTaskCreate(taskMotor,     "Motor",      configMINIMAL_STACK_SIZE + 2000, (void *)0, 3, (void *)0);
+    ret = xTaskCreate(taskMEMs,      "MEMs",       configMINIMAL_STACK_SIZE + 2000, (void *)0, 4, (void *)0);
+    ret = xTaskCreate(taskDialogIn,  "Dialog",     configMINIMAL_STACK_SIZE + 2000, (void *)0, 2, (void *)0);
+    ret = xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 2000, (void *)0, 2, (void *)0);
+    ret = xTaskCreate(taskService,   "SVC",        configMINIMAL_STACK_SIZE + 2000, (void *)0, 5, (void *)0);
+    ret = xTaskCreate(taskBlink,     "Blink",      configMINIMAL_STACK_SIZE + 2000, (void *)0, 2, (void *)0);
 
     /* Start scheduler, should never return */
     vTaskStartScheduler();

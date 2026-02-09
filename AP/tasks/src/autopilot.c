@@ -243,7 +243,7 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 
                 break;
 
-            case AP_MSG_CALIBRATE_MEMS:
+            case AP_MSG_START_CALIBRATE:
                 if(APStatus.engaged)
                 {
                     DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message) - 1, "AP MEMS calibrate impossible while AP engaged\n"),

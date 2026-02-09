@@ -1,0 +1,153 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+
+
+\title{Nauteff Notes de conception}
+\author{Emmanuel Gautier}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Ce document contient des notes de conception du prototype Nauteff.
+\end{abstract}
+
+\tableofcontents
+\chapter{Buts du document}
+\chapter{Documents applicables et de référence}
+\chapter{Terminologie}
+\chapter{Environnement du Nauteff}
+\chapter{Matériel}
+\section{STM32}
+\subsection{Horlogerie}
+Nauteff utilise l'horloge interne HSI à 8Mhz.
+
+\subsection{Interruptions}
+\subsubsection{Liste}
+\begin{tabular}{|c|c|p{7cm}|}
+\hline
+Interruption   & \no & Usage\\
+\hline
+\multicolumn{3}{|c|}{Exceptions du système}  \\
+\hline
+Reset               &  & appel de la fct main() \\
+NMI                 &  &                      \\
+HardFault           &  &                      \\
+MemManage           &  &                      \\
+BusFault            &  &                      \\
+UsageFault          &  &                      \\
+SVCall              &  & vPortSVCHandler  (fct de FreeRTOS)     \\
+PendSV              &  & xPortPendSVHandler (fct de FreeRTOS)  \\
+SysTick             &  & xPortSysTickHandler  (fct de FreeRTOS )\\
+\hline
+\multicolumn{3}{|c|}{Événements extérieurs}   \\
+\hline
+EXTI0          &  & Bouton Marche          \\
+EXTI1          &  & Bouton Veille          \\
+EXTI2          &  & Touche +1              \\
+EXTI3          &  & Touche -1              \\
+EXTI4          &  & Touche +10             \\
+EXTI10\_15     &  & Touche -10             \\
+I2C1\_Event    &  & Évènement I2C1         \\
+I2C1\_Error    &  & Erreur I2C1            \\
+USART1\_Event  &  & Événement USART 1      \\
+\hline 
+\end{tabular} 
+\subsubsection{USART}
+\subsubsection{I2C1}
+
+\subsection{Affectation des broches du STM32}
+Le STM32F303K8 comporte 32 broches.
+\\
+   \begin{tabular}{|l|l|c|c|l|}
+   \hline
+   STM & Nucleo& Fonction & Périphérique & Usage\\
+   \hline
+   PA0  & A0  & Entrée GPIO, PU   & EXTI0       & Bouton marche          \\
+   PA1  & A1  & Entrée GPIO, PU   & EXTI1       & Bouton veille          \\
+   PA2  & A7  & Entrée GPIO, PU   & EXTI2       & Touche +1              \\
+   PA3  & A2  & Entrée GPIO, PU   & EXTI3       & Touche -1              \\
+   PA4  & A3  & Entrée GPIO, PU   & EXTI4       & Touche +10             \\
+   PA5  & A4  & Entrée GPIO       & EXTI5       & Inutilisable sur nucléo\\
+   PA6  & A5  & Entrée GPIO       & EXTI6       & Inutilisable sur nucléo\\
+   PA7  & A6  & Entrée analogique & ADC2\_IN4   & Courant moteur         \\
+   PA8  & D9  & Alt Fct \no 0     & RCC\_MCO    & Sortie horloge système \\
+   PA9  & D1  & Alt Fct \no 7     & USART1 TX   & Sortie série           \\
+   PA10 & D0  & Alt Fct \no 7     & USART1 RX   & Entrée série           \\
+   PA11 & D10 & Entrée GPIO PU    & EXTI10\_15  & Touche -10             \\
+   PB0  & D3  & Sortie GPIO       & GPIO B0     & Commande moteur        \\
+   PB1  & D6  & Entrée analogique & ADC1\_IN2   & Tension alim.          \\
+   PB3  & D13 & Sortie GPIO       & GPIO B3     & LED Verte et embrayage \\
+   PB4  & D12 & Sortie GPIO       & GPIO B4     & Sens pont A (INA)      \\
+   PB5  & D11 & Sortie GPIO       & GPIO B5     & Sens pont B (INB)      \\
+   PB6  & D5  & Alt Fct \no 4     & I2C1 SCL    & Vers capteurs MEMs     \\
+   PB7  & D4  & Alt Fct \no 4     & I2C1 SDA    & Vers capteurs MEMs     \\
+   \hline
+\end{tabular}
+   La broche PA8 sert à observer l'horloge système à l'oscilloscope. Elle pourra servir plus tard à une autre fonction.
+
+\section{STM32}
+
+\chapter{Architecture logicielle}
+
+\section{Tâches}
+\begin{tabular}{|l|c|l|}
+\hline 
+Tâche & Priorité & Nom \\
+\hline 
+Gestion du clavier & 6 & \texttt{TaskKeyboard}\\
+Contrôle du moteur & 5 & \texttt{TaskMotor}\\
+Gestion de l'état & 3 & \texttt{TaskCore}\\
+Gestion des capteurs MEMs & 3 & \texttt{TaskMEMs}\\
+\hline 
+\end{tabular} 
+\subsection{ScrutationClavier}
+La tâche utilise la fonction nommée prvTaskScrutationClavier qui n'utilise aucun argument.  Elle fonctionne par scrutation périodique des entrées sur lesquelles sont branchées les touches.  Elle envoie les ordres à la tâche de gestion de l'état par l'intermédiaire d'un \texttt{MessageBuffer\_t} nommé buffclav
+\subsection{Contrôle du moteur}
+Cette tâche reçoit les ordres de la tâche de gestion, elle commande l'embrayage du moteur et son fonctionnement. Lorsque le moteur tourne, elle mesure le courant du moteur, vérifie que le moteur n'est pas bloqué ou débranché et renvoie une estimation de l'effort du moteur.
+\section{Canaux de communications}
+
+\begin{tabular}{|l|c|c|c|}
+\hline
+Canal & Nom & Type & Taille \\
+\hline
+Messages vers le gestionnaire principal & \texttt{bufferCore} & \texttt{MessageBuffer\_t} & 10 \\
+\hline 
+Ordres vers le moteur & \texttt{bufferMotor} & \texttt{MessageBuffer\_t} & 5 \\ 
+\hline
+\end{tabular}
+\subsection{Message gestionnaire principal}
+\begin{tabular}{|l|l|}
+\hline 
+Ordre & Code  \\ 
+\hline
+\multicolumn{2}{|c|}{Ordres du clavier} \\
+\hline 
+Mise en mode automatique & CMD\_AUTO \\ 
+Mise en veille & CMD\_STDBY \\ 
++1 & CMD\_STARBOARD\_ONE \\ 
+-1 & CMD\_PORT\_ONE \\ 
++10 & CMD\_STARBOARD\_TEN \\ 
+-10 & CMD\_PORT\_TEN \\ 
++1 relachée & CMD\_STARBOARD\_ONE\_END \\ 
+-1 relachée & CMD\_PORT\_ONE\_END \\ 
+\hline 
+\multicolumn{2}{|c|}{Informations du moteur} \\
+\hline
+Effort moteur & MOT\_EFFORT + valeurs\\ 
+Moteur bloqué & MOT\_BLOCKED \\
+Court-circuit sortie moteur & MOT\_SHORT\_CIRCUIT \\
+\hline
+\multicolumn{2}{|c|}{Informations des capteurs MEMs}\\
+\hline
+Info Capteurs MEMs & MEMS\_VALUES + valeurs \\
+Info MEMs indisponible & MEMS\_DEFAULT \\
+
+\hline
+\end{tabular} 
+\subsection{Commande du moteur}
+
+\end{document}

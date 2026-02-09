@@ -165,14 +165,17 @@ float vector3f_getNorm(Vector3f v);
 Vector3f vector3f_getNormalized(Vector3f v);
 
 /*
- @ brief Computes the difference between two 3D vectors and checks if it is within a threshold.
- @ param v1 The first vector.
- @ param v2 The second vector.
- @ param threshold The threshold value.
- @ return true if the norm of the difference is less than or equal to the threshold, false otherwise.
+ * @ brief Computes the square difference between two 3D vectors.
+ *
+ * This function avoids computing a square root wich is usually slow
+ *
+ * @ param v1 The first vector.
+ * @ param v2 The second vector.
+ * @ param threshold The threshold value.
+ * @ return true if the norm of the difference is less than or equal to the threshold, false otherwise.
  */
 
-// bool Vector3f_normDiff(Vector3f v1, Vector3f v2, float threshold);
+float Vector3f_getSquareDiff(Vector3f v1, Vector3f v2);
 
 /*
  * @brief Computes the cosine of the angle between two 3D vectors.

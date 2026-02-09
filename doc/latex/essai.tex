@@ -1,0 +1,57 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage{hyperref}
+
+%\usepackage[xindy]{glossaries}
+\usepackage{csquotes}
+
+\usepackage{glossaries}
+\makeglossaries
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{Nauteff-Biblio.bib}
+
+\title{Nauteff Notes de conception}
+%textsc{}
+\author{Emmanuel Gautier}
+
+\begin{document}
+	
+	\input{Nauteff-Glossaire}
+	
+	\maketitle
+	
+	%\begin{abstract}
+    Ce document contient des notes de conception du prototype Nauteff.
+	%\end{abstract}
+	\section{Glossaire}
+	Le monde de la mer a son vocabulaire bien particulier. Voici quelques définitions.
+        \printglossaries
+	
+	%\tableofcontents
+	\section{Buts du document}
+
+
+    %\nocite{*}
+
+	Le protocole NMEA 0183 est décrit dans \cite{NMEARevealed}.
+	
+    Il ne faut pas dire tourner à droite mais tourner à \gls{tribord}.
+    Il ne faut pas dire tourner à gauche mais tourner à \gls{babord}.
+	
+	Ce document, dans sa version préliminaire contient des notes
+	sur le développement du prototype du Nauteff.
+	Il est destiné au développeur et aux personnes impliquées dans son
+	développement.
+
+Une Autre ligne.
+
+
+ligne
+	
+	\printbibliography	
+	
+\end{document}

@@ -1,11 +1,24 @@
-
+# Fichiers intermédiaires produits par latex
 *.aux
 *.bbl
+*.bcf
 *.blg
-*.dvi
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.lof
 *.log
-doc/latex/aux
-doc/latex/tmp
+*.lot
+*.synctex.gz
+*.out
+*.run.xml
+*.toc
+eps-converted-to.pdf # eps to pdf used by pdflatex
+
 *.alt
 *.bak
 .vscode
@@ -14,3 +27,10 @@ build/*.d
 build/*.lst
 NauteffAutoPilot.geany
 aux
+bin
+lib
+lib64
+pyvenv.cfg
+.cproject
+.project
+.settings

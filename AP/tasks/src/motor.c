@@ -62,6 +62,11 @@ SOFTWARE.
 #include "autopilot.h"
 #include "motor.h"
 
+/* Définition de M_PI, il est parfois non défini */
+#ifndef M_PI
+#define M_PI        3.14159265358979323846
+#endif
+
 /*
  * Affichages de messages de mise au point
  */
@@ -74,15 +79,15 @@ SOFTWARE.
  */
 
 #define MOTOR_HPF_COEF             (0.)
-#define MOTOR_THRESHOLD            (1.0 * ( M_PI / 180.) )
+#define MOTOR_THRESHOLD            (1.0F * ( (float)M_PI / 180.F) )
 #define MOTOR_CVT_ANGLE_TIME       (5.0F)   /* Estimated conversion between time and helm move angle */
 
 
 #define MOTOR_EVENT_STALLED (0x1 << 0)
 #define MOTOR_EVENT_STOP (0x1 << 1)
 
-#define DELTA_ANGLE_NEAR (0.5F * (M_PI / 180.F))      /* 0.5 degree */
-#define DELTA_ANGLE_THRESHOLD (0.5F * (M_PI / 180.F)) /* 0.5 degree */
+#define DELTA_ANGLE_NEAR (0.5F * ( (float)M_PI / 180.F))      /* 0.5 degree */
+#define DELTA_ANGLE_THRESHOLD (0.5F * ( (float)M_PI / 180.F)) /* 0.5 degree */
 
 #define MOTOR_V_CURRENT_NONE       (0.F)
 #define MOTOR_V_CURRENT_FREE       (.35F)
@@ -91,7 +96,7 @@ SOFTWARE.
 #define MOTOR_TIME_TO_STOP         (0.1F)    /* 100 ms */
 #define MOTOR_MAX_TIME_OVERCURRENT (0.02F)   /* 20 ms */
 #define ADC_CVT_TO_VOLTAGE         (0.0097F) /* Ratio ADC val. and power voltage */
-#define ADC_CVT_TO_CURRENT         (0.0004)  /* Ratio  ADC val. and current */
+#define ADC_CVT_TO_CURRENT         (0.0004F) /* Ratio  ADC val. and current */
 
 /* status bits of motor */
 /* More than minimum required so easier to test */

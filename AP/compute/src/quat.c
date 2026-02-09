@@ -50,26 +50,26 @@ Quaternionf Quaternionf_sub(Quaternionf v1, Quaternionf v2)
     return result;
 }
 
-Quaternionf Quaternionf_mul(Quaternionf v1, Quaternionf v2)
+Quaternionf Quaternionf_mul(Quaternionf q1, Quaternionf q2)
 {
     Quaternionf result =
     {
-        v1.w * v2.w - v1.x * v2.x - v1.y * v2.y - v1.z * v2.z,
-        v1.w * v2.x + v1.x * v2.w + v1.y * v2.z - v1.z * v2.y,
-        v1.w * v2.y - v1.x * v2.z + v1.y * v2.w + v1.z * v2.x,
-        v1.w * v2.z + v1.x * v2.y - v1.y * v2.x + v1.z * v2.w
+        q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
+        q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
+        q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
+        q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w
     };
     return result;
 }
 
-float Quaternionf_getDotProduct(Quaternionf v1, Quaternionf v2)
+float Quaternionf_getDotProduct(Quaternionf q1, Quaternionf q2)
 {
-    return v1.w * v2.w + v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    return q1.w * q2.w + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
 }
 
-Quaternionf Quaternionf_getScaled(Quaternionf v, float a)
+Quaternionf Quaternionf_getScaled(Quaternionf q, float a)
 {
-    Quaternionf result = {v.w * a, v.x * a, v.y * a, v.z * a};
+    Quaternionf result = {q.w * a, q.x * a, q.y * a, q.z * a};
     return result;
 }
 

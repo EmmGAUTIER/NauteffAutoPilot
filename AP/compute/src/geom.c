@@ -99,6 +99,15 @@ Vector3f vector3f_getNormalized(Vector3f v)
     return vector3f_getScaled(v, 1.0f / norm);
 }
 
+float Vector3f_getSquareDiff(Vector3f v1, Vector3f v2)
+{
+    float dx = v1.x - v2.x;
+    float dy = v1.y - v2.y;
+    float dz = v1.z - v2.z;
+
+    return dx * dx + dy * dy + dz * dz;
+}
+
 float vector3f_getCosine(Vector3f v1, Vector3f v2)
 {
     float dot = vector3f_getDotProduct(v1, v2);

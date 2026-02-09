@@ -8,9 +8,11 @@
 # 
 #
 
+set -x
+
 if [ -n "$NAUTEFF_AP_DIR_REMOTE" ]
 then
-    echo "Copie sur machine distante :"
+    echo "Copie sur machine distante : "
     cp build/NauteffAutoPilot.elf $NAUTEFF_AP_DIR_REMOTE/build/NauteffAutoPilot.elf 
 fi
 
@@ -21,8 +23,8 @@ else
     export HOST_OPENOCD="localhost"
 fi
 
-#echo "Dir. distant : " ${NAUTEFF_AP_DIR_REMOTE}
-#echo "Hôte openocd : " ${HOST_OPENOCD}
+echo "Dir. distant : " ${NAUTEFF_AP_DIR_REMOTE}
+echo "Hôte openocd : " ${HOST_OPENOCD}
 
 
     (

@@ -43,7 +43,7 @@ typedef enum
     AP_MSG_TURN,             /* turn indicated angle */
     AP_MSG_AHRS,             /* AHRS data : heading, ...  */
     AP_MSG_PARAM,            /* set params */
-    AP_MSG_CALIBRATE_MEMS,
+    AP_MSG_START_CALIBRATE,
     AP_MSG_MEMS_READY,
     AP_MSG_MEMS,
     AP_MSG_MOTOR_STOPPED,

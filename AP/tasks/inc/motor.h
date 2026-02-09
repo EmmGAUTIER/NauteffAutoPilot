@@ -121,7 +121,7 @@ void MOTOR_MSG_moveTime(float time);
 
 /*
  * @brief Set the conversion factor between helm angle and time
- * @param cat Conversion factor angle to time
+ * @param cvt Conversion factor angle to time
  * @return void
  */
 void MOTOR_MSG_set_cvt_angle_time(float cvt);

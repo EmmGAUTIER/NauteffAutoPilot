@@ -91,9 +91,11 @@ AP/tasks/src/motor.c \
 AP/tasks/src/autopilot.c \
 AP/compute/src/imu.c \
 AP/compute/src/geom.c \
-AP/compute/src/madgwick.c \
+AP/compute/src/madgwickAHRS.c \
+AP/compute/src/kalmanAHRS.c \
 AP/compute/src/quat.c \
 AP/compute/src/matrix3f.c \
+AP/compute/src/calib.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -178,12 +180,13 @@ C_INCLUDES =  \
 -IAP/aux/inc \
 -IAP/compute/inc
 
-
+C_VER = \
+-std=c11
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS += $(C_VER) $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
 ifeq ($(DEBUG), 1)
 # CFLAGS += -g -gdwarf-2

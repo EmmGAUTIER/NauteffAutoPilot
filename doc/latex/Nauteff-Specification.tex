@@ -1,30 +1,39 @@
 \documentclass[a4paper,11pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+%\usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-%%\usepackage[francais]{babel}
+\usepackage{hyperref}
+
 \usepackage[french]{babel}
+%\usepackage{frnum}
 \usepackage{numprint}
 \usepackage{multirow}
-\usepackage{glossaries}
+\usepackage{graphicx}
+
+\usepackage{csquotes}
+\usepackage[]{glossaries}
+\makeglossaries
+
 \title{Nauteff P-1 Spécification}
 \author{Emmanuel Gautier}
 
-\input{Nauteff-Glossaire.tex}
+\usepackage[backend=biber]{biblatex}
 
-\makeglossaries
-\makeglossary
+\addbibresource{Nauteff-Biblio.bib}
 
 \begin{document}
 \maketitle
+\input{Nauteff-Glossaire}
 
 \begin{abstract}
 Ce document contient la spécification du prototype Nauteff P-1.
 \end{abstract}
 
 \tableofcontents
-%\printglossary
+\listoftables
+\listoffigures
+
 
 \chapter{Buts du document}
 \section{Buts}
@@ -46,10 +55,13 @@ dans un autre document à venir.
 
 \chapter{Documents applicables et de référence}
 
-NMEA revealed : https://gpsd.gitlab.io/gpsd/NMEA.html
-Ce document sert de référence pour le développement du Nauteff~P-1.
+Ce document sert de référence pour le développement.
 
-\printglossary[numberedsection, title=Terminologie]
+\printbibliography[heading=none]
+
+\chapter{Glossaire}
+
+\printglossaries
 
 \chapter{Présentation du système}
 \section{Objectifs du système}
@@ -62,6 +74,12 @@ Il doit aussi traiter des informations sur les conditions
 de navigation et le fournir à d'autres appareils.
 Il utilise les informations de ses capteurs, et lorsqu'elles
 sont disponibles celles d'autres appareils.
+
+\section {Diagramme général}
+\begin{figure}
+\includegraphics[width=8cm, keepaspectratio]{Nauteff-AP-GeneralView.eps}
+\caption{diagramme général}
+\end{figure}
 
 \section{Environnement du système}
 L'environnement du Nauteff~P-1 comprend:
@@ -89,7 +107,9 @@ la batterie de servitudes du navire.
 
 L'équipage confie la commande de la barre au Nauteff pour réaliser d'autres
 tâches ou pour se reposer. Il attend un bon suivi de cap, exige d'être
-alerté si le Nauteff ne peut plus remplir sa fonction.
+alerté en cas de changements de conditions ou si
+le Nauteff ne peut plus remplir sa fonction.
+
 
 \subsection{Interfaces du système}
 
@@ -99,6 +119,9 @@ très basse tension nominale de 12V et l'alimentation de la sonde.
 l'alimentation 12V répond aux exigences de la section exigences de l'environnement.
 
 
+\subsection{protocoles de communications}
+Le document \cite{NMEARevealed} décrit le protocole de communication.
+
 \subsubsection{Clavier}
 Nauteff comporte un clavier à 6 touches fugitives (aussi appelées à contacts NO).
 
@@ -106,9 +129,11 @@ Nauteff comporte un clavier à 6 touches fugitives (aussi appelées à contacts 
 Nauteff comporte une interface série RS-232 principalement utilisée
 pour la communication avec un ordinateur pour le développement et
 la mise au point.
+
 La norme \gls{NMEA} prévoit un bus RS-422, cependant cette interface
 permet des échanges d'information avec des appareils utilisant
 ce protocole et peu exigeants.
+C'est l'\gls{UART} qui est utilisée pour la communication avec le PC.
 
 \subsubsection{Capteurs MEMS}
 Nauteff P-1 comporte les capteurs \gls{MEMS} suivants :
@@ -160,6 +185,23 @@ Le prototype n'est pas destiné aux utilisateurs.
 
 \subsection{Environnement de développement et de mise au point}
 
+\section{Conventions d'orientation et d'unités\ldots}
+Nauteff utilise les unités courantes des marins en externe.
+Par contre, en interne il utilise les unités du système MKS, les radians
+pour simplifier le codage et éviter les erreurs de conversion.
+Le choix des directions des axes x, y et z du repère du navire
+sont : x vers l'avant, y vers bâbord (à droite) et z vers le bas.
+Cette orientation des axes est couramment utilisée
+par la marine et l'aviation.
+Elle est appelée convention NED pour North, East Down.
+Elle permet d'avoir un repère direct.
+
+\begin{figure}
+	\includegraphics[height=5cm]{orientation.eps}
+	\caption{Convention d'orientation}
+\end{figure}
+
+
 \chapter{Spécification générales}
 \section{Description des services attendus}
 
@@ -180,6 +222,7 @@ Nauteff est protégé contre les surcharges et court-circuits de l'actionneur et
 contre les inversions de polarité de l'alimentation.
 \subsection{Capacité}
 \subsection{Performances}
+\begin{table}
 \begin{tabular}{|c|c|}
 	\hline 
 	Temps de démarrage &  < 2s \\ 
@@ -193,6 +236,8 @@ contre les inversions de polarité de l'alimentation.
 	&  \\ 
 	\hline 
 \end{tabular}
+\caption{Performances}
+\end{table}
 
 
 \subsection{Paramétrage}
@@ -226,7 +271,8 @@ accès facile à tous les signaux et des modifications rapides et aisées.
 
 \section{Interface homme machine}
 Nauteff est équipé d'un clavier à 6 touches fugitives (contact NO).
-\\
+
+\begin{table}
 \begin{tabular}{|c|c|c|c|}
 	\hline 
 	Libellé    & couleur & fonction principale &  \\ 
@@ -239,15 +285,59 @@ Nauteff est équipé d'un clavier à 6 touches fugitives (contact NO).
 	\hline 
 	``-1''     & rouge & Changement de cap 1\degres~vers bâbord  &  \\ 
 	\hline 
-	``+10''    & verte & Changement de cap 1\degres~vers tribord &  \\ 
+	``+10''    & verte & Changement de cap 10\degres~vers tribord &  \\ 
 	\hline 
-	``-10''    & rouge & Changement de cap 1\degres~vers bâbord  &  \\ 
-	\hline 
+	``-10''    & rouge & Changement de cap 10\degres~vers bâbord  &  \\ 
+	\hline
 \end{tabular} 
+\caption{Touches du clavier}
+\end{table}
+Il y en a 6 en tout.
+
+\chapter{Description du matériel}
+
+\section{microcontrôleur}
+Le microcontrôleur est un STM32L476RE monté sur carte Nucleo
+qui comprend la sonde, et une interface UART et est relié
+à un PC de développement par liaison USB.
+
+\section{Alimentation}
+
+\section{Commande et contrôle de l'embrayage et du moteur}
+
+\section{Capteurs d'orientation}
+
+\section{entrées et sorties}
+
+\subsection{UART2}
+UART2 sert aux communications avec le PC de développement.
+Elle utilise un débit élevé et sert à échanger les informations
+entre le pilote et une interface et à envoyer des informations
+de mise au point.
+
+\subsection{UART1, UART3}
+Ce sont des liaisons série RS232 avec un débit de 4800 bits/s,
+8 bits et un bit de stop. Elles utilisent le protocole NMEA0183
+décrit dans \cite[NMEA révélé][]{NMEARevealed}.
+Leur débit peut être porté à \numprint{9600} ou \numprint{38400} bits/s.
+
+\section{SPI1}
 
 
+\chapter{Description détaillée du logiciel}
 
-\chapter{Description des services}
+\section{Étalonnages}
+
+\subsection{Capteurs MEMs}
+
+\subsection{Commande de barre}
+La commande de position barre est obtenue avec ~\eqref{eq:calculPID}.
+C'est un calcul de régulation PID.
+
+\begin{equation}
+	\label{eq:calculPID}
+	Cmd = K_p * Ecart + K_d * Gyr + K_i * Cumul
+\end{equation}
 
 \section{Lecture du clavier}
 
@@ -256,21 +346,27 @@ Nauteff est équipé d'un clavier à 6 touches fugitives (contact NO).
 	 Touche & Action  \\ \hline
 	\multicolumn{2}{|c|}{En mode veille} \\ \hline
 	 Appui sur ``Auto'' & Passage en mode suivi de cap\\ \hline
-	 Appui sur Veille & Sans effet \\ \ hline
+	 Appui sur Veille & Sans effet \\ \hline
 	 Appui +1 &  Mise en marche de l'actionneur vers tribord \\ \hline
 	 Appui -1 &  Mise en marche de l'actionneur vers bâbord \\ \hline
 	 +10 & Sans effet     \\ \hline
 	 -10 &  Sans effet    \\ \hline
 	\multicolumn{2}{|c|}{En mode auto} \\ \hline
-	pression sur touche ``Auto'' & changement de mode : suivi de cap, suivi de vent et suivi GPS     \\ \hline
-	Pression sur ``Veille'' & Mise en veille     \\ \hline
-	+1 & incrément de 1\degres de la consigne      \\ \hline
-	 &      \\ \hline
-	 
+	%pression sur touche ``Auto'' & changement de mode : suivi de cap, %suivi de vent et suivi GPS     \\ \hline
+	Pression sur ``Veille'' & Mise en mode veille     \\ \hline
+	+1, -1, +10, -10 & modification de la consigne de cap     \\ \hline
+	+1, +10 simultanément &  incrément de la consigne de 90\degres    \\
+	-1, -10 simultanément &  décrément de la consigne de 90\degres    \\ 
+	 \hline
 \end{tabular} 
+\\
+
+La consigne est toujours arrondie au degré
+et est toujours comprise entre 0 et 359\degres.
+\\
 
 L'appui sur la touche ``Auto'' met le Nauteff en mode automatique de suivi de cap.
-La touche ``Veille''met le Nauteff en mode veille.
+La touche ``Veille'' met le Nauteff en mode veille.
 En mode veille l'enfoncement des touches ``+1'' et ``-1'' commandent le déplacement du vérin vers tribord et bâbord.
 En mode automatique, un appui sur les touches ``+1'' et ``-1'' ``+10'' et ``-10''
 changent le cap de 1\degres~ ou 10\degres~ vers tribord ou bâbord.
@@ -278,16 +374,132 @@ Le maintient enfoncé des touches ``+1'' et ``-1''
 
 \subsection{Veille}
 
-
 \subsection{Maintient du cap}
 
 \subsection{Configuration et réglages}
 
 \section{Détermination de l'orientation du navire}
+\subsection{Lecture des valeurs des capteurs}
+Lors de l'initialisation Nauteff configure les capteurs :
+Nauteff utilise l'accéléromètre, le gyromètre et le magnétomètre.
+Il lit ces valeurs à chaque fois qu'elle sont disponibles,
+les accumule et les compte.
+
+\subsection{Calculs d'orientation}
+À une cadence de 10Hz, Nauteff calcule la moyenne des valeurs,
+applique les corrections issues de l'étalonnage et
+calcule les nouvelles valeurs d'orientation.
+Nauteff envoie ces valeurs sur la sortie UART2.
+
+
+\section{Décodage des informations en entrée}
 
 \section{Maintien du cap}
-\gls{cavalement}
-\chapter{Description des informations}
-\gls{embardee}
+
+
+\section{Commande et surveillance du moteur}
+Nauteff contrôle l'embrayage, le moteur et la tension d'alimentation.
+Il assure les fonctions suivantes:
+\begin{itemize}
+	\item Envoi de la commande d'embrayage;
+	\item Mise en marche et arrêt du moteur;
+	\item Surveillance de la tension d'alimentation;
+    \item Mesure du courant du moteur;
+	\item Estimation de la position de la barre;
+	\item Envoi d'alarme de détection de butée de moteur bloqué ou de court-circuit;
+	\item Envoi d'information sur l'effort du moteur (dureté de la barre) et de la position aux autres tâches.
+\end{itemize}
+
+Le contrôle du moteur comprend les commandes suivantes:
+\begin{itemize}
+	\item Embrayage ;
+	\item débrayage ;
+	\item demande de la position de la barre ;
+	\item déplacement de la barre à bâbord ou tribord pendant un temps donné
+	\item déplacement de la barre à un angle donné;
+\end{itemize}
+
+L'angle de barre est estimé. Il est en général limité à environ 15\degres{}, cet angle dépend du montage du vérin ou de la barre du bateau.
+
+La tension d'alimentation et le courant du moteur sont mesurés à une cadence de 100Hz quand le moteur tourne. Lorsque le moteur tourne 
+\begin{figure}
+	\includegraphics[height=5cm]{MotorStatus.eps}
+	\caption{États du moteur}
+\end{figure}
+
+
+\section{Émission d'alarmes}
+
+\begin{itemize}
+	\item Moteur bloqué;
+	\item Moteur en court-circuit;
+	\item Écart de cap au delà de la limite (à définir);
+	\item Tension d'alimentation hors limites;
+	\item Mode panique déclenché.
+\end{itemize}
+
+\section{Panique}
+En cas de défaut du logiciel ("plantage") lors du fonctionnement, Nauteff doit envoyer une commande de bas niveau pour arrêter le moteur
+et déclencher l'alarme.
+
+ 
+\section{Envoi d'informations}
+\subsection{Informations de mise au point}
+\subsection{Informations pour une interface du Nauteff}
+
+\chapter{Interface NMEA-0183}
+Nauteff peut recevoir et émettre des données au format NMEA-0183.
+Ce protocole utilise des liaisons RS422 à \numprint{4800} bits/s 8N1 parfois 7N2.
+Lorsque plusieurs appareils sont reliés, un seul peut parler. 
+La vitesse est portée à des valeurs plus élevées par certains appareils.
+Les données sont dans des "phrases" d'un logueur limitée à 82 caractères
+avec une somme de contrôle et une séquence <CR><LF>.
+Les phrases reconnues par Nauteff commencent
+par un \$, deux lettres majuscules indiquant la provenance
+et trois lettres majuscules indiquant le type de phrase.
+\\
+
+Nauteff comprend les types phrases suivants :
+
+\begin{itemize}
+
+	\item[RMC]  Recommended Minimum Specific GNSS. 
+	contient  la position (latitude et longitude),
+	la vitesse par rapport au sol (Speed Over Ground),
+	le cap suivi (Course Over Ground),
+	l’heure et la date. C’est une des phrases les plus utilisées des récepteurs GPS;
+
+    \item[GGA]: Global Positioning System Fix Data. 
+    Contient la position GPS, la qualité de la mesure,
+    le nombre de satellites utilisés,
+    l'altitude, etc;
+
+    \item [GLL]: Geographic Position - Latitude et Longitude,
+    Contient la latitude, la longitude** et l'heure du fix;
+
+    \item [VTG] - *Track Made Good and Ground Speed. 
+    Contient le cap par rapport au nord vrai ou magnétique
+    et la vitesse sur le fond (ground speed) à partir du GPS;
+
+    \item[VHW] : Water Speed and Heading***
+     Donne **la vitesse du bateau par rapport à l’eau (speed through water) et
+     le cap du bateau. C’est la phrase standard pour mesurer la vitesse dans l’eau (souvent émise par un loch/sonde);
+
+    \item[VBW] :Dual Ground/Water Speed
+    Contient à la fois vitesse par rapport à l’eau et
+    la vitesse sur le fond avec leurs statuts de validité;
+
+    \item[MWV] : Wind Speed and Angle.
+     Contient la vitesse du vent et l’angle du vent (souvent par rapport à l’axe du bateau).
+     C’est une des phrases les plus communes pour une girouette/anémomètre.
+
+\end{itemize}
+
+\chapter{Interface Nauteff}
+
+
+turn port|starboard <NNN>
+mode idle|headind [<NNN>]
+
 
 \end{document}

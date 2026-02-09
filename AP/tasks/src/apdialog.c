@@ -480,10 +480,9 @@ void parse_command_line(void)
     else if(tokenCount == 2 && tokenTypes[0] == TOKEN_CALIBRATE && tokenTypes[1] == TOKEN_AHRS)
     {
         /* Command: calibrate AHRS */
-        DBG_DIALOG_PRINT((
-                             svc_UART_Write(&svc_uart2, "DIALOG calibrate AHRS\n", 22, 0U)));
+        DBG_DIALOG_PRINT((svc_UART_Write(&svc_uart2, "DIALOG calibrate AHRS\n", 22, 0U)));
 
-        msgAutoPilot.msgType = AP_MSG_CALIBRATE_MEMS;
+        msgAutoPilot.msgType = AP_MSG_START_CALIBRATE;
         xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
     }
     else if(tokenCount == 2 && tokenTypes[0] == TOKEN_MOVE && tokenTypes[1] == TOKEN_STARBOARD)

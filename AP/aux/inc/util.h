@@ -24,22 +24,8 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
-//#include <stddef.h>
-//#include "stdint.h"
-
-#if 0
-typedef unsigned char  uint8_t;
-typedef signed char    int8_t;
-typedef unsigned short uint16_t;
-typedef signed short   int16_t;
-typedef unsigned int   uint32_t;
-typedef signed int     int32_t;
-typedef unsigned long  uint64_t;
-typedef signed long    int64_t;
-#endif
-
-extern volatile int marque;
-extern volatile int marque_read;
+//extern volatile int marque;
+//extern volatile int marque_read;
 
 #define INLINE  __attribute__((always_inline)) inline
 

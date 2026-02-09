@@ -1,26 +1,26 @@
 /*
-MIT License
+ MIT License
 
-Copyright (c) 2025 Emmanuel Gautier / Nauteff
+ Copyright (c) 2025 Emmanuel Gautier / Nauteff
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
 
 int init_taskMEMs(void);
 
@@ -37,9 +37,17 @@ typedef enum
     MEMS_MSG_POLL,
     MEMS_MSG_TICK,
     MEMS_MSG_CALIBRATE,
+    MEMS_MSG_START_CALIBRATE,
     MEMS_MSG_DISPLAY_CONFIG,
     MEMS_MSG_SET_MAG_VS_GYR,
 } MEMS_MsgType_t;
+
+typedef enum
+{
+    MEMS_Status_Init,
+    MEMS_Status_Measure,
+    MEMS_Status_Calibrate,
+}MEMS_Status_t;
 
 typedef struct
 {
@@ -50,6 +58,13 @@ typedef struct
         float mag_vs_gyr;
     } data;
 } MEMS_Msg_t;
+
+//typedef struct
+//{
+//    Vector3f acc;
+//    Vector3f gyr;
+//    Vector3f mag;
+//} MEMS_Data_t;
 
 void MEMSSendTimerCallback(TimerHandle_t xTimer);
 
