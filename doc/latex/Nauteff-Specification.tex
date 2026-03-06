@@ -61,10 +61,11 @@ Ce document sert de référence pour le développement.
 
 \chapter{Glossaire}
 
-\printglossaries
+%\printglossary[title={}, toctitle={}]
+\printglossary
 
-\chapter{Présentation du système}
-\section{Objectifs du système}
+\chapter{Présentation du Pilote automatique}
+\section{Objectifs}
 Nauteff P-1 est une maquette de pilote automatique pour navires à voile ou à moteur d'une taille comprise entre 5m et 24m.
 Cette maquette sert à évaluer et mettre au point le pilote automatique et améliorer son logiciel.
 
@@ -75,20 +76,22 @@ de navigation et le fournir à d'autres appareils.
 Il utilise les informations de ses capteurs, et lorsqu'elles
 sont disponibles celles d'autres appareils.
 
-\section {Diagramme général}
-\begin{figure}
-\includegraphics[width=8cm, keepaspectratio]{Nauteff-AP-GeneralView.eps}
-\caption{diagramme général}
-\end{figure}
 
 \section{Environnement du système}
+
+\begin{figure}
+	\includegraphics[width=8cm, keepaspectratio]{Nauteff-AP-Environment.eps}
+	\caption{diagramme général}
+\end{figure}
+
 L'environnement du Nauteff~P-1 comprend:
 \begin{itemize}
 	\item un ordinateur avec les outils de développement et la sonde;
 	\item un alimentation 12V;
 	\item un vérin électrique;
 	\item des instruments de navigation: GPS, loch, gyrouette,\dots
-	\item un ou plusieurs équipiers du navire.
+	\item un ou plusieurs équipiers du navire;
+	\item un utilisateur.
 \end{itemize}
 
 Nauteff P-1 est principalement utilisé et stocké dans un bureau
@@ -113,69 +116,6 @@ le Nauteff ne peut plus remplir sa fonction.
 
 \subsection{Interfaces du système}
 
-\subsubsection{Alimentation électrique}
-Nauteff fonctionne avec une alimentation électrique
-très basse tension nominale de 12V et l'alimentation de la sonde.
-l'alimentation 12V répond aux exigences de la section exigences de l'environnement.
-
-
-\subsection{protocoles de communications}
-Le document \cite{NMEARevealed} décrit le protocole de communication.
-
-\subsubsection{Clavier}
-Nauteff comporte un clavier à 6 touches fugitives (aussi appelées à contacts NO).
-
-\subsubsection{Bus de communication UART, \ldots}
-Nauteff comporte une interface série RS-232 principalement utilisée
-pour la communication avec un ordinateur pour le développement et
-la mise au point.
-
-La norme \gls{NMEA} prévoit un bus RS-422, cependant cette interface
-permet des échanges d'information avec des appareils utilisant
-ce protocole et peu exigeants.
-C'est l'\gls{UART} qui est utilisée pour la communication avec le PC.
-
-\subsubsection{Capteurs MEMS}
-Nauteff P-1 comporte les capteurs \gls{MEMS} suivants :
-\begin{enumerate}
-\item un magnétomètre (LSM6DS33);
-\item un gyromètre (LPS25H);
-\item un accéléromètre(LPS25H);
-\item un capteur de pression atmosphérique (LIS3MDL);
-\item des capteurs de température.
-\end{enumerate}
-Ces capteurs sont dans les circuits intégrés de ST Microelectronics et montés
-sur une carte d'évaluation Pololu AltIMU-10 v5. La communication entre ces capteurs et le STM32 utilise un bus \gls{I2C}. Les capteurs de température et de pression atmosphérique nz sonrt pas utilisés.
-
-\subsubsection{Commande du moteur}
-Nauteff comporte une unité de commande et de contrôle du moteur de l'actionneur.
-Cette unité permet de commander la marche du moteur de l'actionneur
-dans les deux sens et de mesurer l'effort du moteur (couple),
-de détecter la butée, un courant excessif ou un court-circuit et un courant nul
-ou anormalement faible et de surveiller la tension d'alimentation.
-La commande du moteur comprend aussi une estimation de la position du moteur.
-
-\subsubsection{Alarme sonore}
-L'alarme sonore appelle l'attention du navigateur que le Nauteff ne peut plus
-assurer ses fonctions ou que des valeurs sont en dehors des limites fixées
-et que la navigateur doit intervenir.
-
-\subsubsection{Écran}
-Dans la version d'évaluation Nauteff P-1 n'a pas d'écran et sort les information
-sur USART2 pour un affichage sur l'écran de l'ordinateur de développement.
-Ça serait dommage de se priver d'un écran, il en faudra au moins un petit avec quelques caractères.
-
-\subsubsection{Voyants}
-Nauteff P-1 comporte les voyants suivant :
-\begin{itemize}
-	\item Voyants de mise sous tension;
-	\item Voyant vert indiquant l'enclenchement du pilote;
-	\item Voyant rouge lors d'un mouvement vers tribord de l'actionneur;
-	\item Voyant vert lors d'un mouvement vers tribord de l'actionneur;
-	\item Voyant indiquant le fonctionnement de l'USART;
-	\item Selon les besoins de mise au point.
-\end{itemize}
-Rappel : Le rouge indique le côté bâbord (gauche) et le vert indique le côté tribord.
 
 \subsection{Utilisateurs}
 Les utilisateurs sont les concepteurs du système ou des navigateurs prenant part à son développement.
@@ -204,6 +144,11 @@ Elle permet d'avoir un repère direct.
 
 \chapter{Spécification générales}
 \section{Description des services attendus}
+
+\section{Description des générale du matériel}
+
+Nauteff 
+
 
 \section{Description des générale des fonctions}
 \section{Exigences opérationnelles}
@@ -294,7 +239,105 @@ Nauteff est équipé d'un clavier à 6 touches fugitives (contact NO).
 \end{table}
 Il y en a 6 en tout.
 
-\chapter{Description du matériel}
+\chapter{Description générale du matériel}
+
+\section{Raccordements}
+
+\begin{tabular}{|c|c|p{6cm}|}
+	\hline
+	type & Nbre & description \\
+	\hline
+    Alimentation & 1  & 10 à 18 V, 2A, 32A max  \\
+    \hline
+	UART & 3 & RS232
+	           \newline \numprint{4800} à \numprint{38400} bits/s
+	           \newline Interface avec les instruments
+	           \\
+	\hline
+	UART & 1 &  niveau 3.3V ou TTL
+                \newline \numprint{230400} bits/s
+                \newline sortie vers sonde et PC de dév.\\
+	\hline
+	I2C & 1 & 3.3V ou TTL \numprint{100} et \numprint{400}kbits/s
+	          \newline Pour raccordement utlérieurs\\
+	\hline
+	SPI & 1 &  Maître, MISO, MOSI, CLK et 2 CS
+	           \newline à partager avec capteurs MEMs\\
+	\hline
+    CAN & 1 & Pour raccordement futur au bus NMEA 2000 \\
+	\hline
+	Moteur & 1 & Pour moteur à courant continu 
+	             \newline 2 fils, 10A continu, 30A max\\
+	\hline
+	Clavier & 1 & 6 fils pour les contacts des touches
+	              \newline quelques fils pour LED, à définir \\
+	\hline
+	alarme & 1 &  Contact avec Vcc \\
+	\hline
+\end{tabular}
+
+\subsubsection{Alimentation électrique}
+Nauteff fonctionne avec une alimentation électrique
+très basse tension nominale de 12V et l'alimentation de la sonde.
+l'alimentation 12V répond aux exigences de la section exigences de l'environnement.
+
+\subsection{protocoles de communications}
+Le document \cite{NMEARevealed} décrit le protocole de communication.
+
+\subsubsection{Clavier}
+Nauteff comporte un clavier à 6 touches fugitives (aussi appelées à contacts NO).
+
+\subsubsection{Bus de communication UART, \ldots}
+Nauteff comporte une interface série RS-232 principalement utilisée
+pour la communication avec un ordinateur pour le développement et
+la mise au point.
+
+La norme \gls{NMEA} prévoit un bus RS-422, cependant cette interface
+permet des échanges d'information avec des appareils utilisant
+ce protocole et peu exigeants.
+C'est l'\gls{UART} qui est utilisée pour la communication avec le PC.
+
+\subsubsection{Capteurs MEMS}
+Nauteff P-1 comporte les capteurs \gls{MEMS} suivants :
+\begin{enumerate}
+	\item un magnétomètre (LSM6DS33);
+	\item un gyromètre (LPS25H);
+	\item un accéléromètre(LPS25H);
+	\item un capteur de pression atmosphérique (LIS3MDL);
+	\item des capteurs de température.
+\end{enumerate}
+Ces capteurs sont dans les circuits intégrés de ST Microelectronics et montés
+sur une carte d'évaluation Pololu AltIMU-10 v5. La communication entre ces capteurs et le STM32 utilise un bus \gls{I2C}. Les capteurs de température et de pression atmosphérique nz sonrt pas utilisés.
+
+\subsubsection{Commande du moteur}
+Nauteff comporte une unité de commande et de contrôle du moteur de l'actionneur.
+Cette unité permet de commander la marche du moteur de l'actionneur
+dans les deux sens et de mesurer l'effort du moteur (couple),
+de détecter la butée, un courant excessif ou un court-circuit et un courant nul
+ou anormalement faible et de surveiller la tension d'alimentation.
+La commande du moteur comprend aussi une estimation de la position du moteur.
+
+\subsubsection{Alarme sonore}
+L'alarme sonore appelle l'attention du navigateur que le Nauteff ne peut plus
+assurer ses fonctions ou que des valeurs sont en dehors des limites fixées
+et que la navigateur doit intervenir.
+
+\subsubsection{Écran}
+Dans la version d'évaluation Nauteff P-1 n'a pas d'écran et sort les information
+sur USART2 pour un affichage sur l'écran de l'ordinateur de développement.
+Ça serait dommage de se priver d'un écran, il en faudra au moins un petit avec quelques caractères.
+
+\subsubsection{Voyants}
+Nauteff P-1 comporte les voyants suivant :
+\begin{itemize}
+	\item Voyants de mise sous tension;
+	\item Voyant vert indiquant l'enclenchement du pilote;
+	\item Voyant rouge lors d'un mouvement vers tribord de l'actionneur;
+	\item Voyant vert lors d'un mouvement vers tribord de l'actionneur;
+	\item Voyant indiquant le fonctionnement de l'USART;
+	\item Selon les besoins de mise au point.
+\end{itemize}
+Rappel : Le rouge indique le côté bâbord (gauche) et le vert indique le côté tribord.
 
 \section{microcontrôleur}
 Le microcontrôleur est un STM32L476RE monté sur carte Nucleo
@@ -447,7 +490,8 @@ et déclencher l'alarme.
 \subsection{Informations de mise au point}
 \subsection{Informations pour une interface du Nauteff}
 
-\chapter{Interface NMEA-0183}
+\chapter{Interfaces}
+\section{Interface NMEA-0183}
 Nauteff peut recevoir et émettre des données au format NMEA-0183.
 Ce protocole utilise des liaisons RS422 à \numprint{4800} bits/s 8N1 parfois 7N2.
 Lorsque plusieurs appareils sont reliés, un seul peut parler. 
@@ -495,7 +539,7 @@ Nauteff comprend les types phrases suivants :
 
 \end{itemize}
 
-\chapter{Interface Nauteff}
+\section{Interface Nauteff}
 
 
 turn port|starboard <NNN>
