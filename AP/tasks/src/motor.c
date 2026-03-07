@@ -188,7 +188,7 @@ typedef struct
     /* Status */
     uint32_t status;
 
-    /* iTuning Data */
+    /* Tuning Data */
     float threshold; /* Threshold motor command */
     float hpf_coeff;  /* High pass filter coefficient */
 
@@ -256,7 +256,7 @@ MotorData motorData =
  *   - PA6 : INA, motor direction                                             *
  *   - PA7 : INB, motor direction                                             *
  *                                                                            *
- * Theses commandes are sent via functions that have the prefix Motor_LL_ :   *
+ * Theses commands are sent via functions that have the prefix Motor_LL_ :    *
  * void Motor_LL_xxxxx(void)                                                  *
  * They use LL_GPIO functions.                                                *
  *                                                                            *
@@ -827,6 +827,7 @@ void taskMotor(void *parameters)
 
                 motorEvent = Motor_newValues(
                                  ADC_PERIOD,
+                                 /* TODO utiliser motorData. vPower et vCurrent  au lieu de refaire le calcul */
                                  (float)msgMoteur.data.adcValues.adc_power * ADC_CVT_TO_VOLTAGE,
                                  (float)msgMoteur.data.adcValues.adc_current * ADC_CVT_TO_CURRENT);
 
@@ -877,16 +878,16 @@ void taskMotor(void *parameters)
 
                 break;
 
-            /* Display config */
+            /* Display configuration  */
             case MSG_MOTOR_DISPLAY_CONFIG:
-            {
+
                 int nbcar = snprintf(message, sizeof(message),
                                      "MOTOR config : cvt angle time %f hpfcoeff %f threshold %f\n",
                                      motorData.cvt_angle_time,
                                      motorData.hpf_coeff,
                                      motorData.threshold);
                                      svc_UART_Write(&svc_uart2, message, nbcar, 0U);
-            }
+                break;
 
             /* Set conversion coefficient between angle and time */
             case MSG_MOTOR_SET_CVT_ANGLE_TIME:
@@ -903,13 +904,15 @@ void taskMotor(void *parameters)
                 DBG_MOTOR_PRINT((snprintf(message, sizeof(message), "MOTOR set hpf coefficient %6f\n",
                                           msgMoteur.data.moveTime),
                                           svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
+                break;
 
-            /* Set threshhold of a command motor */
+            /* Set threshold of a command motor */
             case MSG_MOTOR_SET_THRESHOLD :
                 motorData.threshold = msgMoteur.data.threshold;
                 DBG_MOTOR_PRINT((snprintf(message, sizeof(message), "MOTOR set threshold %6f\n",
                                           msgMoteur.data.moveTime),
                                           svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
+                break;
 
             default:
                 break;
@@ -921,7 +924,17 @@ void taskMotor(void *parameters)
 }
 
 /*****************************************************************************
- * ADC interrupt callback                                                    *
+ * @brief ADC interrupt callback                                             *
+ *                                                                           *
+ * @param hadc ADC handle pointer                                            *
+ * @return none                                                              *
+ *                                                                           *
+ * ADC conversions are triggered by a timer and stored in adc_values[0..1]   *
+ * This function is called at the end of the conversion and sends integer    *
+ * values to themotor task.                                                  *
+ * Values are put in a static array and are integer values.                  *
+ * Since this function is called by an interrupt handler it mustn't use      *
+ * float values and it sends integers.                                       *
  *                                                                           *
  ****************************************************************************/
 

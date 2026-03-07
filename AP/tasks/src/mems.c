@@ -539,6 +539,8 @@ int LSM9DS1_ReadVec(int agmag, int *values)
     /* DMA transfer on SPI bus is in duplex mode.
      * STM32 sends first the register number and ignore the received character
      * and receives the 6 bytes containing the x,y & z values as 16 bits integers.
+     * TX   | regaddr  |      0 |     0 |     0 |     0 |     0 |     0 |
+     * RX   | ignored  |  X MSB | X LSB | Y MSB | Y LSB | Z MSB | Z LSB |
      */
     uint8_t bufferTx[7] =
             { regaddr, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
@@ -568,23 +570,7 @@ int LSM9DS1_ReadVec(int agmag, int *values)
 
 int LSM9DS1_ReadAcc(int *acc)
 {
-
-#if 0
-    Vector3f acc1;
-    Vector3f acc2;
-    Vector3f acc3;
-
-    LSM9DS1_ReadVec(1, &acc1);
-    LSM9DS1_ReadVec(1, &acc2);
-
-    if (Vector3f_getSquareDiff(acc1, acc2) > 1.0F)
-    {
-        LSM9DS1_ReadVec(1, &acc3);
-    }
-#endif
-
     return LSM9DS1_ReadVec(1, acc);
-
 }
 
 int LSM9DS1_ReadGyr(int *gyr)
@@ -832,7 +818,7 @@ void taskMEMs(void *param)
                 LSM9DS1_ReadRegister(2, 0x27, &value);
                 LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_12); // CS_M high
                 // int magReady = (value & 0x8);                /* accelerometer new data available */
-                int magReady = (value & 0xF); /* accelerometer new data available */
+                int magReady = (value & 0xF); /* magnetometer new data available */
 
                 retCalib = 0;
                 if (accReady)
