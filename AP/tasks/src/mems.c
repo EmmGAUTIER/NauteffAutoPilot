@@ -26,11 +26,11 @@
 #define DBG_PRINT_RAW_VALUES_GYR(X)
 #define DBG_PRINT_RAW_VALUES_MAG(X)
 #define DBG_PRINT_MEAN_RAW_VALUES(X)    
-#define DBG_PRINT_CALIB(X)              (X)
-#define DBG_PRINT_MEAN_CORR_VALUES(X)   (X)
+#define DBG_PRINT_CALIB(X)
+#define DBG_PRINT_MEAN_CORR_VALUES(X)
 #define DBG_PRINT_ATTITUDE(X)           (X)
-#define DBG_PRINT_QUATERNION(X)         (X)
-#define DBG_PRINT_MADGWICK(X)           (X)
+#define DBG_PRINT_QUATERNION(X)
+#define DBG_PRINT_MADGWICK(X)
 
 #define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ /* mag and acc ouptut data rate */
 #define LSM9DS1_FS_G LSM9DS1_FS_G_500_DPS /* gyro full scale */
@@ -1113,7 +1113,7 @@ void taskMEMs(void *param)
                 /* Display the configuration */
 
                 snprintf(message, sizeof(message),
-                        "MEMS : %d  %d\n",
+                        "MEMS config : %d  %d\n",
                         MEMS_PERIOD_POLL,
                         MEMS_PERIOD_MS);
                 svc_UART_Write(&svc_uart2, message, strlen(message),

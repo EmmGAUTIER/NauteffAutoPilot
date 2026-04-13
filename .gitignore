@@ -18,13 +18,10 @@
 *.run.xml
 *.toc
 eps-converted-to.pdf # eps to pdf used by pdflatex
-
 *.alt
 *.bak
 .vscode
-build/*.o
-build/*.d
-build/*.lst
+build/*
 NauteffAutoPilot.geany
 aux
 bin

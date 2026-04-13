@@ -1,6 +1,7 @@
 #ifndef R_LIB_H
 #define R_LIB_H
 
+#include "util.h"
 #if 0
 #if RLIB_USE_STRLEN
 size_t strlen(const char *s);
