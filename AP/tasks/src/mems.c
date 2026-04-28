@@ -522,6 +522,12 @@ int LSM9DS1_ReadRegister(int agmag, uint8_t reg, uint8_t *value)
     return (int) res;
 }
 
+/*
+ * @brief reads registers of a LSM9DS1
+ * @param agmag : 1 for accelerometer, 2 for gyrometer, 3 for magnetometer
+ * @values : pointer to data
+ */
+
 int LSM9DS1_ReadVec(int agmag, int *values)
 {
     /*
@@ -602,16 +608,28 @@ int LSM9DS1_ReadVec(int agmag, int *values)
     return ret;
 }
 
+/*
+ * @brief reads acceleration from LSM9DS1
+ * @param acc : pointer to int vector
+ */
 int LSM9DS1_ReadAcc(int *acc)
 {
     return LSM9DS1_ReadVec(1, acc);
 }
 
+/*
+ * @brief reads gyrometer from LSM9DS1
+ * @param acc : pointer to int vector
+ */
 int LSM9DS1_ReadGyr(int *gyr)
 {
     return LSM9DS1_ReadVec(2, gyr);
 }
 
+/*
+ * @brief reads magnetic field from LSM9DS1
+ * @param acc : pointer to int vector
+ */
 int LSM9DS1_ReadMag(int *mag)
 {
     return LSM9DS1_ReadVec(3, mag);
