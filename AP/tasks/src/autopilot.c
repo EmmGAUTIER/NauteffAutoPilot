@@ -59,7 +59,7 @@
 #include "mems.h"
 #include "autopilot.h"
 
-void timerAPCallback(TimerHandle_t xTimer);
+//void timerAPCallback(TimerHandle_t xTimer);
 
 #if 0
 static TimerHandle_t timerAP;
@@ -73,11 +73,14 @@ int AP_set_mode_heading(APStatus_t *aps);
 int AP_turn(APStatus_t *aps, float angle);
 int AP_get_engaged(APStatus_t *aps);
 float AP_get_heading_dir(APStatus_t *aps);
-int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate);
-int AP_compute(APStatus_t *aps);
+int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate,
+        Quaternionf qHeading);
+//int AP_compute(APStatus_t *aps);
 
-int AP_MSG_send_AHRS_values(TickType_t timeStamp, float heading, float roll,
-        float pitch, float yawRate)
+int AP_MSG_send_AHRS_values(
+        TickType_t timeStamp,
+        float roll, float pitch, float heading,
+        float yawRate)
 {
 
     MsgAutoPilot_t msg =
@@ -149,12 +152,12 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
     long unsigned int compteur = 0L;
     static char message[200];
     int nbcar = 0;
-    unsigned memsdata = 0;
-    float deltat;
-    BaseType_t timestamp, timestamp_2;
+    //unsigned memsdata = 0;
+    //float deltat;
+    //BaseType_t timestamp; //, timestamp_2;
 
     // xTimerStart(timerAP, 0);
-    timestamp = xTaskGetTickCount();
+    //timestamp = xTaskGetTickCount();
 
     for (;;)
     {
@@ -166,19 +169,18 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 
             case AP_MSG_AHRS:
 
-                memsdata++;
-                timestamp_2 = xTaskGetTickCount();
-                deltat = ((float) (timestamp_2 - timestamp))
-                        / ((float) configTICK_RATE_HZ);
-                timestamp = timestamp_2;
-                AP_new_values(&APStatus, deltat, msg.data.IMUData.heading,
-                        msg.data.IMUData.yawRate);
+                AP_new_values(&APStatus,
+                        msg.data.IMUData.deltat,
+                        msg.data.IMUData.heading,
+                        msg.data.IMUData.yawRate,
+                        msg.data.IMUData.qHeading);
 
                 DB_PRINT_MEMS_MSGS(
                         (snprintf(message, sizeof(message) - 1,
                         "AP AHRS %6.3f  %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f\n",
-                        deltat,
-                        cvt_dir_rad_deg(msg.data.IMUData.heading),
+                        msg.data.IMUData.deltat,
+                        //cvt_dir_rad_deg(msg.data.IMUData.heading),
+                        msg.data.IMUData.heading,
                         msg.data.IMUData.roll * (180. / M_PI),
                         msg.data.IMUData.pitch * (180. / M_PI),
                         msg.data.IMUData.yawRate * (180. / M_PI),
@@ -194,7 +196,6 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 DB_PRINT_ORDERS(
                         (nbcar = snprintf(message, sizeof(message), "AP Mode heading %.1f\n", AP_get_heading_dir(&APStatus)),
                         svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
-                timestamp = xTaskGetTickCount();
 
                 break;
 
@@ -352,6 +353,10 @@ int AP_set_mode_heading(APStatus_t *aps)
     {
         aps->engaged = 1;
         aps->headingToSteerRadians = aps->currentHeading;
+        aps->qToSteer.w = cosf(aps->currentHeading / 2.);
+        aps->qToSteer.x = 0.;
+        aps->qToSteer.y = 0.;
+        aps->qToSteer.z = -sinf(aps->currentHeading / 2.);
         aps->currentGap = 0;
         aps->integratedGap = 0;
         aps->steerAngle = 0.F;
@@ -380,6 +385,10 @@ int AP_turn(APStatus_t *aps, float angle)
     {
         /* AP idle, send move order to motor task */
         aps->headingToSteerRadians += angle;
+        aps->qToSteer.w = cosf(aps->headingToSteerRadians / 2.);
+        aps->qToSteer.x = 0.;
+        aps->qToSteer.y = 0.;
+        aps->qToSteer.z = sinf(aps->headingToSteerRadians / 2.);
         // AP_compute(aps);
     }
 
@@ -396,19 +405,73 @@ float AP_get_heading_dir(APStatus_t *aps)
     return aps->headingToSteerRadians;
 }
 
-int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
+int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate,
+        Quaternionf qHeading)
 {
     int nbcar = 0;
     static char message[120];
     float steerReq;
+    Quaternionf qGap;
+    Quaternionf qc;
 
     aps->currentHeading = heading;
+    aps->qHeading = qHeading;
 
     if (aps->engaged)
     {
-        aps->currentGap = (aps->headingToSteerRadians - heading);
+        /* compute quaternion of heading gap */
+        qc = Quaternionf_getConjugate(aps->qHeading);
+        qGap = Quaternionf_mul(aps->qToSteer, qc);
+        /* qGap is the rotation from heading to steer and orientation of the ship */
+        /* compute angle gap betwenn heading to steer and ship */
+        //aps->currentGap = 2.f * atan2f(qGap.z, qGap.w);
+        aps->currentGap = atan2(2. * (qGap.w * qGap.z + qGap.x * qGap.y),
+                qGap.w * qGap.w + qGap.x * qGap.x - qGap.y * qGap.y
+                        - qGap.z * qGap.z);
+
+        nbcar =
+                snprintf(message, sizeof(message) - 1,
+                        "AP PID quat tosteer %+6.4f  %+6.4f  %+6.4f  %+6.4f    %-5.3f\n",
+                        aps->qToSteer.w,
+                        aps->qToSteer.x,
+                        aps->qToSteer.y,
+                        aps->qHeading.z,
+                        aps->currentGap);
+        //svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+
+        nbcar =
+                snprintf(message, sizeof(message) - 1,
+                        "AP PID quat heading %+6.4f  %+6.4f  %+6.4f  %+6.4f    %-5.3f\n",
+                        aps->qHeading.w,
+                        aps->qHeading.x,
+                        aps->qHeading.y,
+                        aps->qHeading.z,
+                        aps->heading);
+        //svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+
+        vTaskDelay(pdMS_TO_TICKS(15));
+
+        nbcar = snprintf(message, sizeof(message) - 1,
+                "AP PID quat conjugué  %+6.4f  %+6.4f  %+6.4f  %+6.4f\n",
+                qc.w,
+                qc.x,
+                qc.y,
+                qc.z);
+        //svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+
+        nbcar = snprintf(message, sizeof(message) - 1,
+                "AP PID quat gap    %+6.4f  %+6.4f  %+6.4f  %+6.4f    %-5.3f\n",
+                qGap.w,
+                qGap.x,
+                qGap.y,
+                qGap.z,
+                aps->currentGap);
+        svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+
+        //aps->currentGap = (aps->headingToSteerRadians - heading);
+
         aps->integratedGap += aps->currentGap * deltat;
-        aps->yawRate = -yawRate;
+        aps->yawRate = yawRate;
 
         if (aps->integratedGap > AP_MAX_INTEGRAL_GAP)
         {
@@ -425,7 +488,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
         + (aps->yawRate * aps->kd); /* Derivative */
 
         DB_PRINT_PID((nbcar = snprintf(message, sizeof(message) - 1,
-                "AP GAP %8f %8f %8f %8f\n",
+                "AP PID_values  %8f %8f %8f    %8f\n",
                 aps->currentGap,
                 aps->integratedGap,
                 aps->yawRate,
@@ -434,7 +497,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
 
         MOTOR_MSG_setHelmAngle(steerReq);
 
-        aps->steerAngle += steerReq;
+        //aps->steerAngle += steerReq;
     }
 
     return 0;

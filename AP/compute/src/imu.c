@@ -14,9 +14,10 @@
 #include "service.h"
 #include "imu.h"
 
-int calibreur_addSample(Calibreur_t *calibreur, float currTime, Vector3f *acc, Vector3f *gyr, Vector3f *mag)
+int calibreur_addSample(Calibreur_t *calibreur, float currTime, Vector3f *acc,
+        Vector3f *gyr, Vector3f *mag)
 {
-    if(calibreur->sampleCount >= calibreur->maxSamples)
+    if (calibreur->sampleCount >= calibreur->maxSamples)
     {
         return -1; // Calibrator is full, cannot add more samples
     }
@@ -33,19 +34,20 @@ int calibreur_addSample(Calibreur_t *calibreur, float currTime, Vector3f *acc, V
     }
 }
 
-Calibreur_t *calibreur_create(int numberOfSamples)
+Calibreur_t* calibreur_create(int numberOfSamples)
 {
     /* Allocate memory for the calibrator */
-    Calibreur_t *calibreur = (Calibreur_t *)pvPortMalloc(sizeof(Calibreur_t));
+    Calibreur_t *calibreur = (Calibreur_t*) pvPortMalloc(sizeof(Calibreur_t));
 
-    if(calibreur == NULL)
+    if (calibreur == NULL)
     {
         return NULL; /* Memory allocation failed */
     }
 
-    calibreur->samples = (MEMsSample_t *)pvPortMalloc(numberOfSamples * sizeof(MEMsSample_t));
+    calibreur->samples = (MEMsSample_t*) pvPortMalloc(
+            numberOfSamples * sizeof(MEMsSample_t));
 
-    if(calibreur->samples == NULL)
+    if (calibreur->samples == NULL)
     {
         vPortFree(calibreur);
         return NULL; /* Memory allocation failed */
@@ -72,9 +74,10 @@ int calibreur_isFull(Calibreur_t *calibreur)
     return (calibreur->sampleCount > 0);
 }
 
-int calibreur_calibrate(Calibreur_t *calibreur, Vector3f *offset, float M[3][3], float *quality)
+int calibreur_calibrate(Calibreur_t *calibreur, Vector3f *offset, float M[3][3],
+        float *quality)
 {
-    if(calibreur->sampleCount < 100)
+    if (calibreur->sampleCount < 100)
     {
         return -1; /* Not enough samples */
     }
@@ -95,7 +98,9 @@ void IMU_init_status(IMU_Status_t *mstatus)
     mstatus->initialized = false;
     mstatus->yawRate = 0.F;
     mstatus->magVsGyr = MEMS_INIT_MAG_VS_GYRO;
-    mstatus->orientation = (Quaternionf) {1.F, 0.F, 0.F, 0.F};
+    mstatus->orientation = (Quaternionf
+            )
+            { 1.F, 0.F, 0.F, 0.F };
 }
 
 float IMU_get_roll(IMU_Status_t *mstatus)
@@ -115,7 +120,7 @@ float IMU_get_heading(IMU_Status_t *mstatus)
 
 float IMU_get_yawRate(IMU_Status_t *mstatus)
 {
-    return mstatus->gyr.z;
+    return - mstatus->yawRate;
 }
 
 Quaternionf IMU_getQuaternion(IMU_Status_t *mstatus)
@@ -142,7 +147,8 @@ int IMU_set_mag_vs_gyr_prop(IMU_Status_t *mstatus, float prop)
  * Results are accessed by IMU_GET_XXX() functions.
  */
 
-int IMU_new_values_st(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
+int IMU_new_values_st(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
+        Vector3f *mag, float deltat)
 {
     /*-----------------------------------------------------------*/
     /* From Application Note DT0058 from ST Microelectronics     */
@@ -164,12 +170,13 @@ int IMU_new_values_st(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vecto
     return 0;
 }
 
-int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
+int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
+        Vector3f *mag, float deltat)
 {
     // Vector3f m_h;         /* Horizontal part of magnétic field */
     // Vector3f m_v;         /* Vertical part of magnétic field */
     Vector3f starboard_h; /* Horizontal part of forward idirection */
-    Vector3f east;        /* East horizontal dir to East */
+    Vector3f east; /* East horizontal dir to East */
     // Vector3f north;       /* North horizontal direction  to North */
     Vector3f gravity; /* Gravity */
     Vector3f dir3;
@@ -182,14 +189,16 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Ve
     gravity = vector3f_getNormalized(*acc);
 
 #if 1
-    snprintf(message, sizeof(message), "IMU gravity  %+f %+f %+f\n", gravity.x, gravity.y, gravity.z);
+    snprintf(message, sizeof(message), "IMU gravity  %+f %+f %+f\n", gravity.x,
+            gravity.y, gravity.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
     /* horizontal part of forward relative to device */
     starboard_h = vector3f_getCrossProduct(unitmyf, gravity);
     starboard_h = vector3f_getNormalized(starboard_h);
 #if 1
-    snprintf(message, sizeof(message), "IMU stbd Horizontal  %+f %+f %+f\n", starboard_h.x, starboard_h.y, starboard_h.z);
+    snprintf(message, sizeof(message), "IMU stbd Horizontal  %+f %+f %+f\n",
+            starboard_h.x, starboard_h.y, starboard_h.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
@@ -201,7 +210,8 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Ve
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
-    cos_hdg = vector3f_getDotProduct(vector3f_getCrossProduct(starboard_h, east), gravity);
+    cos_hdg = vector3f_getDotProduct(
+            vector3f_getCrossProduct(starboard_h, east), gravity);
     sin_hdg = vector3f_getDotProduct(starboard_h, east);
 
 #if 0
@@ -223,11 +233,11 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Ve
     return 0;
 }
 
-
-int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
+int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
+        Vector3f *mag, float deltat)
 {
     Vector3f east, north;
-    //static char message[100];
+    static char message[160];
     float gyrturn;
     float newdir_x, newdir_y;
     float hdgestim;
@@ -239,25 +249,28 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
     mstatus->gyr = *gyr;
     mstatus->mag = *mag;
 
-    east = vector3f_getCrossProduct(*mag, *acc);
+    east = vector3f_getCrossProduct(*acc, *mag);
     north = vector3f_getCrossProduct(unitmzf, east);
     north = vector3f_getNormalized(north);
 
-    hdgmag = atan2f(north.x, -north.y);
+    hdgmag = -atan2f(north.x, north.y);
 
-#if 0
-    snprintf(message, sizeof(message) - 1, "IMU mag %+6f %+6f %+6f   acc %+6f %+6f %+6f    east%+6f %+6f %+6f\n",
-             acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, east.x, east.y, east.z);
+#if 1
+    snprintf(message, sizeof(message) - 1,
+            "IMU mag %+6f %+6f %+6f   acc %+6f %+6f %+6f    east%+6f %+6f %+6f\n",
+            acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, east.x, east.y,
+            east.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
-#if 0
-    snprintf(message, sizeof(message) - 1, "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
-             east.x, east.y, east.z, north.x, north.y, north.z);
+#if 1
+    snprintf(message, sizeof(message) - 1,
+            "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
+            east.x, east.y, east.z, north.x, north.y, north.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
-    if((!mstatus->initialized) || isnan(mstatus->heading))
+    if ((!mstatus->initialized) || isnan(mstatus->heading))
     {
         /* First call heading unknown */
         /* Let's start with magnetometer value */
@@ -266,7 +279,7 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
     }
     else
     {
-        if(isnan(gyr->z))
+        if (isnan(gyr->z))
         {
             gyr->z = 0.F;
         }
@@ -288,8 +301,10 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
         direstim_y = sinf(hdgestim);
 
         /* compute the vector beta magnetic value + (1-beta) estimated direction */
-        newdir_x =  mstatus->magVsGyr * dirmag_x + (1.F - mstatus->magVsGyr)  * direstim_x;
-        newdir_y =  mstatus->magVsGyr * dirmag_y + (1.F - mstatus->magVsGyr)  * direstim_y;
+        newdir_x = mstatus->magVsGyr * dirmag_x
+                + (1.F - mstatus->magVsGyr) * direstim_x;
+        newdir_y = mstatus->magVsGyr * dirmag_y
+                + (1.F - mstatus->magVsGyr) * direstim_y;
         /* newdir_x,y points to the direction */
 
 #if 0
@@ -316,22 +331,34 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f
     return 1;
 }
 
-Quaternionf calculer_orientation_navire(Vector3f nord, Vector3f est, Vector3f bas)
+/*
+ *
+ * @brief compute orientation quaternion from north, east and down
+ *
+ * @param north coordinates of north from sensor
+ * @param east coordinates of east from sensor
+ * @param down coordinates of down (gravity) from sensor
+ *
+ * @return normalized quaternion of orientation.
+ */
+
+Quaternionf calculer_orientation_navire(Vector3f north, Vector3f east,
+        Vector3f down)
 {
     Quaternionf q;
 
-    // Matrice de rotation (repère navire -> repère monde)
-    // nord correspond à l'axe x du navire
-    // est correspond à l'axe y du navire
-    // bas correspond à l'axe z du navire
-    float m00 = nord.x, m01 = est.x, m02 = bas.x;
-    float m10 = nord.y, m11 = est.y, m12 = bas.y;
-    float m20 = nord.z, m21 = est.z, m22 = bas.z;
+    /* Matrice de rotation (repère navire -> repère monde) */
+    /* nord correspond à l'axe x du navire */
+    /* east correspond à l'axe y du navire */
+    /* down correspond à l'axe z du navire (rappel : z vers le bas) */
+    float m00 = north.x, m01 = east.x, m02 = down.x;
+    float m10 = north.y, m11 = east.y, m12 = down.y;
+    float m20 = north.z, m21 = east.z, m22 = down.z;
 
-    // Conversion matrice de rotation -> quaternion
+    /* Conversion matrice de rotation -> quaternion */
     float trace = m00 + m11 + m22;
 
-    if(trace > 0.0f)
+    if (trace > 0.0f)
     {
         float s = sqrtf(trace + 1.0f) / 2.0f;
         q.w = s;
@@ -339,7 +366,7 @@ Quaternionf calculer_orientation_navire(Vector3f nord, Vector3f est, Vector3f ba
         q.y = (m02 - m20) / (4 * s);
         q.z = (m10 - m01) / (4 * s);
     }
-    else if((m00 > m11) && (m00 > m22))
+    else if ((m00 > m11) && (m00 > m22))
     {
         float s = sqrtf(1.0f + m00 - m11 - m22) * 2.0f;
         q.w = (m21 - m12) / s;
@@ -347,7 +374,7 @@ Quaternionf calculer_orientation_navire(Vector3f nord, Vector3f est, Vector3f ba
         q.y = (m01 + m10) / s;
         q.z = (m02 + m20) / s;
     }
-    else if(m11 > m22)
+    else if (m11 > m22)
     {
         float s = sqrtf(1.0f + m11 - m00 - m22) * 2.0f;
         q.w = (m02 - m20) / s;
@@ -365,11 +392,16 @@ Quaternionf calculer_orientation_navire(Vector3f nord, Vector3f est, Vector3f ba
     }
 
     q = Quaternionf_getNormalized(q);
+
     return q;
 }
 
-// Convertit un quaternion en angles d'Euler (en radians)
-// Convention : Yaw-Pitch-Roll (Z-Y-X)
+/*
+ *
+ * @brief Converts a quaternion in Euler angles
+ * @param quaternion of orientation
+ * @param roll, pitch, yaw pointers to float to store Euler angles
+ */
 void quaternion_vers_euler(Quaternionf q, float *roll, float *pitch, float *yaw)
 {
     // AnglesEuler angles;
@@ -377,12 +409,12 @@ void quaternion_vers_euler(Quaternionf q, float *roll, float *pitch, float *yaw)
     // Roulis (rotation autour de x)
     float sinr_cosp = 2.0f * (q.w * q.x + q.y * q.z);
     float cosr_cosp = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
-    *roll = atan2f(sinr_cosp, cosr_cosp);
+    *roll = -atan2f(sinr_cosp, cosr_cosp);
 
     // pitch (y-axis rotation)
     double sinp = sqrt(1 + 2 * (q.w * q.y - q.x * q.z));
     double cosp = sqrt(1 - 2 * (q.w * q.y - q.x * q.z));
-    *pitch = 2 * atan2(sinp, cosp) - M_PI / 2;
+    *pitch = -2 * atan2(sinp, cosp) - M_PI / 2;
 
     // Lacet (rotation autour de z) = cap
     float siny_cosp = 2.0f * (q.w * q.z + q.x * q.y);
@@ -393,45 +425,50 @@ void quaternion_vers_euler(Quaternionf q, float *roll, float *pitch, float *yaw)
 }
 
 /*
+ * @brief Compute new orientation whith mems values
+ * @parameter mstatus
  *
  *
  *
- * @note z axis of device points downward, and acceleration points upward
- *       acceleration points upward and has to be inverted
- *       to point downward (gravity)
- *
+ * @note z axis of device points downward
  */
-void IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)
+void IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
+        Vector3f *mag, float deltat)
 {
-    // char message[100];  /* for debugging only */
-    Quaternionf q_new;  /* new quaternion */
-    Vector3f down;      /* -acc, normalized*/
-    Vector3f east;      /* east, normalized */
-    Vector3f north;     /* north, normalized */
+    char message[100]; /* for debugging only */
+    Quaternionf q; /* new quaternion */
+    Vector3f down; /* -acc, normalized*/
+    Vector3f east; /* east, normalized */
+    Vector3f north; /* north, normalized */
     Quaternionf q_pred; /* Quaternion computed with last one and gyro values */
-    // Vector3f rotdir;    /* axe et direction de la rotation */
-    //  float cosrot;       /* cos de l'angle de rotation */
     Quaternionf q_ref; /* reference quaternion computed with acc and mag */
+    float prev_heading; /* previous heading */
+
+    // initial step : get previous heading
+    prev_heading = mstatus->heading;
 
     // Step 1: Predict new orientation using gyroscope data
     Quaternionf gyro_quat_derivative;
     gyro_quat_derivative.w = 0.0f;
-    gyro_quat_derivative.x = gyr->x;
-    gyro_quat_derivative.y = gyr->y;
-    gyro_quat_derivative.z = gyr->z;
+    gyro_quat_derivative.x = -gyr->x;
+    gyro_quat_derivative.y = -gyr->y;
+    gyro_quat_derivative.z = -gyr->z;
 
-    Quaternionf q_dot = Quaternionf_mul(mstatus->orientation, gyro_quat_derivative);
+    Quaternionf q_dot = Quaternionf_mul(mstatus->orientation,
+            gyro_quat_derivative);
     q_dot = Quaternionf_getScaled(q_dot, 0.5f);
 
-    q_pred = Quaternionf_add(mstatus->orientation, Quaternionf_getScaled(q_dot, deltat));
+    q_pred = Quaternionf_add(mstatus->orientation,
+            Quaternionf_getScaled(q_dot, deltat));
     q_pred = Quaternionf_getNormalized(q_pred);
 
     // Step 2: Compute the reference orientation using accelerometer and magnetometer data
-    down = vector3f_getScaled(*acc, -1.0f); // Invert to get gravity direction
+    //down = vector3f_getScaled(*acc, -1.0f); // Invert to get gravity direction
+    down = *acc;
     down = vector3f_getNormalized(down);
 
     /* Compute Est. Use cross product of down and mag */
-    east = vector3f_getCrossProduct(down, *mag);
+    east = vector3f_getCrossProduct(*acc, *mag);
     east = vector3f_getNormalized(east);
 
     /* Compute North as cross product of down and east */
@@ -441,28 +478,61 @@ void IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector
     /* we have North, East and down, let's compute the quaternion of orientation */
     q_ref = calculer_orientation_navire(north, east, down);
 
-    if(mstatus->initialized == false)
+    if (mstatus->initialized == false)
     {
-        mstatus->initialized = true;
         mstatus->orientation = q_ref;
     }
     else
     {
-        q_new = Quaternionf_getScaled(q_ref, 0.05f);
-        q_new = Quaternionf_add(q_new, q_pred);
-        mstatus->orientation = Quaternionf_getNormalized(q_new);
+        Quaternionf q1;
+        Quaternionf q2;
+        q1 = Quaternionf_getScaled(q_ref, mstatus->magVsGyr);
+        q2 = Quaternionf_getScaled(q_pred, (1 - mstatus->magVsGyr));
+        q = Quaternionf_add(q1, q2);
+        mstatus->orientation = Quaternionf_getNormalized(q);
     }
 
     float roll, pitch, yaw;
-    quaternion_vers_euler(q_ref, &roll, &pitch, &yaw);
-    mstatus->roll = roll;
+    quaternion_vers_euler(q, &roll, &pitch, &yaw);
+
+    if (mstatus->initialized == false)
+    {
+        mstatus->yawRate = 0.;
+    }
+    else
+    {
+        /* Pré-calculs */
+        float q1q1 = q.x * q.x;
+        float q2q2 = q.y * q.y;
+        float q3q3 = q.z * q.z;
+
+        /* Roll rate, around x axis of surface */
+        mstatus->rollRate = gyr->x * (1.0f - 2.0f * (q2q2 + q3q3))
+                + gyr->y * (2.0f * (q.x * q.y + q.w * q.z))
+                + gyr->z * (2.0f * (q.x * q.z - q.w * q.y));
+
+        /* Pitch rate, around y axis of surface */
+        mstatus->pitchRate = gyr->x * (2.0f * (q.x * q.y - q.w * q.z))
+                + gyr->y * (1.0f - 2.0f * (q1q1 + q3q3))
+                + gyr->z * (2.0f * (q.y * q.z + q.w * q.x));
+
+        /* Yaw rate, along z axis of surface */
+        mstatus->yawRate = gyr->x * (2.0f * (q.x * q.z + q.w * q.y))
+                + gyr->y * (2.0f * (q.y * q.z - q.w * q.x))
+                + gyr->z * (1.0f - 2.0f * (q1q1 + q2q2));
+
+    }
+
+    mstatus->roll = -roll;
     mstatus->pitch = pitch;
-    mstatus->heading = yaw;
+    mstatus->heading = -yaw;
+
+    mstatus->initialized = true;
 
 #if 0
-    snprintf(message, sizeof(message), "IMU north %+f %+f %+f\n", north.x, north.y, north.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
     snprintf(message, sizeof(message), "IMU east %+f %+f %+f\n", east.x, east.y, east.z);
+    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    snprintf(message, sizeof(message), "IMU north %+f %+f %+f\n", north.x, north.y, north.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
     snprintf(message, sizeof(message), "IMU  down %+f %+f %+f\n", down.x, down.y, down.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
@@ -472,16 +542,4 @@ void IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
-// Step 3: Apply complementary filter to combine predicted and reference quaternions
-#if 0
-    q_new = Quaternionf_getScaled(q_predicted, (1 - mstatus->magVsGyr));
-    Quaternionf q_ref_scaled = Quaternionf_getScaled(q_ref, mstatus->magVsGyr);
-    q_new = Quaternionf_add(q_new, q_ref_scaled);
-
-    // Normalize the final quaternion
-    q_new = Quaternionf_getNormalized(q_new);
-
-    // Update the IMU status with the new orientation
-    mstatus->orientation = q_new;
-#endif
 }

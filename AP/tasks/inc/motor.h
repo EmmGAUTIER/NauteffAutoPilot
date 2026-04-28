@@ -36,6 +36,9 @@ SOFTWARE.
 #include "FreeRTOS.h"
 #include "queue.h"
 
+#include "stm32l4xx_ll_gpio.h"
+#include <stm32l452xx.h>
+
 #include "util.h"
 
 extern QueueHandle_t msgQueueMotor;
@@ -131,3 +134,11 @@ void MOTOR_MSG_set_hpf_coeff(float cvt);
 void MOTOR_MSG_set_threshold(float cvt);
 
 void MOTOR_stopPanic();
+
+INLINE static void Motor_stopPanic(void)
+{
+    /* Reset PWN, INA and INB */
+    LL_GPIO_ResetOutputPin(GPIOA,
+    LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+}
+

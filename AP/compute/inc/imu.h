@@ -28,7 +28,7 @@ typedef struct
     Vector3f gyr;
     Vector3f mag;
     float roll, pitch, heading;
-    float yawRate;
+    float rollRate, pitchRate, yawRate;
     bool initialized;
     float magVsGyr;
     Quaternionf orientation;

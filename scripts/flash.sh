@@ -13,7 +13,7 @@ set -x
 if [ -n "$NAUTEFF_AP_DIR_REMOTE" ]
 then
     echo "Copie sur machine distante : "
-    cp build/NauteffAutoPilot.elf $NAUTEFF_AP_DIR_REMOTE/build/NauteffAutoPilot.elf 
+    cp build/NauteffAutoPilot.elf $NAUTEFF_AP_DIR_REMOTE/build/NauteffAutoPilot.elf  || exit 1
 fi
 
 if [ $NAUTEFF_AP_HOST_OPENOCD ]

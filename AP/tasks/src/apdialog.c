@@ -383,8 +383,8 @@ void parse_command_line(void)
     float numberValue; /* for storing converted numbers */
     int tokenCount = 0;
     int terminator;
-    static char message[100];
-    char nbcar;
+    //static char message[100];
+    //char nbcar;
     MsgAutoPilot_t msgAutoPilot;
     MEMS_Msg_t msgMEMs;
     MsgMotor_t msgMotor;
@@ -450,13 +450,18 @@ void parse_command_line(void)
         }
         break;
 
+        /* Mode idle | ( heading [number] ) */
+        /* set mode idle or heading heading to steer optional */
     case TOKEN_MODE:
         switch (tokenTypes[1])
         {
+        /* Mode idle */
         case TOKEN_IDLE:
             msgAutoPilot.msgType = AP_MSG_MODE_IDLE;
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
             break;
+
+            /* mode heading, optional heading number */
         case TOKEN_HEADING:
             switch (tokenTypes[2])
             {
@@ -466,10 +471,12 @@ void parse_command_line(void)
                 msgAutoPilot.data.reqHeading = heading;
                 xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
                 break;
+
             case TOKEN_UNKNOWN:
                 msgAutoPilot.msgType = AP_MSG_MODE_HEADING;
                 xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
                 break;
+
             default:
                 return; // Syntax error
             }
@@ -485,11 +492,11 @@ void parse_command_line(void)
             return; // Syntax error
         }
 
+        /* calibration commands */
     case TOKEN_CALIBRATE:
         switch (tokenTypes[1])
         {
-        //case TOKEN_MOTOR:
-
+        /*calibrate MEMS */
         case TOKEN_MEMS:
             msgMEMs.msgType = MEMS_MSG_CALIBRATE;
             xQueueSend(msgQueueMEMs, &msgMEMs, 0);
@@ -499,6 +506,7 @@ void parse_command_line(void)
             return; // Syntax error
         }
 
+        /* Set parameters SET <param> <value> */
     case TOKEN_SET:
         if (tokenTypes[2] == TOKEN_NUMBER)
         {
@@ -542,7 +550,7 @@ void parse_command_line(void)
                 case TOKEN_MAG_VS_GYR:
                     msgMEMs.msgType = MEMS_MSG_SET_MAG_VS_GYR;
                     msgMEMs.data.mag_vs_gyr = numberValue;
-                    xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
+                    xQueueSend(msgQueueMEMs, &msgMEMs, 0);
                     break;
 
                 case TOKEN_MOTOR_THRESHOLD:
@@ -569,12 +577,15 @@ void parse_command_line(void)
         }
         break;
 
+        /* display configurations or statuses */
     case TOKEN_DISPLAY:
         switch (tokenTypes[1])
         {
+        /* display MEMS ... */
         case TOKEN_MEMS:
             switch (tokenTypes[2])
             {
+            /* display MEMS config */
             case TOKEN_CONFIG:
                 msgMEMs.msgType = MEMS_MSG_DISPLAY_CONFIG;
                 xQueueSend(msgQueueMEMs, &msgMEMs, 0);
@@ -585,9 +596,11 @@ void parse_command_line(void)
             }
             break;
 
+            /* display motor ... */
         case TOKEN_MOTOR:
             switch (tokenTypes[2])
             {
+            /* display motor config */
             case TOKEN_CONFIG:
                 msgMotor.msgType = MSG_MOTOR_DISPLAY_CONFIG;
                 xQueueSend(msgQueueMotor, &msgMotor, 0);
@@ -598,9 +611,11 @@ void parse_command_line(void)
             }
             break;
 
+            /* display AP ...  AP for autopilot */
         case TOKEN_AP:
             switch (tokenTypes[2])
             {
+            /* display AP config */
             case TOKEN_CONFIG:
                 msgAutoPilot.msgType = AP_MSG_DISPLAY_CONFIG;
                 xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);

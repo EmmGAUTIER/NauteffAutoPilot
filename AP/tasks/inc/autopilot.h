@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "quat.h"
+
 // #define AP_PERIOD_TICKS 250
 // #define AP_FREQ_HZ 4.0
 // #define AP_PERIOD_SEC (1.0 / AP_FREQ_HZ)
@@ -67,6 +69,8 @@ typedef struct
     int engaged;
     int headingToSteerDegrees;
     float headingToSteerRadians;
+    Quaternionf qHeading; /* Quaternion of heading of ship */
+    Quaternionf qToSteer; /* Quaternion of direction to steer */
     float currentHeading;
     float currentGap;
     float integratedGap;
@@ -108,8 +112,6 @@ typedef struct
 
         int32_t reqHeading; /* requested heading to steer */
 
-        // float helmAngle;   /* Helm angle to turn */
-
         int32_t reqTurnAngle; /* requested angle to turn */
 
         struct
@@ -118,11 +120,8 @@ typedef struct
             float roll;
             float pitch;
             float yawRate;
-            // float rollRate;
-            // float pitchRate;
-            // float cavalement;
-            // float embardee;
-            // float pilonnement;
+            Quaternionf qHeading;
+            float deltat;
         } IMUData;
         struct
         {
@@ -158,14 +157,14 @@ void taskAutoPilot(void *parameters);
 * @brief Send AHRS values to autopilot task
 *
 * @param timeStamp TickType_t timestamp of the values
-* @param heading float heading in degrees
-* @param roll float roll in degrees
-* @param pitch float pitch in degrees
-* @param yawRate float yaw rate in degrees per second
+* @param roll float roll in radians, positive when roll to starboard
+* @param pitch float pitch in radians , positive when pitch downward
+* @param heading float heading in radians
+* @param yawRate float yaw rate in radians per second, positive when turning to starboard
 *
 * @return 0 if success, -1 if error
 */
-int AP_MSG_send_AHRS_values(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate);
+int AP_MSG_send_AHRS_values(TickType_t timeStamp, float roll, float pitch, float heading, float yawRate);
 
 /*
 * @brief Send motor stall message to autopilot task

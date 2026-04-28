@@ -25,17 +25,17 @@
 #define DBG_PRINT_RAW_VALUES_ACC(X)
 #define DBG_PRINT_RAW_VALUES_GYR(X)
 #define DBG_PRINT_RAW_VALUES_MAG(X)
-#define DBG_PRINT_MEAN_RAW_VALUES(X)    
-#define DBG_PRINT_CALIB(X)
-#define DBG_PRINT_MEAN_CORR_VALUES(X)
+#define DBG_PRINT_MEAN_RAW_VALUES(X)    (X)
+#define DBG_PRINT_CALIB(X) (X)
+#define DBG_PRINT_MEAN_CORR_VALUES(X)   (X)
 #define DBG_PRINT_ATTITUDE(X)           (X)
-#define DBG_PRINT_QUATERNION(X)
+#define DBG_PRINT_QUATERNION(X)         (X)
 #define DBG_PRINT_MADGWICK(X)
 
-#define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ /* mag and acc ouptut data rate */
+#define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ /* gyr and acc ouptut data rate */
 #define LSM9DS1_FS_G LSM9DS1_FS_G_500_DPS /* gyro full scale */
 #define LSM9DS1_FS_XL LSM9DS1_FS_XL_8G    /* acc full scale */
-#define LSM9DS1_DO LSM9DS1_DO_40_HZ       /* Mag output data rate */
+#define LSM9DS1_DO LSM9DS1_DO_20_HZ       /* Mag output data rate */
 #define LSM9DS1_FS_M LSM9DS1_FS_M_8_GAUSS /* Mag full scale */
 
 /*
@@ -44,8 +44,8 @@
  */
 // #define LSM9DS1_MAG_I2C_ADDR (0x1E) /* Magnetometer device address */
 // #define LSM9DS1_XLG_I2C_ADDR (0x6B) /* Accelerometer and gyrometer device address */
-#define MEMS_PERIOD_MS 50
-#define MEMS_PERIOD_POLL 20
+#define MEMS_PERIOD_MS 100
+#define MEMS_PERIOD_POLL 10
 #define MEMS_PERIOD_S ((float)MEMS_PERIOD_MS / 1000.0F)
 /*
  * Magnetometer register addresses
@@ -268,6 +268,7 @@
 #define LSM9DS1_CVT_MKS_FACTOR_MAG (MEMS_STANDARD_MAGNETIC_GAUSS * (16.F / 32768.F))
 #endif
 
+#if 0
 /*
  * Offsets and gain values for the connected device
  * those values are meant to be obtained from calibration in the future
@@ -282,13 +283,13 @@
 #define MEMS_ACC_CORR_GAIN_Y (0.9966F)
 #define MEMS_ACC_CORR_GAIN_Z (0.9792F)
 
-#define MEMS_GYR_OFFSET_X (0.008707F)
-#define MEMS_GYR_OFFSET_Y (0.013293F)
-#define MEMS_GYR_OFFSET_Z (0.051001F)
+//#define MEMS_GYR_OFFSET_X (0.008707F)
+//#define MEMS_GYR_OFFSET_Y (0.013293F)
+//#define MEMS_GYR_OFFSET_Z (0.051001F)
 
-#define MEMS_GYR_CORR_GAIN_X (1.0F)
-#define MEMS_GYR_CORR_GAIN_Y (1.0F)
-#define MEMS_GYR_CORR_GAIN_Z (1.1F)
+//#define MEMS_GYR_CORR_GAIN_X (1.0F)
+//#define MEMS_GYR_CORR_GAIN_Y (1.0F)
+//#define MEMS_GYR_CORR_GAIN_Z (1.1F)
 
 #define MEMS_MAG_OFFSET_X (0.0668F)
 #define MEMS_MAG_OFFSET_Y (0.07925F)
@@ -300,6 +301,7 @@
 // #define MEMS_MAG_GAIN_X (1.F)
 // #define MEMS_MAG_GAIN_Y (1.F)
 // #define MEMS_MAG_GAIN_Z (1.F)
+#endif
 
 void timerMEMsCallback(TimerHandle_t xTimer);
 void timerPOLLCallback(TimerHandle_t xTimer);
@@ -321,25 +323,35 @@ SemaphoreHandle_t semspi2 = (SemaphoreHandle_t) 0;
 
 static Calib6_t calibreur;
 
-static Corrector_t corrector = {
-    50.731567F,
-    12.749512F,
-    -26.425171F,
-    0.002399F,
-    0.002402F,
-    0.002381F,
-    -4.573334F,
-    46.593998F,
-    155.863327F,
-    0.000312F,
-    0.000312F,
-    0.000312F,
-    -467.892975F,
-    -812.839966F,
-    -679.364014F,
-    0.366352F,
-    0.386369F,
-    0.394172F};
+static Corrector_t corrector =
+        {
+                /* Accelerometer correction */
+                50.731567F,
+                12.749512F,
+                -26.425171F,
+                -0.002399F,
+                -0.002402F,
+                0.002381F,
+
+                /* Gyrometer correction */
+                -11.573334F,
+                -41.593998F,
+                -158.863327F,
+                //-0.000312F,
+                //-0.000312F,
+                //0.000312F,
+                +0.000305F,
+                -0.000305F,
+                -0.000305F,
+
+                /* Magnetometer Corrections */
+                -467.892975F,
+                -812.839966F,
+                -679.364014F,
+                -0.366352F,
+                0.386369F,
+                -0.394172F
+        };
 
 INLINE Vector3f Vector3f_fromInts(int i[])
 {
@@ -347,6 +359,8 @@ INLINE Vector3f Vector3f_fromInts(int i[])
             { (float) i[0], (float) i[1], (float) i[2] };
     return v;
 }
+
+#if 0
 /*
  * @brief Correct the accelerometer, gyrometer and magnetometer values
  */
@@ -364,6 +378,10 @@ void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
     gyr->y -= MEMS_GYR_OFFSET_Y;
     gyr->z -= MEMS_GYR_OFFSET_Z;
 
+    //gyr->x = 1.02f;
+    //gyr->y = 1.02f;
+    //gyr->z = 1.02f;
+
     /* Correct the magnetometer values */
     mag->x = (mag->x - MEMS_MAG_OFFSET_X) * (1. / MEMS_MAG_GAIN_X);
     mag->y = (mag->y - MEMS_MAG_OFFSET_Y) * (1. / MEMS_MAG_GAIN_Y);
@@ -380,7 +398,7 @@ void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
     mag->x *= -1.F;
     mag->z *= -1.F;
 }
-
+#endif
 /**
  * @brief  Fonction d’échange SPI en DMA (full-duplex).
  * @param  txBuffer : pointeur vers données à envoyer
@@ -512,24 +530,32 @@ int LSM9DS1_ReadVec(int agmag, int *values)
      * regaddr is the address of the register and pi is the pin connected to CS.
      */
     HAL_StatusTypeDef res;
+    int ret;
     uint8_t regaddr;
+    uint8_t maskRDY;
     uint32_t pin;
 
     switch (agmag)
     {
     case 1: // Acc
-        regaddr = 0x28 | 0x80;
+        regaddr = 0x27 | 0x80;
         pin = LL_GPIO_PIN_11;
+        maskRDY = 0x1 << 0;
         break;
 
     case 2: // Gyr
-        regaddr = 0x18 | 0x80;
+        regaddr = 0x17 | 0x80;
         pin = LL_GPIO_PIN_11;
+        maskRDY = 0x1 << 1;
         break;
 
     case 3: // Mag
-        regaddr = 0x28 | 0x80 | 0x40;
+        regaddr = 0x27 | 0x80 | 0x40; /* bit 7 for reading, bit 6 to inc. addr. */
         pin = LL_GPIO_PIN_12;
+        /* Read only XDA and YDA, ZDA and ZYXDA ignored, because they are
+         * always 0. X, Y and Z are both available when XDA or YDA are set
+         */
+        maskRDY = 0x3 << 0;
         break;
 
     default:
@@ -539,33 +565,41 @@ int LSM9DS1_ReadVec(int agmag, int *values)
     /* DMA transfer on SPI bus is in duplex mode.
      * STM32 sends first the register number and ignore the received character
      * and receives the 6 bytes containing the x,y & z values as 16 bits integers.
-     * TX   | regaddr  |      0 |     0 |     0 |     0 |     0 |     0 |
-     * RX   | ignored  |  X MSB | X LSB | Y MSB | Y LSB | Z MSB | Z LSB |
+     * TX   | regaddr  |      0   |      0 |     0 |     0 |     0 |     0 |     0 |
+     * RX   | ignored  |STATUS_REG|  X MSB | X LSB | Y MSB | Y LSB | Z MSB | Z LSB |
      */
-    uint8_t bufferTx[7] =
-            { regaddr, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
-    uint8_t bufferRx[7] =
-            { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+    uint8_t bufferTx[8] =
+            { regaddr, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+    uint8_t bufferRx[8] =
+            { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
     LL_GPIO_ResetOutputPin(GPIOB, pin); // CS_A/G or CS_M low : select device
-    res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 7, pdMS_TO_TICKS(100));
+    res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 8, pdMS_TO_TICKS(100));
+    LL_GPIO_SetOutputPin(GPIOB, pin); /* CS_A/G high : deselect device */
 
-    if (res == HAL_OK)
+    if (agmag == 3)
     {
-        values[0] = (int16_t) (bufferRx[1] | (bufferRx[2] << 8));
-        values[1] = (int16_t) (bufferRx[3] | (bufferRx[4] << 8));
-        values[2] = (int16_t) (bufferRx[5] | (bufferRx[6] << 8));
+        static int i = 0;
+        i++;
+    }
+
+    if ((res == HAL_OK) && ((bufferRx[1] & maskRDY) == maskRDY))
+    {
+        values[0] = (int16_t) (bufferRx[2] | (bufferRx[3] << 8));
+        values[1] = (int16_t) (bufferRx[4] | (bufferRx[5] << 8));
+        values[2] = (int16_t) (bufferRx[6] | (bufferRx[7] << 8));
+        //ret = 1;
+        ret = bufferRx[1];
     }
     else
     {
         values[0] = 0;
         values[1] = 0;
         values[2] = 0;
+        ret = 0;
     }
 
-    LL_GPIO_SetOutputPin(GPIOB, pin); // CS_A/G high : deselect device
-
-    return (int) res;
+    return ret;
 }
 
 int LSM9DS1_ReadAcc(int *acc)
@@ -706,14 +740,15 @@ int LSM9DS1_init(void)
         return -1;
     }
 
+    LSM9DS1_WriteRegister(1, CTRL_REG8, (0x1 << 6) | (0x1 << 2)); /* BDU and IF_ADD_INC */
     LSM9DS1_WriteRegister(1, CTRL_REG6_XL, (0x2 << 5) | LSM9DS1_FS_XL); /* Accelerometer full scale */
-    // LSM9DS1_WriteRegister(1, CTRL_REG6_XL, 0x40);
+    LSM9DS1_WriteRegister(1, CTRL_REG1_G, (0x2 << 5) | 0x1 << 3);
     LSM9DS1_WriteRegister(1, INT1_CTRL, 0x1); /* Interrupt on INT1 : data ready accelerometer */
     LSM9DS1_WriteRegister(1, INT2_CTRL, 0x2); /* Interrupt on INT2 : data ready gyrometer */
 
     /* Output data rate, x&y ultra high performance mode, Temperature compensation */
     LSM9DS1_WriteRegister(2, CTRL_REG1_M,
-            (0x1 << 7) | (0x3 << 5) | (0x01 << 1) | LSM9DS1_DO);
+            (0x1 << 7) | (LSM9DS1_DO) | (0x03 << 2));
     LSM9DS1_WriteRegister(2, CTRL_REG2_M, LSM9DS1_FS_M); /* Full scale  */
     LSM9DS1_WriteRegister(2, CTRL_REG3_M, (0x1 << 7) | 0x00); /* I2C disable, Continuous conversion mode */
     LSM9DS1_WriteRegister(2, CTRL_REG4_M, 0x03 << 2); /* Z axis ultra high performance */
@@ -729,6 +764,7 @@ void taskMEMs(void *param)
     MEMS_Msg_t MEMS_Msg;
     BaseType_t ret;
     int retCalib;
+    //int retMEMsRead;
     char message[200];
     int intacc[3];
     int intgyr[3];
@@ -736,11 +772,11 @@ void taskMEMs(void *param)
     Vector3f acc, gyr, mag;
     MEMS_Status_t status = MEMS_Status_Init;
 
-    Vector3f accPrevious, gyrPrevious, magPrevious;
-    float magPreviousNorm = 0.F;
-    float magMaxDelta = 0.F;
-    bool magok = false;
-    uint8_t value;
+    //Vector3f accPrevious, gyrPrevious, magPrevious;
+    //float magPreviousNorm = 0.F;
+    //float magMaxDelta = 0.F;
+    //bool magok = false;
+    //uint8_t value;
     TickType_t tickPast = 0U;
     TickType_t tickCurrent = 0U;
     // TickType_t tickDelta = 0U;
@@ -767,7 +803,7 @@ void taskMEMs(void *param)
     Vector3f gyrCumul = Vector3f_null;
     Vector3f magCumul = Vector3f_null;
 
-    float roll, pitch, heading;
+    //float roll, pitch, heading;
 
     AHRSState_t ahrs;
     IMU_Status_t imu;
@@ -789,11 +825,13 @@ void taskMEMs(void *param)
     LSM9DS1_ReadAcc(intacc);
     LSM9DS1_ReadGyr(intgyr);
     LSM9DS1_ReadMag(intmag);
-    accPrevious = Vector3f_fromInts(intacc);
-    gyrPrevious = Vector3f_fromInts(intgyr);
-    magPrevious = Vector3f_fromInts(intmag);
-    magPreviousNorm = vector3f_getNorm(magPrevious);
+    //accPrevious = Vector3f_fromInts(intacc);
+    //gyrPrevious = Vector3f_fromInts(intgyr);
+    //magPrevious = Vector3f_fromInts(intmag);
+    //magPreviousNorm = vector3f_getNorm(magPrevious);
     status = MEMS_Status_Measure;
+
+    //LSM9DS1_WriteRegister(2, CTRL_REG1_M, (0x1 << 7) | (0x02 << 2)); // | (0x01 << 1) );
 
     for (;;)
     {
@@ -805,133 +843,77 @@ void taskMEMs(void *param)
             switch (MEMS_Msg.msgType)
             {
             case MEMS_MSG_POLL:
+                int accrdstat = LSM9DS1_ReadAcc(intacc);
+                int gyrrdstat = LSM9DS1_ReadGyr(intgyr);
+                int magrdstat = LSM9DS1_ReadMag(intmag);
 
-                //LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9); /* C9 signal synchro */
-
-                LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS_A/G low
-                LSM9DS1_ReadRegister(1, 0x17, &value);
-                LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS_A/G high
-                int gyrReady = (value & 0x2); /* Gyroscope new data available */
-                int accReady = (value & 0x1); /* accelerometer new data available */
-
-                LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_12); // CS_M low
-                LSM9DS1_ReadRegister(2, 0x27, &value);
-                LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_12); // CS_M high
-                // int magReady = (value & 0x8);                /* accelerometer new data available */
-                int magReady = (value & 0xF); /* magnetometer new data available */
-
-                retCalib = 0;
-                if (accReady)
+                if (accrdstat > 0)
                 {
-                    LSM9DS1_ReadAcc(intacc);
-
-                    acc = Vector3f_fromInts(intacc);
+                    DBG_PRINT_RAW_VALUES_ACC(
+                            (snprintf(message, sizeof(message), "ACC : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intacc[0], intacc[1], intacc[2]),
+                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                     if (status == MEMS_Status_Calibrate)
                     {
                         retCalib = Calib6_addSample(&calibreur, 0, intacc);
-                        //int iface = Calib6_getFace(intacc);
-                        DBG_PRINT_CALIB(
-                                (snprintf(message, sizeof(message), "CALIB : stab. %4x %2d  %2d   nb %5d  %2d %5d\n",
-                                calibreur.facesDone,
-                                calibreur.stabOnFace,
-                                calibreur.faceIdx,
-                                calibreur.stabNumber,
-                                calibreur.accumulating,
-                                calibreur.nbSampleAcc),
-                                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
-
                     }
                     else
                     {
-                        if (Vector3f_getSquareDiff(acc, accPrevious)
-                                > (20000.0f * 20000.f))
-                        {
-                            LSM9DS1_ReadAcc(intacc);
-                            acc = Vector3f_fromInts(intacc);
-                            svc_UART_Write(&svc_uart2, "ACC reread\n", 11,
-                                    pdMS_TO_TICKS(1));
-                        }
-                        accPrevious = acc;
+
+                        acc = Vector3f_fromInts(intacc);
                         accCumul = vector3f_add(accCumul, acc);
                         accNb++;
                         accNbTot++;
                     }
-                    DBG_PRINT_RAW_VALUES_ACC(
-                            (snprintf(message, sizeof(message), "ACC : %u  %+6.0f %+6.0f %+6.0f\n", xTaskGetTickCount(), acc.x, acc.y, acc.z),
-                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                 }
 
-                if (gyrReady)
+                if (gyrrdstat > 0)
                 {
-                    LSM9DS1_ReadGyr(intgyr);
-                    gyr = Vector3f_fromInts(intgyr);
+                    DBG_PRINT_RAW_VALUES_GYR(
+                            (snprintf(message, sizeof(message), "GYR : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intgyr[0], intgyr[1], intgyr[2]),
+                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                     if (status == MEMS_Status_Calibrate)
                     {
                         retCalib = Calib6_addSample(&calibreur, 1, intgyr);
                     }
                     else
                     {
-                        if (Vector3f_getSquareDiff(gyr, gyrPrevious)
-                                > (20000.0f * 20000.f))
-                        {
-                            LSM9DS1_ReadGyr(intgyr);
-                            gyr = Vector3f_fromInts(intgyr);
-                            svc_UART_Write(&svc_uart2, "GYR reread\n",
-                                    11,
-                                    pdMS_TO_TICKS(1));
-                        }
-                        gyrPrevious = gyr;
+                        gyr = Vector3f_fromInts(intgyr);
+                        gyrCumul = vector3f_add(gyrCumul, gyr);
+                        gyrNb++;
+                        gyrNbTot++;
                     }
-
-                    DBG_PRINT_RAW_VALUES_GYR(
-                            (snprintf(message, sizeof(message), "GYR : %u  %+6.0f %+6.0f %+6.0f\n", xTaskGetTickCount(), gyr.x, gyr.y, gyr.z),
-                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
-                    gyrCumul = vector3f_add(gyrCumul, gyr);
-                    gyrNb++;
-                    gyrNbTot++;
                 }
 
-                if (magReady)
+                if (magrdstat > 0)
                 {
-                    LSM9DS1_ReadMag(intmag);
-                    mag = Vector3f_fromInts(intmag);
+                    DBG_PRINT_RAW_VALUES_MAG(
+                            (snprintf(message, sizeof(message), "MAG : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intmag[0], intmag[1], intmag[2]),
+                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                     if (status == MEMS_Status_Calibrate)
                     {
                         retCalib = Calib6_addSample(&calibreur, 2, intmag);
                     }
                     else
                     {
-                        magPreviousNorm = vector3f_getNorm(magPrevious);
-                        magMaxDelta = magPreviousNorm * 1.5F;
-
-                        if (((fabs(mag.x - magPrevious.x) < magMaxDelta)
-                                && (fabs(mag.y - magPrevious.y)
-                                        < magMaxDelta)
-                                && (fabs(mag.z - magPrevious.z)
-                                        < magMaxDelta))
-                                || !magok)
-                        {
-                            magCumul = vector3f_add(magCumul, mag);
-                            magNb++;
-                            magNbTot++;
-                            magok = true;
-                            magPrevious = mag;
-                        }
-                        else
-                        {
-                            magok = false;
-                        }
+                        mag = Vector3f_fromInts(intmag);
+                        magCumul = vector3f_add(magCumul, mag);
+                        magNb++;
+                        magNbTot++;
                     }
-                    DBG_PRINT_RAW_VALUES_MAG(
-                            (snprintf(message, sizeof(message), "MAG %c %u %+6.0f %+6.0f %+6.0f\n",
-                                            magok ? ':' : '!',
-                                            xTaskGetTickCount(),
-                                            mag.x, mag.y, mag.z),
-                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                 }
 
                 if (status == MEMS_Status_Calibrate)
                 {
+                    DBG_PRINT_CALIB(
+                            (snprintf(message, sizeof(message), "CALIB : stab. %4x %2d  %2d   nb %5d  %2d %5d\n",
+                            calibreur.facesDone,
+                            calibreur.stabOnFace,
+                            calibreur.faceIdx,
+                            calibreur.stabNumber,
+                            calibreur.accumulating,
+                            calibreur.nbSampleAcc),
+                            svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+
                     if (Calib6_hasEnoughSamples(&calibreur))
                     {
 
@@ -987,32 +969,30 @@ void taskMEMs(void *param)
                                 svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                     }
                 }
-                //LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9); // C9 signal synchro
-
+                (void) retCalib; /* TODO traiter le résultat de retCalib */
                 break;
 
             case MEMS_MSG_TICK:
 
                 if (accNb > 0)
                 {
-                    accMeanRaw = vector3f_getScaled(accCumul, 1.F / ((float) accNb));
-                    accCumul = Vector3f_null;
+                    accMeanRaw = vector3f_getScaled(accCumul,
+                            1.F / ((float) accNb));
                 }
 
                 if (gyrNb > 0)
                 {
-                    gyrMeanRaw = vector3f_getScaled(gyrCumul, 1.F / ((float) gyrNb));
-                    gyrCumul = Vector3f_null;
+                    gyrMeanRaw = vector3f_getScaled(gyrCumul,
+                            1.F / ((float) gyrNb));
                 }
 
                 if (magNb > 0)
                 {
-                    magMeanRaw = vector3f_getScaled(magCumul, 1.F / ((float) magNb));
-                    magCumul = Vector3f_null;
+                    magMeanRaw = vector3f_getScaled(magCumul,
+                            1.F / ((float) magNb));
                 }
 
                 tickCurrent = xTaskGetTickCount();
-
                 deltat = ((float) (tickCurrent - tickPast)) / 1000.F;
 
                 DBG_PRINT_MEAN_RAW_VALUES(
@@ -1026,6 +1006,7 @@ void taskMEMs(void *param)
                         magMeanRaw.x, magMeanRaw.y, magMeanRaw.z),
                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
+                /* offset and gain corrections */
                 accComp = Corrector_getAccCorrected(&corrector, &accMeanRaw);
                 gyrComp = Corrector_getGyrCorrected(&corrector, &gyrMeanRaw);
                 magComp = Corrector_getMagCorrected(&corrector, &magMeanRaw);
@@ -1041,54 +1022,41 @@ void taskMEMs(void *param)
                         magComp.x, magComp.y, magComp.z),
                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
-                IMU_new_values(&imu, &accComp, &gyrComp, &magComp, deltat);
-                AHRS_update(&ahrs, &accComp, &gyrComp, &magComp, deltat);
+                IMU_update_quat(&imu, &accComp, &gyrComp, &magComp, deltat);
 
                 DBG_PRINT_ATTITUDE(
                         (snprintf(message, sizeof(message),
-                        "ATTITUDE     %+f %+f %+f\n",
-                        AHRS_get_heading(&ahrs),
-                        AHRS_get_roll(&ahrs),
-                        AHRS_get_pitch(&ahrs)),
+                        "ATTITUDE     %+6f %+6f %+6f   %6f\n",
+                        IMU_get_roll(&imu),
+                        IMU_get_pitch(&imu),
+                        IMU_get_heading(&imu),
+                        IMU_get_yawRate((&imu))),
                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 Quaternionf orient;
-                orient = AHRS_get_Quaternion(&ahrs);
-                (void) orient;
+                orient = IMU_getQuaternion(&imu);
+                (void) orient; // Avoid compiler warning if unused when debugging
                 DBG_PRINT_QUATERNION(
                         (snprintf(message, sizeof(message),
                         "QUATERNION %+f %+f %+f %+f\n",
                         orient.w, orient.x, orient.y, orient.z),
                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
-                // madgwick_update(gyr.x, gyr.y, gyr.z, acc.x, acc.y, acc.z, mag.x, mag.y, mag.z, deltat);
-                //MadgwickAHRSupdate(gyr.x, gyr.y, gyr.z,
-                //                   acc.x, acc.y, acc.z,
-                //                   mag.x, mag.y, mag.z,
-                //                   deltat);
-                MadgwickAHRSupdate(
-                        -gyrComp.x, -gyrComp.y, -gyrComp.z,
-                        -accComp.x, -accComp.y, -accComp.z,
-                        -magComp.x, -magComp.y, -magComp.z,
-                        deltat);
-                Quaternionf qmadgwick;
-                MadgwickAHRS_get_quat(&qmadgwick);
-                MadgwickAHRS_get_Euler(&roll, &pitch, &heading);
-                DBG_PRINT_MADGWICK((snprintf(message, sizeof(message),
-                                        "MADGWICK %+f %+f %+f    %+f  %+f %+f %+f\n",
-                                        roll, pitch, heading,
-                                        qmadgwick.w, qmadgwick.x, qmadgwick.y, qmadgwick.z),
-                                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                 tickPast = tickCurrent;
                 accNb = 0U;
                 gyrNb = 0U;
                 magNb = 0U;
+                accCumul = Vector3f_null;
+                gyrCumul = Vector3f_null;
+                magCumul = Vector3f_null;
 
                 msgAutopilot.msgType = AP_MSG_AHRS;
                 msgAutopilot.data.IMUData.heading = IMU_get_heading(&imu);
-                msgAutopilot.data.IMUData.roll    = IMU_get_roll(&imu);
-                msgAutopilot.data.IMUData.pitch   = IMU_get_pitch(&imu);
+                msgAutopilot.data.IMUData.roll = IMU_get_roll(&imu);
+                msgAutopilot.data.IMUData.pitch = IMU_get_pitch(&imu);
                 msgAutopilot.data.IMUData.yawRate = IMU_get_yawRate(&imu);
+                msgAutopilot.data.IMUData.qHeading = orient;
+                msgAutopilot.data.IMUData.deltat = deltat;
                 xQueueSend(msgQueueAutoPilot, &msgAutopilot, pdMS_TO_TICKS(10));
 
                 break;
@@ -1113,9 +1081,10 @@ void taskMEMs(void *param)
                 /* Display the configuration */
 
                 snprintf(message, sizeof(message),
-                        "MEMS config : %d  %d\n",
+                        "MEMS config : poll : %dms  compute : %dms  mag/gyr %f\n",
                         MEMS_PERIOD_POLL,
-                        MEMS_PERIOD_MS);
+                        MEMS_PERIOD_MS,
+                        imu.magVsGyr);
                 svc_UART_Write(&svc_uart2, message, strlen(message),
                         pdMS_TO_TICKS(1));
 

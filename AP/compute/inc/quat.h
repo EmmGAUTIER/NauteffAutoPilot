@@ -27,6 +27,8 @@ SOFTWARE.
 
 #include <stdint.h>
 
+#include "quat.h"
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846F
 #endif
@@ -83,6 +85,7 @@ typedef struct
 // ...
 
 extern Quaternionf Quatf_null;
+extern Quaternionf Quaternionf_unit;
 
 /*
  * @brief Initializes a quaternion with given components.
@@ -161,6 +164,13 @@ float Quaternionf_getNorm(Quaternionf v);
  * @return The normalized vector (unit vector), or the zero vector if the input is zero.
  */
 Quaternionf Quaternionf_getNormalized(Quaternionf v);
+
+/*
+ * @brief returns the conjugate of a quaternion
+ * @param v the quaternion to get the conjugate
+ * @return the conjugate of the quaternion
+ */
+Quaternionf Quaternionf_getConjugate(Quaternionf v);
 
 /*
  @ brief Computes the difference between two 3D vectors and checks if it is within a threshold.
