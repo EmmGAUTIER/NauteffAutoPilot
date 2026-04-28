@@ -22,6 +22,7 @@ et le matériel n'est pas encore disponible.
 Le premier essai du pilote a été réalisé le 28 décembre 2025.
 La météo "agitée" était défavorable aux essais,
 cependant le pilote a tenu le cap pendant une heure dans une mer formée.
+Une présentation de cet essai au lien suivant : https://nauteffpremier-rqi29u4dasoiwxbasaz6gk.streamlit.app/
 
 ## Outils de développement
 
@@ -31,5 +32,8 @@ Le développement est fait avec
  - FreeRTOS ;
  - cmake.
 
+## Le code
+Le code spécifique au pilote est dans le répertoire
+[: https://github.com/EmmGAUTIER/NauteffAutoPilot/tree/main/AP]("AP")
 
 
