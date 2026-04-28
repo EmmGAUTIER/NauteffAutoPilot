@@ -34,6 +34,6 @@ Le développement est fait avec
 
 ## Le code
 Le code spécifique au pilote est dans le répertoire
-[: https://github.com/EmmGAUTIER/NauteffAutoPilot/tree/main/AP]("AP")
+https://github.com/EmmGAUTIER/NauteffAutoPilot/tree/main/AP
 
 
