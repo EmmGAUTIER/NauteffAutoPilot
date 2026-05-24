@@ -81,9 +81,6 @@ void Error_Handler(void);
 #define INA_GPIO_Port GPIOA
 #define INB_Pin LL_GPIO_PIN_7
 #define INB_GPIO_Port GPIOA
-#define ACC_READY_Pin LL_GPIO_PIN_0
-#define ACC_READY_GPIO_Port GPIOB
-#define ACC_READY_EXTI_IRQn EXTI0_IRQn
 #define GYR_READY_Pin LL_GPIO_PIN_1
 #define GYR_READY_GPIO_Port GPIOB
 #define GYR_READY_EXTI_IRQn EXTI1_IRQn

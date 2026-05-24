@@ -25,11 +25,11 @@
 #define DBG_PRINT_RAW_VALUES_ACC(X)
 #define DBG_PRINT_RAW_VALUES_GYR(X)
 #define DBG_PRINT_RAW_VALUES_MAG(X)
-#define DBG_PRINT_MEAN_RAW_VALUES(X)    (X)
+#define DBG_PRINT_MEAN_RAW_VALUES(X)
 #define DBG_PRINT_CALIB(X) (X)
-#define DBG_PRINT_MEAN_CORR_VALUES(X)   (X)
-#define DBG_PRINT_ATTITUDE(X)           (X)
-#define DBG_PRINT_QUATERNION(X)         (X)
+#define DBG_PRINT_MEAN_CORR_VALUES(X)
+#define DBG_PRINT_ATTITUDE(X)  (X)
+#define DBG_PRINT_QUATERNION(X)
 #define DBG_PRINT_MADGWICK(X)
 
 #define LSM9DS1_ODR LSM9DS1_ODR_G_59_5_HZ /* gyr and acc ouptut data rate */
@@ -268,41 +268,6 @@
 #define LSM9DS1_CVT_MKS_FACTOR_MAG (MEMS_STANDARD_MAGNETIC_GAUSS * (16.F / 32768.F))
 #endif
 
-#if 0
-/*
- * Offsets and gain values for the connected device
- * those values are meant to be obtained from calibration in the future
- * and stored in flash memory.
- */
-
-#define MEMS_ACC_CORR_OFFSET_X (0.298F)
-#define MEMS_ACC_CORR_OFFSET_Y (0.083F)
-#define MEMS_ACC_CORR_OFFSET_Z (0.050F)
-
-#define MEMS_ACC_CORR_GAIN_X (0.9943F)
-#define MEMS_ACC_CORR_GAIN_Y (0.9966F)
-#define MEMS_ACC_CORR_GAIN_Z (0.9792F)
-
-//#define MEMS_GYR_OFFSET_X (0.008707F)
-//#define MEMS_GYR_OFFSET_Y (0.013293F)
-//#define MEMS_GYR_OFFSET_Z (0.051001F)
-
-//#define MEMS_GYR_CORR_GAIN_X (1.0F)
-//#define MEMS_GYR_CORR_GAIN_Y (1.0F)
-//#define MEMS_GYR_CORR_GAIN_Z (1.1F)
-
-#define MEMS_MAG_OFFSET_X (0.0668F)
-#define MEMS_MAG_OFFSET_Y (0.07925F)
-#define MEMS_MAG_OFFSET_Z (0.0885F)
-
-#define MEMS_MAG_GAIN_X (.3675F)
-#define MEMS_MAG_GAIN_Y (.3585F)
-#define MEMS_MAG_GAIN_Z (.3571F)
-// #define MEMS_MAG_GAIN_X (1.F)
-// #define MEMS_MAG_GAIN_Y (1.F)
-// #define MEMS_MAG_GAIN_Z (1.F)
-#endif
-
 void timerMEMsCallback(TimerHandle_t xTimer);
 void timerPOLLCallback(TimerHandle_t xTimer);
 
@@ -322,6 +287,10 @@ static TimerHandle_t timerPoll = (TimerHandle_t) 0;
 SemaphoreHandle_t semspi2 = (SemaphoreHandle_t) 0;
 
 static Calib6_t calibreur;
+
+/* this corrector struct contains biais and gains corrections to be applied
+ * to raw values of accelerometer, gyrometer and magnetometer
+ */
 
 static Corrector_t corrector =
         {
@@ -353,6 +322,11 @@ static Corrector_t corrector =
                 -0.394172F
         };
 
+/*
+ * @brief Converts an array of 3 integers to a Vector3f
+ * @param i : array of 3 integers
+ * @return a Vector3f with the 3 values of the array converted to float
+ */
 INLINE Vector3f Vector3f_fromInts(int i[])
 {
     Vector3f v =
@@ -360,45 +334,6 @@ INLINE Vector3f Vector3f_fromInts(int i[])
     return v;
 }
 
-#if 0
-/*
- * @brief Correct the accelerometer, gyrometer and magnetometer values
- */
-void imu_correct(Vector3f *acc, Vector3f *gyr, Vector3f *mag)
-{
-    // float val;
-
-    /* Correct the accelerometer values */
-    acc->x = -1.0F * (acc->x - MEMS_ACC_CORR_OFFSET_X) * MEMS_ACC_CORR_GAIN_X;
-    acc->y = -1.0F * (acc->y - MEMS_ACC_CORR_OFFSET_Y) * MEMS_ACC_CORR_GAIN_Y;
-    acc->z = -1.0F * (acc->z - MEMS_ACC_CORR_OFFSET_Z) * MEMS_ACC_CORR_GAIN_Z;
-
-    /* Correct the gyrometer values */
-    gyr->x -= MEMS_GYR_OFFSET_X;
-    gyr->y -= MEMS_GYR_OFFSET_Y;
-    gyr->z -= MEMS_GYR_OFFSET_Z;
-
-    //gyr->x = 1.02f;
-    //gyr->y = 1.02f;
-    //gyr->z = 1.02f;
-
-    /* Correct the magnetometer values */
-    mag->x = (mag->x - MEMS_MAG_OFFSET_X) * (1. / MEMS_MAG_GAIN_X);
-    mag->y = (mag->y - MEMS_MAG_OFFSET_Y) * (1. / MEMS_MAG_GAIN_Y);
-    mag->z = (mag->z - MEMS_MAG_OFFSET_Z) * (1. / MEMS_MAG_GAIN_Z);
-
-    /* North East Down (NED) convention */
-    /* accelerometer and gyro has same coordinates */
-    /* z axis has to be inverted */
-    acc->z *= -1.F;
-    gyr->z *= -1.F;
-
-    /* Mag has different coordinates than mag and gyro */
-    /* invert sign of x and z */
-    mag->x *= -1.F;
-    mag->z *= -1.F;
-}
-#endif
 /**
  * @brief  Fonction d’échange SPI en DMA (full-duplex).
  * @param  txBuffer : pointeur vers données à envoyer
@@ -436,6 +371,13 @@ HAL_StatusTypeDef SPI_DMA_Transfer(SPI_HandleTypeDef *hspi, uint8_t *txBuffer,
 
 /**
  * @brief Callback appelé par la HAL quand DMA terminé
+ * @param hspi : handle du SPI concerné
+ * @return none
+ * Ce callback est appelé à la fin de la transmission ou de la réception
+ * d'une trame SPI gérée par DMA. Il libère le sémaphore pour signaler
+ * que le SPI est disponible, que les données sont disponibles et
+ * demande au séquenceur de faire un changement de contexte
+  *si une tâche plus prioritaire.
  */
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
@@ -467,7 +409,7 @@ void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
     }
 }
 
-/**
+/*
  * @brief  Écrit une valeur dans un registre du LSM9DS1 (SPI).
  * @param  agmag    : 1 : Acc& gyr, 0 : mag
  * @param  reg      : register address (0x00-0x7F)
@@ -496,11 +438,22 @@ HAL_StatusTypeDef LSM9DS1_WriteRegister(int agmag, uint8_t reg, uint8_t value)
     return status;
 }
 
+/*
+ * @brief  Lit une  ou plusieurs valeurs des registres du LSM9DS1 (SPI).
+ * @param  agmag    : 1 : Acc& gyr, 0 : mag
+ * @param  reg      : register address (0x00-0x7F)
+ * @param  value    : valeur à écrire
+ * @retval HAL_StatusTypeDef
+ */
 int LSM9DS1_ReadRegister(int agmag, uint8_t reg, uint8_t *value)
 {
 
     HAL_StatusTypeDef res;
 
+    /* La lecture de registres nécessite d'nvoyer l'adresse (un octet) du premier registre
+     * puis de lire les données. Cela necessite d'utiliiser deux tampons
+     * de 7 octets (1 octet d'adresse + 6 octets de données) pour le transfert SPI en DMA.
+     */
     uint8_t bufferTx[7] =
             { reg | 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
     uint8_t bufferRx[7] =
@@ -711,6 +664,13 @@ void timerPOLLCallback(TimerHandle_t xTimer)
     return;
 }
 
+/*
+ * @brief Initialize the LSM9DS1 MEMs
+ * This function checks the connection of the devices by reading the WHOAMI register,
+ * resets the devices, configures the output data rate, the full scale and the performance mode
+ * of the sensors and configures the interrupts to be notified when new data are available.
+ * @return 1 if initialization is successful, -1 otherwise
+ */
 int LSM9DS1_init(void)
 {
     int res;
@@ -782,7 +742,6 @@ void taskMEMs(void *param)
     MEMS_Msg_t MEMS_Msg;
     BaseType_t ret;
     int retCalib;
-    //int retMEMsRead;
     char message[200];
     int intacc[3];
     int intgyr[3];
@@ -790,14 +749,8 @@ void taskMEMs(void *param)
     Vector3f acc, gyr, mag;
     MEMS_Status_t status = MEMS_Status_Init;
 
-    //Vector3f accPrevious, gyrPrevious, magPrevious;
-    //float magPreviousNorm = 0.F;
-    //float magMaxDelta = 0.F;
-    //bool magok = false;
-    //uint8_t value;
     TickType_t tickPast = 0U;
     TickType_t tickCurrent = 0U;
-    // TickType_t tickDelta = 0U;
 
     float deltat = 0.;
 
@@ -843,10 +796,6 @@ void taskMEMs(void *param)
     LSM9DS1_ReadAcc(intacc);
     LSM9DS1_ReadGyr(intgyr);
     LSM9DS1_ReadMag(intmag);
-    //accPrevious = Vector3f_fromInts(intacc);
-    //gyrPrevious = Vector3f_fromInts(intgyr);
-    //magPrevious = Vector3f_fromInts(intmag);
-    //magPreviousNorm = vector3f_getNorm(magPrevious);
     status = MEMS_Status_Measure;
 
     //LSM9DS1_WriteRegister(2, CTRL_REG1_M, (0x1 << 7) | (0x02 << 2)); // | (0x01 << 1) );
@@ -1077,7 +1026,7 @@ void taskMEMs(void *param)
                 msgAutopilot.data.IMUData.deltat = deltat;
                 xQueueSend(msgQueueAutoPilot, &msgAutopilot, pdMS_TO_TICKS(10));
 
-                break;
+                break; /* case MEMS_MSG_QUATERNION */
 
             case MEMS_MSG_CALIBRATE:
                 /* Calibrate the sensors */
@@ -1087,16 +1036,15 @@ void taskMEMs(void *param)
                 xTimerStop(timerMEMs, (TickType_t )0);
                 Calib6_init(&calibreur);
 
-                break;
+                break; /* case MEMS_MSG_CALIBRATE: */
 
             case MEMS_MSG_SET_MAG_VS_GYR:
 
                 IMU_set_mag_vs_gyr_prop(&imu, MEMS_Msg.data.mag_vs_gyr);
 
-                break;
+                break; /* case MEMS_MSG_SET_MAG_VS_GYR: */
 
-            case MEMS_MSG_DISPLAY_CONFIG:
-                /* Display the configuration */
+            case MEMS_MSG_DISPLAY_CONFIG: /* Display the configuration */
 
                 snprintf(message, sizeof(message),
                         "MEMS config : poll : %dms  compute : %dms  mag/gyr %f\n",
@@ -1106,7 +1054,7 @@ void taskMEMs(void *param)
                 svc_UART_Write(&svc_uart2, message, strlen(message),
                         pdMS_TO_TICKS(1));
 
-                break;
+                break; /* case MEMS_MSG_DISPLAY_CONFIG: */
 
             default:
 

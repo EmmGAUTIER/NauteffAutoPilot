@@ -10,7 +10,7 @@ Ce projet a pour but de réaliser un pilote automatique pour bateaux.
 Le pilote est développé pour être utile à tous sans restriction d'usage
 de taille ou de type de bateau et pour que chaque utilisateur puisse l'adapter
 à ses besoins. Le code est disponible pour en comprendre le fonctionnement
-et le modifier.
+et l'adapter.
 
 ## État d'avancement
 
@@ -19,9 +19,9 @@ et le matériel n'est pas encore disponible.
 
 ## Premier essai
 
-Le premier essai du pilote a été réalisé le 28 décembre 2025.
-La météo "agitée" était défavorable aux essais,
-cependant le pilote a tenu le cap pendant une heure dans une mer formée.
+Le premier essai du pilote a été réalisé le 28 wnovembreécembre 2025.
+La météo était défavorable aux essais,
+cependant le pilote a tenu le cap pendant une heure dans une mer très "agitée".
 Une présentation de cet essai au lien suivant : https://nauteffpremier-rqi29u4dasoiwxbasaz6gk.streamlit.app/
 
 ## Outils de développement

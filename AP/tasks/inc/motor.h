@@ -124,21 +124,44 @@ void MOTOR_MSG_moveTime(float time);
 
 /*
  * @brief Set the conversion factor between helm angle and time
- * @param cvt Conversion factor angle to time
+ * @param cvt Conversion factor angle (radians) to time (seconds)
  * @return void
  */
 void MOTOR_MSG_set_cvt_angle_time(float cvt);
 
+/*
+ * @brief Set the high pass filter coefficient 
+ * @param cvt Coefficient between 0 and 1 for the high pass filter
+ * Usage is to be defined later.
+ * @return void
+ */
 void MOTOR_MSG_set_hpf_coeff(float cvt);
 
+/*
+ * @brief Set the threshold of angle to move the motor
+ * @param thr threshold in radians
+ * Motor is not moved if the estimated angle to move is below this threshold.
+ * This is used to avoid moving the motor for very small angles.
+ * Starting the motor consumes a lot of energy and is less efficient.
+ * @return void
+ */
 void MOTOR_MSG_set_threshold(float cvt);
 
-void MOTOR_stopPanic();
-
-INLINE static void Motor_stopPanic(void)
+/*
+ * @brief Stop motor in case pf panic.
+ * This function stops the motor by resetting PA4, PA6 and PA7
+ * which are connected to PWM, INA and INB of the motor driver.
+ * It doesn't disengage the clutch.
+ * It is meant to be called by fault exceptions handlers.
+ * It is INLINE in order to use no function call nor stack.
+ */
+//INLINE void MOTOR_stopPanic(void)
+__attribute__((always_inline)) inline void MOTOR_stopPanic(void)
 {
     /* Reset PWN, INA and INB */
-    LL_GPIO_ResetOutputPin(GPIOA,
-    LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+    // LL_GPIO_ResetOutputPin(GPIOA,
+    // LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+    /* Very low level : register acces */
+    GPIOA->BRR = LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7;
 }
 

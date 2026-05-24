@@ -43,6 +43,7 @@
 #include "rlib.h"
 #include "util.h"
 
+#include "apmain.h"
 #include "apdialog.h"
 #include "autopilot.h"
 #include "mems.h"
@@ -83,6 +84,7 @@ typedef enum
     TOKEN_EOL, /* End-of-line marker */
     TOKEN_GPS,
     TOKEN_HEADING,
+    TOKEN_HWMS, /* High Water Marks, stack usage measure */
     TOKEN_IDLE,
     TOKEN_KD,
     TOKEN_KI,
@@ -122,6 +124,7 @@ static const TokenEntry tokenTable[] =
                 { "display", TOKEN_DISPLAY },
                 { "GPS", TOKEN_GPS },
                 { "heading", TOKEN_HEADING },
+                { "hwms", TOKEN_HWMS},
                 { "idle", TOKEN_IDLE },
                 { "Kd", TOKEN_KD },
                 { "Ki", TOKEN_KI },
@@ -383,7 +386,7 @@ void parse_command_line(void)
     float numberValue; /* for storing converted numbers */
     int tokenCount = 0;
     int terminator;
-    //static char message[100];
+    static char message[100];
     //char nbcar;
     MsgAutoPilot_t msgAutoPilot;
     MEMS_Msg_t msgMEMs;
@@ -579,29 +582,51 @@ void parse_command_line(void)
 
         /* display configurations or statuses */
     case TOKEN_DISPLAY:
-        switch (tokenTypes[1])
-        {
-        /* display MEMS ... */
-        case TOKEN_MEMS:
-            switch (tokenTypes[2])
-            {
-            /* display MEMS config */
-            case TOKEN_CONFIG:
+        switch (tokenTypes[1]) {
+       
+        case TOKEN_MEMS: /* display MEMS ... */
+
+            switch (tokenTypes[2]) {
+
+            case TOKEN_CONFIG: /* display MEMS config */
+
                 msgMEMs.msgType = MEMS_MSG_DISPLAY_CONFIG;
                 xQueueSend(msgQueueMEMs, &msgMEMs, 0);
-                break;
+
+                break; /* case TOKEN_CONFIG: */
 
             default:
-                return;
+
+                return; 
+
             }
             break;
 
-            /* display motor ... */
-        case TOKEN_MOTOR:
+        case TOKEN_HWMS: /* High Water MarkS : display stack usage of each task */
+
+            /* task list is in taskHandles[] */
+            for (int i = 0 ; i<tasksNumber ; i++)
+            {
+                /* each task has its own stack.*/
+                /* High water mark tels the usage of the task's stack. */
+                /* get task name and high water mark of task. */
+                UBaseType_t hwm = uxTaskGetStackHighWaterMark(tasksHandles[i]);
+                char* taskName = pcTaskGetName(tasksHandles[i]);
+                int nbcar = snprintf(message, sizeof(message), "TASK HWMS %d  %16s : %u bytes\n", i, taskName, hwm * sizeof(StackType_t));
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+            }
+
+            break; /* TOKEN_HWMS */
+           
+        case TOKEN_MOTOR: /* display motor ... */
             switch (tokenTypes[2])
             {
-            /* display motor config */
-            case TOKEN_CONFIG:
+           
+            case TOKEN_CONFIG: /* display motor config */
+
+                snprintf (message, sizeof(message) - 1, "Motor config ?\n");
+                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+
                 msgMotor.msgType = MSG_MOTOR_DISPLAY_CONFIG;
                 xQueueSend(msgQueueMotor, &msgMotor, 0);
                 break;
@@ -615,10 +640,12 @@ void parse_command_line(void)
         case TOKEN_AP:
             switch (tokenTypes[2])
             {
-            /* display AP config */
-            case TOKEN_CONFIG:
+
+            case TOKEN_CONFIG: /* display AP config */
+
                 msgAutoPilot.msgType = AP_MSG_DISPLAY_CONFIG;
                 xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
+
                 break;
 
             default:

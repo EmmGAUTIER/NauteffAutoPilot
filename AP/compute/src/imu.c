@@ -435,17 +435,17 @@ void quaternion_vers_euler(Quaternionf q, float *roll, float *pitch, float *yaw)
 void IMU_update_quat(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
         Vector3f *mag, float deltat)
 {
-    char message[100]; /* for debugging only */
+    //char message[100]; /* for debugging only */
     Quaternionf q; /* new quaternion */
     Vector3f down; /* -acc, normalized*/
     Vector3f east; /* east, normalized */
     Vector3f north; /* north, normalized */
     Quaternionf q_pred; /* Quaternion computed with last one and gyro values */
     Quaternionf q_ref; /* reference quaternion computed with acc and mag */
-    float prev_heading; /* previous heading */
+    //float prev_heading; /* previous heading */
 
     // initial step : get previous heading
-    prev_heading = mstatus->heading;
+    //prev_heading = mstatus->heading;
 
     // Step 1: Predict new orientation using gyroscope data
     Quaternionf gyro_quat_derivative;

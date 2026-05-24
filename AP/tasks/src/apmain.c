@@ -16,6 +16,18 @@
 #include "autopilot.h"
 #include "blink.h"
 
+TaskHandle_t tasksHandles [] = {
+        [0] = NULL, /* taskMotor */
+        [1] = NULL, /* taskMEMs */
+        [2] = NULL, /* taskDialogIn */
+        [3] = NULL, /* taskAutoPilot */
+        [4] = NULL, /* taskService */
+        [5] = NULL  /* taskBlink */
+};
+int tasksNumber = sizeof(tasksHandles) / sizeof(tasksHandles[0]);
+
+extern int _sram2;
+extern int _eram2;
 /*
  * @brief blink a LED for debugging purpose only
  *
@@ -54,7 +66,7 @@ void panic(int panicType)
 
 void apmain()
 {
-    int ret;
+    int ret = 0;
 
     /* init_tasksXXX fcts create queues semaphores, timers,...
      * before starting scheduler
@@ -66,12 +78,12 @@ void apmain()
     init_taskService();
 
     /* Create tasks */
-    ret = xTaskCreate(taskMotor,     "Motor",      configMINIMAL_STACK_SIZE + 2000, (void *)0, 3, (void *)0);
-    ret = xTaskCreate(taskMEMs,      "MEMs",       configMINIMAL_STACK_SIZE + 2000, (void *)0, 4, (void *)0);
-    ret = xTaskCreate(taskDialogIn,  "Dialog",     configMINIMAL_STACK_SIZE + 2000, (void *)0, 2, (void *)0);
-    ret = xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 2000, (void *)0, 2, (void *)0);
-    ret = xTaskCreate(taskService,   "SVC",        configMINIMAL_STACK_SIZE + 2000, (void *)0, 5, (void *)0);
-    ret = xTaskCreate(taskBlink,     "Blink",      configMINIMAL_STACK_SIZE + 2000, (void *)0, 2, (void *)0);
+    ret &= xTaskCreate(taskMotor,     "Motor",      configMINIMAL_STACK_SIZE + 500, (void *)0, 3, tasksHandles + 0);
+    ret &= xTaskCreate(taskMEMs,      "MEMs",       configMINIMAL_STACK_SIZE + 500, (void *)0, 4, tasksHandles + 1);
+    ret &= xTaskCreate(taskDialogIn,  "Dialog",     configMINIMAL_STACK_SIZE + 300, (void *)0, 2, tasksHandles + 2);
+    ret &= xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, tasksHandles + 3);
+    ret &= xTaskCreate(taskService,   "SVC",        configMINIMAL_STACK_SIZE + 200, (void *)0, 5, tasksHandles + 4);
+    ret &= xTaskCreate(taskBlink,     "Blink",      configMINIMAL_STACK_SIZE + 100, (void *)0, 2, tasksHandles + 5);
 
     /* Start scheduler, should never return */
     vTaskStartScheduler();

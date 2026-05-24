@@ -20,7 +20,6 @@
 eps-converted-to.pdf # eps to pdf used by pdflatex
 *.alt
 *.bak
-.vscode
 build/*
 NauteffAutoPilot.geany
 aux
@@ -28,6 +27,7 @@ bin
 lib
 lib64
 pyvenv.cfg
+.vscode
 .cproject
 .project
 .settings

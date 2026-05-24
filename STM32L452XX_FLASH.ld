@@ -194,6 +194,16 @@ SECTIONS
   } >RAM
 
   
+  .ram2 : 
+  {
+    . = ALIGN(8);
+     _sram2 = .;        /* create a global symbol at data start */
+    *(.ram2)           /* .ram2 sections */
+    *(.ram2*)          /* .ram2* sections */
+
+    . = ALIGN(8);
+     _eram2 = .;        /* define a global symbol at data end */
+  } >RAM2
 
   /* Remove information from the standard libraries */
   /DISCARD/ :
