@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include "quat.h"
+#include "ahrs.h"
 
 // #define AP_PERIOD_TICKS 250
 // #define AP_FREQ_HZ 4.0
@@ -52,6 +53,7 @@ typedef enum
     AP_MSG_MOTOR_STOPPING,
     AP_MSG_MOTOR_STALLED,  /* From MOTOR, motor stalled (usually end course) */
     AP_MSG_DISPLAY_CONFIG, /* From DIALOG, display coefficients, params,... */
+    AP_MSG_AHRS_SELECT,    /* From DIALOG, select AHRS type */
 } MsgAutoPilotType_t;
 
 typedef enum
@@ -88,10 +90,6 @@ typedef struct
     float ki; /* Integrali */
     float kd; /* Derivate */
 
-    /* Paramètres moteur */
-    float motorThreshold;
-    float steerAngle;
-
     /* historique */
     int memorizedHeading;
     int idxStart;
@@ -113,6 +111,8 @@ typedef struct
         int32_t reqHeading; /* requested heading to steer */
 
         int32_t reqTurnAngle; /* requested angle to turn */
+
+        AHRS_Types ahrsType; /* AHRS type to select */
 
         struct
         {
@@ -173,3 +173,12 @@ int AP_MSG_send_AHRS_values(TickType_t timeStamp, float roll, float pitch, float
 * This function is called by motor task when motor is stalled
 */
 int AP_MSG_MotorStalled();
+
+/*
+ * @brief Send an message to AHRS task to select the AHRS type
+ * @param ahrsType AHRS_Types type of AHRS to select
+ * @return 0 if success, -1 if error
+ * This function is called by dialog task when user select an AHRS type
+ * @note when autopilot is engaged autopilot task doesn't change the AHRS type
+ */
+int AP_MSG_Select_AHRS(AHRS_Types ahrsType);

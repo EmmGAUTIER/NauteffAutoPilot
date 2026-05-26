@@ -30,6 +30,9 @@ SOFTWARE.
 /* Maximum integrated angle */
 #define AP_MAX_INTEGRAL_GAP  (30.F * (M_PI / 180.))
 
+ /* Low pass filter coefficient for yaw rate */
+#define AP_LPF_YAW_RATE 0.8F
+
 #define AP_TIME_ONE_MOVE (0.2F) /* time to move for one order to motor in seconds */
 
 #define DB_PRINT_ORDERS(X) (X)
@@ -56,14 +59,12 @@ SOFTWARE.
 #include "service.h"
 
 #include "motor.h"
+#include "ahrs.h"
 #include "mems.h"
 #include "autopilot.h"
 
 void timerAPCallback(TimerHandle_t xTimer);
 
-#if 0
-static TimerHandle_t timerAP;
-#endif
 APStatus_t APStatus;
 QueueHandle_t msgQueueAutoPilot;
 
@@ -116,6 +117,22 @@ int AP_MSG_MotorStopped()
     MsgAutoPilot_t msg =
     {
         .msgType = AP_MSG_MOTOR_STALLED,
+    };
+
+    if(xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS)
+    {
+        return -1; // Failed to send message
+    }
+
+    return 1;
+}
+
+int AP_MSG_Select_AHRS(AHRS_Types ahrsType)
+{
+    MsgAutoPilot_t msg =
+    {
+        .msgType = AP_MSG_AHRS_SELECT,
+        .data.ahrsType = ahrsType
     };
 
     if(xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0)) != pdPASS)
@@ -287,6 +304,19 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U));
 
                 break; /* case AP_MSG_DISPLAY_CONFIG: */
+            
+            case AP_MSG_AHRS_SELECT: /* Change type of AHRS algorithm */
+
+                if ( ! APStatus.engaged)
+                {
+                    snprintf(message, sizeof(message) - 1, "AP select AHRS type %d\n", (int)msg.data.ahrsType);
+                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                    static MEMS_Msg_t msgMEMs = {.msgType = MEMS_MSG_SET_AHRS_TYPE};
+                    msgMEMs.data.ahrsType = msg.data.ahrsType;
+                    xQueueSend(msgQueueMEMs, &msgMEMs, pdMS_TO_TICKS(10));
+                }
+
+                break; /* case AP_MSG_AHRS_SELECT: */
 
             default:
 
@@ -341,9 +371,6 @@ void AP_init(APStatus_t *aps)
     aps->ki = AP_KI;
     aps->kp = AP_KP;
 
-    /*Motor parameters*/
-    aps->steerAngle = 0.F;
-
     return;
 }
 
@@ -378,7 +405,6 @@ int AP_set_mode_heading(APStatus_t *aps)
         aps->headingToSteerRadians = aps->currentHeading;
         aps->currentGap = 0;
         aps->integratedGap = 0;
-        aps->steerAngle = 0.F;
 
         MOTOR_MSG_letInClutch();
     }
@@ -465,7 +491,8 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
     {
         aps->currentGap = (aps->headingToSteerRadians - heading);
         aps->integratedGap += aps->currentGap * deltat;
-        aps->yawRate = -yawRate;
+        //aps->yawRate = -yawRate;
+        aps->yawRate = aps->yawRate * (1.0F - AP_LPF_YAW_RATE) -yawRate * AP_LPF_YAW_RATE;
 
         /* Integrated gap is maintained in [ - AP_MAX_INTEGRAL_GAP +AP_MAX_INTEGRAL_GAP] */
         if(aps->integratedGap > AP_MAX_INTEGRAL_GAP)
@@ -483,7 +510,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
                    + (aps->yawRate * aps->kd);      /* Derivative */
 
         DB_PRINT_PID((nbcar = snprintf(message, sizeof(message) - 1,
-                                          "AP GAP %8f %8f %8f %8f\n",
+                                          "AP PID %8f %8f %8f %8f\n",
                                           aps->currentGap,
                                           aps->integratedGap,
                                           aps->yawRate,
@@ -492,7 +519,6 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
 
         MOTOR_MSG_setHelmAngle(steerReq);
 
-        aps->steerAngle += steerReq;
     }
 
     return 0;

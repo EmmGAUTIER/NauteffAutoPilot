@@ -89,14 +89,18 @@ AP/tasks/src/apmain.c \
 AP/tasks/src/apdialog.c \
 AP/tasks/src/motor.c \
 AP/tasks/src/autopilot.c \
+AP/compute/src/ahrs.c \
+AP/compute/src/ahrssimple.c \
+AP/compute/src/ahrsquat.c \
+AP/compute/src/ahrsdt0058.c \
 AP/compute/src/imu.c \
 AP/compute/src/geom.c \
-AP/compute/src/madgwickAHRS.c \
-AP/compute/src/kalmanAHRS.c \
 AP/compute/src/quat.c \
 AP/compute/src/matrix3f.c \
 AP/compute/src/calib.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_can.c
+#AP/compute/src/madgwickAHRS.c \
+#AP/compute/src/kalmanAHRS.c \
 
 # ASM sources
 ASM_SOURCES =  \

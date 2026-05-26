@@ -219,15 +219,17 @@
 #include "rlib.h"
 #include "service.h"
 
-#include "mems.h"
-
 #include "geom.h"
 #include "quat.h"
-#include "madgwickAHRS.h"
-#include "kalmanAHRS.h"
 #include "calib.h"
 #include "autopilot.h"
 #include "imu.h"
+#include "ahrs.h"
+#include "ahrssimple.h"
+#include "ahrsquat.h"
+//#include "madgwickAHRS.h"
+//#include "kalmanAHRS.h"
+#include "mems.h"
 
 #if LSM9DS1_FS_XL == LSM9DS1_FS_XL_2G
 #define LSM9DS1_CVT_MKS_FACTOR_ACC (MEMS_STANDARD_GRAVITY * (2.F / 32768.F))
@@ -774,18 +776,19 @@ void taskMEMs(void *param)
     Vector3f gyrCumul = Vector3f_null;
     Vector3f magCumul = Vector3f_null;
 
-    //float roll, pitch, heading;
+    AHRS_Types ahrsType = AHRS_TYPE_SIMPLE;
+    AHRS_Status_t ahrs;
 
-    AHRSState_t ahrs;
-    IMU_Status_t imu;
     MsgAutoPilot_t msgAutopilot;
 
     LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11); // CS_A/G high
     LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_12); // CS_M high
 
     LSM9DS1_init();
-    IMU_init_status(&imu);
-    AHRS_init(&ahrs);
+
+    //AHRS_Simple_init(&ahrs);
+    AHRS_Interfaces[ahrsType]->AHRS_init(&ahrs);
+    //AHRS_Interfaces[ahrsType]->
 
     xTimerStart(timerMEMs, (TickType_t )0);
     xTimerStart(timerPoll, (TickType_t )0);
@@ -989,19 +992,19 @@ void taskMEMs(void *param)
                         magComp.x, magComp.y, magComp.z),
                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
-                IMU_update_quat(&imu, &accComp, &gyrComp, &magComp, deltat);
+                AHRS_Interfaces[AHRS_TYPE_SIMPLE]->AHRS_update(&ahrs, &accComp, &gyrComp, &magComp, deltat);
 
                 DBG_PRINT_ATTITUDE(
                         (snprintf(message, sizeof(message),
                         "ATTITUDE     %+6f %+6f %+6f   %6f\n",
-                        IMU_get_roll(&imu),
-                        IMU_get_pitch(&imu),
-                        IMU_get_heading(&imu),
-                        IMU_get_yawRate((&imu))),
+                        AHRS_Interfaces[ahrsType]->AHRS_get_roll(&ahrs),
+                        AHRS_Interfaces[ahrsType]->AHRS_get_pitch(&ahrs),
+                        AHRS_Interfaces[ahrsType]->AHRS_get_heading(&ahrs),
+                        AHRS_Interfaces[ahrsType]->AHRS_get_yawRate((&ahrs))),
                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 Quaternionf orient;
-                orient = IMU_getQuaternion(&imu);
+                orient = AHRS_Interfaces[ahrsType]->AHRS_get_Quaternion(&ahrs);
                 (void) orient; // Avoid compiler warning if unused when debugging
                 DBG_PRINT_QUATERNION(
                         (snprintf(message, sizeof(message),
@@ -1018,15 +1021,15 @@ void taskMEMs(void *param)
                 magCumul = Vector3f_null;
 
                 msgAutopilot.msgType = AP_MSG_AHRS;
-                msgAutopilot.data.IMUData.heading = IMU_get_heading(&imu);
-                msgAutopilot.data.IMUData.roll = IMU_get_roll(&imu);
-                msgAutopilot.data.IMUData.pitch = IMU_get_pitch(&imu);
-                msgAutopilot.data.IMUData.yawRate = IMU_get_yawRate(&imu);
+                msgAutopilot.data.IMUData.heading = AHRS_Interfaces[ahrsType]->AHRS_get_heading(&ahrs);
+                msgAutopilot.data.IMUData.roll = AHRS_Interfaces[ahrsType]->AHRS_get_roll(&ahrs);
+                msgAutopilot.data.IMUData.pitch = AHRS_Interfaces[ahrsType]->AHRS_get_pitch(&ahrs);
+                msgAutopilot.data.IMUData.yawRate = AHRS_Interfaces[ahrsType]->AHRS_get_yawRate(&ahrs);
                 msgAutopilot.data.IMUData.qHeading = orient;
                 msgAutopilot.data.IMUData.deltat = deltat;
                 xQueueSend(msgQueueAutoPilot, &msgAutopilot, pdMS_TO_TICKS(10));
 
-                break; /* case MEMS_MSG_QUATERNION */
+                break; /* case MEMS_MSG_TICK */
 
             case MEMS_MSG_CALIBRATE:
                 /* Calibrate the sensors */
@@ -1040,7 +1043,7 @@ void taskMEMs(void *param)
 
             case MEMS_MSG_SET_MAG_VS_GYR:
 
-                IMU_set_mag_vs_gyr_prop(&imu, MEMS_Msg.data.mag_vs_gyr);
+                AHRS_Interfaces[ahrsType]->AHRS_set_mag_vs_gyr_prop(&ahrs, MEMS_Msg.data.mag_vs_gyr);
 
                 break; /* case MEMS_MSG_SET_MAG_VS_GYR: */
 
@@ -1050,11 +1053,26 @@ void taskMEMs(void *param)
                         "MEMS config : poll : %dms  compute : %dms  mag/gyr %f\n",
                         MEMS_PERIOD_POLL,
                         MEMS_PERIOD_MS,
-                        imu.magVsGyr);
+                        ahrs.magVsGyr);
                 svc_UART_Write(&svc_uart2, message, strlen(message),
                         pdMS_TO_TICKS(1));
 
                 break; /* case MEMS_MSG_DISPLAY_CONFIG: */
+
+            case MEMS_MSG_SET_AHRS_TYPE : /* Change algorythm of data fusion */
+                /* note : Mustn't happen when autopilot engaged */
+
+                if ((MEMS_Msg.data.ahrsType >= 0) &&  (MEMS_Msg.data.ahrsType < AHRS_TYPES_NUMBER))
+                {
+                    ahrsType = MEMS_Msg.data.ahrsType;
+                    AHRS_Interfaces[ahrsType]->AHRS_init(&ahrs);
+                    snprintf (message, sizeof(message),
+                            "MEMS AHRS type set to %d\n", ahrsType);
+                    svc_UART_Write(&svc_uart2, message, strlen(message),
+                            pdMS_TO_TICKS(1));
+                }
+
+                break; /* case MEMS_MSG_SET_AHRS_TYPE: */
 
             default:
 

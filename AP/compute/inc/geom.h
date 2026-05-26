@@ -196,4 +196,11 @@ float cvt_dir_rad_deg(float angle);
 float cvt_dir_norm_rad(float angle);
 float cvt_dir_norm_deg(float angle);
 
+/*
+ * @brief Normalizes an angle in radians to the range [0, 2*PI[.
+ * @param angle The input angle in radians.
+ * @return The normalized angle in radians, in the range [0, 2*PI[
+ */
+float normalize_angle_rad(float angle);
+
 #endif /* GEOM_H */

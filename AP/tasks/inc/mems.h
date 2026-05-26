@@ -40,6 +40,7 @@ typedef enum
     MEMS_MSG_START_CALIBRATE,
     MEMS_MSG_DISPLAY_CONFIG,
     MEMS_MSG_SET_MAG_VS_GYR,
+    MEMS_MSG_SET_AHRS_TYPE
 } MEMS_MsgType_t;
 
 typedef enum
@@ -56,6 +57,7 @@ typedef struct
     union
     {
         float mag_vs_gyr;
+        AHRS_Types  ahrsType;
     } data;
 } MEMS_Msg_t;
 

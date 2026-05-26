@@ -78,9 +78,11 @@ typedef enum
 {
     TOKEN_UNKNOWN = 0, /* Unrecognized token */
     TOKEN_AP,
+    TOKEN_AHRS,
     TOKEN_CALIBRATE,
     TOKEN_CONFIG,
     TOKEN_DISPLAY,
+    TOKEN_DT0058,
     TOKEN_EOL, /* End-of-line marker */
     TOKEN_GPS,
     TOKEN_HEADING,
@@ -98,7 +100,10 @@ typedef enum
     TOKEN_MOTOR_THRESHOLD,
     TOKEN_NUMBER, /* Represents a number token (with optional sign) */
     TOKEN_PORT,
+    TOKEN_QUAT,
+    TOKEN_SELECT,
     TOKEN_SET,
+    TOKEN_SIMPLE,
     TOKEN_STARBOARD,
     TOKEN_STATUS,
     TOKEN_TURN,
@@ -120,8 +125,10 @@ static const TokenEntry tokenTable[] =
         {
                 { "calibrate", TOKEN_CALIBRATE },
                 { "AP", TOKEN_AP },
+                { "AHRS", TOKEN_AHRS },
                 { "config", TOKEN_CONFIG },
                 { "display", TOKEN_DISPLAY },
+                { "DT0058", TOKEN_DT0058 },
                 { "GPS", TOKEN_GPS },
                 { "heading", TOKEN_HEADING },
                 { "hwms", TOKEN_HWMS},
@@ -137,7 +144,10 @@ static const TokenEntry tokenTable[] =
                 { "motor_hpf_coeff", TOKEN_MOTOR_HPF_COEFF },
                 { "motor_threshold", TOKEN_MOTOR_THRESHOLD },
                 { "port", TOKEN_PORT },
+                { "quat", TOKEN_QUAT },
+                { "select", TOKEN_SELECT },
                 { "set", TOKEN_SET },
+                { "Simple", TOKEN_SIMPLE },
                 { "starboard", TOKEN_STARBOARD },
                 { "turn", TOKEN_TURN },
                 { "wind", TOKEN_WIND },
@@ -656,6 +666,45 @@ void parse_command_line(void)
         default:
             return;
         }
+
+    case TOKEN_AHRS:
+            
+        switch (tokenTypes[1])
+        {
+
+            case TOKEN_SELECT:
+                AHRS_Types ahrsType = TOKEN_UNKNOWN;
+                
+                switch (tokenTypes[2])
+                {
+                    case TOKEN_SIMPLE:
+                        
+                        ahrsType = AHRS_TYPE_SIMPLE;
+
+                        break;
+
+                    case TOKEN_QUAT:
+                        
+                        ahrsType = AHRS_TYPE_QUAT;
+
+                        break;
+
+                    default:
+                        break; // Syntax error: unrecognized AHRS type
+
+                } 
+                if (ahrsType != AHRS_TYPE_NONE)
+                {
+                    AP_MSG_Select_AHRS(ahrsType);
+                }
+
+                break;
+
+            default:
+                break;
+        }
+
+        break;
 
     default:
         return; // Syntax error: unrecognized command

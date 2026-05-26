@@ -11,6 +11,7 @@
 #include "service.h"
 
 #include "motor.h"
+#include "ahrs.h"
 #include "mems.h"
 #include "apdialog.h"
 #include "autopilot.h"
