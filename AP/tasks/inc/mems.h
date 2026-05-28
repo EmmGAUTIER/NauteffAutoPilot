@@ -22,9 +22,9 @@
  SOFTWARE.
  */
 
-int init_taskMEMs(void);
+int Mems_task_init(void);
 
-void taskMEMs(void *pvParameters);
+void Mems_task(void *pvParameters);
 
 extern QueueHandle_t msgQueueMEMs;
 

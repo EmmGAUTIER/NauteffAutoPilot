@@ -597,7 +597,7 @@ int LSM9DS1_ReadMag(int *mag)
  * Semaphores are given so they can be taken.
  *
  */
-int init_taskMEMs()
+int Mems_task_init()
 {
     semspi2 = xSemaphoreCreateBinary();
     xSemaphoreGive(semspi2);
@@ -738,7 +738,7 @@ int LSM9DS1_init(void)
     return 1;
 }
 
-void taskMEMs(void *param)
+void Mems_task(void *param)
 {
     (void) param;
     MEMS_Msg_t MEMS_Msg;

@@ -180,6 +180,11 @@ float Vector3f_getSquareDiff(Vector3f v1, Vector3f v2);
 /*
  * @brief Computes the cosine of the angle between two 3D vectors.
  *  The cosine is calculated as the dot product of the vectors divided by the product of their norms.
+ *
+ *      v1 . v2
+ *  ---------------
+ *  ||v1|| . ||v2||
+ *
  *  If either vector has zero length, the function returns 0.0.
  *  The cosine is usually used to know how two vectors are aligned.
  * @param v1 The first vector.

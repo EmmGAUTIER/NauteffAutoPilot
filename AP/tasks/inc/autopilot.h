@@ -25,16 +25,15 @@ SOFTWARE.
 #include "quat.h"
 #include "ahrs.h"
 
-// #define AP_PERIOD_TICKS 250
-// #define AP_FREQ_HZ 4.0
-// #define AP_PERIOD_SEC (1.0 / AP_FREQ_HZ)
-
 typedef enum
 {
     AP_IDLE = 0,
     AP_AUTO_HEADING,
 } AP_Mode_t;
 
+/*
+ * Message types send to autopilot task
+ */
 typedef enum
 {
     AP_MSG_NONE = 0,
@@ -46,23 +45,25 @@ typedef enum
     AP_MSG_TURN,             /* turn indicated angle */
     AP_MSG_AHRS,             /* AHRS data : heading, ...  */
     AP_MSG_PARAM,            /* set params */
-    AP_MSG_START_CALIBRATE,
-    AP_MSG_MEMS_READY,
-    AP_MSG_MEMS,
-    AP_MSG_MOTOR_STOPPED,
-    AP_MSG_MOTOR_STOPPING,
-    AP_MSG_MOTOR_STALLED,  /* From MOTOR, motor stalled (usually end course) */
-    AP_MSG_DISPLAY_CONFIG, /* From DIALOG, display coefficients, params,... */
-    AP_MSG_AHRS_SELECT,    /* From DIALOG, select AHRS type */
+    AP_MSG_START_CALIBRATE,  /* start calibration of MEMS sensors*/
+    AP_MSG_MEMS_READY,       /* TODO : testMEMS ready */
+    AP_MSG_MEMS,             /*  */
+    AP_MSG_MOTOR_STOPPED,    /* Motor has stopped */
+    AP_MSG_MOTOR_STOPPING,   /* Motor is stopping */
+    AP_MSG_MOTOR_STALLED,    /* From MOTOR, motor stalled (usually end course) */
+    AP_MSG_DISPLAY_CONFIG,   /* From DIALOG, display coefficients, params,... */
+    AP_MSG_AHRS_SELECT,      /* From DIALOG, select AHRS type */
 } MsgAutoPilotType_t;
 
+/* Types of autopilot parameters */
+/* Any change must be reported in APParameterNames declared n autopilot.c */
 typedef enum
 {
-    AP_PARAM_NONE = 0,
-    AP_PARAM_KP,
-    AP_PARAM_KI,
-    AP_PARAM_KD,
-    AP_PARAM_MOTOR_THRESHOLD,
+    AP_PARAM_NONE = -1, /* unknown parameter type */
+    AP_PARAM_KP = 0,    /* Kp : proportinnal coefficient of PID */
+    AP_PARAM_KI,        /* Ki : integral coefficient of PID */
+    AP_PARAM_KD,        /* Kd : derivative coefficient of PID */
+    //AP_PARAM_MOTOR_THRESHOLD, /* to be removed in not used */
 } APParam_t;
 
 typedef struct
@@ -143,7 +144,7 @@ typedef struct
 * @note the autopilot uses static variables because there is only one instance
 * of the autopilot, the memory is used more efficiently.
 */
-int init_taskAutoPilot(void);
+int AutoPilot_task_init(void);
 
 /*
 * @brief Autopilot task
@@ -151,7 +152,7 @@ int init_taskAutoPilot(void);
 * @return none
 * @see note about tasks
 */
-void taskAutoPilot(void *parameters);
+void AutoPilot_task(void *parameters);
 
 /*
 * @brief Send AHRS values to autopilot task

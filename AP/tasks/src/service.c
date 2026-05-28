@@ -117,7 +117,7 @@ int scv_init_UARTS()
 }
 #endif
 
-int init_taskService()
+int Service_task_init()
 {
     svcQueueRequests = xQueueCreate(SERVICE_QUEUE_LENGTH,
                                     sizeof(ServiceRequest_t));
@@ -153,7 +153,7 @@ int((*fcts[])(ServiceRequest_t *)) =
  * The user sends requests whith the service functions.
  */
 
-void taskService(void *)
+void Service_task(void *)
 {
     ServiceRequest_t request;
     BaseType_t ret;

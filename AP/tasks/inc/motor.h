@@ -42,7 +42,8 @@ SOFTWARE.
 #include "util.h"
 
 extern QueueHandle_t msgQueueMotor;
-int init_taskMotor();
+int Motor_task_init();
+void Motor_task();
 
 typedef enum
 {
@@ -80,8 +81,6 @@ typedef struct
         float threshold;
     } data;
 } MsgMotor_t;
-
-void taskMotor(void *);
 
 /**
  * @brief Send the order "engage clutch" to motor task

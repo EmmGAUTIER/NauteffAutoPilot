@@ -18,45 +18,17 @@
 #include "blink.h"
 
 TaskHandle_t tasksHandles [] = {
-        [0] = NULL, /* taskMotor */
-        [1] = NULL, /* taskMEMs */
-        [2] = NULL, /* taskDialogIn */
+        [0] = NULL, /* taskMotor     */
+        [1] = NULL, /* taskMEMs      */
+        [2] = NULL, /* taskDialogIn  */
         [3] = NULL, /* taskAutoPilot */
-        [4] = NULL, /* taskService */
-        [5] = NULL  /* taskBlink */
+        [4] = NULL, /* taskService   */
+        [5] = NULL  /* taskBlink     */
 };
 int tasksNumber = sizeof(tasksHandles) / sizeof(tasksHandles[0]);
 
-extern int _sram2;
-extern int _eram2;
-/*
- * @brief blink a LED for debugging purpose only
- *
- * Blinks the green LED on the Nucleo board.
- * This task is used for debugging and to check if the system is running.
- *
- */
-
-void taskBlink(void *param)
-{
-    (void)param;
-
-    for(;;) /* infinite loop */
-    {
-        /*set and reset a LED with delays */
-        LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
-        vTaskDelay(pdMS_TO_TICKS(100));
-
-        LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
-        vTaskDelay(pdMS_TO_TICKS(200));
-
-        LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
-        vTaskDelay(pdMS_TO_TICKS(100));
-
-        LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
-        vTaskDelay(pdMS_TO_TICKS(600));
-    }
-}
+//extern int _sram2;
+//extern int _eram2;
 
 void panic(int panicType)
 {
@@ -72,19 +44,20 @@ void apmain()
     /* init_tasksXXX fcts create queues semaphores, timers,...
      * before starting scheduler
      */
-    init_taskMotor();
-    init_taskMEMs();
-    init_taskDialogIn();
-    init_taskAutoPilot();
-    init_taskService();
+    Motor_task_init();
+    Mems_task_init();
+    Dialog_task_init();
+    AutoPilot_task_init();
+    Service_task_init();
+    Blink_task_init();
 
     /* Create tasks */
-    ret &= xTaskCreate(taskMotor,     "Motor",      configMINIMAL_STACK_SIZE + 500, (void *)0, 3, tasksHandles + 0);
-    ret &= xTaskCreate(taskMEMs,      "MEMs",       configMINIMAL_STACK_SIZE + 500, (void *)0, 4, tasksHandles + 1);
-    ret &= xTaskCreate(taskDialogIn,  "Dialog",     configMINIMAL_STACK_SIZE + 300, (void *)0, 2, tasksHandles + 2);
-    ret &= xTaskCreate(taskAutoPilot, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, tasksHandles + 3);
-    ret &= xTaskCreate(taskService,   "SVC",        configMINIMAL_STACK_SIZE + 200, (void *)0, 5, tasksHandles + 4);
-    ret &= xTaskCreate(taskBlink,     "Blink",      configMINIMAL_STACK_SIZE + 100, (void *)0, 2, tasksHandles + 5);
+    ret &= xTaskCreate(Motor_task,     "Motor",      configMINIMAL_STACK_SIZE + 500, (void *)0, 3, tasksHandles + 0);
+    ret &= xTaskCreate(Mems_task,      "MEMs",       configMINIMAL_STACK_SIZE + 500, (void *)0, 4, tasksHandles + 1);
+    ret &= xTaskCreate(Dialog_task,    "Dialog",     configMINIMAL_STACK_SIZE + 300, (void *)0, 2, tasksHandles + 2);
+    ret &= xTaskCreate(AutoPilot_task, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, tasksHandles + 3);
+    ret &= xTaskCreate(Service_task,   "SVC",        configMINIMAL_STACK_SIZE + 200, (void *)0, 5, tasksHandles + 4);
+    ret &= xTaskCreate(Blink_task,     "Blink",      configMINIMAL_STACK_SIZE + 100, (void *)0, 2, tasksHandles + 5);
 
     /* Start scheduler, should never return */
     vTaskStartScheduler();

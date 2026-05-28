@@ -25,11 +25,11 @@ SOFTWARE.
 extern QueueHandle_t msgQueueDialogIn;
 extern QueueHandle_t msgQueueDialogOut;
 
-void taskDialogIn(void *param);
+void Dialog_task(void *param);
 void taskDialogOut(void *param);
 void taskDialogBis(void *param);
 
-int init_taskDialogIn();
+int Dialog_task_init();
 
 typedef struct
 {

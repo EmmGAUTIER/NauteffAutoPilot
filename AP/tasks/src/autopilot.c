@@ -68,6 +68,14 @@ void timerAPCallback(TimerHandle_t xTimer);
 APStatus_t APStatus;
 QueueHandle_t msgQueueAutoPilot;
 
+/* Names of PID parameters,
+ * must be coherent with APParam_t declared in autopilot.h */
+const char *APParameterNames[] = {
+    "Kp",
+    "Ki",
+    "Kd"
+};
+
 void AP_init(APStatus_t *aps);
 int AP_set_mode_idle(APStatus_t *aps);
 int AP_set_mode_heading(APStatus_t *aps);
@@ -143,7 +151,7 @@ int AP_MSG_Select_AHRS(AHRS_Types ahrsType)
     return 1;
 }
 
-int init_taskAutoPilot(void)
+int AutoPilot_task_init(void)
 {
 
     AP_init(&APStatus);
@@ -159,7 +167,7 @@ int init_taskAutoPilot(void)
     return 1;
 }
 
-void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
+void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused)))
 {
     MsgAutoPilot_t msg;
     long unsigned int compteur = 0L; /* for debugging purpose only */
@@ -237,7 +245,8 @@ void __attribute__((noreturn)) taskAutoPilot(void *args __attribute__((unused)))
 
             case AP_MSG_PARAM:
 
-                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message) - 1, "AP param %d %f\n", (int)msg.data.coefficient.param_number,
+                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message) - 1, "AP param %s %f\n",
+                                                  APParameterNames[(int)msg.data.coefficient.param_number],
                                                   msg.data.coefficient.param_value),
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 

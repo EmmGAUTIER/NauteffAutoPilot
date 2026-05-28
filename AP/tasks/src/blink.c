@@ -22,19 +22,116 @@
  SOFTWARE.
  */
 
+/****************************************************************************\
+*    Blink task : blink a LED for debugging and testing                      *
+******************************************************************************
+* This module is used for testing and debugging and demonstrate the use      *
+* of task, message queue and timer.                                          *
+* It may be studied to understand other tasks.                               *
+*                                                                            *
+\****************************************************************************/
+
+/* defines to tune the algorithms.
+ * They should be defined near the top of file to be easily accessible.
+ * Here we define the period of the timer.
+ */
+
+ #define BLINK_PERIOD_MS 2000
+
 #include "blink.h"
 
-TaskHandle_t BlinkTaskHandle = NULL;
+static QueueHandle_t Blink_Queue_Msg = NULL;
+static TimerHandle_t Blink_Timer = NULL;
 
-static unsigned delays =
-        { 500U, 500U, 0U, 0U, 0U, 0U };
-static QueueHandle_t msgQueueBlink = NULL;
 
-void init_taskBlink()
+void Blink_stop(void)
+{
+
+    /* message struct may be static because it is never changed */
+    static Blink_Msg_t msg = {.msgType=BLINK_MSG_STOP};
+
+    xQueueSend(Blink_Queue_Msg, &msg, pdMS_TO_TICKS(0));
+
+    return;
+}
+
+void Blink_start(void)
+{
+
+    /* message struct may be static because it is never changed */
+    static Blink_Msg_t msg = {.msgType=BLINK_MSG_STOP};
+
+    xQueueSend(Blink_Queue_Msg, &msg, pdMS_TO_TICKS(0));
+
+    return;
+}
+
+void Blink_set_flash_duration(float duration)
+{
+    Blink_Msg_t msg;
+    BaseType_t ret;
+
+    msg.msgType = BLINK_SET_FLASH_DURATION;
+    msg.data.duration = duration;
+
+    xQueueSend(Blink_Queue_Msg, &msg, pdMS_TO_TICKS(0));
+
+    return;
+}
+
+/*
+ * @brief Sends a tick message to the MEMs task
+ *
+ * It is The callback of the timer Blink_Timer.
+ * it is called every BLINK_PERIOD_MS milliseconds .
+ *
+ * This function sends a tick message to the Blink task.
+ *
+ * @ param xTimer The timer handle (not used)
+ * @ return None
+ */
+void Blink_Timer_Callback(TimerHandle_t xTimer)
+{
+    (void) xTimer; /* statement to avoid unused parameter warning */
+
+    /* The message is contained in a struct.
+     * it is declared static to avoid using stack.
+     * Only one blink task, so only one timer and callback execution at a time,
+     * so no risk of overwriting the message before it is sent.
+     */
+    static Blink_Msg_t command =
+            {
+                    .msgType = BLINK_MSG_TICK
+            };
+
+    xQueueSend(Blink_Queue_Msg, (const void* )&command, (TickType_t )0);
+
+    return;
+}
+
+/*
+ * @brief Creates necessary stuff for the Blink tast.
+ *
+ * @param none
+ * @return none
+ *
+ * Tasks have to use queues and timers. These have to be created
+ * before starting scheduler so when tasks begin they can use them. 
+ * The queue is used to send ticks and messages to the task.
+ *
+ */
+void Blink_task_init()
 {
     /* MEMs task queue creation */
-    msgQueueBlink = xQueueCreate(1, sizeof(BLINK_Msg_t));
-    TaskAbortDelay();
+    Blink_Queue_Msg = xQueueCreate(1, sizeof(Blink_Msg_t));
+
+    /* Create a timer that sends messages periodically to the task */
+    Blink_Timer = xTimerCreate("BLINK",
+                  pdMS_TO_TICKS(BLINK_PERIOD_MS),
+                  pdTRUE, /* Auto reload (repeat indefinitely) */
+                  (void*) 0, /* Timer ID, not used */
+                  Blink_Timer_Callback);
+
 }
 
 /*
@@ -45,45 +142,36 @@ void init_taskBlink()
  *
  */
 
-void taskBlink(void *param)
+void Blink_task(void *param)
 {
     (void) param;
     BaseType_t ret;
-    int tour = 0;
-    BLINK_Msg_t message;
+    Blink_Msg_t message;
 
     for (;;) /* infinite loop */
     {
 
-        if (delays[tour] != 0)
+        ret = xQueueReceive(Blink_Queue_Msg, &message, pdMS_TO_TICKS(0));
+        if (ret == pdPASS)
         {
-            vTaskDelay(pdMS_TO_TICKS(delays[tour]));
-            ret = xQueueReceive(msgQueueMEMs, &message, 0);
-            if (ret == pdPASS)
-            {
-                tour = 0;
-                //message.
-            }
-            else
-            {
-                (tour % 2) ?
-                             LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9) :
-                             LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9);
-                tour++;
-                tour %= 6;
-            }
-
-            /*set and reset a LED with delays */
-            LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
-            vTaskDelay(pdMS_TO_TICKS(100));
-
-            LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
-            vTaskDelay(pdMS_TO_TICKS(200));
-
-            LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
-            vTaskDelay(pdMS_TO_TICKS(100));
-
-            LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
-            vTaskDelay(pdMS_TO_TICKS(600));
+                ;
         }
+
+        /* We use delays to make very simple code */
+        /*set and reset a LED with delays */
+        LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9);
+        vTaskDelay(pdMS_TO_TICKS(100));
+
+        LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9);
+        vTaskDelay(pdMS_TO_TICKS(200));
+
+        LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9);
+        vTaskDelay(pdMS_TO_TICKS(100));
+
+        LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9);
+        vTaskDelay(pdMS_TO_TICKS(600));
     }
+
+    /* Mustn't be reached */
+
+}

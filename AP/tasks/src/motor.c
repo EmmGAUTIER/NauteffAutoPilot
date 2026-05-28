@@ -25,15 +25,22 @@
 /*
  * Ces fonction permettent le contrôle de l'actuateur, elles assurent :
  *   - la commande d'embrayage ;
- *   - la commande du moteur et le sens pendant un temps imparti ou un angle
- * estimé ;
- *   - la mesure et la surveillance du courant pendant le fonctionnement du
- * moteur ;
+ *   - la commande du moteur et le sens pendant un temps imparti ou un angle estimé ;
+ *   - la mesure et la surveillance du courant pendant le fonctionnement du moteur ;
  *   - la mesure et  la surveillance de la tension d'alimentation ;
- *   - l'arrêt du moteur en cas de surcharge, de court-cicuit ou de détection de
- * buttée ;
- *   - Une évaluation de la position de la barre avec le courant et la tension
- * d'alimentation ;
+ *   - l'arrêt du moteur en cas de surcharge, de court-cicuit ou de détection de buttée ;
+ *   - Une évaluation de la position de la barre.
+ *
+ * La position de barre est estimée avec le courant et la tension d'alimentation ;
+ * Le contrôle de l'actuateur est réalisé par une tâche. Elle lesçoit des ordres
+ * et informations par une file de messages de type queue.
+ * La fonction réflexe HAL_ADC_ConvCpltCallback envoie les valeurs de tension
+ * et de courant à la tâche moteur par cette file de messages.
+ * Les fonction MOTER_MSG_XXX() sont des fonctions d'envoi de messages à la tâche moteur.
+ * Les Fonctions de bas niveau MOTOR_LL_XXX() commandent l'actuateur et l'embrayage.
+ * L'état du moteur est stocké dans une structure MotorData, des fonction Motor_XXX()
+ * mettent à jour cette structure et commandent l'actuateur et l'embrayage.
+ *
  * Rappel : L'angle de barre est positif vers tribord et négatif à babord.
  */
 #include <math.h>
@@ -74,13 +81,15 @@
 #define DBG_MOTOR_PRINT(X) (X)
 #define DBG_ADC_PRINT(X) (X)
 
-/*
- * Default values for parameters
- */
+/****************************************************************************\
+*                 Default values for parameters                              *
+ *****************************************************************************/
 
-#define MOTOR_HPF_COEF             (0.)
+#define MOTOR_HPF_COEF             (0.0F)
 #define MOTOR_THRESHOLD            (1.0F * ( (float)M_PI / 180.F) )
 #define MOTOR_CVT_ANGLE_TIME       (2.0F)   /* Estimated conversion between time and helm move angle */
+#define MOTOR_TIME_START           (0.1F)   /* Maximum time to allow over current when starting motor */
+#define MOTOR_TIME_STOP            (0.2F)   /* Time to wait for motor to stop before opposite move order  */
 
 #define MOTOR_EVENT_STALLED (0x1 << 0)
 #define MOTOR_EVENT_STOP (0x1 << 1)
@@ -125,6 +134,8 @@ QueueHandle_t msgQueueMotor = (QueueHandle_t) 0;
 static uint16_t adc_values[2];
 
 #if 0
+/*Ancienne version de l'état du moteur conservée pour mémoire */
+/* À supprimer ultérieurement */
 typedef enum
 {
     MotorIdle,
@@ -195,18 +206,16 @@ typedef struct
     /* Tuning Data */
     float threshold; /* Threshold motor command */
     float hpf_coeff; /* High pass filter coefficient */
-
+    /**/
     /* Data for duration and move */
     float HelmAngleEstimated; /* Estimated helm angle (rad) */
     float helmAngleRequested; /* Requested steer angle (rad) */
-    // float turnAngleReq;       /* Turn angle requested (rad) */
-    // float turnAngleRemaining; /* Turn angle remaining positive */
     float turnTimeReq; /* Turn angle requested (rad counterclockwise ie with sign)*/
-
+    /**/
     float turnTimeRemaining; /* Turning time Remaining positive */
     float stopTimeRemaining; /* Time since motor powered off */
     float overCurrentTime; /* Time since start of overcurrent */
-
+    /**/
     /* Values of calibration */
     float vcurrentNone; /* adc value of current when not moving */
     float vcurrentFree; /* adc value of current when moving with no effort */
@@ -214,7 +223,8 @@ typedef struct
     float vPowerStandard; /* Standard power voltage */
     float vPowerMin; /* Minimum power voltage */
     float vPowerMax; /* Maximum power voltage */
-    float timeStartStop; /* Time to start or stop the motor */
+    float timeToStart; /* Time to start the motor */
+    float timeToStop; /* Time to stop the motor */
     float cvt_angle_time; /* Conversion helm angle to time */
     float currentStalled; /* Current when motor is stalled */
 
@@ -234,7 +244,8 @@ MotorData motorData =
                 .vcurrentNone = MOTOR_V_CURRENT_NONE,
                 .vcurrentFree = MOTOR_V_CURRENT_FREE,
                 .vcurrentBlocked = MOTOR_V_CURRENT_BLOCKED,
-                .timeStartStop = 0.1F,
+                .timeToStart = MOTOR_TIME_START,
+                .timeToStop = MOTOR_TIME_STOP,
                 .currentStalled = 1.0F,
                 .cvt_angle_time = MOTOR_CVT_ANGLE_TIME,
                 .hpf_coeff = MOTOR_HPF_COEF,
@@ -249,29 +260,29 @@ MotorData motorData =
 
 /****************************************************************************\
 *       Low level commands of motor and clutch                               *
-******************************************************************************
-*                                                                            *
-*   Motor and clutch commands are connected to GPIOA pins as follows :       *
-*   - PA4 : motor command,                                                   *
-*   - PA5 : clutch command, optional, connected to green LED on Nucleo board *
-*   - PA6 : INA, motor direction                                             *
-*   - PA7 : INB, motor direction                                             *
-*                                                                            *
-* These functions are low level functions that set and reset GPIO pins       *
-* to run the motor and control the clutch.                                   *
-* Theses functions are called by higher level functions.                     *
-* they have the prefix Motor_LL_, their protoype is :                        *
-* void Motor_LL_(void)                                                       *
-* They use LL_GPIO_[Re]setOutputPin functions.                               *
-*                                                                            *
-* Those function are only used by motor task and are declared inline;        *
-* they are 'private' to motor.c                                              *
-* The device that controls the motor is a VNH5019 from ST Microelectronics.  *
-* see https://www.st.com/en/automotive-analog-and-power/vnh5019a-e.html      *
-* Another function that accesses GPIO pins to control motor and clutch       *
-* stops the motor in case of panic.                                          *
-*                                                                            *
-\****************************************************************************/
+ ******************************************************************************
+ *                                                                            *
+ *   Motor and clutch commands are connected to GPIOA pins as follows :       *
+ *   - PA4 : motor command,                                                   *
+ *   - PA5 : clutch command, optional, connected to green LED on Nucleo board *
+ *   - PA6 : INA, motor direction                                             *
+ *   - PA7 : INB, motor direction                                             *
+ *                                                                            *
+ * These functions are low level functions that set and reset GPIO pins       *
+ * to run the motor and control the clutch.                                   *
+ * Theses functions are called by higher level functions.                     *
+ * they have the prefix Motor_LL_, their protoype is :                        *
+ * void Motor_LL_(void)                                                       *
+ * They use LL_GPIO_[Re]setOutputPin functions.                               *
+ *                                                                            *
+ * Those function are only used by motor task and are declared inline;        *
+ * they are 'private' to motor.c                                              *
+ * The device that controls the motor is a VNH5019 from ST Microelectronics.  *
+ * see https://www.st.com/en/automotive-analog-and-power/vnh5019a-e.html      *
+ * Another function that accesses GPIO pins to control motor and clutch       *
+ * stops the motor in case of panic.                                          *
+ *                                                                            *
+ \****************************************************************************/
 
 /**
  * @brief Run the motor to port
@@ -334,7 +345,7 @@ INLINE static void Motor_LL_stop(void)
 }
 
 /**
- * @brief Engage the clutch
+ * @brief Engage the clutch.
  * This function sets the GPIO pin to engage the tiller.
  * pin is connected to the motor driver
  * it is also connected to a green LED on the Nucleo board.
@@ -373,20 +384,20 @@ INLINE static void Motor_LL_tillerDisengage(void)
 
 /****************************************************************************\
 *     Function to send orders to MOTOR task                                  *
-******************************************************************************
-*                                                                            *
-* These functions send commands to the motor task by sending messages        *
-* to its message queue. They are a easy way for creating messages and        *
-* sending them to motor task without having to know message structure.       *
-*                                                                            *
-* Note : Messages to the task come from several tasks: mems, dialog and AP.  *
-* Messages are put in a queue by these functions.                            *
-*                                                                            *
-* They have no return value.                                                 *
-* Their prototype is :                                                       *
-* void MOTOR_MSG_XXX(...)                                                    *
-*                                                                            *
-\****************************************************************************/
+ ******************************************************************************
+ *                                                                            *
+ * These functions send commands to the motor task by sending messages        *
+ * to its message queue. They are a easy way for creating messages and        *
+ * sending them to motor task without having to know message structure.       *
+ *                                                                            *
+ * Note : Messages to the task come from several tasks: mems, dialog and AP.  *
+ * Messages are put in a queue by these functions.                            *
+ *                                                                            *
+ * They have no return value.                                                 *
+ * Their prototype is :                                                       *
+ * void MOTOR_MSG_XXX(...)                                                    *
+ *                                                                            *
+ \****************************************************************************/
 
 /*
  * @brief Send command to let in (engage) the clutch to motor task.
@@ -456,7 +467,7 @@ void MOTOR_MSG_moveTime(float time)
  * cvt has to be positive. in a future version it may be used  revert
  * the direction of the motor instead of swaping motor wires.
  * @return none
-*/
+ */
 void MOTOR_MSG_set_cvt_angle_time(float cvt)
 {
     static MsgMotor_t msg =
@@ -469,7 +480,7 @@ void MOTOR_MSG_set_cvt_angle_time(float cvt)
  * @brief sends the new value for the high pass filter for estimating motor position to motor task
  * @param coef between 0 and 1.
  * @return none
-*/
+ */
 void MOTOR_MSG_set_hpf_coeff(float coef)
 {
     MsgMotor_t msg =
@@ -485,7 +496,7 @@ void MOTOR_MSG_set_hpf_coeff(float coef)
  * @brief sends the new value for the threshold for moving motor to motor task
  * @param coef between 0 and 1.
  * @return none
-*/
+ */
 void MOTOR_MSG_set_threshold(float thr)
 {
     MsgMotor_t msg =
@@ -513,21 +524,21 @@ void Motor_set_cvt_angle_time(float cvt)
 
 /****************************************************************************\
 *     Function that control the motor                                        *
-******************************************************************************
-*                                                                            *
-* These functions control the motor, they :                                  *
-*  - send commands to the motor and clutch,                                  *
-*  - receive new values of voltage and current,                              *
-*  - estimate the helm angle,                                                *
-*  - stop motor if helm is at angle or in case of overcurrent,               *
-*  - keep state of the motor and estimated helm angle.                       *
-*  - send messages to autopilot task in case of stall or stop.               *
-*                                                                            *
-* Theses functions use MotorData struct to store state of motor              *
-* They use MOTOR_LLXXX() function to send commands to motor driver           *
-* They are called by taskMotor()                                             *
-*                                                                            *
-\****************************************************************************/
+ ******************************************************************************
+ *                                                                            *
+ * These functions control the motor, they :                                  *
+ *  - send commands to the motor and clutch,                                  *
+ *  - receive new values of voltage and current,                              *
+ *  - estimate the helm angle,                                                *
+ *  - stop motor if helm is at angle or in case of overcurrent,               *
+ *  - keep state of the motor and estimated helm angle.                       *
+ *  - send messages to autopilot task in case of stall or stop.               *
+ *                                                                            *
+ * Theses functions use MotorData struct to store state of motor              *
+ * They use MOTOR_LLXXX() function to send commands to motor driver           *
+ * They are called by taskMotor()                                             *
+ *                                                                            *
+ \****************************************************************************/
 
 /**
  * @brief Update motor status with new values of voltage and current
@@ -591,11 +602,31 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
 
         /* Estimate new position of motor */
         dirSign = (motorData.status & MOTOR_STATUS_DIR_STARBOARD) ? 1 : -1;
+#if 1
+        float angleMove;
+        int hdgSign;
+        if (fabs(motorData.HelmAngleEstimated) > 0.2 * (M_PIF / 180.F))
+        {
+            hdgSign = (motorData.HelmAngleEstimated > 0.F) ? 1 : -1;
+        }
+        else
+        {
+            hdgSign = 0;
+        }
+        angleMove = motorData.cvt_angle_time * deltat * dirSign;
+
+        /* TODO : reduce estimated helm angle */
+        (void) hdgSign; /* to be used later, avoid compiler warning for "set but unused" */
+
+        motorData.HelmAngleEstimated += angleMove;
+
+#else
         motorData.HelmAngleEstimated += motorData.cvt_angle_time * deltat * dirSign;
-
         motorData.HelmAngleEstimated *= 1.0 / (1.0 + motorData.hpf_coeff);
+#endif
 
-        deltaAngle = motorData.helmAngleRequested - motorData.HelmAngleEstimated;
+        deltaAngle = motorData.helmAngleRequested
+                - motorData.HelmAngleEstimated;
 
         if (deltaAngle * dirSign < motorData.threshold * dirSign)
         {
@@ -606,7 +637,7 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
                     | MOTOR_STATUS_MOVING_TIME);
 
             motorData.status |= MOTOR_STATUS_STOPPING;
-            motorData.turnTimeRemaining = motorData.timeStartStop;
+            motorData.turnTimeRemaining = motorData.timeToStop;
 
             //DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR S_11\n", 11, 0U));
 
@@ -829,7 +860,7 @@ void Motor_disengageTiller()
  * @brief Initialise the motor task
  * This function must be called before starting tasmMotor task.
  */
-int init_taskMotor()
+int Motor_task_init()
 {
     msgQueueMotor = xQueueCreate(10, sizeof(MsgMotor_t));
 
@@ -849,7 +880,7 @@ int init_taskMotor()
  *
  */
 
-void taskMotor(void *parameters)
+void Motor_task(void *parameters)
 {
     (void) parameters; /* parameters ignored, avoids warning */
 
@@ -887,12 +918,18 @@ void taskMotor(void *parameters)
              */
             case MSG_MOTOR_ADC_VALUES:
 
-                motorData.vPower = ((float) msgMoteur.data.adcValues.adc_power) * ADC_CVT_TO_VOLTAGE;
-                motorData.vCurrent = ((float) msgMoteur.data.adcValues.adc_current) * ADC_CVT_TO_CURRENT;
+                motorData.vPower = ((float) msgMoteur.data.adcValues.adc_power)
+                        * ADC_CVT_TO_VOLTAGE;
+                motorData.vCurrent =
+                        ((float) msgMoteur.data.adcValues.adc_current)
+                                * ADC_CVT_TO_CURRENT;
 
-                motorEvent = Motor_newValues(ADC_PERIOD, motorData.vPower, motorData.vCurrent);
+                motorEvent = Motor_newValues(ADC_PERIOD, motorData.vPower,
+                        motorData.vCurrent);
 
-                if (counter % (((motorData.status & MOTOR_STATUS_RUNNING)) ? 1 : 20) == 0)
+                if (counter
+                        % (((motorData.status & MOTOR_STATUS_RUNNING)) ? 1 : 20)
+                        == 0)
                 {
                     DBG_ADC_PRINT(
                             (snprintf(message, sizeof(message), "ADC --> %d %5.2f %5.3f\n",
@@ -955,7 +992,7 @@ void taskMotor(void *parameters)
                 break; /* case MSG_MOTOR_DISPLAY_CONFIG: */
 
                 /* Set conversion coefficient between angle and time */
-            case MSG_MOTOR_SET_CVT_ANGLE_TIME: 
+            case MSG_MOTOR_SET_CVT_ANGLE_TIME:
 
                 Motor_set_cvt_angle_time(msgMoteur.data.cvtAngleTime);
                 DBG_MOTOR_PRINT(
@@ -997,20 +1034,19 @@ void taskMotor(void *parameters)
     }
 }
 
-/*****************************************************************************
- * @brief ADC interrupt callback                                             *
- *                                                                           *
- * @param hadc ADC handle pointer                                            *
- * @return none                                                              *
- *                                                                           *
- * ADC conversions are triggered by a timer and stored in adc_values[0..1]   *
- * This function is called at the end of the conversion and sends integer    *
- * values to the motor task.                                                 *
- * Values are put in a static array and are integer values.                  *
- * Since this function is called by an interrupt handler it mustn't use      *
- * float values and it sends integers.                                       *
- *                                                                           *
- ****************************************************************************/
+/*
+ * @brief ADC interrupt callback
+ *
+ * @param hadc ADC handle pointer
+ * @return none
+ *
+ * ADC conversions are triggered by a timer and stored in adc_values[0..1]
+ * This function is called at the end of the conversion and sends integer
+ * values to the motor task.
+ * Values are put in a static array and are integer values.
+ * Since this function is called by an interrupt handler it mustn't use
+ * float values so it sends integers.
+ */
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {

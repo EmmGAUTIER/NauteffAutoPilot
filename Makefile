@@ -89,6 +89,7 @@ AP/tasks/src/apmain.c \
 AP/tasks/src/apdialog.c \
 AP/tasks/src/motor.c \
 AP/tasks/src/autopilot.c \
+AP/tasks/src/blink.c \
 AP/compute/src/ahrs.c \
 AP/compute/src/ahrssimple.c \
 AP/compute/src/ahrsquat.c \

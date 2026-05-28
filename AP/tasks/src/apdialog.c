@@ -157,7 +157,7 @@ static const TokenEntry tokenTable[] =
 QueueHandle_t msgQueueDialogIn;
 QueueHandle_t msgQueueDialogOut;
 
-int init_taskDialogIn()
+int Dialog_task_init()
 {
 
     msgQueueDialogIn = xQueueCreate(10, sizeof(MsgDialog_t));
@@ -713,7 +713,7 @@ void parse_command_line(void)
     return;
 }
 
-void taskDialogIn(void *args __attribute__((unused)))
+void Dialog_task(void *args __attribute__((unused)))
 {
 
     for (;;)

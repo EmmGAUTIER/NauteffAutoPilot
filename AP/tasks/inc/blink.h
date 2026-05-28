@@ -34,23 +34,21 @@ SOFTWARE.
 #include <stm32l4xx_ll_usart.h>
 
 typedef enum {
-    BlinkBlink,
-    BlinkOn,
-    BlinkOff,
-} BlinkMsgType_t;
+    BLINK_MSG_TICK = 1,       /*Clock tick send to start flash(es) sequence */
+    BLINK_MSG_STOP,           /* stop blinking */
+    BLINK_MSG_START,          /* start blinking */
+    BLINK_SET_FLASH_DURATION, /* set flash duration */
+} Blink_Msg_Type_t;
 
 typedef struct {
-    BlinkMsgType_t msgType;
-    TickType_t delays[6];
-} BLINK_Msg_t;
+    Blink_Msg_Type_t msgType;
+    union {
+        float duration;
+    } data;
+} Blink_Msg_t;
 
-extern TaskHandle_t BlinkTaskHandle;
-
-int init_taskBlink(void);
-
-void taskBlink(void *pvParameters);
-
-void BLINK_setPeriods(TickType_t* delays);
-
-//extern QueueHandle_t msgQueueBlink;
-extern TaskHandle_t BlinkTaskHandle;
+void Blink_task_init();
+void Blink_task(void *param);
+void Blink_stop(void);
+void Blink_start(void);
+void Blink_set_flash_duration(float duration);

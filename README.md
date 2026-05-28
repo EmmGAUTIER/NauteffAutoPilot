@@ -8,21 +8,25 @@ Ce projet a pour but de réaliser un pilote automatique pour bateaux.
 ## Notre philosophie
 
 Le pilote est développé pour être utile à tous sans restriction d'usage
-de taille ou de type de bateau et pour que chaque utilisateur puisse l'adapter
-à ses besoins. Le code est disponible pour en comprendre le fonctionnement
+de taille ou de type de bateau et pour que chaque utilisateur puisse l'utiliser
+et en obtenir le meilleur usage.
+De plus le code est disponible pour en comprendre le fonctionnement
 et l'adapter.
 
 ## État d'avancement
 
-Le logiciel est en cours de développement sur une maquette
+Le logiciel est en cours de développement sur une maquette.
 et le matériel n'est pas encore disponible.
 
 ## Premier essai
 
-Le premier essai du pilote a été réalisé le 28 wnovembreécembre 2025.
+Le premier essai du pilote a été réalisé le 28 novembre 2025.
 La météo était défavorable aux essais,
 cependant le pilote a tenu le cap pendant une heure dans une mer très "agitée".
 Une présentation de cet essai au lien suivant : https://nauteffpremier-rqi29u4dasoiwxbasaz6gk.streamlit.app/
+
+Un deuxième essai doit être réalisé très prochainement avec un temps calme et plus propice à une analyse
+de ses réactions et à l'essai plusieurs algirithmes et réglages.
 
 ## Outils de développement
 
@@ -33,7 +37,5 @@ Le développement est fait avec
  - cmake.
 
 ## Le code
-Le code spécifique au pilote est dans le répertoire
-https://github.com/EmmGAUTIER/NauteffAutoPilot/tree/main/AP
-
-
+Le code spécifique au pilote est dans le [répertoire](https://github.com/EmmGAUTIER/NauteffAutoPilot/tree/main/AP).
+Le sous-répertoire tasks est un bon début pour comprendre le code.
