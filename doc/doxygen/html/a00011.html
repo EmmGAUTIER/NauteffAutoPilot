@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: calculs.c File Reference</title>
+<title>Nauteff auto pilot: calib.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,77 +71,180 @@ $(function() {
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">calculs.c File Reference</div></div>
+  <div class="headertitle"><div class="title">calib.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;math.h&gt;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
-<code>#include &lt;string.h&gt;</code><br />
-<code>#include &lt;math.h&gt;</code><br />
-<code>#include &lt;float.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="a00116_source.html">calib.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00068_source.html">rlib.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00080_source.html">util.h</a>&quot;</code><br />
+<code>#include &quot;FreeRTOS.h&quot;</code><br />
+<code>#include &quot;task.h&quot;</code><br />
+<code>#include &quot;semphr.h&quot;</code><br />
+<code>#include &quot;stream_buffer.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00125_source.html">service.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00074_source.html">printf.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for calculs.c:</div>
+Include dependency graph for calib.c:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00012.png" border="0" usemap="#acalculs_8c" alt=""/></div>
-<map name="acalculs_8c" id="acalculs_8c">
-<area shape="rect" title=" " alt="" coords="187,5,266,32"/>
-<area shape="rect" title=" " alt="" coords="5,80,72,107"/>
-<area shape="rect" title=" " alt="" coords="97,80,167,107"/>
-<area shape="rect" title=" " alt="" coords="191,80,262,107"/>
-<area shape="rect" title=" " alt="" coords="286,80,354,107"/>
-<area shape="rect" title=" " alt="" coords="378,80,441,107"/>
+<div class="center"><img src="a00012.png" border="0" usemap="#acalib_8c" alt=""/></div>
+<map name="acalib_8c" id="acalib_8c">
+<area shape="rect" title=" " alt="" coords="427,5,491,32"/>
+<area shape="rect" title=" " alt="" coords="5,80,73,107"/>
+<area shape="rect" title=" " alt="" coords="373,229,444,256"/>
+<area shape="rect" title=" " alt="" coords="149,80,220,107"/>
+<area shape="rect" href="a00116.html" title=" " alt="" coords="375,80,440,107"/>
+<area shape="rect" href="a00080.html" title=" " alt="" coords="295,155,349,181"/>
+<area shape="rect" href="a00068.html" title=" " alt="" coords="296,80,351,107"/>
+<area shape="rect" title=" " alt="" coords="465,80,561,107"/>
+<area shape="rect" title=" " alt="" coords="585,80,648,107"/>
+<area shape="rect" title=" " alt="" coords="673,80,755,107"/>
+<area shape="rect" title=" " alt="" coords="780,80,904,107"/>
+<area shape="rect" href="a00125.html" title=" " alt="" coords="928,80,1009,107"/>
+<area shape="rect" href="a00074.html" title=" " alt="" coords="1047,80,1115,107"/>
+<area shape="rect" href="a00119.html" title=" " alt="" coords="373,155,444,181"/>
+<area shape="rect" href="a00077.html" title=" " alt="" coords="624,155,700,181"/>
+<area shape="rect" title=" " alt="" coords="889,155,1019,181"/>
+<area shape="rect" title=" " alt="" coords="621,229,703,256"/>
+<area shape="rect" title=" " alt="" coords="1043,155,1118,181"/>
+<area shape="rect" title=" " alt="" coords="1142,155,1217,181"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00108.html">Vector3f</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a 3D vector with float components.  <a href="a00108.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00112.html">MEMsSample_t</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html">CalibrationEllipsoidResult_t</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00150.html">SelectValues</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a864e696e58717460cdb19e5ce8f7ce20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a864e696e58717460cdb19e5ce8f7ce20">N_SAMPLES</a>&#160;&#160;&#160;800</td></tr>
-<tr class="separator:a864e696e58717460cdb19e5ce8f7ce20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6801baa546c6112d19eb095111d24720"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a6801baa546c6112d19eb095111d24720">GRAVITY</a>&#160;&#160;&#160;(9.8066F)</td></tr>
+<tr class="separator:a6801baa546c6112d19eb095111d24720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad8ce4296100d14da1e1fe631409e9e0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#aad8ce4296100d14da1e1fe631409e9e0">MIN_SAMPLES_NUMBER</a>&#160;&#160;&#160;500</td></tr>
+<tr class="separator:aad8ce4296100d14da1e1fe631409e9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3936d355276639f81e49c778fb3db3f2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a3936d355276639f81e49c778fb3db3f2">MAX_SAMPLES_NUMBER</a>&#160;&#160;&#160;500</td></tr>
+<tr class="separator:a3936d355276639f81e49c778fb3db3f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3423d1d47b10b06214267e355744c9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a4f3423d1d47b10b06214267e355744c9">STABILITY_THRESHOLD</a>&#160;&#160;&#160;100</td></tr>
+<tr class="separator:a4f3423d1d47b10b06214267e355744c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaa49821be74be58aabfe4435c5717b2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#afaa49821be74be58aabfe4435c5717b2">MIN_STAB_NUMBER</a>&#160;&#160;&#160;50</td></tr>
+<tr class="separator:afaa49821be74be58aabfe4435c5717b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae048feeaa651993f380953e74d0aa61c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#ae048feeaa651993f380953e74d0aa61c">MAX_DIFFERENCE</a>&#160;&#160;&#160;100</td></tr>
+<tr class="separator:ae048feeaa651993f380953e74d0aa61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47df2dc162e73a41dd8cb89abe12b0d2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a47df2dc162e73a41dd8cb89abe12b0d2">LPF_COEF</a>&#160;&#160;&#160;0.9F</td></tr>
+<tr class="separator:a47df2dc162e73a41dd8cb89abe12b0d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0ac1892e9abcdeb8276ae8c7b94e1ec6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a0ac1892e9abcdeb8276ae8c7b94e1ec6">jacobi_eigen_decomposition</a> (const <a class="el" href="a00164.html">Matrix3f</a> *B, float lambda[3], <a class="el" href="a00164.html">Matrix3f</a> *V)</td></tr>
-<tr class="separator:a0ac1892e9abcdeb8276ae8c7b94e1ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f39c15b7d6c1e38e65fc6f3a9d701cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a3f39c15b7d6c1e38e65fc6f3a9d701cc">solve_linear_system_9x9</a> (float A[81], float b[9], float x[9])</td></tr>
-<tr class="separator:a3f39c15b7d6c1e38e65fc6f3a9d701cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65932f5f790dae020a4fe34ec36439f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00116.html">CalibrationEllipsoidResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a65932f5f790dae020a4fe34ec36439f3">build_calibration_from_Ab</a> (const float p[9], float d, const <a class="el" href="a00112.html">MEMsSample_t</a> *samples, <a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> count)</td></tr>
-<tr class="separator:a65932f5f790dae020a4fe34ec36439f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e54f3238e100efccf17c795ee8b8529"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a1e54f3238e100efccf17c795ee8b8529">fit_ellipsoid_linear</a> (const <a class="el" href="a00112.html">MEMsSample_t</a> *samples, <a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> count, float p_out[9])</td></tr>
-<tr class="separator:a1e54f3238e100efccf17c795ee8b8529"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad90292fd732b5b5b7b890124356e7490"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#ad90292fd732b5b5b7b890124356e7490">calibrate_ellipsoid</a> (const <a class="el" href="a00112.html">MEMsSample_t</a> *samples, <a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> count, <a class="el" href="a00116.html">CalibrationEllipsoidResult_t</a> *result)</td></tr>
-<tr class="separator:ad90292fd732b5b5b7b890124356e7490"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e8bae0d49d7a20e29b646a6e48dda7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a9e8bae0d49d7a20e29b646a6e48dda7b">matrix_from_axis_angle</a> (float ux, float uy, float uz, float angle, <a class="el" href="a00164.html">Matrix3f</a> *R)</td></tr>
-<tr class="separator:a9e8bae0d49d7a20e29b646a6e48dda7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a997ded248033b2669ecea69a4b981077"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a997ded248033b2669ecea69a4b981077">matrix_inverse3</a> (const <a class="el" href="a00164.html">Matrix3f</a> *A, <a class="el" href="a00164.html">Matrix3f</a> *inv)</td></tr>
-<tr class="separator:a997ded248033b2669ecea69a4b981077"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a042af563e0fa0054fb1acd4207a2eefb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a042af563e0fa0054fb1acd4207a2eefb">generate_synthetic_data</a> (<a class="el" href="a00112.html">MEMsSample_t</a> *samples, <a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> n, <a class="el" href="a00164.html">Matrix3f</a> *M_true, <a class="el" href="a00108.html">Vector3f</a> b_true)</td></tr>
-<tr class="separator:a042af563e0fa0054fb1acd4207a2eefb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbfce5889e08454b9864e040063e1c27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#acbfce5889e08454b9864e040063e1c27">printMatrix3</a> (const <a class="el" href="a00164.html">Matrix3f</a> *A)</td></tr>
-<tr class="separator:acbfce5889e08454b9864e040063e1c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01b8ce0d57a06edb7821c87986091a2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a01b8ce0d57a06edb7821c87986091a2b">printMatF3</a> (const float M[3][3])</td></tr>
-<tr class="separator:a01b8ce0d57a06edb7821c87986091a2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91b4dbae4bbebebb5efd6adc91489c75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75">main_ellipsoid</a> (void)</td></tr>
-<tr class="separator:a91b4dbae4bbebebb5efd6adc91489c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a9ba0d675d84ecec777ff9ef73404d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a4a9ba0d675d84ecec777ff9ef73404d3">Calib6_getFace</a> (const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> *accint)</td></tr>
+<tr class="separator:a4a9ba0d675d84ecec777ff9ef73404d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2045e43ed87a04df16914157ea4decc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a2045e43ed87a04df16914157ea4decc7">Calib6_init</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib)</td></tr>
+<tr class="separator:a2045e43ed87a04df16914157ea4decc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55d30a57ced2043d0903c37c8254e0f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a55d30a57ced2043d0903c37c8254e0f5">Calib6_addSample</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib, const <a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3">Calib6_typeSensor_t</a> type, const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> *values)</td></tr>
+<tr class="separator:a55d30a57ced2043d0903c37c8254e0f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dfb40a8c2e305a52c8012788fd9e842"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a3dfb40a8c2e305a52c8012788fd9e842">Calib6_hasEnoughSamples</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib)</td></tr>
+<tr class="separator:a3dfb40a8c2e305a52c8012788fd9e842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3632d89fda0a3a65fae450b066768d3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#a3632d89fda0a3a65fae450b066768d3e">Calib6_isPhaseComplete</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib)</td></tr>
+<tr class="separator:a3632d89fda0a3a65fae450b066768d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae00a86a8efd65c1534256918b72996b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#ae00a86a8efd65c1534256918b72996b1">Calib6_getPhase</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib)</td></tr>
+<tr class="separator:ae00a86a8efd65c1534256918b72996b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade2302afb58c89ac29a9b322ae587093"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00011.html#ade2302afb58c89ac29a9b322ae587093">Calib6_ComputeCorrector</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib, <a class="el" href="a00194.html">Corrector_t</a> *corr)</td></tr>
+<tr class="separator:ade2302afb58c89ac29a9b322ae587093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a864e696e58717460cdb19e5ce8f7ce20" name="a864e696e58717460cdb19e5ce8f7ce20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a864e696e58717460cdb19e5ce8f7ce20">&#9670;&nbsp;</a></span>N_SAMPLES</h2>
+<a id="a6801baa546c6112d19eb095111d24720" name="a6801baa546c6112d19eb095111d24720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6801baa546c6112d19eb095111d24720">&#9670;&nbsp;</a></span>GRAVITY</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define N_SAMPLES&#160;&#160;&#160;800</td>
+          <td class="memname">#define GRAVITY&#160;&#160;&#160;(9.8066F)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a47df2dc162e73a41dd8cb89abe12b0d2" name="a47df2dc162e73a41dd8cb89abe12b0d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47df2dc162e73a41dd8cb89abe12b0d2">&#9670;&nbsp;</a></span>LPF_COEF</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LPF_COEF&#160;&#160;&#160;0.9F</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae048feeaa651993f380953e74d0aa61c" name="ae048feeaa651993f380953e74d0aa61c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae048feeaa651993f380953e74d0aa61c">&#9670;&nbsp;</a></span>MAX_DIFFERENCE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAX_DIFFERENCE&#160;&#160;&#160;100</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3936d355276639f81e49c778fb3db3f2" name="a3936d355276639f81e49c778fb3db3f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3936d355276639f81e49c778fb3db3f2">&#9670;&nbsp;</a></span>MAX_SAMPLES_NUMBER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAX_SAMPLES_NUMBER&#160;&#160;&#160;500</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad8ce4296100d14da1e1fe631409e9e0" name="aad8ce4296100d14da1e1fe631409e9e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad8ce4296100d14da1e1fe631409e9e0">&#9670;&nbsp;</a></span>MIN_SAMPLES_NUMBER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MIN_SAMPLES_NUMBER&#160;&#160;&#160;500</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afaa49821be74be58aabfe4435c5717b2" name="afaa49821be74be58aabfe4435c5717b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afaa49821be74be58aabfe4435c5717b2">&#9670;&nbsp;</a></span>MIN_STAB_NUMBER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MIN_STAB_NUMBER&#160;&#160;&#160;50</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f3423d1d47b10b06214267e355744c9" name="a4f3423d1d47b10b06214267e355744c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f3423d1d47b10b06214267e355744c9">&#9670;&nbsp;</a></span>STABILITY_THRESHOLD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define STABILITY_THRESHOLD&#160;&#160;&#160;100</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -149,35 +252,29 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a65932f5f790dae020a4fe34ec36439f3" name="a65932f5f790dae020a4fe34ec36439f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65932f5f790dae020a4fe34ec36439f3">&#9670;&nbsp;</a></span>build_calibration_from_Ab()</h2>
+<a id="a55d30a57ced2043d0903c37c8254e0f5" name="a55d30a57ced2043d0903c37c8254e0f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55d30a57ced2043d0903c37c8254e0f5">&#9670;&nbsp;</a></span>Calib6_addSample()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00116.html">CalibrationEllipsoidResult_t</a> build_calibration_from_Ab </td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_addSample </td>
           <td>(</td>
-          <td class="paramtype">const float&#160;</td>
-          <td class="paramname"><em>p</em>[9], </td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>d</em>, </td>
+          <td class="paramtype">const <a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3">Calib6_typeSensor_t</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="a00112.html">MEMsSample_t</a> *&#160;</td>
-          <td class="paramname"><em>samples</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td>
-          <td class="paramname"><em>count</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> *&#160;</td>
+          <td class="paramname"><em>values</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -189,49 +286,42 @@ Functions</h2></td></tr>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00011_a65932f5f790dae020a4fe34ec36439f3_cgraph.png" border="0" usemap="#aa00011_a65932f5f790dae020a4fe34ec36439f3_cgraph" alt=""/></div>
-<map name="aa00011_a65932f5f790dae020a4fe34ec36439f3_cgraph" id="aa00011_a65932f5f790dae020a4fe34ec36439f3_cgraph">
-<area shape="rect" title=" " alt="" coords="5,31,197,57"/>
-<area shape="rect" href="a00011.html#a0ac1892e9abcdeb8276ae8c7b94e1ec6" title=" " alt="" coords="245,5,452,32"/>
-<area shape="rect" href="a00050.html#a313175102214d45434bf045db18dddf0" title=" " alt="" coords="311,56,387,83"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a65932f5f790dae020a4fe34ec36439f3_icgraph.png" border="0" usemap="#aa00011_a65932f5f790dae020a4fe34ec36439f3_icgraph" alt=""/></div>
-<map name="aa00011_a65932f5f790dae020a4fe34ec36439f3_icgraph" id="aa00011_a65932f5f790dae020a4fe34ec36439f3_icgraph">
-<area shape="rect" title=" " alt="" coords="360,5,552,32"/>
-<area shape="rect" href="a00011.html#ad90292fd732b5b5b7b890124356e7490" title=" " alt="" coords="171,5,312,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
+<div class="center"><img src="a00011_a55d30a57ced2043d0903c37c8254e0f5_cgraph.png" border="0" usemap="#aa00011_a55d30a57ced2043d0903c37c8254e0f5_cgraph" alt=""/></div>
+<map name="aa00011_a55d30a57ced2043d0903c37c8254e0f5_cgraph" id="aa00011_a55d30a57ced2043d0903c37c8254e0f5_cgraph">
+<area shape="rect" title=" " alt="" coords="5,183,148,209"/>
+<area shape="rect" href="a00011.html#a4a9ba0d675d84ecec777ff9ef73404d3" title=" " alt="" coords="196,107,316,133"/>
+<area shape="rect" href="a00050.html#a8866b5421a676559242721d47fc1fcdc" title=" " alt="" coords="237,157,275,184"/>
+<area shape="rect" href="a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="227,259,285,285"/>
+<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="420,208,548,235"/>
+<area shape="rect" href="a00050.html#af0b843e95b71e99f178f067d104c34c1" title=" " alt="" coords="364,81,604,108"/>
+<area shape="rect" href="a00050.html#a36c7605fe943636b66f8f5b411f81136" title=" " alt="" coords="391,157,577,184"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="652,107,812,133"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="879,81,1005,108"/>
+<area shape="rect" href="a00005.html#ab3e01b9f2d18902b5ae589d07c638dd8" title="Skips len bytes in the buffer (advances idxStart)." alt="" coords="683,5,781,32"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="860,208,1024,235"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="679,208,785,235"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="ad90292fd732b5b5b7b890124356e7490" name="ad90292fd732b5b5b7b890124356e7490"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad90292fd732b5b5b7b890124356e7490">&#9670;&nbsp;</a></span>calibrate_ellipsoid()</h2>
+<a id="ade2302afb58c89ac29a9b322ae587093" name="ade2302afb58c89ac29a9b322ae587093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade2302afb58c89ac29a9b322ae587093">&#9670;&nbsp;</a></span>Calib6_ComputeCorrector()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> calibrate_ellipsoid </td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_ComputeCorrector </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00112.html">MEMsSample_t</a> *&#160;</td>
-          <td class="paramname"><em>samples</em>, </td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00116.html">CalibrationEllipsoidResult_t</a> *&#160;</td>
-          <td class="paramname"><em>result</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="a00194.html">Corrector_t</a> *&#160;</td>
+          <td class="paramname"><em>corr</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -240,201 +330,83 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_ad90292fd732b5b5b7b890124356e7490_cgraph.png" border="0" usemap="#aa00011_ad90292fd732b5b5b7b890124356e7490_cgraph" alt=""/></div>
-<map name="aa00011_ad90292fd732b5b5b7b890124356e7490_cgraph" id="aa00011_ad90292fd732b5b5b7b890124356e7490_cgraph">
-<area shape="rect" title=" " alt="" coords="5,56,147,83"/>
-<area shape="rect" href="a00011.html#a65932f5f790dae020a4fe34ec36439f3" title=" " alt="" coords="195,31,387,57"/>
-<area shape="rect" href="a00011.html#a1e54f3238e100efccf17c795ee8b8529" title=" " alt="" coords="220,81,361,108"/>
-<area shape="rect" href="a00011.html#a0ac1892e9abcdeb8276ae8c7b94e1ec6" title=" " alt="" coords="435,5,641,32"/>
-<area shape="rect" href="a00050.html#a313175102214d45434bf045db18dddf0" title=" " alt="" coords="500,56,576,83"/>
-<area shape="rect" href="a00011.html#a3f39c15b7d6c1e38e65fc6f3a9d701cc" title=" " alt="" coords="445,107,631,133"/>
-<area shape="rect" href="a00050.html#aba088e716bccbc96d42da97e96316df1" title=" " alt="" coords="689,107,768,133"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_ad90292fd732b5b5b7b890124356e7490_icgraph.png" border="0" usemap="#aa00011_ad90292fd732b5b5b7b890124356e7490_icgraph" alt=""/></div>
-<map name="aa00011_ad90292fd732b5b5b7b890124356e7490_icgraph" id="aa00011_ad90292fd732b5b5b7b890124356e7490_icgraph">
-<area shape="rect" title=" " alt="" coords="171,5,312,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
-</map>
-</div>
 
 </div>
 </div>
-<a id="a1e54f3238e100efccf17c795ee8b8529" name="a1e54f3238e100efccf17c795ee8b8529"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e54f3238e100efccf17c795ee8b8529">&#9670;&nbsp;</a></span>fit_ellipsoid_linear()</h2>
+<a id="a4a9ba0d675d84ecec777ff9ef73404d3" name="a4a9ba0d675d84ecec777ff9ef73404d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a9ba0d675d84ecec777ff9ef73404d3">&#9670;&nbsp;</a></span>Calib6_getFace()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> fit_ellipsoid_linear </td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_getFace </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00112.html">MEMsSample_t</a> *&#160;</td>
-          <td class="paramname"><em>samples</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> *&#160;</td>
+          <td class="paramname"><em>accint</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>p_out</em>[9]&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a1e54f3238e100efccf17c795ee8b8529_cgraph.png" border="0" usemap="#aa00011_a1e54f3238e100efccf17c795ee8b8529_cgraph" alt=""/></div>
-<map name="aa00011_a1e54f3238e100efccf17c795ee8b8529_cgraph" id="aa00011_a1e54f3238e100efccf17c795ee8b8529_cgraph">
-<area shape="rect" title=" " alt="" coords="5,31,147,57"/>
-<area shape="rect" href="a00050.html#a313175102214d45434bf045db18dddf0" title=" " alt="" coords="250,5,326,32"/>
-<area shape="rect" href="a00011.html#a3f39c15b7d6c1e38e65fc6f3a9d701cc" title=" " alt="" coords="195,56,381,83"/>
-<area shape="rect" href="a00050.html#aba088e716bccbc96d42da97e96316df1" title=" " alt="" coords="429,56,508,83"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a1e54f3238e100efccf17c795ee8b8529_icgraph.png" border="0" usemap="#aa00011_a1e54f3238e100efccf17c795ee8b8529_icgraph" alt=""/></div>
-<map name="aa00011_a1e54f3238e100efccf17c795ee8b8529_icgraph" id="aa00011_a1e54f3238e100efccf17c795ee8b8529_icgraph">
-<area shape="rect" title=" " alt="" coords="360,5,501,32"/>
-<area shape="rect" href="a00011.html#ad90292fd732b5b5b7b890124356e7490" title=" " alt="" coords="171,5,312,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a042af563e0fa0054fb1acd4207a2eefb" name="a042af563e0fa0054fb1acd4207a2eefb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a042af563e0fa0054fb1acd4207a2eefb">&#9670;&nbsp;</a></span>generate_synthetic_data()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void generate_synthetic_data </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00112.html">MEMsSample_t</a> *&#160;</td>
-          <td class="paramname"><em>samples</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td>
-          <td class="paramname"><em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00164.html">Matrix3f</a> *&#160;</td>
-          <td class="paramname"><em>M_true</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>b_true</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a042af563e0fa0054fb1acd4207a2eefb_cgraph.png" border="0" usemap="#aa00011_a042af563e0fa0054fb1acd4207a2eefb_cgraph" alt=""/></div>
-<map name="aa00011_a042af563e0fa0054fb1acd4207a2eefb_cgraph" id="aa00011_a042af563e0fa0054fb1acd4207a2eefb_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,188,32"/>
-<area shape="rect" href="a00011.html#a997ded248033b2669ecea69a4b981077" title=" " alt="" coords="236,5,364,32"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a042af563e0fa0054fb1acd4207a2eefb_icgraph.png" border="0" usemap="#aa00011_a042af563e0fa0054fb1acd4207a2eefb_icgraph" alt=""/></div>
-<map name="aa00011_a042af563e0fa0054fb1acd4207a2eefb_icgraph" id="aa00011_a042af563e0fa0054fb1acd4207a2eefb_icgraph">
-<area shape="rect" title=" " alt="" coords="171,5,353,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a0ac1892e9abcdeb8276ae8c7b94e1ec6" name="a0ac1892e9abcdeb8276ae8c7b94e1ec6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ac1892e9abcdeb8276ae8c7b94e1ec6">&#9670;&nbsp;</a></span>jacobi_eigen_decomposition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void jacobi_eigen_decomposition </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00164.html">Matrix3f</a> *&#160;</td>
-          <td class="paramname"><em>B</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>lambda</em>[3], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00164.html">Matrix3f</a> *&#160;</td>
-          <td class="paramname"><em>V</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00011_a0ac1892e9abcdeb8276ae8c7b94e1ec6_icgraph.png" border="0" usemap="#aa00011_a0ac1892e9abcdeb8276ae8c7b94e1ec6_icgraph" alt=""/></div>
-<map name="aa00011_a0ac1892e9abcdeb8276ae8c7b94e1ec6_icgraph" id="aa00011_a0ac1892e9abcdeb8276ae8c7b94e1ec6_icgraph">
-<area shape="rect" title=" " alt="" coords="600,5,807,32"/>
-<area shape="rect" href="a00011.html#a65932f5f790dae020a4fe34ec36439f3" title=" " alt="" coords="360,5,552,32"/>
-<area shape="rect" href="a00011.html#ad90292fd732b5b5b7b890124356e7490" title=" " alt="" coords="171,5,312,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
+<div class="center"><img src="a00011_a4a9ba0d675d84ecec777ff9ef73404d3_icgraph.png" border="0" usemap="#aa00011_a4a9ba0d675d84ecec777ff9ef73404d3_icgraph" alt=""/></div>
+<map name="aa00011_a4a9ba0d675d84ecec777ff9ef73404d3_icgraph" id="aa00011_a4a9ba0d675d84ecec777ff9ef73404d3_icgraph">
+<area shape="rect" title=" " alt="" coords="196,5,316,32"/>
+<area shape="rect" href="a00011.html#a55d30a57ced2043d0903c37c8254e0f5" title=" " alt="" coords="5,5,148,32"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="a91b4dbae4bbebebb5efd6adc91489c75" name="a91b4dbae4bbebebb5efd6adc91489c75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91b4dbae4bbebebb5efd6adc91489c75">&#9670;&nbsp;</a></span>main_ellipsoid()</h2>
+<a id="ae00a86a8efd65c1534256918b72996b1" name="ae00a86a8efd65c1534256918b72996b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae00a86a8efd65c1534256918b72996b1">&#9670;&nbsp;</a></span>Calib6_getPhase()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> main_ellipsoid </td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_getPhase </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3dfb40a8c2e305a52c8012788fd9e842" name="a3dfb40a8c2e305a52c8012788fd9e842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3dfb40a8c2e305a52c8012788fd9e842">&#9670;&nbsp;</a></span>Calib6_hasEnoughSamples()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_hasEnoughSamples </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2045e43ed87a04df16914157ea4decc7" name="a2045e43ed87a04df16914157ea4decc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2045e43ed87a04df16914157ea4decc7">&#9670;&nbsp;</a></span>Calib6_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Calib6_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -442,224 +414,30 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00011_a91b4dbae4bbebebb5efd6adc91489c75_cgraph.png" border="0" usemap="#aa00011_a91b4dbae4bbebebb5efd6adc91489c75_cgraph" alt=""/></div>
-<map name="aa00011_a91b4dbae4bbebebb5efd6adc91489c75_cgraph" id="aa00011_a91b4dbae4bbebebb5efd6adc91489c75_cgraph">
-<area shape="rect" title=" " alt="" coords="5,183,123,209"/>
-<area shape="rect" href="a00011.html#ad90292fd732b5b5b7b890124356e7490" title=" " alt="" coords="191,81,333,108"/>
-<area shape="rect" href="a00011.html#a042af563e0fa0054fb1acd4207a2eefb" title=" " alt="" coords="171,132,353,159"/>
-<area shape="rect" href="a00011.html#a9e8bae0d49d7a20e29b646a6e48dda7b" title=" " alt="" coords="172,183,352,209"/>
-<area shape="rect" href="a00011.html#a01b8ce0d57a06edb7821c87986091a2b" title=" " alt="" coords="215,233,309,260"/>
-<area shape="rect" href="a00011.html#acbfce5889e08454b9864e040063e1c27" title=" " alt="" coords="211,284,313,311"/>
-<area shape="rect" href="a00011.html#a65932f5f790dae020a4fe34ec36439f3" title=" " alt="" coords="401,31,593,57"/>
-<area shape="rect" href="a00011.html#a1e54f3238e100efccf17c795ee8b8529" title=" " alt="" coords="427,81,568,108"/>
-<area shape="rect" href="a00011.html#a0ac1892e9abcdeb8276ae8c7b94e1ec6" title=" " alt="" coords="641,5,848,32"/>
-<area shape="rect" href="a00050.html#a313175102214d45434bf045db18dddf0" title=" " alt="" coords="707,56,783,83"/>
-<area shape="rect" href="a00011.html#a3f39c15b7d6c1e38e65fc6f3a9d701cc" title=" " alt="" coords="651,107,838,133"/>
-<area shape="rect" href="a00050.html#aba088e716bccbc96d42da97e96316df1" title=" " alt="" coords="896,107,975,133"/>
-<area shape="rect" href="a00011.html#a997ded248033b2669ecea69a4b981077" title=" " alt="" coords="433,132,561,159"/>
+<div class="center"><img src="a00011_a2045e43ed87a04df16914157ea4decc7_cgraph.png" border="0" usemap="#aa00011_a2045e43ed87a04df16914157ea4decc7_cgraph" alt=""/></div>
+<map name="aa00011_a2045e43ed87a04df16914157ea4decc7_cgraph" id="aa00011_a2045e43ed87a04df16914157ea4decc7_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,96,32"/>
+<area shape="rect" href="a00068.html#a313175102214d45434bf045db18dddf0" title=" " alt="" coords="144,5,220,32"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="a9e8bae0d49d7a20e29b646a6e48dda7b" name="a9e8bae0d49d7a20e29b646a6e48dda7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e8bae0d49d7a20e29b646a6e48dda7b">&#9670;&nbsp;</a></span>matrix_from_axis_angle()</h2>
+<a id="a3632d89fda0a3a65fae450b066768d3e" name="a3632d89fda0a3a65fae450b066768d3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3632d89fda0a3a65fae450b066768d3e">&#9670;&nbsp;</a></span>Calib6_isPhaseComplete()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void matrix_from_axis_angle </td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_isPhaseComplete </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>ux</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>uy</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>uz</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>angle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00164.html">Matrix3f</a> *&#160;</td>
-          <td class="paramname"><em>R</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a9e8bae0d49d7a20e29b646a6e48dda7b_icgraph.png" border="0" usemap="#aa00011_a9e8bae0d49d7a20e29b646a6e48dda7b_icgraph" alt=""/></div>
-<map name="aa00011_a9e8bae0d49d7a20e29b646a6e48dda7b_icgraph" id="aa00011_a9e8bae0d49d7a20e29b646a6e48dda7b_icgraph">
-<area shape="rect" title=" " alt="" coords="171,5,351,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a997ded248033b2669ecea69a4b981077" name="a997ded248033b2669ecea69a4b981077"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a997ded248033b2669ecea69a4b981077">&#9670;&nbsp;</a></span>matrix_inverse3()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> matrix_inverse3 </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00164.html">Matrix3f</a> *&#160;</td>
-          <td class="paramname"><em>A</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00164.html">Matrix3f</a> *&#160;</td>
-          <td class="paramname"><em>inv</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a997ded248033b2669ecea69a4b981077_icgraph.png" border="0" usemap="#aa00011_a997ded248033b2669ecea69a4b981077_icgraph" alt=""/></div>
-<map name="aa00011_a997ded248033b2669ecea69a4b981077_icgraph" id="aa00011_a997ded248033b2669ecea69a4b981077_icgraph">
-<area shape="rect" title=" " alt="" coords="401,5,529,32"/>
-<area shape="rect" href="a00011.html#a042af563e0fa0054fb1acd4207a2eefb" title=" " alt="" coords="171,5,353,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a01b8ce0d57a06edb7821c87986091a2b" name="a01b8ce0d57a06edb7821c87986091a2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01b8ce0d57a06edb7821c87986091a2b">&#9670;&nbsp;</a></span>printMatF3()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void printMatF3 </td>
-          <td>(</td>
-          <td class="paramtype">const float&#160;</td>
-          <td class="paramname"><em>M</em>[3][3]</td><td>)</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a01b8ce0d57a06edb7821c87986091a2b_icgraph.png" border="0" usemap="#aa00011_a01b8ce0d57a06edb7821c87986091a2b_icgraph" alt=""/></div>
-<map name="aa00011_a01b8ce0d57a06edb7821c87986091a2b_icgraph" id="aa00011_a01b8ce0d57a06edb7821c87986091a2b_icgraph">
-<area shape="rect" title=" " alt="" coords="171,5,264,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="acbfce5889e08454b9864e040063e1c27" name="acbfce5889e08454b9864e040063e1c27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acbfce5889e08454b9864e040063e1c27">&#9670;&nbsp;</a></span>printMatrix3()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void printMatrix3 </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00164.html">Matrix3f</a> *&#160;</td>
-          <td class="paramname"><em>A</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_acbfce5889e08454b9864e040063e1c27_icgraph.png" border="0" usemap="#aa00011_acbfce5889e08454b9864e040063e1c27_icgraph" alt=""/></div>
-<map name="aa00011_acbfce5889e08454b9864e040063e1c27_icgraph" id="aa00011_acbfce5889e08454b9864e040063e1c27_icgraph">
-<area shape="rect" title=" " alt="" coords="171,5,273,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a3f39c15b7d6c1e38e65fc6f3a9d701cc" name="a3f39c15b7d6c1e38e65fc6f3a9d701cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f39c15b7d6c1e38e65fc6f3a9d701cc">&#9670;&nbsp;</a></span>solve_linear_system_9x9()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> solve_linear_system_9x9 </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>A</em>[81], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>b</em>[9], </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>x</em>[9]&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a3f39c15b7d6c1e38e65fc6f3a9d701cc_cgraph.png" border="0" usemap="#aa00011_a3f39c15b7d6c1e38e65fc6f3a9d701cc_cgraph" alt=""/></div>
-<map name="aa00011_a3f39c15b7d6c1e38e65fc6f3a9d701cc_cgraph" id="aa00011_a3f39c15b7d6c1e38e65fc6f3a9d701cc_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" href="a00050.html#aba088e716bccbc96d42da97e96316df1" title=" " alt="" coords="240,5,319,32"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00011_a3f39c15b7d6c1e38e65fc6f3a9d701cc_icgraph.png" border="0" usemap="#aa00011_a3f39c15b7d6c1e38e65fc6f3a9d701cc_icgraph" alt=""/></div>
-<map name="aa00011_a3f39c15b7d6c1e38e65fc6f3a9d701cc_icgraph" id="aa00011_a3f39c15b7d6c1e38e65fc6f3a9d701cc_icgraph">
-<area shape="rect" title=" " alt="" coords="549,5,736,32"/>
-<area shape="rect" href="a00011.html#a1e54f3238e100efccf17c795ee8b8529" title=" " alt="" coords="360,5,501,32"/>
-<area shape="rect" href="a00011.html#ad90292fd732b5b5b7b890124356e7490" title=" " alt="" coords="171,5,312,32"/>
-<area shape="rect" href="a00011.html#a91b4dbae4bbebebb5efd6adc91489c75" title=" " alt="" coords="5,5,123,32"/>
-</map>
-</div>
 
 </div>
 </div>

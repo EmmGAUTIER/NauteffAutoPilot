@@ -38,7 +38,8 @@
 #include "ahrsquat.h"
 #include "ahrsdt0058.h"
 
-const AHRS_Interface_t *AHRS_Interfaces[] = {
+const AHRS_Interface_t *AHRS_Interfaces[] =
+{
     &AHRS_Simple_Interface,
     &AHRS_Quat_Interface,
     &AHRS_DT0058_Interface
@@ -106,7 +107,7 @@ Quaternionf calculer_orientation_navire(Vector3f north, Vector3f east, Vector3f 
     /* Conversion matrice de rotation -> quaternion */
     float trace = m00 + m11 + m22;
 
-    if (trace > 0.0f)
+    if(trace > 0.0f)
     {
         float s = sqrtf(trace + 1.0f) / 2.0f;
         q.w = s;
@@ -114,7 +115,7 @@ Quaternionf calculer_orientation_navire(Vector3f north, Vector3f east, Vector3f 
         q.y = (m02 - m20) / (4 * s);
         q.z = (m10 - m01) / (4 * s);
     }
-    else if ((m00 > m11) && (m00 > m22))
+    else if((m00 > m11) && (m00 > m22))
     {
         float s = sqrtf(1.0f + m00 - m11 - m22) * 2.0f;
         q.w = (m21 - m12) / s;
@@ -122,7 +123,7 @@ Quaternionf calculer_orientation_navire(Vector3f north, Vector3f east, Vector3f 
         q.y = (m01 + m10) / s;
         q.z = (m02 + m20) / s;
     }
-    else if (m11 > m22)
+    else if(m11 > m22)
     {
         float s = sqrtf(1.0f + m11 - m00 - m22) * 2.0f;
         q.w = (m02 - m20) / s;

@@ -1,19 +1,10 @@
 var searchData=
 [
-  ['samplecount_0',['sampleCount',['../a00156.html#addf2a1686f38604b5e07aa05ee918ab6',1,'Calibreur_t']]],
-  ['samples_1',['samples',['../a00156.html#a96560f3ec118a85b527ed1853b03c21a',1,'Calibreur_t']]],
-  ['semrx_2',['semRx',['../a00140.html#a60db166980def5b12231bc7be5c0d611',1,'aux_USART_Handle_t::semRx()'],['../a00244.html#a4c4294dd4846e5bafd77d39833e91fdc',1,'ServiceUartHandle_t::semRx()']]],
-  ['semspi2_3',['semspi2',['../a00029.html#a2172e29ab9b53fd2d0e896bfee805a64',1,'mems.c']]],
-  ['semtx_4',['semTx',['../a00140.html#acf4f780a5f63f612ed38082cc396d746',1,'aux_USART_Handle_t::semTx()'],['../a00244.html#afb7d7fa1e0c01bab989ef5b52da847f1',1,'ServiceUartHandle_t::semTx()']]],
-  ['seq_5f1_5',['SEq_1',['../a00017.html#ae25f6d5bf3f29ee34c638ecb2c993dc7',1,'madgwick.c']]],
-  ['seq_5f2_6',['SEq_2',['../a00017.html#a2120a353ab9b63f94445e0122c174666',1,'madgwick.c']]],
-  ['seq_5f3_7',['SEq_3',['../a00017.html#abd75cfb8abb6af941ab35e99a9863bcf',1,'madgwick.c']]],
-  ['seq_5f4_8',['SEq_4',['../a00017.html#a9cd67bb03c99afebe3802d131710085d',1,'madgwick.c']]],
-  ['status_9',['status',['../a00124.html#a9bb3c3adb2c290b661096d4047f8a25e',1,'MotorData']]],
-  ['steerangle_10',['steerAngle',['../a00200.html#abcc3c970f6d62fb38b00c492b505834d',1,'APStatus_t::steerAngle()'],['../a00232.html#ab3797f71b7e5d997d1eea852a30e4a42',1,'MsgMotor_t::steerAngle()']]],
-  ['steerthreshold_11',['steerThreshold',['../a00200.html#aa12c944648b48686501765ebf191e8df',1,'APStatus_t']]],
-  ['stoptimeremaining_12',['stopTimeRemaining',['../a00124.html#ad43ce9a91b8a363b3cfc1e436161be89',1,'MotorData']]],
-  ['svc_5fuart1_13',['svc_uart1',['../a00032.html#ac1017da83d77c5a0f50fdc652ffa4454',1,'svc_uart1():&#160;service.c'],['../a00086.html#ac1017da83d77c5a0f50fdc652ffa4454',1,'svc_uart1():&#160;service.c']]],
-  ['svc_5fuart2_14',['svc_uart2',['../a00032.html#ab0a7406e4fc58e27dc1efdc0b7861cff',1,'svc_uart2():&#160;service.c'],['../a00086.html#ab0a7406e4fc58e27dc1efdc0b7861cff',1,'svc_uart2():&#160;service.c']]],
-  ['svcqueuerequests_15',['svcQueueRequests',['../a00032.html#a69184522006d088f84f2007469a94f93',1,'service.c']]]
+  ['receivebuffer_0',['receiveBuffer',['../a00314.html#ac19cc081291df9a350d344f30573b7a4',1,'ServiceUartHandle_t']]],
+  ['registers_1',['registers',['../a00174.html#a378c0c2d12161ad051a89c0229fe7901',1,'aux_USART_Handle_t']]],
+  ['reqheading_2',['reqHeading',['../a00266.html#a1689bc61eb99bc65a01e441b5727579e',1,'MsgAutoPilot_t']]],
+  ['reqturnangle_3',['reqTurnAngle',['../a00266.html#a241f9bfefca58a31ba2acfef1070d68a',1,'MsgAutoPilot_t']]],
+  ['requestdescription_4',['requestdescription',['../a00166.html#ab70351653c3d7f55a6ebd2f1ba5866ea',1,'ServiceRequest_t']]],
+  ['roll_5',['roll',['../a00182.html#af8171eff75229aec1a6303f21593e610',1,'AHRS_Status_t::roll()'],['../a00218.html#a314d85ea10efc32ab77a1abd381390ef',1,'IMU_Status_t::roll()'],['../a00222.html#ad1682512f1373e3db89e6a9a6d832841',1,'AHRSState_t::roll()'],['../a00242.html#a5a19dd7f4c364cbd11292ee1e45baac0',1,'MsgDialog_t::roll()'],['../a00262.html#a62d71fd79296b1c1d651cc9d42273563',1,'APStatus_t::roll()'],['../a00266.html#a4cb192dc5bab0f7427bba071e79735c7',1,'MsgAutoPilot_t::roll()']]],
+  ['rollrate_6',['rollRate',['../a00182.html#a3c0c6797dcaffad2a29c577f3f0b00c6',1,'AHRS_Status_t::rollRate()'],['../a00218.html#aec44359e4eaaac047d4ceeaa1b6604b8',1,'IMU_Status_t::rollRate()'],['../a00262.html#a5bce3380dda59102da0901d8f1f8d131',1,'APStatus_t::rollRate()']]]
 ];

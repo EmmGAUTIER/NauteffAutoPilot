@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: printf.h File Reference</title>
+<title>Nauteff auto pilot: apdialog.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,249 +63,519 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_382a97f60b6932328865d4436f266605.html">aux</a></li><li class="navelem"><a class="el" href="dir_20bb0788014b5bf95dec8ec0508b3316.html">inc</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_f6024555edb91c92286789204247ac6f.html">tasks</a></li><li class="navelem"><a class="el" href="dir_aa6787a2aac31845089ef2f60137983b.html">src</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">printf.h File Reference</div></div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">apdialog.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;stdarg.h&gt;</code><br />
-<code>#include &lt;stddef.h&gt;</code><br />
+<div class="textblock"><code>#include &quot;FreeRTOS.h&quot;</code><br />
+<code>#include &quot;semphr.h&quot;</code><br />
+<code>#include &quot;stream_buffer.h&quot;</code><br />
+<code>#include &quot;task.h&quot;</code><br />
+<code>#include &quot;timers.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00074_source.html">printf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00068_source.html">rlib.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00080_source.html">util.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00122_source.html">apmain.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00137_source.html">apdialog.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00140_source.html">autopilot.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00128_source.html">mems.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00131_source.html">motor.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00125_source.html">service.h</a>&quot;</code><br />
+<code>#include &lt;stm32l452xx.h&gt;</code><br />
+<code>#include &lt;stm32l4xx_ll_gpio.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for printf.h:</div>
+Include dependency graph for apdialog.c:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00057.png" border="0" usemap="#aprintf_8h" alt=""/></div>
-<map name="aprintf_8h" id="aprintf_8h">
-<area shape="rect" title=" " alt="" coords="58,5,126,32"/>
-<area shape="rect" title=" " alt="" coords="5,80,80,107"/>
-<area shape="rect" title=" " alt="" coords="104,80,179,107"/>
+<div class="center"><img src="a00057.png" border="0" usemap="#aapdialog_8c" alt=""/></div>
+<map name="aapdialog_8c" id="aapdialog_8c">
+<area shape="rect" title=" " alt="" coords="638,5,727,32"/>
+<area shape="rect" title=" " alt="" coords="5,155,101,181"/>
+<area shape="rect" title=" " alt="" coords="455,80,537,107"/>
+<area shape="rect" title=" " alt="" coords="562,80,686,107"/>
+<area shape="rect" title=" " alt="" coords="710,80,773,107"/>
+<area shape="rect" title=" " alt="" coords="797,80,873,107"/>
+<area shape="rect" href="a00074.html" title=" " alt="" coords="897,80,965,107"/>
+<area shape="rect" href="a00068.html" title=" " alt="" coords="178,80,233,107"/>
+<area shape="rect" href="a00080.html" title=" " alt="" coords="126,155,181,181"/>
+<area shape="rect" href="a00122.html" title=" " alt="" coords="989,80,1072,107"/>
+<area shape="rect" href="a00137.html" title=" " alt="" coords="1096,80,1187,107"/>
+<area shape="rect" href="a00140.html" title=" " alt="" coords="1211,80,1303,107"/>
+<area shape="rect" href="a00128.html" title=" " alt="" coords="1439,80,1513,107"/>
+<area shape="rect" href="a00131.html" title=" " alt="" coords="257,80,329,107"/>
+<area shape="rect" title=" " alt="" coords="305,155,458,181"/>
+<area shape="rect" title=" " alt="" coords="482,155,601,181"/>
+<area shape="rect" href="a00125.html" title=" " alt="" coords="1333,80,1414,107"/>
+<area shape="rect" title=" " alt="" coords="943,155,1017,181"/>
+<area shape="rect" title=" " alt="" coords="844,155,919,181"/>
+<area shape="rect" href="a00107.html" title=" " alt="" coords="1167,229,1230,256"/>
+<area shape="rect" href="a00095.html" title=" " alt="" coords="1223,155,1286,181"/>
+<area shape="rect" title=" " alt="" coords="1278,304,1349,331"/>
+<area shape="rect" href="a00119.html" title=" " alt="" coords="1278,229,1349,256"/>
+<area shape="rect" title=" " alt="" coords="205,155,280,181"/>
+<area shape="rect" href="a00077.html" title=" " alt="" coords="1466,155,1542,181"/>
+<area shape="rect" title=" " alt="" coords="1311,155,1441,181"/>
+<area shape="rect" title=" " alt="" coords="1463,229,1545,256"/>
 </map>
 </div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00058.png" border="0" usemap="#aprintf_8hdep" alt=""/></div>
-<map name="aprintf_8hdep" id="aprintf_8hdep">
-<area shape="rect" title=" " alt="" coords="275,5,343,32"/>
-<area shape="rect" href="a00038.html" title=" " alt="" coords="5,80,95,107"/>
-<area shape="rect" href="a00044.html" title=" " alt="" coords="119,80,210,107"/>
-<area shape="rect" href="a00026.html" title=" " alt="" coords="234,80,293,107"/>
-<area shape="rect" href="a00029.html" title=" " alt="" coords="317,80,391,107"/>
-<area shape="rect" href="a00041.html" title=" " alt="" coords="416,80,487,107"/>
-<area shape="rect" href="a00008.html" title=" " alt="" coords="511,80,578,107"/>
-</map>
-</div>
-</div>
-<p><a href="a00056_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00154.html">TokenEntry</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a3cb9f0894fab1c8fbb0753c9c7c2a8d9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9">printf</a>&#160;&#160;&#160;<a class="el" href="a00056.html#a770cb7c9f4a7b37dc5b49c4c68a8308e">printf_</a></td></tr>
-<tr class="memdesc:a3cb9f0894fab1c8fbb0753c9c7c2a8d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiny printf implementation You have to implement <em>putchar if you use <a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9" title="Tiny printf implementation You have to implement putchar if you use printf() To avoid conflicts with ...">printf()</a> To avoid conflicts with the regular <a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9" title="Tiny printf implementation You have to implement putchar if you use printf() To avoid conflicts with ...">printf()</a> API it is overridden by macro defines and internal underscore-appended functions like printf</em>() are used.  <a href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9">More...</a><br /></td></tr>
-<tr class="separator:a3cb9f0894fab1c8fbb0753c9c7c2a8d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5998f60c4f4af322b36debdbd11d7917"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a5998f60c4f4af322b36debdbd11d7917">sprintf</a>&#160;&#160;&#160;<a class="el" href="a00056.html#a989410555ef35cd646c15d51e649faaa">sprintf_</a></td></tr>
-<tr class="memdesc:a5998f60c4f4af322b36debdbd11d7917"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiny sprintf implementation Due to security reasons (buffer overflow) YOU SHOULD CONSIDER USING (V)SNPRINTF INSTEAD!  <a href="a00056.html#a5998f60c4f4af322b36debdbd11d7917">More...</a><br /></td></tr>
-<tr class="separator:a5998f60c4f4af322b36debdbd11d7917"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa367b75c5aed883fef5befbdf04835a4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#aa367b75c5aed883fef5befbdf04835a4">snprintf</a>&#160;&#160;&#160;<a class="el" href="a00056.html#a5b16fca837f5301cb0c01fa668f044f4">snprintf_</a></td></tr>
-<tr class="memdesc:aa367b75c5aed883fef5befbdf04835a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiny snprintf/vsnprintf implementation.  <a href="a00056.html#aa367b75c5aed883fef5befbdf04835a4">More...</a><br /></td></tr>
-<tr class="separator:aa367b75c5aed883fef5befbdf04835a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00ba2ca988495904efc418acbf0627d7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a00ba2ca988495904efc418acbf0627d7">vsnprintf</a>&#160;&#160;&#160;<a class="el" href="a00056.html#af37254f8c6a2d9d51e82c85fd666f88e">vsnprintf_</a></td></tr>
-<tr class="separator:a00ba2ca988495904efc418acbf0627d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a275497dfccfba8ca97e73865fd2b083b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a275497dfccfba8ca97e73865fd2b083b">vprintf</a>&#160;&#160;&#160;<a class="el" href="a00056.html#aa199d9388f8dcddcda1a0451315cae89">vprintf_</a></td></tr>
-<tr class="memdesc:a275497dfccfba8ca97e73865fd2b083b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiny vprintf implementation.  <a href="a00056.html#a275497dfccfba8ca97e73865fd2b083b">More...</a><br /></td></tr>
-<tr class="separator:a275497dfccfba8ca97e73865fd2b083b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f845159259313251d394521999c7c3b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a6f845159259313251d394521999c7c3b">DBG_DIALOG_PRINT</a>(X)&#160;&#160;&#160;(X)</td></tr>
+<tr class="separator:a6f845159259313251d394521999c7c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36781b6b4384cbb1232f14f4abc7b2ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a36781b6b4384cbb1232f14f4abc7b2ab">YYINPUT</a>&#160;&#160;&#160;<a class="el" href="a00125.html#a07a9fbf5b0b93c82edb8d1d7582f7019">svc_UART_getc</a>(&amp;<a class="el" href="a00125.html#ab0a7406e4fc58e27dc1efdc0b7861cff">svc_uart2</a>, portMAX_DELAY)</td></tr>
+<tr class="separator:a36781b6b4384cbb1232f14f4abc7b2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f6d16dfdf7920e1e5f1dad5db5347f2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a3f6d16dfdf7920e1e5f1dad5db5347f2">MAX_TOKEN_LEN</a>&#160;&#160;&#160;20</td></tr>
+<tr class="separator:a3f6d16dfdf7920e1e5f1dad5db5347f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09886d6ba96e67553bf3c49ed8ade975"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a09886d6ba96e67553bf3c49ed8ade975">MAX_TOKENS</a>&#160;&#160;&#160;4</td></tr>
+<tr class="separator:a09886d6ba96e67553bf3c49ed8ade975"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:aa520fbf142ba1e7e659590c07da31921"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> { <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a2dee186c009d8a91a8ebd2caa81ceef3">TOKEN_UNKNOWN</a> = 0
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a2f3bfeaa37a490c6e7409e2f3f98eaaf">TOKEN_AP</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a4a94caf327e2858573bbabf15f67936d">TOKEN_AHRS</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a3d80221ffee5142f5e45e56466049840">TOKEN_CALIBRATE</a>
+, <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a9c03281a79c456599cdc1ae45f280d53">TOKEN_CONFIG</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921ae3ce774af2713bd1009bebf1ef9aa5be">TOKEN_DISPLAY</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921aa4c40c59080b6722ecd8d32e365a4926">TOKEN_DT0058</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a6b0ab7cf8c0d1203475022b3d5600f85">TOKEN_EOL</a>
+, <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a08b2f408b6da17fc7a4ae1d694a35c59">TOKEN_GPS</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a054b1e13ab8d2b47a47f4d0b80181ac4">TOKEN_HEADING</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a216cb23670a3c1d505c2cad1e1b61a01">TOKEN_HWMS</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a091f17166ce24254effa2c4ccf956df3">TOKEN_IDLE</a>
+, <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a09dbd308cf813b60dd2b82f92d5fa1d5">TOKEN_KD</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a252877c810f17cd16a05f92e21c9f8e1">TOKEN_KI</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a5446c764f19df7e930004653da858cce">TOKEN_KP</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921acd706f1a3764e761eca678b89ce6416d">TOKEN_MAG_VS_GYR</a>
+, <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a67295c694426d51c0adc19695a7465bc">TOKEN_MEMS</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921ad6110a419e6e093f3dda3234bd0b00c7">TOKEN_MODE</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921acd8529390c469fd2576928dbd3de7e1d">TOKEN_MOTOR</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921aa1f225c3913cc857e685b4816fd789b3">TOKEN_MOTOR_CVT_ANGLE_TIME</a>
+, <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a20379fb24f9e772433d9d66b2fc886d0">TOKEN_MOTOR_HPF_COEFF</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921aa90685a7394a79e00553a6956690ad15">TOKEN_MOTOR_THRESHOLD</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921ab2af03662d780038284bc9c09e11c452">TOKEN_NUMBER</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921acdf6b9ee784bdafe63bcb35fd57749f2">TOKEN_PORT</a>
+, <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a581c87e3a612ed8743ba096a522d7562">TOKEN_QUAT</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921aa006aef4c2f4d1d35b06c355fda93366">TOKEN_SELECT</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a724f3397a4079fa4a77d84ffc500c2e0">TOKEN_SET</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921ae46756391f70776ffc1807571e304ff0">TOKEN_SIMPLE</a>
+, <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921aeaf68c5d9b052b370d715736cdb99ae2">TOKEN_STARBOARD</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a8aa50f3151b28d4eaaef43ebc05bf302">TOKEN_STATUS</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a2b771e894572d3610b357cdb4986a87f">TOKEN_TURN</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a695d30cfd5838823571d3176fba3fb50">TOKEN_WIND</a>
+<br />
+ }</td></tr>
+<tr class="separator:aa520fbf142ba1e7e659590c07da31921"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a223496da92021626a4430fed0af667bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a223496da92021626a4430fed0af667bd">_putchar</a> (char character)</td></tr>
-<tr class="memdesc:a223496da92021626a4430fed0af667bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a character to a custom device like UART, used by the <a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9" title="Tiny printf implementation You have to implement putchar if you use printf() To avoid conflicts with ...">printf()</a> function This function is declared here only.  <a href="a00056.html#a223496da92021626a4430fed0af667bd">More...</a><br /></td></tr>
-<tr class="separator:a223496da92021626a4430fed0af667bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a770cb7c9f4a7b37dc5b49c4c68a8308e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a770cb7c9f4a7b37dc5b49c4c68a8308e">printf_</a> (const char *format,...)</td></tr>
-<tr class="separator:a770cb7c9f4a7b37dc5b49c4c68a8308e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a989410555ef35cd646c15d51e649faaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a989410555ef35cd646c15d51e649faaa">sprintf_</a> (char *buffer, const char *format,...)</td></tr>
-<tr class="separator:a989410555ef35cd646c15d51e649faaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b16fca837f5301cb0c01fa668f044f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a5b16fca837f5301cb0c01fa668f044f4">snprintf_</a> (char *buffer, size_t count, const char *format,...)</td></tr>
-<tr class="separator:a5b16fca837f5301cb0c01fa668f044f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af37254f8c6a2d9d51e82c85fd666f88e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#af37254f8c6a2d9d51e82c85fd666f88e">vsnprintf_</a> (char *buffer, size_t count, const char *format, va_list va)</td></tr>
-<tr class="separator:af37254f8c6a2d9d51e82c85fd666f88e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa199d9388f8dcddcda1a0451315cae89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#aa199d9388f8dcddcda1a0451315cae89">vprintf_</a> (const char *format, va_list va)</td></tr>
-<tr class="separator:aa199d9388f8dcddcda1a0451315cae89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16cdc6ff34afc2122ae164d4ee3a8c50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a16cdc6ff34afc2122ae164d4ee3a8c50">fctprintf</a> (void(*out)(char character, void *arg), void *arg, const char *format,...)</td></tr>
-<tr class="memdesc:a16cdc6ff34afc2122ae164d4ee3a8c50"><td class="mdescLeft">&#160;</td><td class="mdescRight">printf with output function You may use this as dynamic alternative to <a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9" title="Tiny printf implementation You have to implement putchar if you use printf() To avoid conflicts with ...">printf()</a> with its fixed <a class="el" href="a00056.html#a223496da92021626a4430fed0af667bd" title="Output a character to a custom device like UART, used by the printf() function This function is decla...">_putchar()</a> output  <a href="a00056.html#a16cdc6ff34afc2122ae164d4ee3a8c50">More...</a><br /></td></tr>
-<tr class="separator:a16cdc6ff34afc2122ae164d4ee3a8c50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaea28331e468f3bc038ec31827130e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#afaea28331e468f3bc038ec31827130e4">Dialog_task_init</a> ()</td></tr>
+<tr class="separator:afaea28331e468f3bc038ec31827130e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2fd86edfbe772063129bca4abbd1eb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#ae2fd86edfbe772063129bca4abbd1eb1">convert_float</a> (const char *token, float *number)</td></tr>
+<tr class="separator:ae2fd86edfbe772063129bca4abbd1eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a876d26799b33d1d1c13397656e391bdd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a876d26799b33d1d1c13397656e391bdd">convert_number</a> (const char *token)</td></tr>
+<tr class="memdesc:a876d26799b33d1d1c13397656e391bdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">convert_number: Manually converts a string representing a signed number into an integer.  <a href="a00056.html#a876d26799b33d1d1c13397656e391bdd">More...</a><br /></td></tr>
+<tr class="separator:a876d26799b33d1d1c13397656e391bdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac464eff2c5b203876f1d5993d2bfcf46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#ac464eff2c5b203876f1d5993d2bfcf46">read_token</a> (char token[], <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> max_len)</td></tr>
+<tr class="memdesc:ac464eff2c5b203876f1d5993d2bfcf46"><td class="mdescLeft">&#160;</td><td class="mdescRight">read_token: Reads a token (a word or number) from standard input using USART_getc().  <a href="a00056.html#ac464eff2c5b203876f1d5993d2bfcf46">More...</a><br /></td></tr>
+<tr class="separator:ac464eff2c5b203876f1d5993d2bfcf46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a072d11c2be29c39c82d13492090d3d74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a072d11c2be29c39c82d13492090d3d74">lookup_token</a> (const char *token)</td></tr>
+<tr class="memdesc:a072d11c2be29c39c82d13492090d3d74"><td class="mdescLeft">&#160;</td><td class="mdescRight">lookup_token: Compares a given token string to the known keywords table.  <a href="a00056.html#a072d11c2be29c39c82d13492090d3d74">More...</a><br /></td></tr>
+<tr class="separator:a072d11c2be29c39c82d13492090d3d74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f7d4dcd2a607f34d7e03a65a208501f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f">parse_command_line</a> (void)</td></tr>
+<tr class="memdesc:a3f7d4dcd2a607f34d7e03a65a208501f"><td class="mdescLeft">&#160;</td><td class="mdescRight">parse_command_line: Parses a single command line (terminated by a newline) from standard input.  <a href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f">More...</a><br /></td></tr>
+<tr class="separator:a3f7d4dcd2a607f34d7e03a65a208501f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae240d0d18dee3daf177c5fd01d99936f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f">Dialog_task</a> (void *args <a class="el" href="a00131.html#a450d87c6a516eb359791b9aa89955cb5">__attribute__</a>((unused)))</td></tr>
+<tr class="separator:ae240d0d18dee3daf177c5fd01d99936f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ad807948520aebc2ae5bb6f18821e1275"><td class="memItemLeft" align="right" valign="top">QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#ad807948520aebc2ae5bb6f18821e1275">msgQueueDialogIn</a></td></tr>
+<tr class="separator:ad807948520aebc2ae5bb6f18821e1275"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a214cddb0898e8fb7e1594fe39b87bad7"><td class="memItemLeft" align="right" valign="top">QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a214cddb0898e8fb7e1594fe39b87bad7">msgQueueDialogOut</a></td></tr>
+<tr class="separator:a214cddb0898e8fb7e1594fe39b87bad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a3cb9f0894fab1c8fbb0753c9c7c2a8d9" name="a3cb9f0894fab1c8fbb0753c9c7c2a8d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cb9f0894fab1c8fbb0753c9c7c2a8d9">&#9670;&nbsp;</a></span>printf</h2>
+<a id="a6f845159259313251d394521999c7c3b" name="a6f845159259313251d394521999c7c3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f845159259313251d394521999c7c3b">&#9670;&nbsp;</a></span>DBG_DIALOG_PRINT</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define printf&#160;&#160;&#160;<a class="el" href="a00056.html#a770cb7c9f4a7b37dc5b49c4c68a8308e">printf_</a></td>
+          <td class="memname">#define DBG_DIALOG_PRINT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">X</td><td>)</td>
+          <td>&#160;&#160;&#160;(X)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Tiny printf implementation You have to implement <em>putchar if you use <a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9" title="Tiny printf implementation You have to implement putchar if you use printf() To avoid conflicts with ...">printf()</a> To avoid conflicts with the regular <a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9" title="Tiny printf implementation You have to implement putchar if you use printf() To avoid conflicts with ...">printf()</a> API it is overridden by macro defines and internal underscore-appended functions like printf</em>() are used. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">format</td><td>A string that specifies the format of the output </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of characters that are written into the array, not counting the terminating null character </dd></dl>
-
 </div>
 </div>
-<a id="aa367b75c5aed883fef5befbdf04835a4" name="aa367b75c5aed883fef5befbdf04835a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa367b75c5aed883fef5befbdf04835a4">&#9670;&nbsp;</a></span>snprintf</h2>
+<a id="a3f6d16dfdf7920e1e5f1dad5db5347f2" name="a3f6d16dfdf7920e1e5f1dad5db5347f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f6d16dfdf7920e1e5f1dad5db5347f2">&#9670;&nbsp;</a></span>MAX_TOKEN_LEN</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define snprintf&#160;&#160;&#160;<a class="el" href="a00056.html#a5b16fca837f5301cb0c01fa668f044f4">snprintf_</a></td>
+          <td class="memname">#define MAX_TOKEN_LEN&#160;&#160;&#160;20</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Tiny snprintf/vsnprintf implementation. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">buffer</td><td>A pointer to the buffer where to store the formatted string </td></tr>
-    <tr><td class="paramname">count</td><td>The maximum number of characters to store in the buffer, including a terminating null character </td></tr>
-    <tr><td class="paramname">format</td><td>A string that specifies the format of the output </td></tr>
-    <tr><td class="paramname">va</td><td>A value identifying a variable arguments list </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of characters that COULD have been written into the buffer, not counting the terminating null character. A value equal or larger than count indicates truncation. Only when the returned value is non-negative and less than count, the string has been completely written. </dd></dl>
-
 </div>
 </div>
-<a id="a5998f60c4f4af322b36debdbd11d7917" name="a5998f60c4f4af322b36debdbd11d7917"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5998f60c4f4af322b36debdbd11d7917">&#9670;&nbsp;</a></span>sprintf</h2>
+<a id="a09886d6ba96e67553bf3c49ed8ade975" name="a09886d6ba96e67553bf3c49ed8ade975"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09886d6ba96e67553bf3c49ed8ade975">&#9670;&nbsp;</a></span>MAX_TOKENS</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define sprintf&#160;&#160;&#160;<a class="el" href="a00056.html#a989410555ef35cd646c15d51e649faaa">sprintf_</a></td>
+          <td class="memname">#define MAX_TOKENS&#160;&#160;&#160;4</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Tiny sprintf implementation Due to security reasons (buffer overflow) YOU SHOULD CONSIDER USING (V)SNPRINTF INSTEAD! </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">buffer</td><td>A pointer to the buffer where to store the formatted string. MUST be big enough to store the output! </td></tr>
-    <tr><td class="paramname">format</td><td>A string that specifies the format of the output </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of characters that are WRITTEN into the buffer, not counting the terminating null character </dd></dl>
-
 </div>
 </div>
-<a id="a275497dfccfba8ca97e73865fd2b083b" name="a275497dfccfba8ca97e73865fd2b083b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a275497dfccfba8ca97e73865fd2b083b">&#9670;&nbsp;</a></span>vprintf</h2>
+<a id="a36781b6b4384cbb1232f14f4abc7b2ab" name="a36781b6b4384cbb1232f14f4abc7b2ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36781b6b4384cbb1232f14f4abc7b2ab">&#9670;&nbsp;</a></span>YYINPUT</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define vprintf&#160;&#160;&#160;<a class="el" href="a00056.html#aa199d9388f8dcddcda1a0451315cae89">vprintf_</a></td>
+          <td class="memname">#define YYINPUT&#160;&#160;&#160;<a class="el" href="a00125.html#a07a9fbf5b0b93c82edb8d1d7582f7019">svc_UART_getc</a>(&amp;<a class="el" href="a00125.html#ab0a7406e4fc58e27dc1efdc0b7861cff">svc_uart2</a>, portMAX_DELAY)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Tiny vprintf implementation. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">format</td><td>A string that specifies the format of the output </td></tr>
-    <tr><td class="paramname">va</td><td>A value identifying a variable arguments list </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of characters that are WRITTEN into the buffer, not counting the terminating null character </dd></dl>
-
 </div>
 </div>
-<a id="a00ba2ca988495904efc418acbf0627d7" name="a00ba2ca988495904efc418acbf0627d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a00ba2ca988495904efc418acbf0627d7">&#9670;&nbsp;</a></span>vsnprintf</h2>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="aa520fbf142ba1e7e659590c07da31921" name="aa520fbf142ba1e7e659590c07da31921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa520fbf142ba1e7e659590c07da31921">&#9670;&nbsp;</a></span>TokenType</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define vsnprintf&#160;&#160;&#160;<a class="el" href="a00056.html#af37254f8c6a2d9d51e82c85fd666f88e">vsnprintf_</a></td>
+          <td class="memname">enum <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a2dee186c009d8a91a8ebd2caa81ceef3" name="aa520fbf142ba1e7e659590c07da31921a2dee186c009d8a91a8ebd2caa81ceef3"></a>TOKEN_UNKNOWN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a2f3bfeaa37a490c6e7409e2f3f98eaaf" name="aa520fbf142ba1e7e659590c07da31921a2f3bfeaa37a490c6e7409e2f3f98eaaf"></a>TOKEN_AP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a4a94caf327e2858573bbabf15f67936d" name="aa520fbf142ba1e7e659590c07da31921a4a94caf327e2858573bbabf15f67936d"></a>TOKEN_AHRS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a3d80221ffee5142f5e45e56466049840" name="aa520fbf142ba1e7e659590c07da31921a3d80221ffee5142f5e45e56466049840"></a>TOKEN_CALIBRATE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a9c03281a79c456599cdc1ae45f280d53" name="aa520fbf142ba1e7e659590c07da31921a9c03281a79c456599cdc1ae45f280d53"></a>TOKEN_CONFIG&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921ae3ce774af2713bd1009bebf1ef9aa5be" name="aa520fbf142ba1e7e659590c07da31921ae3ce774af2713bd1009bebf1ef9aa5be"></a>TOKEN_DISPLAY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921aa4c40c59080b6722ecd8d32e365a4926" name="aa520fbf142ba1e7e659590c07da31921aa4c40c59080b6722ecd8d32e365a4926"></a>TOKEN_DT0058&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a6b0ab7cf8c0d1203475022b3d5600f85" name="aa520fbf142ba1e7e659590c07da31921a6b0ab7cf8c0d1203475022b3d5600f85"></a>TOKEN_EOL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a08b2f408b6da17fc7a4ae1d694a35c59" name="aa520fbf142ba1e7e659590c07da31921a08b2f408b6da17fc7a4ae1d694a35c59"></a>TOKEN_GPS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a054b1e13ab8d2b47a47f4d0b80181ac4" name="aa520fbf142ba1e7e659590c07da31921a054b1e13ab8d2b47a47f4d0b80181ac4"></a>TOKEN_HEADING&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a216cb23670a3c1d505c2cad1e1b61a01" name="aa520fbf142ba1e7e659590c07da31921a216cb23670a3c1d505c2cad1e1b61a01"></a>TOKEN_HWMS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a091f17166ce24254effa2c4ccf956df3" name="aa520fbf142ba1e7e659590c07da31921a091f17166ce24254effa2c4ccf956df3"></a>TOKEN_IDLE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a09dbd308cf813b60dd2b82f92d5fa1d5" name="aa520fbf142ba1e7e659590c07da31921a09dbd308cf813b60dd2b82f92d5fa1d5"></a>TOKEN_KD&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a252877c810f17cd16a05f92e21c9f8e1" name="aa520fbf142ba1e7e659590c07da31921a252877c810f17cd16a05f92e21c9f8e1"></a>TOKEN_KI&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a5446c764f19df7e930004653da858cce" name="aa520fbf142ba1e7e659590c07da31921a5446c764f19df7e930004653da858cce"></a>TOKEN_KP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921acd706f1a3764e761eca678b89ce6416d" name="aa520fbf142ba1e7e659590c07da31921acd706f1a3764e761eca678b89ce6416d"></a>TOKEN_MAG_VS_GYR&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a67295c694426d51c0adc19695a7465bc" name="aa520fbf142ba1e7e659590c07da31921a67295c694426d51c0adc19695a7465bc"></a>TOKEN_MEMS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921ad6110a419e6e093f3dda3234bd0b00c7" name="aa520fbf142ba1e7e659590c07da31921ad6110a419e6e093f3dda3234bd0b00c7"></a>TOKEN_MODE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921acd8529390c469fd2576928dbd3de7e1d" name="aa520fbf142ba1e7e659590c07da31921acd8529390c469fd2576928dbd3de7e1d"></a>TOKEN_MOTOR&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921aa1f225c3913cc857e685b4816fd789b3" name="aa520fbf142ba1e7e659590c07da31921aa1f225c3913cc857e685b4816fd789b3"></a>TOKEN_MOTOR_CVT_ANGLE_TIME&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a20379fb24f9e772433d9d66b2fc886d0" name="aa520fbf142ba1e7e659590c07da31921a20379fb24f9e772433d9d66b2fc886d0"></a>TOKEN_MOTOR_HPF_COEFF&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921aa90685a7394a79e00553a6956690ad15" name="aa520fbf142ba1e7e659590c07da31921aa90685a7394a79e00553a6956690ad15"></a>TOKEN_MOTOR_THRESHOLD&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921ab2af03662d780038284bc9c09e11c452" name="aa520fbf142ba1e7e659590c07da31921ab2af03662d780038284bc9c09e11c452"></a>TOKEN_NUMBER&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921acdf6b9ee784bdafe63bcb35fd57749f2" name="aa520fbf142ba1e7e659590c07da31921acdf6b9ee784bdafe63bcb35fd57749f2"></a>TOKEN_PORT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a581c87e3a612ed8743ba096a522d7562" name="aa520fbf142ba1e7e659590c07da31921a581c87e3a612ed8743ba096a522d7562"></a>TOKEN_QUAT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921aa006aef4c2f4d1d35b06c355fda93366" name="aa520fbf142ba1e7e659590c07da31921aa006aef4c2f4d1d35b06c355fda93366"></a>TOKEN_SELECT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a724f3397a4079fa4a77d84ffc500c2e0" name="aa520fbf142ba1e7e659590c07da31921a724f3397a4079fa4a77d84ffc500c2e0"></a>TOKEN_SET&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921ae46756391f70776ffc1807571e304ff0" name="aa520fbf142ba1e7e659590c07da31921ae46756391f70776ffc1807571e304ff0"></a>TOKEN_SIMPLE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921aeaf68c5d9b052b370d715736cdb99ae2" name="aa520fbf142ba1e7e659590c07da31921aeaf68c5d9b052b370d715736cdb99ae2"></a>TOKEN_STARBOARD&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a8aa50f3151b28d4eaaef43ebc05bf302" name="aa520fbf142ba1e7e659590c07da31921a8aa50f3151b28d4eaaef43ebc05bf302"></a>TOKEN_STATUS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a2b771e894572d3610b357cdb4986a87f" name="aa520fbf142ba1e7e659590c07da31921a2b771e894572d3610b357cdb4986a87f"></a>TOKEN_TURN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a695d30cfd5838823571d3176fba3fb50" name="aa520fbf142ba1e7e659590c07da31921a695d30cfd5838823571d3176fba3fb50"></a>TOKEN_WIND&#160;</td><td class="fielddoc"></td></tr>
+</table>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a223496da92021626a4430fed0af667bd" name="a223496da92021626a4430fed0af667bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a223496da92021626a4430fed0af667bd">&#9670;&nbsp;</a></span>_putchar()</h2>
+<a id="ae2fd86edfbe772063129bca4abbd1eb1" name="ae2fd86edfbe772063129bca4abbd1eb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2fd86edfbe772063129bca4abbd1eb1">&#9670;&nbsp;</a></span>convert_float()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void _putchar </td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> convert_float </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>token</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>number</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_ae2fd86edfbe772063129bca4abbd1eb1_icgraph.png" border="0" usemap="#aa00056_ae2fd86edfbe772063129bca4abbd1eb1_icgraph" alt=""/></div>
+<map name="aa00056_ae2fd86edfbe772063129bca4abbd1eb1_icgraph" id="aa00056_ae2fd86edfbe772063129bca4abbd1eb1_icgraph">
+<area shape="rect" title=" " alt="" coords="480,5,587,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a876d26799b33d1d1c13397656e391bdd" name="a876d26799b33d1d1c13397656e391bdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a876d26799b33d1d1c13397656e391bdd">&#9670;&nbsp;</a></span>convert_number()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> convert_number </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>token</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>convert_number: Manually converts a string representing a signed number into an integer. </p>
+<p >It processes the string character-by-character, using multiplications and additions.</p>
+<p >Parameters: token - the string representing the number (with an optional '+' or '-' sign)</p>
+<p >Returns: The integer value represented by the string. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_a876d26799b33d1d1c13397656e391bdd_icgraph.png" border="0" usemap="#aa00056_a876d26799b33d1d1c13397656e391bdd_icgraph" alt=""/></div>
+<map name="aa00056_a876d26799b33d1d1c13397656e391bdd_icgraph" id="aa00056_a876d26799b33d1d1c13397656e391bdd_icgraph">
+<area shape="rect" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="480,5,608,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae240d0d18dee3daf177c5fd01d99936f" name="ae240d0d18dee3daf177c5fd01d99936f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae240d0d18dee3daf177c5fd01d99936f">&#9670;&nbsp;</a></span>Dialog_task()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Dialog_task </td>
+          <td>(</td>
+          <td class="paramtype">void *args &#160;</td>
+          <td class="paramname"><em>__attribute__</em>(unused)</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_ae240d0d18dee3daf177c5fd01d99936f_cgraph.png" border="0" usemap="#aa00056_ae240d0d18dee3daf177c5fd01d99936f_cgraph" alt=""/></div>
+<map name="aa00056_ae240d0d18dee3daf177c5fd01d99936f_cgraph" id="aa00056_ae240d0d18dee3daf177c5fd01d99936f_cgraph">
+<area shape="rect" title=" " alt="" coords="5,157,104,184"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="152,157,313,184"/>
+<area shape="rect" href="a00062.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="361,5,528,32"/>
+<area shape="rect" href="a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="391,56,498,83"/>
+<area shape="rect" href="a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="381,107,509,133"/>
+<area shape="rect" href="a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="391,157,499,184"/>
+<area shape="rect" href="a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="397,208,492,235"/>
+<area shape="rect" href="a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="415,259,474,285"/>
+<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="381,309,509,336"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="784,284,948,311"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="576,360,736,387"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="603,309,709,336"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="803,360,929,387"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_ae240d0d18dee3daf177c5fd01d99936f_icgraph.png" border="0" usemap="#aa00056_ae240d0d18dee3daf177c5fd01d99936f_icgraph" alt=""/></div>
+<map name="aa00056_ae240d0d18dee3daf177c5fd01d99936f_icgraph" id="aa00056_ae240d0d18dee3daf177c5fd01d99936f_icgraph">
+<area shape="rect" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="afaea28331e468f3bc038ec31827130e4" name="afaea28331e468f3bc038ec31827130e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afaea28331e468f3bc038ec31827130e4">&#9670;&nbsp;</a></span>Dialog_task_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Dialog_task_init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_afaea28331e468f3bc038ec31827130e4_icgraph.png" border="0" usemap="#aa00056_afaea28331e468f3bc038ec31827130e4_icgraph" alt=""/></div>
+<map name="aa00056_afaea28331e468f3bc038ec31827130e4_icgraph" id="aa00056_afaea28331e468f3bc038ec31827130e4_icgraph">
+<area shape="rect" title=" " alt="" coords="124,5,251,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a072d11c2be29c39c82d13492090d3d74" name="a072d11c2be29c39c82d13492090d3d74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a072d11c2be29c39c82d13492090d3d74">&#9670;&nbsp;</a></span>lookup_token()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921">TokenType</a> lookup_token </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>token</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>lookup_token: Compares a given token string to the known keywords table. </p>
+<p >If a match is found, the corresponding TokenType is returned. If the token represents a number, TOKEN_NUMBER is returned. Otherwise, TOKEN_UNKNOWN is returned.</p>
+<p >Parameters: token - the token string to classify.</p>
+<p >Returns: The TokenType corresponding to the token. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_a072d11c2be29c39c82d13492090d3d74_icgraph.png" border="0" usemap="#aa00056_a072d11c2be29c39c82d13492090d3d74_icgraph" alt=""/></div>
+<map name="aa00056_a072d11c2be29c39c82d13492090d3d74_icgraph" id="aa00056_a072d11c2be29c39c82d13492090d3d74_icgraph">
+<area shape="rect" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="480,5,588,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a3f7d4dcd2a607f34d7e03a65a208501f" name="a3f7d4dcd2a607f34d7e03a65a208501f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f7d4dcd2a607f34d7e03a65a208501f">&#9670;&nbsp;</a></span>parse_command_line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void parse_command_line </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>parse_command_line: Parses a single command line (terminated by a newline) from standard input. </p>
+<p >It tokenizes the line into at most MAX_TOKENS tokens and then processes the command according to the grammar provided in the attached file.</p>
+<p >The function uses only local variables (no global variables, no dynamic allocation) and relies on a table lookup for token classification. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_a3f7d4dcd2a607f34d7e03a65a208501f_cgraph.png" border="0" usemap="#aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_cgraph" alt=""/></div>
+<map name="aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_cgraph" id="aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_cgraph">
+<area shape="rect" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="5,157,167,184"/>
+<area shape="rect" href="a00062.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="215,5,381,32"/>
+<area shape="rect" href="a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="245,56,351,83"/>
+<area shape="rect" href="a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="234,107,362,133"/>
+<area shape="rect" href="a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="244,157,352,184"/>
+<area shape="rect" href="a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="251,208,345,235"/>
+<area shape="rect" href="a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="269,259,327,285"/>
+<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="234,309,362,336"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="637,284,801,311"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="429,360,589,387"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="457,309,562,336"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="657,360,782,387"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_a3f7d4dcd2a607f34d7e03a65a208501f_icgraph.png" border="0" usemap="#aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_icgraph" alt=""/></div>
+<map name="aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_icgraph" id="aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_icgraph">
+<area shape="rect" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac464eff2c5b203876f1d5993d2bfcf46" name="ac464eff2c5b203876f1d5993d2bfcf46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac464eff2c5b203876f1d5993d2bfcf46">&#9670;&nbsp;</a></span>read_token()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> read_token </td>
           <td>(</td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>character</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Output a character to a custom device like UART, used by the <a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9" title="Tiny printf implementation You have to implement putchar if you use printf() To avoid conflicts with ...">printf()</a> function This function is declared here only. </p>
-<p >You have to write your custom implementation somewhere </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">character</td><td>Character to output </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a16cdc6ff34afc2122ae164d4ee3a8c50" name="a16cdc6ff34afc2122ae164d4ee3a8c50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16cdc6ff34afc2122ae164d4ee3a8c50">&#9670;&nbsp;</a></span>fctprintf()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> fctprintf </td>
-          <td>(</td>
-          <td class="paramtype">void(*)(char character, void *arg)&#160;</td>
-          <td class="paramname"><em>out</em>, </td>
+          <td class="paramname"><em>token</em>[], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>arg</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>format</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td>
+          <td class="paramname"><em>max_len</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -315,183 +585,48 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>printf with output function You may use this as dynamic alternative to <a class="el" href="a00056.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9" title="Tiny printf implementation You have to implement putchar if you use printf() To avoid conflicts with ...">printf()</a> with its fixed <a class="el" href="a00056.html#a223496da92021626a4430fed0af667bd" title="Output a character to a custom device like UART, used by the printf() function This function is decla...">_putchar()</a> output </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">out</td><td>An output function which takes one character and an argument pointer </td></tr>
-    <tr><td class="paramname">arg</td><td>An argument pointer for user data passed to output function </td></tr>
-    <tr><td class="paramname">format</td><td>A string that specifies the format of the output </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of characters that are sent to the output function, not counting the terminating null character </dd></dl>
+<p>read_token: Reads a token (a word or number) from standard input using USART_getc(). </p>
+<p >The token is stored in the provided buffer and is null-terminated. This function stops reading when a space, tab, newline, or EOF is encountered.</p>
+<p >Parameters: token - a char array where the token will be stored. max_len - maximum number of characters to store (including the terminating null).</p>
+<p >Returns: The first character that terminated the token (could be '<br  />
+' or EOF), so that the caller knows whether the token ended because of end-of-line. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00056_ac464eff2c5b203876f1d5993d2bfcf46_icgraph.png" border="0" usemap="#aa00056_ac464eff2c5b203876f1d5993d2bfcf46_icgraph" alt=""/></div>
+<map name="aa00056_ac464eff2c5b203876f1d5993d2bfcf46_icgraph" id="aa00056_ac464eff2c5b203876f1d5993d2bfcf46_icgraph">
+<area shape="rect" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="480,5,575,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
 
 </div>
 </div>
-<a id="a770cb7c9f4a7b37dc5b49c4c68a8308e" name="a770cb7c9f4a7b37dc5b49c4c68a8308e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a770cb7c9f4a7b37dc5b49c4c68a8308e">&#9670;&nbsp;</a></span>printf_()</h2>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="ad807948520aebc2ae5bb6f18821e1275" name="ad807948520aebc2ae5bb6f18821e1275"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad807948520aebc2ae5bb6f18821e1275">&#9670;&nbsp;</a></span>msgQueueDialogIn</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> printf_ </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>format</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">QueueHandle_t msgQueueDialogIn</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a5b16fca837f5301cb0c01fa668f044f4" name="a5b16fca837f5301cb0c01fa668f044f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b16fca837f5301cb0c01fa668f044f4">&#9670;&nbsp;</a></span>snprintf_()</h2>
+<a id="a214cddb0898e8fb7e1594fe39b87bad7" name="a214cddb0898e8fb7e1594fe39b87bad7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a214cddb0898e8fb7e1594fe39b87bad7">&#9670;&nbsp;</a></span>msgQueueDialogOut</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> snprintf_ </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>format</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a989410555ef35cd646c15d51e649faaa" name="a989410555ef35cd646c15d51e649faaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a989410555ef35cd646c15d51e649faaa">&#9670;&nbsp;</a></span>sprintf_()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> sprintf_ </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>format</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa199d9388f8dcddcda1a0451315cae89" name="aa199d9388f8dcddcda1a0451315cae89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa199d9388f8dcddcda1a0451315cae89">&#9670;&nbsp;</a></span>vprintf_()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> vprintf_ </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>format</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">va_list&#160;</td>
-          <td class="paramname"><em>va</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af37254f8c6a2d9d51e82c85fd666f88e" name="af37254f8c6a2d9d51e82c85fd666f88e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af37254f8c6a2d9d51e82c85fd666f88e">&#9670;&nbsp;</a></span>vsnprintf_()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> vsnprintf_ </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>format</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">va_list&#160;</td>
-          <td class="paramname"><em>va</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">QueueHandle_t msgQueueDialogOut</td>
         </tr>
       </table>
 </div><div class="memdoc">

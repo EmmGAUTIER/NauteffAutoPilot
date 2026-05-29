@@ -15,9 +15,9 @@
 #include "imu.h"
 
 int calibreur_addSample(Calibreur_t *calibreur, float currTime, Vector3f *acc,
-        Vector3f *gyr, Vector3f *mag)
+                        Vector3f *gyr, Vector3f *mag)
 {
-    if (calibreur->sampleCount >= calibreur->maxSamples)
+    if(calibreur->sampleCount >= calibreur->maxSamples)
     {
         return -1; // Calibrator is full, cannot add more samples
     }
@@ -39,15 +39,15 @@ Calibreur_t* calibreur_create(int numberOfSamples)
     /* Allocate memory for the calibrator */
     Calibreur_t *calibreur = (Calibreur_t*) pvPortMalloc(sizeof(Calibreur_t));
 
-    if (calibreur == NULL)
+    if(calibreur == NULL)
     {
         return NULL; /* Memory allocation failed */
     }
 
     calibreur->samples = (MEMsSample_t*) pvPortMalloc(
-            numberOfSamples * sizeof(MEMsSample_t));
+                             numberOfSamples * sizeof(MEMsSample_t));
 
-    if (calibreur->samples == NULL)
+    if(calibreur->samples == NULL)
     {
         vPortFree(calibreur);
         return NULL; /* Memory allocation failed */
@@ -75,9 +75,9 @@ int calibreur_isFull(Calibreur_t *calibreur)
 }
 
 int calibreur_calibrate(Calibreur_t *calibreur, Vector3f *offset, float M[3][3],
-        float *quality)
+                        float *quality)
 {
-    if (calibreur->sampleCount < 100)
+    if(calibreur->sampleCount < 100)
     {
         return -1; /* Not enough samples */
     }
@@ -99,8 +99,8 @@ void IMU_init_status(IMU_Status_t *mstatus)
     mstatus->yawRate = 0.F;
     mstatus->magVsGyr = MEMS_INIT_MAG_VS_GYRO;
     mstatus->orientation = (Quaternionf
-            )
-            { 1.F, 0.F, 0.F, 0.F };
+                           )
+    { 1.F, 0.F, 0.F, 0.F };
 }
 
 float IMU_get_roll(IMU_Status_t *mstatus)
@@ -136,7 +136,7 @@ int IMU_set_mag_vs_gyr_prop(IMU_Status_t *mstatus, float prop)
 }
 
 int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
-        Vector3f *mag, float deltat)
+                         Vector3f *mag, float deltat)
 {
     // Vector3f m_h;         /* Horizontal part of magnétic field */
     // Vector3f m_v;         /* Vertical part of magnétic field */
@@ -155,7 +155,7 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
 
 #if 1
     snprintf(message, sizeof(message), "IMU gravity  %+f %+f %+f\n", gravity.x,
-            gravity.y, gravity.z);
+             gravity.y, gravity.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
     /* horizontal part of forward relative to device */
@@ -163,7 +163,7 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
     starboard_h = vector3f_getNormalized(starboard_h);
 #if 1
     snprintf(message, sizeof(message), "IMU stbd Horizontal  %+f %+f %+f\n",
-            starboard_h.x, starboard_h.y, starboard_h.z);
+             starboard_h.x, starboard_h.y, starboard_h.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
@@ -176,7 +176,7 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
 #endif
 
     cos_hdg = vector3f_getDotProduct(
-            vector3f_getCrossProduct(starboard_h, east), gravity);
+                  vector3f_getCrossProduct(starboard_h, east), gravity);
     sin_hdg = vector3f_getDotProduct(starboard_h, east);
 
 #if 0
@@ -199,7 +199,7 @@ int IMU_new_values_essai(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
 }
 
 int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
-        Vector3f *mag, float deltat)
+                   Vector3f *mag, float deltat)
 {
     Vector3f east, north;
     static char message[160];
@@ -222,20 +222,20 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
 
 #if 1
     snprintf(message, sizeof(message) - 1,
-            "IMU mag %+6f %+6f %+6f   acc %+6f %+6f %+6f    east%+6f %+6f %+6f\n",
-            acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, east.x, east.y,
-            east.z);
+             "IMU mag %+6f %+6f %+6f   acc %+6f %+6f %+6f    east%+6f %+6f %+6f\n",
+             acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, east.x, east.y,
+             east.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
 #if 1
     snprintf(message, sizeof(message) - 1,
-            "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
-            east.x, east.y, east.z, north.x, north.y, north.z);
+             "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
+             east.x, east.y, east.z, north.x, north.y, north.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
-    if ((!mstatus->initialized) || isnan(mstatus->heading))
+    if((!mstatus->initialized) || isnan(mstatus->heading))
     {
         /* First call heading unknown */
         /* Let's start with magnetometer value */
@@ -244,7 +244,7 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
     }
     else
     {
-        if (isnan(gyr->z))
+        if(isnan(gyr->z))
         {
             gyr->z = 0.F;
         }
@@ -267,9 +267,9 @@ int IMU_new_values(IMU_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
 
         /* compute the vector beta magnetic value + (1-beta) estimated direction */
         newdir_x = mstatus->magVsGyr * dirmag_x
-                + (1.F - mstatus->magVsGyr) * direstim_x;
+                   + (1.F - mstatus->magVsGyr) * direstim_x;
         newdir_y = mstatus->magVsGyr * dirmag_y
-                + (1.F - mstatus->magVsGyr) * direstim_y;
+                   + (1.F - mstatus->magVsGyr) * direstim_y;
         /* newdir_x,y points to the direction */
 
 #if 0

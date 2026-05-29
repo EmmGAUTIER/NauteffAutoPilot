@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: Member List</title>
+<title>Nauteff auto pilot: service.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,18 +61,325 @@ $(function() {
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_f6024555edb91c92286789204247ac6f.html">tasks</a></li><li class="navelem"><a class="el" href="dir_96b134f082932b0ffaad969aba350d0a.html">inc</a></li>  </ul>
+</div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">ServiceTransfer_t Member List</div></div>
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">service.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="a00077_source.html">rbuffer.h</a>&quot;</code><br />
+<code>#include &quot;stm32l4xx_hal.h&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for service.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00126.png" border="0" usemap="#aservice_8h" alt=""/></div>
+<map name="aservice_8h" id="aservice_8h">
+<area shape="rect" title=" " alt="" coords="115,5,196,32"/>
+<area shape="rect" href="a00077.html" title=" " alt="" coords="53,80,129,107"/>
+<area shape="rect" title=" " alt="" coords="154,80,285,107"/>
+<area shape="rect" title=" " alt="" coords="5,155,76,181"/>
+<area shape="rect" title=" " alt="" coords="101,155,183,181"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00127.png" border="0" usemap="#aservice_8hdep" alt=""/></div>
+<map name="aservice_8hdep" id="aservice_8hdep">
+<area shape="rect" title=" " alt="" coords="577,5,658,32"/>
+<area shape="rect" href="a00041.html" title=" " alt="" coords="5,80,96,107"/>
+<area shape="rect" href="a00029.html" title=" " alt="" coords="121,80,226,107"/>
+<area shape="rect" href="a00056.html" title=" " alt="" coords="250,80,339,107"/>
+<area shape="rect" href="a00053.html" title=" " alt="" coords="364,80,447,107"/>
+<area shape="rect" href="a00062.html" title=" " alt="" coords="471,80,561,107"/>
+<area shape="rect" href="a00011.html" title=" " alt="" coords="585,80,649,107"/>
+<area shape="rect" href="a00038.html" title=" " alt="" coords="673,80,732,107"/>
+<area shape="rect" href="a00026.html" title=" " alt="" coords="756,80,873,107"/>
+<area shape="rect" href="a00047.html" title=" " alt="" coords="897,80,972,107"/>
+<area shape="rect" href="a00059.html" title=" " alt="" coords="997,80,1067,107"/>
+<area shape="rect" href="a00050.html" title=" " alt="" coords="1092,80,1172,107"/>
+</map>
+</div>
+</div>
+<p><a href="a00125_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00314.html">ServiceUartHandle_t</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a2919f845e6410cd0bed07697e3f309a1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00125.html#a2919f845e6410cd0bed07697e3f309a1">SERVICE_QUEUE_LENGTH</a>&#160;&#160;&#160;20</td></tr>
+<tr class="separator:a2919f845e6410cd0bed07697e3f309a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cb114a10e157f0223645ba758c8f34c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00125.html#a0cb114a10e157f0223645ba758c8f34c">SERVICE_USART_BUFFER_SIZE</a>&#160;&#160;&#160;4*1024</td></tr>
+<tr class="separator:a0cb114a10e157f0223645ba758c8f34c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:aca9a2b5d52ea7cb385abffb611d72361"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00125.html#aca9a2b5d52ea7cb385abffb611d72361">svc_UART_Write</a> (<a class="el" href="a00314.html">ServiceUartHandle_t</a> *svc_uart, const void *data, size_t len, TickType_t delay)</td></tr>
+<tr class="separator:aca9a2b5d52ea7cb385abffb611d72361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07a9fbf5b0b93c82edb8d1d7582f7019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00125.html#a07a9fbf5b0b93c82edb8d1d7582f7019">svc_UART_getc</a> (<a class="el" href="a00314.html">ServiceUartHandle_t</a> *svc_uart, TickType_t delay)</td></tr>
+<tr class="separator:a07a9fbf5b0b93c82edb8d1d7582f7019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa976a4a5d02f7a0b4e14a37b76f6eec5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00125.html#aa976a4a5d02f7a0b4e14a37b76f6eec5">Service_task_init</a> ()</td></tr>
+<tr class="separator:aa976a4a5d02f7a0b4e14a37b76f6eec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb30b4435857c1f6737ea564258d8cc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00125.html#abb30b4435857c1f6737ea564258d8cc6">Service_task</a> (void *)</td></tr>
+<tr class="separator:abb30b4435857c1f6737ea564258d8cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ac1017da83d77c5a0f50fdc652ffa4454"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00314.html">ServiceUartHandle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00125.html#ac1017da83d77c5a0f50fdc652ffa4454">svc_uart1</a></td></tr>
+<tr class="separator:ac1017da83d77c5a0f50fdc652ffa4454"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0a7406e4fc58e27dc1efdc0b7861cff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00314.html">ServiceUartHandle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00125.html#ab0a7406e4fc58e27dc1efdc0b7861cff">svc_uart2</a></td></tr>
+<tr class="separator:ab0a7406e4fc58e27dc1efdc0b7861cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a2919f845e6410cd0bed07697e3f309a1" name="a2919f845e6410cd0bed07697e3f309a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2919f845e6410cd0bed07697e3f309a1">&#9670;&nbsp;</a></span>SERVICE_QUEUE_LENGTH</h2>
 
-<p>This is the complete list of members for <a class="el" href="a00128.html">ServiceTransfer_t</a>, including all inherited members.</p>
-<table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="a00128.html#ab3d26802f2cdb6a0e766754a3bbec3be">data</a></td><td class="entry"><a class="el" href="a00128.html">ServiceTransfer_t</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="a00128.html#a38f5e4ce9fd13785ee18904cc15218a0">dir</a></td><td class="entry"><a class="el" href="a00128.html">ServiceTransfer_t</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00128.html#a47182924c0dbbd4035a22585c046c0f0">len</a></td><td class="entry"><a class="el" href="a00128.html">ServiceTransfer_t</a></td><td class="entry"></td></tr>
-</table></div><!-- contents -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SERVICE_QUEUE_LENGTH&#160;&#160;&#160;20</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0cb114a10e157f0223645ba758c8f34c" name="a0cb114a10e157f0223645ba758c8f34c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cb114a10e157f0223645ba758c8f34c">&#9670;&nbsp;</a></span>SERVICE_USART_BUFFER_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SERVICE_USART_BUFFER_SIZE&#160;&#160;&#160;4*1024</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="abb30b4435857c1f6737ea564258d8cc6" name="abb30b4435857c1f6737ea564258d8cc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb30b4435857c1f6737ea564258d8cc6">&#9670;&nbsp;</a></span>Service_task()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Service_task </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00125_abb30b4435857c1f6737ea564258d8cc6_icgraph.png" border="0" usemap="#aa00125_abb30b4435857c1f6737ea564258d8cc6_icgraph" alt=""/></div>
+<map name="aa00125_abb30b4435857c1f6737ea564258d8cc6_icgraph" id="aa00125_abb30b4435857c1f6737ea564258d8cc6_icgraph">
+<area shape="rect" title=" " alt="" coords="124,5,229,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa976a4a5d02f7a0b4e14a37b76f6eec5" name="aa976a4a5d02f7a0b4e14a37b76f6eec5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa976a4a5d02f7a0b4e14a37b76f6eec5">&#9670;&nbsp;</a></span>Service_task_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Service_task_init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00125_aa976a4a5d02f7a0b4e14a37b76f6eec5_cgraph.png" border="0" usemap="#aa00125_aa976a4a5d02f7a0b4e14a37b76f6eec5_cgraph" alt=""/></div>
+<map name="aa00125_aa976a4a5d02f7a0b4e14a37b76f6eec5_cgraph" id="aa00125_aa976a4a5d02f7a0b4e14a37b76f6eec5_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,139,32"/>
+<area shape="rect" href="a00050.html#aa6ed815b156a748a4a2f908bb2d9a6ff" title=" " alt="" coords="187,5,301,32"/>
+<area shape="rect" href="a00005.html#ab374bad8d7900bcfd9643b48ea576785" title="Initializes the ring buffer." alt="" coords="349,5,443,32"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00125_aa976a4a5d02f7a0b4e14a37b76f6eec5_icgraph.png" border="0" usemap="#aa00125_aa976a4a5d02f7a0b4e14a37b76f6eec5_icgraph" alt=""/></div>
+<map name="aa00125_aa976a4a5d02f7a0b4e14a37b76f6eec5_icgraph" id="aa00125_aa976a4a5d02f7a0b4e14a37b76f6eec5_icgraph">
+<area shape="rect" title=" " alt="" coords="124,5,257,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a07a9fbf5b0b93c82edb8d1d7582f7019" name="a07a9fbf5b0b93c82edb8d1d7582f7019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07a9fbf5b0b93c82edb8d1d7582f7019">&#9670;&nbsp;</a></span>svc_UART_getc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> svc_UART_getc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00314.html">ServiceUartHandle_t</a> *&#160;</td>
+          <td class="paramname"><em>svc_uart</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TickType_t&#160;</td>
+          <td class="paramname"><em>delay</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aca9a2b5d52ea7cb385abffb611d72361" name="aca9a2b5d52ea7cb385abffb611d72361"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca9a2b5d52ea7cb385abffb611d72361">&#9670;&nbsp;</a></span>svc_UART_Write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> svc_UART_Write </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00314.html">ServiceUartHandle_t</a> *&#160;</td>
+          <td class="paramname"><em>svc_uart</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TickType_t&#160;</td>
+          <td class="paramname"><em>delay</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00125_aca9a2b5d52ea7cb385abffb611d72361_cgraph.png" border="0" usemap="#aa00125_aca9a2b5d52ea7cb385abffb611d72361_cgraph" alt=""/></div>
+<map name="aa00125_aca9a2b5d52ea7cb385abffb611d72361_cgraph" id="aa00125_aca9a2b5d52ea7cb385abffb611d72361_cgraph">
+<area shape="rect" title=" " alt="" coords="5,31,133,57"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="389,5,553,32"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="181,81,341,108"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="209,31,314,57"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="409,81,534,108"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00125_aca9a2b5d52ea7cb385abffb611d72361_icgraph.png" border="0" usemap="#aa00125_aca9a2b5d52ea7cb385abffb611d72361_icgraph" alt=""/></div>
+<map name="aa00125_aca9a2b5d52ea7cb385abffb611d72361_icgraph" id="aa00125_aca9a2b5d52ea7cb385abffb611d72361_icgraph">
+<area shape="rect" title=" " alt="" coords="500,220,628,246"/>
+<area shape="rect" href="a00062.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="124,93,231,120"/>
+<area shape="rect" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb" title=" " alt="" coords="291,42,439,69"/>
+<area shape="rect" href="a00029.html#aa7ea64af1dac32b3af3a4a898b940824" title=" " alt="" coords="284,93,447,120"/>
+<area shape="rect" href="a00026.html#abc8ae3e325b0b84e82632cd263c30fb0" title=" " alt="" coords="310,144,421,170"/>
+<area shape="rect" href="a00062.html#afa8c4bb9dc2009e2a7dee4f0e290c8c5" title=" " alt="" coords="304,194,427,221"/>
+<area shape="rect" href="a00011.html#a55d30a57ced2043d0903c37c8254e0f5" title=" " alt="" coords="294,245,437,272"/>
+<area shape="rect" href="a00038.html#a212785a20157f9f72833269483fbbdbc" title=" " alt="" coords="299,296,431,322"/>
+<area shape="rect" href="a00038.html#ab565c5a9ef974d7ae8873525de16cb95" title=" " alt="" coords="279,346,452,373"/>
+<area shape="rect" href="a00059.html#ae68efef717f3a191436388c86b11bbe1" title="Motor control task." alt="" coords="130,397,225,424"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="285,448,446,474"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,422,76,449"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="128,448,227,474"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="ac1017da83d77c5a0f50fdc652ffa4454" name="ac1017da83d77c5a0f50fdc652ffa4454"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1017da83d77c5a0f50fdc652ffa4454">&#9670;&nbsp;</a></span>svc_uart1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00314.html">ServiceUartHandle_t</a> svc_uart1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab0a7406e4fc58e27dc1efdc0b7861cff" name="ab0a7406e4fc58e27dc1efdc0b7861cff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0a7406e4fc58e27dc1efdc0b7861cff">&#9670;&nbsp;</a></span>svc_uart2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00314.html">ServiceUartHandle_t</a> svc_uart2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4

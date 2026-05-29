@@ -1,18 +1,12 @@
 var searchData=
 [
-  ['rbuffer_5fsize_0',['RBUFFER_SIZE',['../a00059.html#a4668e81a1ed62f082533889edeb96e23',1,'rbuffer.h']]],
-  ['reference_5fg_1',['REFERENCE_G',['../a00029.html#a155d0c26a927635e559f28c2c71b36af',1,'mems.c']]],
-  ['rlib_5fctype_5fcntrl_2',['RLIB_CTYPE_CNTRL',['../a00050.html#a162537945c848d0422625fb2b69649b1',1,'rlib.h']]],
-  ['rlib_5fctype_5fdigit_3',['RLIB_CTYPE_DIGIT',['../a00050.html#a691dee6868cb969808f908810e170091',1,'rlib.h']]],
-  ['rlib_5fctype_5fgraph_4',['RLIB_CTYPE_GRAPH',['../a00050.html#adb5933facb5734c81a3ed544cd2f4614',1,'rlib.h']]],
-  ['rlib_5fctype_5flower_5',['RLIB_CTYPE_LOWER',['../a00050.html#ae4a1bbbf810b33c3bba28171179cd8ed',1,'rlib.h']]],
-  ['rlib_5fctype_5fpunct_6',['RLIB_CTYPE_PUNCT',['../a00050.html#a2e63fd941771b656c364aaa4497032e3',1,'rlib.h']]],
-  ['rlib_5fctype_5fspace_7',['RLIB_CTYPE_SPACE',['../a00050.html#ae51655f612db4819cdca585ba6325feb',1,'rlib.h']]],
-  ['rlib_5fctype_5fupper_8',['RLIB_CTYPE_UPPER',['../a00050.html#afc1793f8da30e38c6e57d3ecda08f457',1,'rlib.h']]],
-  ['rlib_5fctype_5fxdigit_9',['RLIB_CTYPE_XDIGIT',['../a00050.html#a4c324f74659d3bcd0945ecf6d184167e',1,'rlib.h']]],
-  ['rlib_5fuse_5fctype_10',['RLIB_USE_CTYPE',['../a00047.html#a5a0ffaa23d5c44bd5557dcbe61b587cf',1,'rlibconfig.h']]],
-  ['rlib_5fuse_5fmemcpy_11',['RLIB_USE_MEMCPY',['../a00047.html#a50f7b9f1da552c64267f2ce620b08e4e',1,'rlibconfig.h']]],
-  ['rlib_5fuse_5fmemset_12',['RLIB_USE_MEMSET',['../a00047.html#a29d41e5872bd81b61d9435f6f01026c9',1,'rlibconfig.h']]],
-  ['rlib_5fuse_5fstrcpy_13',['RLIB_USE_STRCPY',['../a00047.html#a0abbeb5305d72fa1f2bd71d9b9cf795d',1,'rlibconfig.h']]],
-  ['rlib_5fuse_5fstrlen_14',['RLIB_USE_STRLEN',['../a00047.html#a8af8b07ac64452404c4f41aba1369722',1,'rlibconfig.h']]]
+  ['printf_0',['printf',['../a00074.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9',1,'printf.h']]],
+  ['printf_5fdefault_5ffloat_5fprecision_1',['PRINTF_DEFAULT_FLOAT_PRECISION',['../a00008.html#ab6f8f053fe123435128cfcff1d407d75',1,'printf.c']]],
+  ['printf_5fftoa_5fbuffer_5fsize_2',['PRINTF_FTOA_BUFFER_SIZE',['../a00008.html#af7aeb1c970d5c2bf5fada4eaca516a25',1,'printf.c']]],
+  ['printf_5fmax_5ffloat_3',['PRINTF_MAX_FLOAT',['../a00008.html#a3efdab8617b9e4d7f01a570ce44e8d2d',1,'printf.c']]],
+  ['printf_5fntoa_5fbuffer_5fsize_4',['PRINTF_NTOA_BUFFER_SIZE',['../a00008.html#a4278b980717163a8ef983ce3fbf0b9db',1,'printf.c']]],
+  ['printf_5fsupport_5fexponential_5',['PRINTF_SUPPORT_EXPONENTIAL',['../a00008.html#a7698906c40c5f8210d173b278625feaa',1,'printf.c']]],
+  ['printf_5fsupport_5ffloat_6',['PRINTF_SUPPORT_FLOAT',['../a00008.html#ac65831bb84fde6008edd159836e82eed',1,'printf.c']]],
+  ['printf_5fsupport_5flong_5flong_7',['PRINTF_SUPPORT_LONG_LONG',['../a00008.html#a34aa02fd74c9f366b87312cf708dc9e1',1,'printf.c']]],
+  ['printf_5fsupport_5fptrdiff_5ft_8',['PRINTF_SUPPORT_PTRDIFF_T',['../a00008.html#af341191ed47c98ec35beaa7bb8db8e75',1,'printf.c']]]
 ];

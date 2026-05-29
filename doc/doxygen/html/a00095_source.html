@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: apdialog.h Source File</title>
+<title>Nauteff auto pilot: ahrs.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,86 +63,180 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_f6024555edb91c92286789204247ac6f.html">tasks</a></li><li class="navelem"><a class="el" href="dir_96b134f082932b0ffaad969aba350d0a.html">inc</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_9dfa3f9a64349c3632ba595b490a8ee1.html">compute</a></li><li class="navelem"><a class="el" href="dir_a916071c727a11f0597e20cb00a44bbc.html">inc</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">apdialog.h</div></div>
+  <div class="headertitle"><div class="title">ahrs.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="a00095.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">MIT License</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"></span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">Copyright (c) 2025 Emmanuel Gautier / Nauteff</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"></span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"></span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">copies or substantial portions of the Software.</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"></span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">SOFTWARE.</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">*/</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">extern</span> QueueHandle_t <a class="code hl_variable" href="a00095.html#ad807948520aebc2ae5bb6f18821e1275">msgQueueDialogIn</a>;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">extern</span> QueueHandle_t <a class="code hl_variable" href="a00095.html#a214cddb0898e8fb7e1594fe39b87bad7">msgQueueDialogOut</a>;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="a00095.html#ac9746733d00092ea5ca7375ba48240b1">   28</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00095.html#ac9746733d00092ea5ca7375ba48240b1">taskDialogIn</a>(<span class="keywordtype">void</span> *param);</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="a00095.html#aaf437009039ed90f4ca29bcdde9a2b31">   29</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00095.html#aaf437009039ed90f4ca29bcdde9a2b31">taskDialogOut</a>(<span class="keywordtype">void</span> *param);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="a00095.html#a22da3d1b29b0ad1eff58eeee2306d4eb">   30</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00095.html#a22da3d1b29b0ad1eff58eeee2306d4eb">taskDialogBis</a>(<span class="keywordtype">void</span> *param);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keywordtype">int</span> <a class="code hl_function" href="a00095.html#aba1fed95c25f958dfba1f4c345d56455">init_taskDialogIn</a>();</div>
+<a href="a00095.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef AHRS_H</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define AHRS_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="a00119.html">geom.h</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="a00107.html">quat.h</a>&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">//#include &quot;ahrssimple.h&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="a00095.html#a8ac904d83063ec9b661ba6d9e2a6b453">    9</a></span><span class="preprocessor">#define AHRS_TYPES_NUMBER 1</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="a00095.html#a5653958ade3b660d54e5f617728cd76e">   11</a></span><span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea0257e55fbf1b896515a8e7e0428ebf03">   12</a></span>    <a class="code hl_enumvalue" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea0257e55fbf1b896515a8e7e0428ebf03">AHRS_TYPE_NONE</a> = -1,</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea7041b045e6327a5fa882dec5bbc6610c">   13</a></span>    <a class="code hl_enumvalue" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea7041b045e6327a5fa882dec5bbc6610c">AHRS_TYPE_SIMPLE</a> = 0,</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea410b6edba9f4a9516086953e94a004d0">   14</a></span>    <a class="code hl_enumvalue" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea410b6edba9f4a9516086953e94a004d0">AHRS_TYPE_QUAT</a>,</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea05d4544068a22deab8c48c0897617716">   15</a></span>    <a class="code hl_enumvalue" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea05d4544068a22deab8c48c0897617716">AHRS_TYPE_DT0058</a>,</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="comment">//AHRS_TYPE_MADGWICK,</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="comment">//AHRS_TYPE_KALMAN,</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="comment">//AHRS_TYPE_MAHONY,</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>} <a class="code hl_enumeration" href="a00095.html#a5653958ade3b660d54e5f617728cd76e">AHRS_Types</a> ;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="a00182.html">   21</a></span><span class="keyword">typedef</span> <span class="keyword">struct</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>{</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="a00182.html#a860797dc64933f845ab791229145cf02">   23</a></span>    <a class="code hl_struct" href="a00198.html">Vector3f</a> <a class="code hl_variable" href="a00182.html#a860797dc64933f845ab791229145cf02">acc</a>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="a00182.html#adae4b4efdb69c44d446bf9693182ae69">   24</a></span>    <a class="code hl_struct" href="a00198.html">Vector3f</a> <a class="code hl_variable" href="a00182.html#adae4b4efdb69c44d446bf9693182ae69">gyr</a>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="a00182.html#a599074d98b402c03811160e5355d2363">   25</a></span>    <a class="code hl_struct" href="a00198.html">Vector3f</a> <a class="code hl_variable" href="a00182.html#a599074d98b402c03811160e5355d2363">mag</a>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="a00182.html#a31d7247ce6aefa3f873d8235e8aef5c5">   26</a></span>    <span class="keywordtype">float</span> roll, pitch, <a class="code hl_variable" href="a00182.html#a31d7247ce6aefa3f873d8235e8aef5c5">heading</a>;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="a00182.html#af5b203955357748d3db093894b297fca">   27</a></span>    <span class="keywordtype">float</span> rollRate, <a class="code hl_variable" href="a00182.html#af5b203955357748d3db093894b297fca">pitchRate</a>, yawRate;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="a00182.html#ae17fa6423e397010fdf2fe8c8d56188e">   28</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="a00182.html#ae17fa6423e397010fdf2fe8c8d56188e">initialized</a>;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="a00182.html#a22ce949ce585b6b511a9cd1da099feea">   29</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="a00182.html#a22ce949ce585b6b511a9cd1da099feea">magVsGyr</a>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="a00182.html#a00bbef706604271826ea35d68a6e72c8">   30</a></span>    <a class="code hl_struct" href="a00230.html">Quaternionf</a> <a class="code hl_variable" href="a00182.html#a00bbef706604271826ea35d68a6e72c8">orientation</a>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="a00182.html#abefcd5b7d2a074ea3348b8876d18c651">   31</a></span>    <span class="keywordtype">float</span>  <a class="code hl_variable" href="a00182.html#abefcd5b7d2a074ea3348b8876d18c651">hdg_x</a>, hdg_y;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>} <a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>;</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="a00180.html">   34</a></span><span class="keyword">typedef</span> <span class="keyword">struct</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>{</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="a00180.html#aa3add4608c5aacef546c66fcde004bac">   36</a></span>    uint32_t <a class="code hl_variable" href="a00180.html#aa3add4608c5aacef546c66fcde004bac">msgType</a>; <span class="comment">// Code de message</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">union</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    {</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keyword">struct</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        {</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="comment">/* Ces valeurs sont envoyées par une interruption */</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="comment">/* Elles ne doivent pas être de type float */</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="a00180.html#ab2ec86e54158935652259cb8c4b7acd9">   43</a></span>            uint16_t <a class="code hl_variable" href="a00180.html#ab2ec86e54158935652259cb8c4b7acd9">adc_power</a>;   <span class="comment">/* Tension d&#39;alimentation */</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="a00180.html#a79bd25a810f58a70bcd113cfdeaea021">   44</a></span>            uint16_t <a class="code hl_variable" href="a00180.html#a79bd25a810f58a70bcd113cfdeaea021">adc_current</a>; <span class="comment">/* Courant moteur */</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="a00180.html#a215873f443506b6be6e7387c09b1eb2e">   45</a></span>        } motorpwr;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="a00186.html">   34</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span>{</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="a00186.html#a7f43de17586a621530b46f88c65edc6e">   35</a></span>    void (*<a class="code hl_function" href="a00095.html#a618298c6bba8b28006f83840c64108fd">AHRS_init</a>) (<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>*);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="a00186.html#a4d767f1df021f3b3ac47dc08e5cd7b0b">   36</a></span>    float (*<a class="code hl_function" href="a00095.html#a56484f46471712bfc47bd066488b8511">AHRS_get_roll</a>)(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>*);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="a00186.html#a500bf5b704b1503e1d6df6cffe125f22">   37</a></span>    float (*<a class="code hl_function" href="a00095.html#afd68e05312decd599783b33b3da7b1d3">AHRS_get_pitch</a>)(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>*);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="a00186.html#a156c764ad97108141abd1c587786537f">   38</a></span>    float (*<a class="code hl_function" href="a00095.html#aafbe1e32e529a951c5a7b2abc0d803a3">AHRS_get_heading</a>)(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>*);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="a00186.html#a5736c3fbb80a67038c731db5823b9056">   39</a></span>    float (*<a class="code hl_function" href="a00095.html#aead537e023527d91301cd5ca17bd9c17">AHRS_get_yawRate</a>)(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>*);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="a00186.html#a64cfcbff39be75e64cc2cc3a400573ec">   40</a></span>    void (*<a class="code hl_function" href="a00095.html#aa841e662fd69e3fc2a25e9987100e499">AHRS_set_mag_vs_gyr_prop</a>)(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>*, <span class="keywordtype">float</span> prop);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="a00186.html#ab04d25a4d3f2482c3f91f3a6ccc5a990">   41</a></span>    <a class="code hl_function" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> (*<a class="code hl_function" href="a00095.html#ae25330d51426485223f6ef1b5ba8e5c6">AHRS_update</a>)(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>*, <a class="code hl_struct" href="a00198.html">Vector3f</a> *acc, <a class="code hl_struct" href="a00198.html">Vector3f</a> *gyr, <a class="code hl_struct" href="a00198.html">Vector3f</a> *mag, <span class="keywordtype">float</span> deltat);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="a00186.html#ab5c1de95c222d31ffd7be1fbadfb1f88">   42</a></span>    <a class="code hl_struct" href="a00230.html">Quaternionf</a> (*<a class="code hl_function" href="a00095.html#ae991b3a46353130b66e20d8cb3053d88">AHRS_get_Quaternion</a>)(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a>*);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>} <a class="code hl_struct" href="a00186.html">AHRS_Interface_t</a>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_struct" href="a00186.html">AHRS_Interface_t</a> *<a class="code hl_variable" href="a00095.html#ad2438ce1a9d965da439db90ddd01a0e8">AHRS_Interfaces</a>[];</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">struct</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        {</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="a00180.html#a02015b9b90fcecd0d300753b0e83de15">   49</a></span>            <span class="keywordtype">float</span> <a class="code hl_variable" href="a00180.html#a02015b9b90fcecd0d300753b0e83de15">heading</a>;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="a00180.html#a7fe26f3ad2aa2d97a40f6cecc33d0a58">   50</a></span>            <span class="keywordtype">float</span> <a class="code hl_variable" href="a00180.html#a7fe26f3ad2aa2d97a40f6cecc33d0a58">pitch</a>;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="a00180.html#a5a19dd7f4c364cbd11292ee1e45baac0">   51</a></span>            <span class="keywordtype">float</span> <a class="code hl_variable" href="a00180.html#a5a19dd7f4c364cbd11292ee1e45baac0">roll</a>;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="a00180.html#a74a86ab1a05c623578269f17e9f3ee37">   52</a></span>        } MEMsAngles;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * @brief Initialise the AHRS_status_t structure.</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * @param mstatus Pointer to the AHRS_status_t structure to initialize.</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * return None.</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keywordtype">void</span> <a class="code hl_function" href="a00095.html#a618298c6bba8b28006f83840c64108fd">AHRS_init</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">struct</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        {</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="a00180.html#a148ebc648bbdee1d03de6b17df4d7543">   56</a></span>            uint32_t <a class="code hl_variable" href="a00180.html#a148ebc648bbdee1d03de6b17df4d7543">errorCode</a>; <span class="comment">// Code d&#39;erreur</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="a00180.html#aff85a0c8389354c85af17f2949018130">   57</a></span>        } error;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="a00180.html#acd153b620f834e98386b6097bfea1e2f">   58</a></span>    } data;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>} <a class="code hl_struct" href="a00180.html">MsgDialog_t</a>;</div>
-<div class="ttc" id="aa00095_html_a214cddb0898e8fb7e1594fe39b87bad7"><div class="ttname"><a href="a00095.html#a214cddb0898e8fb7e1594fe39b87bad7">msgQueueDialogOut</a></div><div class="ttdeci">QueueHandle_t msgQueueDialogOut</div><div class="ttdef"><b>Definition:</b> apdialog.c:127</div></div>
-<div class="ttc" id="aa00095_html_a22da3d1b29b0ad1eff58eeee2306d4eb"><div class="ttname"><a href="a00095.html#a22da3d1b29b0ad1eff58eeee2306d4eb">taskDialogBis</a></div><div class="ttdeci">void taskDialogBis(void *param)</div></div>
-<div class="ttc" id="aa00095_html_aaf437009039ed90f4ca29bcdde9a2b31"><div class="ttname"><a href="a00095.html#aaf437009039ed90f4ca29bcdde9a2b31">taskDialogOut</a></div><div class="ttdeci">void taskDialogOut(void *param)</div></div>
-<div class="ttc" id="aa00095_html_aba1fed95c25f958dfba1f4c345d56455"><div class="ttname"><a href="a00095.html#aba1fed95c25f958dfba1f4c345d56455">init_taskDialogIn</a></div><div class="ttdeci">int init_taskDialogIn()</div><div class="ttdef"><b>Definition:</b> apdialog.c:129</div></div>
-<div class="ttc" id="aa00095_html_ac9746733d00092ea5ca7375ba48240b1"><div class="ttname"><a href="a00095.html#ac9746733d00092ea5ca7375ba48240b1">taskDialogIn</a></div><div class="ttdeci">void taskDialogIn(void *param)</div></div>
-<div class="ttc" id="aa00095_html_ad807948520aebc2ae5bb6f18821e1275"><div class="ttname"><a href="a00095.html#ad807948520aebc2ae5bb6f18821e1275">msgQueueDialogIn</a></div><div class="ttdeci">QueueHandle_t msgQueueDialogIn</div><div class="ttdef"><b>Definition:</b> apdialog.c:126</div></div>
-<div class="ttc" id="aa00180_html"><div class="ttname"><a href="a00180.html">MsgDialog_t</a></div><div class="ttdef"><b>Definition:</b> apdialog.h:35</div></div>
-<div class="ttc" id="aa00180_html_a02015b9b90fcecd0d300753b0e83de15"><div class="ttname"><a href="a00180.html#a02015b9b90fcecd0d300753b0e83de15">MsgDialog_t::heading</a></div><div class="ttdeci">float heading</div><div class="ttdef"><b>Definition:</b> apdialog.h:49</div></div>
-<div class="ttc" id="aa00180_html_a148ebc648bbdee1d03de6b17df4d7543"><div class="ttname"><a href="a00180.html#a148ebc648bbdee1d03de6b17df4d7543">MsgDialog_t::errorCode</a></div><div class="ttdeci">uint32_t errorCode</div><div class="ttdef"><b>Definition:</b> apdialog.h:56</div></div>
-<div class="ttc" id="aa00180_html_a5a19dd7f4c364cbd11292ee1e45baac0"><div class="ttname"><a href="a00180.html#a5a19dd7f4c364cbd11292ee1e45baac0">MsgDialog_t::roll</a></div><div class="ttdeci">float roll</div><div class="ttdef"><b>Definition:</b> apdialog.h:51</div></div>
-<div class="ttc" id="aa00180_html_a79bd25a810f58a70bcd113cfdeaea021"><div class="ttname"><a href="a00180.html#a79bd25a810f58a70bcd113cfdeaea021">MsgDialog_t::adc_current</a></div><div class="ttdeci">uint16_t adc_current</div><div class="ttdef"><b>Definition:</b> apdialog.h:44</div></div>
-<div class="ttc" id="aa00180_html_a7fe26f3ad2aa2d97a40f6cecc33d0a58"><div class="ttname"><a href="a00180.html#a7fe26f3ad2aa2d97a40f6cecc33d0a58">MsgDialog_t::pitch</a></div><div class="ttdeci">float pitch</div><div class="ttdef"><b>Definition:</b> apdialog.h:50</div></div>
-<div class="ttc" id="aa00180_html_aa3add4608c5aacef546c66fcde004bac"><div class="ttname"><a href="a00180.html#aa3add4608c5aacef546c66fcde004bac">MsgDialog_t::msgType</a></div><div class="ttdeci">uint32_t msgType</div><div class="ttdef"><b>Definition:</b> apdialog.h:36</div></div>
-<div class="ttc" id="aa00180_html_ab2ec86e54158935652259cb8c4b7acd9"><div class="ttname"><a href="a00180.html#ab2ec86e54158935652259cb8c4b7acd9">MsgDialog_t::adc_power</a></div><div class="ttdeci">uint16_t adc_power</div><div class="ttdef"><b>Definition:</b> apdialog.h:43</div></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * @brief Compute new orientation whith mems values</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * @parameter mstatus pointer to AHRS structure to update</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * @parameter acc pointer to accelerometer data</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * @parameter gyr pointer to gyroscope data</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * @parameter mag pointer to magnetometer data</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> * @parameter deltat time elapsed since last update in seconds</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * @return 1</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="a00095.html#ae25330d51426485223f6ef1b5ba8e5c6">   63</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="a00095.html#ae25330d51426485223f6ef1b5ba8e5c6">AHRS_update</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                       <a class="code hl_struct" href="a00198.html">Vector3f</a> *acc,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                       <a class="code hl_struct" href="a00198.html">Vector3f</a> *gyr,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                       <a class="code hl_struct" href="a00198.html">Vector3f</a> *mag,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                       <span class="keywordtype">float</span> deltat);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * @brief Get the roll angle from the AHRS status.</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * @return The roll angle in radians.</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00095.html#a56484f46471712bfc47bd066488b8511">AHRS_get_roll</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment"> * @brief Get the pitch angle from the AHRS status.</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"> * @return The pitch angle in radians.</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00095.html#afd68e05312decd599783b33b3da7b1d3">AHRS_get_pitch</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * @brief Get the heading angle from the AHRS status.</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00095.html#aafbe1e32e529a951c5a7b2abc0d803a3">AHRS_get_heading</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * @brief Get the yawrate from the AHRS status.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * yawrate is the rotation speed around z axis, in rad/s</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00095.html#aead537e023527d91301cd5ca17bd9c17">AHRS_get_yawRate</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> * @brief Set the proportion of magnetometer vs gyroscope for heading estimation.</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> * prop is a value between 0 and 1, where 0 means only gyroscope is used and 1 means only magnetometer is used.</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keywordtype">void</span> <a class="code hl_function" href="a00095.html#aa841e662fd69e3fc2a25e9987100e499">AHRS_set_mag_vs_gyr_prop</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus, <span class="keywordtype">float</span> prop);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment"> * @brief Get the quaternion of orientatoin from the AHRS status.</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"> * @return The quaternion of orientation.</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><a class="code hl_struct" href="a00230.html">Quaternionf</a> <a class="code hl_function" href="a00095.html#ae991b3a46353130b66e20d8cb3053d88">AHRS_get_Quaternion</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment"> * @brief compute orientation quaternion from north, east and down</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment"> * @param north coordinates of north from sensor</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"> * @param east coordinates of east from sensor</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"> * @param down coordinates of down (gravity) from sensor</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment"> * @return normalized quaternion of orientation.</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><a class="code hl_struct" href="a00230.html">Quaternionf</a> <a class="code hl_function" href="a00095.html#a3bd7bdeac773e7c317be75ca7331b247">calculer_orientation_navire</a>(<a class="code hl_struct" href="a00198.html">Vector3f</a> north,</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>                                        <a class="code hl_struct" href="a00198.html">Vector3f</a> east,</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>                                        <a class="code hl_struct" href="a00198.html">Vector3f</a> down);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment"> * @brief Converts a quaternion in Euler angles</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment"> * @param quaternion of orientation</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"> * @param roll, pitch, yaw pointers to float to store Euler angles</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="keywordtype">void</span> <a class="code hl_function" href="a00095.html#aa02d5933c6d5e374c3c7e2a6cf7c7ad1">quaternion_vers_euler</a>(<a class="code hl_struct" href="a00230.html">Quaternionf</a> q, <span class="keywordtype">float</span> *roll, <span class="keywordtype">float</span> *pitch, <span class="keywordtype">float</span> *yaw);</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="preprocessor">#endif </span><span class="comment">/* AHRS_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aa00050_html_a8866b5421a676559242721d47fc1fcdc"><div class="ttname"><a href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a></div><div class="ttdeci">int((*fcts[])(ServiceRequest_t *))</div></div>
+<div class="ttc" id="aa00095_html_a3bd7bdeac773e7c317be75ca7331b247"><div class="ttname"><a href="a00095.html#a3bd7bdeac773e7c317be75ca7331b247">calculer_orientation_navire</a></div><div class="ttdeci">Quaternionf calculer_orientation_navire(Vector3f north, Vector3f east, Vector3f down)</div><div class="ttdef"><b>Definition:</b> ahrs.c:93</div></div>
+<div class="ttc" id="aa00095_html_a56484f46471712bfc47bd066488b8511"><div class="ttname"><a href="a00095.html#a56484f46471712bfc47bd066488b8511">AHRS_get_roll</a></div><div class="ttdeci">float AHRS_get_roll(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:61</div></div>
+<div class="ttc" id="aa00095_html_a5653958ade3b660d54e5f617728cd76e"><div class="ttname"><a href="a00095.html#a5653958ade3b660d54e5f617728cd76e">AHRS_Types</a></div><div class="ttdeci">AHRS_Types</div><div class="ttdef"><b>Definition:</b> ahrs.h:11</div></div>
+<div class="ttc" id="aa00095_html_a5653958ade3b660d54e5f617728cd76ea0257e55fbf1b896515a8e7e0428ebf03"><div class="ttname"><a href="a00095.html#a5653958ade3b660d54e5f617728cd76ea0257e55fbf1b896515a8e7e0428ebf03">AHRS_TYPE_NONE</a></div><div class="ttdeci">@ AHRS_TYPE_NONE</div><div class="ttdef"><b>Definition:</b> ahrs.h:12</div></div>
+<div class="ttc" id="aa00095_html_a5653958ade3b660d54e5f617728cd76ea05d4544068a22deab8c48c0897617716"><div class="ttname"><a href="a00095.html#a5653958ade3b660d54e5f617728cd76ea05d4544068a22deab8c48c0897617716">AHRS_TYPE_DT0058</a></div><div class="ttdeci">@ AHRS_TYPE_DT0058</div><div class="ttdef"><b>Definition:</b> ahrs.h:15</div></div>
+<div class="ttc" id="aa00095_html_a5653958ade3b660d54e5f617728cd76ea410b6edba9f4a9516086953e94a004d0"><div class="ttname"><a href="a00095.html#a5653958ade3b660d54e5f617728cd76ea410b6edba9f4a9516086953e94a004d0">AHRS_TYPE_QUAT</a></div><div class="ttdeci">@ AHRS_TYPE_QUAT</div><div class="ttdef"><b>Definition:</b> ahrs.h:14</div></div>
+<div class="ttc" id="aa00095_html_a5653958ade3b660d54e5f617728cd76ea7041b045e6327a5fa882dec5bbc6610c"><div class="ttname"><a href="a00095.html#a5653958ade3b660d54e5f617728cd76ea7041b045e6327a5fa882dec5bbc6610c">AHRS_TYPE_SIMPLE</a></div><div class="ttdeci">@ AHRS_TYPE_SIMPLE</div><div class="ttdef"><b>Definition:</b> ahrs.h:13</div></div>
+<div class="ttc" id="aa00095_html_a618298c6bba8b28006f83840c64108fd"><div class="ttname"><a href="a00095.html#a618298c6bba8b28006f83840c64108fd">AHRS_init</a></div><div class="ttdeci">void AHRS_init(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:47</div></div>
+<div class="ttc" id="aa00095_html_aa02d5933c6d5e374c3c7e2a6cf7c7ad1"><div class="ttname"><a href="a00095.html#aa02d5933c6d5e374c3c7e2a6cf7c7ad1">quaternion_vers_euler</a></div><div class="ttdeci">void quaternion_vers_euler(Quaternionf q, float *roll, float *pitch, float *yaw)</div><div class="ttdef"><b>Definition:</b> ahrs.c:147</div></div>
+<div class="ttc" id="aa00095_html_aa841e662fd69e3fc2a25e9987100e499"><div class="ttname"><a href="a00095.html#aa841e662fd69e3fc2a25e9987100e499">AHRS_set_mag_vs_gyr_prop</a></div><div class="ttdeci">void AHRS_set_mag_vs_gyr_prop(AHRS_Status_t *mstatus, float prop)</div><div class="ttdef"><b>Definition:</b> ahrs.c:81</div></div>
+<div class="ttc" id="aa00095_html_aafbe1e32e529a951c5a7b2abc0d803a3"><div class="ttname"><a href="a00095.html#aafbe1e32e529a951c5a7b2abc0d803a3">AHRS_get_heading</a></div><div class="ttdeci">float AHRS_get_heading(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:71</div></div>
+<div class="ttc" id="aa00095_html_ad2438ce1a9d965da439db90ddd01a0e8"><div class="ttname"><a href="a00095.html#ad2438ce1a9d965da439db90ddd01a0e8">AHRS_Interfaces</a></div><div class="ttdeci">const AHRS_Interface_t * AHRS_Interfaces[]</div><div class="ttdef"><b>Definition:</b> ahrs.c:41</div></div>
+<div class="ttc" id="aa00095_html_ae25330d51426485223f6ef1b5ba8e5c6"><div class="ttname"><a href="a00095.html#ae25330d51426485223f6ef1b5ba8e5c6">AHRS_update</a></div><div class="ttdeci">int AHRS_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)</div></div>
+<div class="ttc" id="aa00095_html_ae991b3a46353130b66e20d8cb3053d88"><div class="ttname"><a href="a00095.html#ae991b3a46353130b66e20d8cb3053d88">AHRS_get_Quaternion</a></div><div class="ttdeci">Quaternionf AHRS_get_Quaternion(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:88</div></div>
+<div class="ttc" id="aa00095_html_aead537e023527d91301cd5ca17bd9c17"><div class="ttname"><a href="a00095.html#aead537e023527d91301cd5ca17bd9c17">AHRS_get_yawRate</a></div><div class="ttdeci">float AHRS_get_yawRate(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:76</div></div>
+<div class="ttc" id="aa00095_html_afd68e05312decd599783b33b3da7b1d3"><div class="ttname"><a href="a00095.html#afd68e05312decd599783b33b3da7b1d3">AHRS_get_pitch</a></div><div class="ttdeci">float AHRS_get_pitch(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:66</div></div>
+<div class="ttc" id="aa00107_html"><div class="ttname"><a href="a00107.html">quat.h</a></div></div>
+<div class="ttc" id="aa00119_html"><div class="ttname"><a href="a00119.html">geom.h</a></div></div>
+<div class="ttc" id="aa00182_html"><div class="ttname"><a href="a00182.html">AHRS_Status_t</a></div><div class="ttdef"><b>Definition:</b> ahrs.h:22</div></div>
+<div class="ttc" id="aa00182_html_a00bbef706604271826ea35d68a6e72c8"><div class="ttname"><a href="a00182.html#a00bbef706604271826ea35d68a6e72c8">AHRS_Status_t::orientation</a></div><div class="ttdeci">Quaternionf orientation</div><div class="ttdef"><b>Definition:</b> ahrs.h:30</div></div>
+<div class="ttc" id="aa00182_html_a22ce949ce585b6b511a9cd1da099feea"><div class="ttname"><a href="a00182.html#a22ce949ce585b6b511a9cd1da099feea">AHRS_Status_t::magVsGyr</a></div><div class="ttdeci">float magVsGyr</div><div class="ttdef"><b>Definition:</b> ahrs.h:29</div></div>
+<div class="ttc" id="aa00182_html_a31d7247ce6aefa3f873d8235e8aef5c5"><div class="ttname"><a href="a00182.html#a31d7247ce6aefa3f873d8235e8aef5c5">AHRS_Status_t::heading</a></div><div class="ttdeci">float heading</div><div class="ttdef"><b>Definition:</b> ahrs.h:26</div></div>
+<div class="ttc" id="aa00182_html_a599074d98b402c03811160e5355d2363"><div class="ttname"><a href="a00182.html#a599074d98b402c03811160e5355d2363">AHRS_Status_t::mag</a></div><div class="ttdeci">Vector3f mag</div><div class="ttdef"><b>Definition:</b> ahrs.h:25</div></div>
+<div class="ttc" id="aa00182_html_a860797dc64933f845ab791229145cf02"><div class="ttname"><a href="a00182.html#a860797dc64933f845ab791229145cf02">AHRS_Status_t::acc</a></div><div class="ttdeci">Vector3f acc</div><div class="ttdef"><b>Definition:</b> ahrs.h:23</div></div>
+<div class="ttc" id="aa00182_html_abefcd5b7d2a074ea3348b8876d18c651"><div class="ttname"><a href="a00182.html#abefcd5b7d2a074ea3348b8876d18c651">AHRS_Status_t::hdg_x</a></div><div class="ttdeci">float hdg_x</div><div class="ttdef"><b>Definition:</b> ahrs.h:31</div></div>
+<div class="ttc" id="aa00182_html_adae4b4efdb69c44d446bf9693182ae69"><div class="ttname"><a href="a00182.html#adae4b4efdb69c44d446bf9693182ae69">AHRS_Status_t::gyr</a></div><div class="ttdeci">Vector3f gyr</div><div class="ttdef"><b>Definition:</b> ahrs.h:24</div></div>
+<div class="ttc" id="aa00182_html_ae17fa6423e397010fdf2fe8c8d56188e"><div class="ttname"><a href="a00182.html#ae17fa6423e397010fdf2fe8c8d56188e">AHRS_Status_t::initialized</a></div><div class="ttdeci">bool initialized</div><div class="ttdef"><b>Definition:</b> ahrs.h:28</div></div>
+<div class="ttc" id="aa00182_html_af5b203955357748d3db093894b297fca"><div class="ttname"><a href="a00182.html#af5b203955357748d3db093894b297fca">AHRS_Status_t::pitchRate</a></div><div class="ttdeci">float pitchRate</div><div class="ttdef"><b>Definition:</b> ahrs.h:27</div></div>
+<div class="ttc" id="aa00186_html"><div class="ttname"><a href="a00186.html">AHRS_Interface_t</a></div><div class="ttdef"><b>Definition:</b> ahrs.h:34</div></div>
+<div class="ttc" id="aa00198_html"><div class="ttname"><a href="a00198.html">Vector3f</a></div><div class="ttdoc">Structure representing a 3D vector with float components.</div><div class="ttdef"><b>Definition:</b> geom.h:55</div></div>
+<div class="ttc" id="aa00230_html"><div class="ttname"><a href="a00230.html">Quaternionf</a></div><div class="ttdoc">Structure representing a quaternion with float components.</div><div class="ttdef"><b>Definition:</b> quat.h:57</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

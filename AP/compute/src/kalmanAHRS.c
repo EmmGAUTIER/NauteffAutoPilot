@@ -49,38 +49,41 @@
 /* Fonctions sécurisées pour éviter les erreurs numériques */
 static float safe_asin(const float x)
 {
-    if (x >= 1.0f)
+    if(x >= 1.0f)
         return M_PI / 2.0f;
-    if (x <= -1.0f)
+
+    if(x <= -1.0f)
         return -M_PI / 2.0f;
+
     return asinf(x);
 }
 
 static float safe_atan2(const float y, const float x)
 {
-    if ((x == 0.0f) && (y == 0.0f))
+    if((x == 0.0f) && (y == 0.0f))
         return 0.0f;
+
     return atan2f(y, x);
 }
 
 AHRSStatus_t AHRS_init(AHRSState_t *ahrs)
 {
     ahrs->quaternion = (Quaternionf
-            )
-            { 1.0F, 0.F, 0.F, 0.F };
+                       )
+    { 1.0F, 0.F, 0.F, 0.F };
     ahrs->roll = 0;
     ahrs->pitch = 0;
     ahrs->heading = 0;
     ahrs->gravity = (Vector3f
-            )
-            { 0.F, 0.F, 0.F };
+                    )
+    { 0.F, 0.F, 0.F };
     ahrs->status = AHRS_UNINITIALIZED;
     return AHRS_OK;
 }
 
 AHRSStatus_t AHRS_firstUpdate(AHRSState_t *const ahrs,
-        const Vector3f *const acc, const Vector3f *const gyr,
-        const Vector3f *const mag, const float deltat)
+                              const Vector3f *const acc, const Vector3f *const gyr,
+                              const Vector3f *const mag, const float deltat)
 {
 
     //ahrs->quaternion =
@@ -88,8 +91,8 @@ AHRSStatus_t AHRS_firstUpdate(AHRSState_t *const ahrs,
 }
 
 AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
-        const Vector3f *const gyr, const Vector3f *const mag,
-        const float deltat)
+                         const Vector3f *const gyr, const Vector3f *const mag,
+                         const float deltat)
 {
 
     char message[100];
@@ -105,11 +108,11 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
     /* East direction is the cross product of acceleration and magnetic field */
     /* It has to be normalized.  */
     east_body = vector3f_getNormalized(
-            vector3f_getCrossProduct(acc_body, *mag));
+                    vector3f_getCrossProduct(acc_body, *mag));
 
     /* North direction is the cross product of east and acceleration */
     north_body = vector3f_getNormalized(
-            vector3f_getCrossProduct(east_body, acc_body));
+                     vector3f_getCrossProduct(east_body, acc_body));
 
     // Vector3f v1 = north_body;
 
@@ -122,7 +125,7 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
 
     int cas = 0;
 
-    if (tr > 0.0f)
+    if(tr > 0.0f)
     {
         float S = sqrtf(tr + 1.0f) * 2.0f;
         qm.w = 0.25f * S;
@@ -131,7 +134,7 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
         qm.z = (north_body.y - east_body.x) / S;
         cas = 1;
     }
-    else if (north_body.x > east_body.y && north_body.x > acc_body.z)
+    else if(north_body.x > east_body.y && north_body.x > acc_body.z)
     {
         float S = sqrtf(1.0f + north_body.x - east_body.y - acc_body.z) * 2.0f;
         qm.w = (east_body.z - acc_body.y) / S;
@@ -140,7 +143,7 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
         qm.z = (north_body.z + acc_body.x) / S;
         cas = 2;
     }
-    else if (east_body.y > acc_body.z)
+    else if(east_body.y > acc_body.z)
     {
         float S = sqrtf(1.0f + east_body.y - north_body.x - acc_body.z) * 2.0f;
         qm.w = (acc_body.x - north_body.z) / S;
@@ -159,7 +162,7 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
         cas = 4;
     }
 
-    if (ahrs->status == AHRS_UNINITIALIZED)
+    if(ahrs->status == AHRS_UNINITIALIZED)
     {
         ahrs->quaternion = qm;
     }
@@ -173,12 +176,12 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
         //qe.z = ahrs->quaternion.w*sz + ahrs->quaternion.x*sy - ahrs->quaternion.y*sx + ahrs->quaternion.z*cw;
 
         ahrs->quaternion = Quaternionf_add(
-                Quaternionf_getScaled(qm, AHRS_ALPHA),
-                Quaternionf_getScaled(qrot, (1.0f - AHRS_ALPHA)));
+                               Quaternionf_getScaled(qm, AHRS_ALPHA),
+                               Quaternionf_getScaled(qrot, (1.0f - AHRS_ALPHA)));
     }
 
     snprintf(message, sizeof message,
-            "quat  %d  %+7.3f  %+7.3f %+7.3f %+7.3f\n", cas, qm.w, qm.x, qm.y, qm.z);
+             "quat  %d  %+7.3f  %+7.3f %+7.3f %+7.3f\n", cas, qm.w, qm.x, qm.y, qm.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
 
     /* Compute Euler angles : roll pitch and heading */
@@ -190,10 +193,13 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
 
     /* pitch (Y, East) */
     float s = 2.0f * (qm.w * qm.y - qm.z * qm.x);
-    if (s > 1.0f)
+
+    if(s > 1.0f)
         s = 1.0f;
-    if (s < -1.0f)
+
+    if(s < -1.0f)
         s = -1.0f;
+
     ahrs->pitch = asinf(s);
 
     /* yaw (Z, Down) */
@@ -209,18 +215,18 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
 
 /* Fonction principale AHRS_update */
 AHRSStatus_t AHRS_updateold(AHRSState_t *const ahrs, const Vector3f *const acc,
-        const Vector3f *const gyr, const Vector3f *const mag,
-        const float deltat)
+                            const Vector3f *const gyr, const Vector3f *const mag,
+                            const float deltat)
 {
 
-    if (ahrs->status == AHRS_UNINITIALIZED)
+    if(ahrs->status == AHRS_UNINITIALIZED)
     {
         //AHRS_firstUpdate(&ahrs, &acc, &gyr, &mag, deltat);
     }
 
     /* --- 1. Calcul du pas adaptatif (AHRS_calculate_adaptive_step) --- */
     const float omega = sqrtf(
-            gyr->x * gyr->x + gyr->y * gyr->y + gyr->z * gyr->z);
+                            gyr->x * gyr->x + gyr->y * gyr->y + gyr->z * gyr->z);
     const float mu = AHRS_MU0 + AHRS_BETA * omega * deltat;
 
     /* --- 2. Normalisation de l'accélération --- */
@@ -235,8 +241,10 @@ AHRSStatus_t AHRS_updateold(AHRSState_t *const ahrs, const Vector3f *const acc,
         Quaternionf g_body_quat =
         { 0.0f, g_nav.x, g_nav.y, g_nav.z };
         Quaternionf q_conj =
-        { ahrs->quaternion.w, -ahrs->quaternion.x, -ahrs->quaternion.y,
-                -ahrs->quaternion.z };
+        {
+            ahrs->quaternion.w, -ahrs->quaternion.x, -ahrs->quaternion.y,
+            -ahrs->quaternion.z
+        };
         Quaternionf temp1 = Quaternionf_mul(ahrs->quaternion, g_body_quat);
         Quaternionf g_body_quat_rotated = Quaternionf_mul(temp1, q_conj);
         Vector3f g_body =
@@ -244,9 +252,11 @@ AHRSStatus_t AHRS_updateold(AHRSState_t *const ahrs, const Vector3f *const acc,
 
         /* Erreur entre la mesure et la prédiction */
         const Vector3f error =
-        { accel_normalized.y * g_body.z - accel_normalized.z * g_body.y,
-                accel_normalized.z * g_body.x - accel_normalized.x * g_body.z,
-                accel_normalized.x * g_body.y - accel_normalized.y * g_body.x };
+        {
+            accel_normalized.y * g_body.z - accel_normalized.z * g_body.y,
+            accel_normalized.z * g_body.x - accel_normalized.x * g_body.z,
+            accel_normalized.x * g_body.y - accel_normalized.y * g_body.x
+        };
 
         /* Gradient de la fonction d'erreur */
         Quaternionf error_quat =
@@ -266,25 +276,25 @@ AHRSStatus_t AHRS_updateold(AHRSState_t *const ahrs, const Vector3f *const acc,
             /* Prédiction : q_pred = q_prev + 0.5 * q_prev ⊗ ω * deltat */
             Quaternionf q_pred;
             q_pred.w = ahrs->quaternion.w
-                    + 0.5f * deltat
-                            * (-ahrs->quaternion.x * gyr->x
-                                    - ahrs->quaternion.y * gyr->y
-                                    - ahrs->quaternion.z * gyr->z);
+                       + 0.5f * deltat
+                       * (-ahrs->quaternion.x * gyr->x
+                          - ahrs->quaternion.y * gyr->y
+                          - ahrs->quaternion.z * gyr->z);
             q_pred.x = ahrs->quaternion.x
-                    + 0.5f * deltat
-                            * (ahrs->quaternion.w * gyr->x
-                                    + ahrs->quaternion.y * gyr->z
-                                    - ahrs->quaternion.z * gyr->y);
+                       + 0.5f * deltat
+                       * (ahrs->quaternion.w * gyr->x
+                          + ahrs->quaternion.y * gyr->z
+                          - ahrs->quaternion.z * gyr->y);
             q_pred.y = ahrs->quaternion.y
-                    + 0.5f * deltat
-                            * (ahrs->quaternion.w * gyr->y
-                                    - ahrs->quaternion.x * gyr->z
-                                    + ahrs->quaternion.z * gyr->x);
+                       + 0.5f * deltat
+                       * (ahrs->quaternion.w * gyr->y
+                          - ahrs->quaternion.x * gyr->z
+                          + ahrs->quaternion.z * gyr->x);
             q_pred.z = ahrs->quaternion.z
-                    + 0.5f * deltat
-                            * (ahrs->quaternion.w * gyr->z
-                                    + ahrs->quaternion.x * gyr->y
-                                    - ahrs->quaternion.y * gyr->x);
+                       + 0.5f * deltat
+                       * (ahrs->quaternion.w * gyr->z
+                          + ahrs->quaternion.x * gyr->y
+                          - ahrs->quaternion.y * gyr->x);
             q_pred = Quaternionf_getNormalized(q_pred);
 
             /* Mise à jour : Correction avec le quaternion observé (gain fixe) */
@@ -304,8 +314,10 @@ AHRSStatus_t AHRS_updateold(AHRSState_t *const ahrs, const Vector3f *const acc,
         Quaternionf g_nav_quat =
         { 0.0f, g_nav.x, g_nav.y, g_nav.z };
         Quaternionf q_conj =
-        { ahrs->quaternion.w, -ahrs->quaternion.x, -ahrs->quaternion.y,
-                -ahrs->quaternion.z };
+        {
+            ahrs->quaternion.w, -ahrs->quaternion.x, -ahrs->quaternion.y,
+            -ahrs->quaternion.z
+        };
         Quaternionf temp1 = Quaternionf_mul(ahrs->quaternion, g_nav_quat);
         Quaternionf gravity_quat = Quaternionf_mul(temp1, q_conj);
         ahrs->gravity.x = gravity_quat.x;
@@ -328,40 +340,45 @@ AHRSStatus_t AHRS_updateold(AHRSState_t *const ahrs, const Vector3f *const acc,
 
         /* roll = asin(down · right) */
         ahrs->roll = safe_asin(
-                down_body.x * right_body.x + down_body.y * right_body.y
-                        + down_body.z * right_body.z);
+                         down_body.x * right_body.x + down_body.y * right_body.y
+                         + down_body.z * right_body.z);
 
         /* pitch = asin(down · forward) */
         ahrs->pitch = safe_asin(
-                down_body.x * forward_body.x + down_body.y * forward_body.y
-                        + down_body.z * forward_body.z);
+                          down_body.x * forward_body.x + down_body.y * forward_body.y
+                          + down_body.z * forward_body.z);
 
         /* Calcul du cap (heading) via le magnétomètre */
         {
             Quaternionf mag_quat =
             { 0.0f, mag->x, mag->y, mag->z };
             Quaternionf mag_body_quat = Quaternionf_mul(ahrs->quaternion,
-                    mag_quat);
+                                        mag_quat);
             Quaternionf q_conj =
-            { ahrs->quaternion.w, -ahrs->quaternion.x, -ahrs->quaternion.y,
-                    -ahrs->quaternion.z };
+            {
+                ahrs->quaternion.w, -ahrs->quaternion.x, -ahrs->quaternion.y,
+                -ahrs->quaternion.z
+            };
             Quaternionf mag_body_quat_rotated = Quaternionf_mul(mag_body_quat,
-                    q_conj);
+                                                q_conj);
             Vector3f mag_body =
-            { mag_body_quat_rotated.x, mag_body_quat_rotated.y, 0.0f /* Projection dans le plan XY */
+            {
+                mag_body_quat_rotated.x, mag_body_quat_rotated.y, 0.0f /* Projection dans le plan XY */
             };
             mag_body = vector3f_getNormalized(mag_body);
 
             const Vector3f north_body =
             { 1.0f, 0.0f, 0.0f }; /* Axes X (Nord) */
             const Vector3f cross =
-            { north_body.y * mag_body.z - north_body.z * mag_body.y,
-                    north_body.z * mag_body.x - north_body.x * mag_body.z,
-                    north_body.x * mag_body.y - north_body.y * mag_body.x };
+            {
+                north_body.y * mag_body.z - north_body.z * mag_body.y,
+                north_body.z * mag_body.x - north_body.x * mag_body.z,
+                north_body.x * mag_body.y - north_body.y * mag_body.x
+            };
 
             /* heading = atan2((north × mag).z, north · mag) */
             ahrs->heading = safe_atan2(cross.z,
-                    north_body.x * mag_body.x + north_body.y * mag_body.y);
+                                       north_body.x * mag_body.x + north_body.y * mag_body.y);
         }
     }
 

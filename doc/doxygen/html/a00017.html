@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: madgwick.c File Reference</title>
+<title>Nauteff auto pilot: ahrs.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,92 +70,188 @@ $(function() {
   <div class="summary">
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">madgwick.c File Reference</div></div>
+  <div class="headertitle"><div class="title">ahrs.c File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;math.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="a00080_source.html">geom.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00074_source.html">quat.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00077_source.html">madgwick.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &lt;math.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="a00080_source.html">util.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00095_source.html">ahrs.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00089_source.html">ahrssimple.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00098_source.html">ahrsquat.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00113_source.html">ahrsdt0058.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for madgwick.c:</div>
+Include dependency graph for ahrs.c:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00018.png" border="0" usemap="#amadgwick_8c" alt=""/></div>
-<map name="amadgwick_8c" id="amadgwick_8c">
-<area shape="rect" title=" " alt="" coords="128,5,228,32"/>
-<area shape="rect" title=" " alt="" coords="5,80,73,107"/>
-<area shape="rect" href="a00080.html" title=" " alt="" coords="97,80,168,107"/>
-<area shape="rect" href="a00074.html" title=" " alt="" coords="192,80,255,107"/>
-<area shape="rect" href="a00077.html" title=" " alt="" coords="279,80,381,107"/>
-<area shape="rect" title=" " alt="" coords="143,155,213,181"/>
+<div class="center"><img src="a00018.png" border="0" usemap="#aahrs_8c" alt=""/></div>
+<map name="aahrs_8c" id="aahrs_8c">
+<area shape="rect" title=" " alt="" coords="268,5,330,32"/>
+<area shape="rect" title=" " alt="" coords="214,229,285,256"/>
+<area shape="rect" title=" " alt="" coords="31,80,114,107"/>
+<area shape="rect" title=" " alt="" coords="138,80,206,107"/>
+<area shape="rect" href="a00080.html" title=" " alt="" coords="230,80,285,107"/>
+<area shape="rect" href="a00095.html" title=" " alt="" coords="309,80,372,107"/>
+<area shape="rect" href="a00089.html" title=" " alt="" coords="396,80,503,107"/>
+<area shape="rect" href="a00098.html" title=" " alt="" coords="527,80,618,107"/>
+<area shape="rect" href="a00113.html" title=" " alt="" coords="642,80,748,107"/>
+<area shape="rect" href="a00119.html" title=" " alt="" coords="214,155,285,181"/>
+<area shape="rect" href="a00107.html" title=" " alt="" coords="309,155,372,181"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a240b269f71f744adaffbe1000b138d39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a240b269f71f744adaffbe1000b138d39">madgwick_set_beta</a> (float new_beta)</td></tr>
-<tr class="separator:a240b269f71f744adaffbe1000b138d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2733f46f7ddddbbfeb25f3cf2f56759e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a2733f46f7ddddbbfeb25f3cf2f56759e">madgwick_set_zeta</a> (float new_zeta)</td></tr>
-<tr class="separator:a2733f46f7ddddbbfeb25f3cf2f56759e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abed19d3d5accbf5414288e55a905dc2f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00168.html">Quaternionf</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#abed19d3d5accbf5414288e55a905dc2f">madgwick_get_quaternion</a> ()</td></tr>
-<tr class="separator:abed19d3d5accbf5414288e55a905dc2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93cf5a3f91409cb4369bd5edca20d1b0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a93cf5a3f91409cb4369bd5edca20d1b0">madgwick_get_roll</a> ()</td></tr>
-<tr class="separator:a93cf5a3f91409cb4369bd5edca20d1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5796cbdbe339eb2b7f93358df4016285"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a5796cbdbe339eb2b7f93358df4016285">madgwick_get_pitch</a> ()</td></tr>
-<tr class="separator:a5796cbdbe339eb2b7f93358df4016285"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35545f3eaf18562c452661dfce014e93"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a35545f3eaf18562c452661dfce014e93">madgwick_get_yaw</a> ()</td></tr>
-<tr class="separator:a35545f3eaf18562c452661dfce014e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a652a40e332424613364a71667e254137"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a652a40e332424613364a71667e254137">madgwick_get_Euler_angles</a> (float *proll, float *ppitch, float *pyaw)</td></tr>
-<tr class="separator:a652a40e332424613364a71667e254137"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6abbbcfdb675b8c1e2b36d0a9ae1397b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a6abbbcfdb675b8c1e2b36d0a9ae1397b">madgwick_update</a> (float w_x, float w_y, float w_z, float a_x, float a_y, float a_z, float m_x, float m_y, float m_z, float deltat)</td></tr>
-<tr class="memdesc:a6abbbcfdb675b8c1e2b36d0a9ae1397b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filtre de Madgwick - Mise à jour avec gyroscope, accéléromètre et magnétomètre.  <a href="a00017.html#a6abbbcfdb675b8c1e2b36d0a9ae1397b">More...</a><br /></td></tr>
-<tr class="separator:a6abbbcfdb675b8c1e2b36d0a9ae1397b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a618298c6bba8b28006f83840c64108fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a618298c6bba8b28006f83840c64108fd">AHRS_init</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:a618298c6bba8b28006f83840c64108fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56484f46471712bfc47bd066488b8511"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a56484f46471712bfc47bd066488b8511">AHRS_get_roll</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:a56484f46471712bfc47bd066488b8511"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd68e05312decd599783b33b3da7b1d3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#afd68e05312decd599783b33b3da7b1d3">AHRS_get_pitch</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:afd68e05312decd599783b33b3da7b1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafbe1e32e529a951c5a7b2abc0d803a3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#aafbe1e32e529a951c5a7b2abc0d803a3">AHRS_get_heading</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:aafbe1e32e529a951c5a7b2abc0d803a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aead537e023527d91301cd5ca17bd9c17"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#aead537e023527d91301cd5ca17bd9c17">AHRS_get_yawRate</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:aead537e023527d91301cd5ca17bd9c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa841e662fd69e3fc2a25e9987100e499"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#aa841e662fd69e3fc2a25e9987100e499">AHRS_set_mag_vs_gyr_prop</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus, float prop)</td></tr>
+<tr class="separator:aa841e662fd69e3fc2a25e9987100e499"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae991b3a46353130b66e20d8cb3053d88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00230.html">Quaternionf</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#ae991b3a46353130b66e20d8cb3053d88">AHRS_get_Quaternion</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:ae991b3a46353130b66e20d8cb3053d88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bd7bdeac773e7c317be75ca7331b247"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00230.html">Quaternionf</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a3bd7bdeac773e7c317be75ca7331b247">calculer_orientation_navire</a> (<a class="el" href="a00198.html">Vector3f</a> north, <a class="el" href="a00198.html">Vector3f</a> east, <a class="el" href="a00198.html">Vector3f</a> down)</td></tr>
+<tr class="separator:a3bd7bdeac773e7c317be75ca7331b247"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa02d5933c6d5e374c3c7e2a6cf7c7ad1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#aa02d5933c6d5e374c3c7e2a6cf7c7ad1">quaternion_vers_euler</a> (<a class="el" href="a00230.html">Quaternionf</a> q, float *roll, float *pitch, float *yaw)</td></tr>
+<tr class="separator:aa02d5933c6d5e374c3c7e2a6cf7c7ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ae25f6d5bf3f29ee34c638ecb2c993dc7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#ae25f6d5bf3f29ee34c638ecb2c993dc7">SEq_1</a> = 0.866025</td></tr>
-<tr class="separator:ae25f6d5bf3f29ee34c638ecb2c993dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2120a353ab9b63f94445e0122c174666"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a2120a353ab9b63f94445e0122c174666">SEq_2</a> = 0.f</td></tr>
-<tr class="separator:a2120a353ab9b63f94445e0122c174666"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd75cfb8abb6af941ab35e99a9863bcf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#abd75cfb8abb6af941ab35e99a9863bcf">SEq_3</a> = 0.f</td></tr>
-<tr class="separator:abd75cfb8abb6af941ab35e99a9863bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cd67bb03c99afebe3802d131710085d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a9cd67bb03c99afebe3802d131710085d">SEq_4</a> = 0.5f</td></tr>
-<tr class="separator:a9cd67bb03c99afebe3802d131710085d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f05394786ffe2faacd69da28c8e06f3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a1f05394786ffe2faacd69da28c8e06f3">b_x</a> = 1</td></tr>
-<tr class="separator:a1f05394786ffe2faacd69da28c8e06f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7e663f57f5b6933ca491125d452c880"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#ad7e663f57f5b6933ca491125d452c880">b_z</a> = 0</td></tr>
-<tr class="separator:ad7e663f57f5b6933ca491125d452c880"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefabbc5e0bebfe3ad85d4eb66ec57e5c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#aefabbc5e0bebfe3ad85d4eb66ec57e5c">w_bx</a> = 0</td></tr>
-<tr class="separator:aefabbc5e0bebfe3ad85d4eb66ec57e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b6997f5f268f97fa4058089b9a41e73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a1b6997f5f268f97fa4058089b9a41e73">w_by</a> = 0</td></tr>
-<tr class="separator:a1b6997f5f268f97fa4058089b9a41e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a086f18bf5edf965ca3475c1b3f2f52fb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#a086f18bf5edf965ca3475c1b3f2f52fb">w_bz</a> = 0</td></tr>
-<tr class="separator:a086f18bf5edf965ca3475c1b3f2f52fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2438ce1a9d965da439db90ddd01a0e8"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00186.html">AHRS_Interface_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00017.html#ad2438ce1a9d965da439db90ddd01a0e8">AHRS_Interfaces</a> []</td></tr>
+<tr class="separator:ad2438ce1a9d965da439db90ddd01a0e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a652a40e332424613364a71667e254137" name="a652a40e332424613364a71667e254137"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a652a40e332424613364a71667e254137">&#9670;&nbsp;</a></span>madgwick_get_Euler_angles()</h2>
+<a id="aafbe1e32e529a951c5a7b2abc0d803a3" name="aafbe1e32e529a951c5a7b2abc0d803a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafbe1e32e529a951c5a7b2abc0d803a3">&#9670;&nbsp;</a></span>AHRS_get_heading()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void madgwick_get_Euler_angles </td>
+          <td class="memname">float AHRS_get_heading </td>
           <td>(</td>
-          <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>proll</em>, </td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afd68e05312decd599783b33b3da7b1d3" name="afd68e05312decd599783b33b3da7b1d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd68e05312decd599783b33b3da7b1d3">&#9670;&nbsp;</a></span>AHRS_get_pitch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float AHRS_get_pitch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae991b3a46353130b66e20d8cb3053d88" name="ae991b3a46353130b66e20d8cb3053d88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae991b3a46353130b66e20d8cb3053d88">&#9670;&nbsp;</a></span>AHRS_get_Quaternion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00230.html">Quaternionf</a> AHRS_get_Quaternion </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a56484f46471712bfc47bd066488b8511" name="a56484f46471712bfc47bd066488b8511"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56484f46471712bfc47bd066488b8511">&#9670;&nbsp;</a></span>AHRS_get_roll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float AHRS_get_roll </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aead537e023527d91301cd5ca17bd9c17" name="aead537e023527d91301cd5ca17bd9c17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aead537e023527d91301cd5ca17bd9c17">&#9670;&nbsp;</a></span>AHRS_get_yawRate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float AHRS_get_yawRate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a618298c6bba8b28006f83840c64108fd" name="a618298c6bba8b28006f83840c64108fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a618298c6bba8b28006f83840c64108fd">&#9670;&nbsp;</a></span>AHRS_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AHRS_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa841e662fd69e3fc2a25e9987100e499" name="aa841e662fd69e3fc2a25e9987100e499"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa841e662fd69e3fc2a25e9987100e499">&#9670;&nbsp;</a></span>AHRS_set_mag_vs_gyr_prop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AHRS_set_mag_vs_gyr_prop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>ppitch</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>pyaw</em>&#160;</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>prop</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -167,175 +263,29 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a5796cbdbe339eb2b7f93358df4016285" name="a5796cbdbe339eb2b7f93358df4016285"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5796cbdbe339eb2b7f93358df4016285">&#9670;&nbsp;</a></span>madgwick_get_pitch()</h2>
+<a id="a3bd7bdeac773e7c317be75ca7331b247" name="a3bd7bdeac773e7c317be75ca7331b247"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bd7bdeac773e7c317be75ca7331b247">&#9670;&nbsp;</a></span>calculer_orientation_navire()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float madgwick_get_pitch </td>
+          <td class="memname"><a class="el" href="a00230.html">Quaternionf</a> calculer_orientation_navire </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abed19d3d5accbf5414288e55a905dc2f" name="abed19d3d5accbf5414288e55a905dc2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abed19d3d5accbf5414288e55a905dc2f">&#9670;&nbsp;</a></span>madgwick_get_quaternion()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00168.html">Quaternionf</a> madgwick_get_quaternion </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a93cf5a3f91409cb4369bd5edca20d1b0" name="a93cf5a3f91409cb4369bd5edca20d1b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93cf5a3f91409cb4369bd5edca20d1b0">&#9670;&nbsp;</a></span>madgwick_get_roll()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float madgwick_get_roll </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a35545f3eaf18562c452661dfce014e93" name="a35545f3eaf18562c452661dfce014e93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35545f3eaf18562c452661dfce014e93">&#9670;&nbsp;</a></span>madgwick_get_yaw()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float madgwick_get_yaw </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a240b269f71f744adaffbe1000b138d39" name="a240b269f71f744adaffbe1000b138d39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a240b269f71f744adaffbe1000b138d39">&#9670;&nbsp;</a></span>madgwick_set_beta()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void madgwick_set_beta </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>new_beta</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2733f46f7ddddbbfeb25f3cf2f56759e" name="a2733f46f7ddddbbfeb25f3cf2f56759e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2733f46f7ddddbbfeb25f3cf2f56759e">&#9670;&nbsp;</a></span>madgwick_set_zeta()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void madgwick_set_zeta </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>new_zeta</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6abbbcfdb675b8c1e2b36d0a9ae1397b" name="a6abbbcfdb675b8c1e2b36d0a9ae1397b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6abbbcfdb675b8c1e2b36d0a9ae1397b">&#9670;&nbsp;</a></span>madgwick_update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void madgwick_update </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>w_x</em>, </td>
+          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a>&#160;</td>
+          <td class="paramname"><em>north</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>w_y</em>, </td>
+          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a>&#160;</td>
+          <td class="paramname"><em>east</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>w_z</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>a_x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>a_y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>a_z</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>m_x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>m_y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>m_z</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>deltat</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a>&#160;</td>
+          <td class="paramname"><em>down</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -344,145 +294,99 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00017_a3bd7bdeac773e7c317be75ca7331b247_cgraph.png" border="0" usemap="#aa00017_a3bd7bdeac773e7c317be75ca7331b247_cgraph" alt=""/></div>
+<map name="aa00017_a3bd7bdeac773e7c317be75ca7331b247_cgraph" id="aa00017_a3bd7bdeac773e7c317be75ca7331b247_cgraph">
+<area shape="rect" title=" " alt="" coords="5,23,156,65"/>
+<area shape="rect" href="a00032.html#a7079c3ac4ae2b37c622a486f320e4750" title="Normalizes a 3D vector to have a length of 1." alt="" coords="204,31,407,57"/>
+<area shape="rect" href="a00032.html#aa19acb4a5290918456252d10d5b73889" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="459,5,621,32"/>
+<area shape="rect" href="a00032.html#a5a2bc8ab3233bdbf447d1d572f801288" title="Multiplies a 3D vector by a scalar." alt="" coords="455,56,625,83"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00017_a3bd7bdeac773e7c317be75ca7331b247_icgraph.png" border="0" usemap="#aa00017_a3bd7bdeac773e7c317be75ca7331b247_icgraph" alt=""/></div>
+<map name="aa00017_a3bd7bdeac773e7c317be75ca7331b247_icgraph" id="aa00017_a3bd7bdeac773e7c317be75ca7331b247_icgraph">
+<area shape="rect" title=" " alt="" coords="201,5,352,47"/>
+<area shape="rect" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb" title=" " alt="" coords="5,13,153,39"/>
+</map>
+</div>
 
-<p>Filtre de Madgwick - Mise à jour avec gyroscope, accéléromètre et magnétomètre. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">gx,gy,gz</td><td>: Vitesses angulaires du gyroscope (rad/s) </td></tr>
-    <tr><td class="paramname">ax,ay,az</td><td>: Accélérations (g ou m/s², l'unité importe peu tant qu'elle est cohérente) </td></tr>
-    <tr><td class="paramname">mx,my,mz</td><td>: Champ magnétique (gauss ou µT, l'unité importe peu) </td></tr>
-    <tr><td class="paramname">dt</td><td>: Période d'échantillonnage (secondes) </td></tr>
-  </table>
-  </dd>
-</dl>
+</div>
+</div>
+<a id="aa02d5933c6d5e374c3c7e2a6cf7c7ad1" name="aa02d5933c6d5e374c3c7e2a6cf7c7ad1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa02d5933c6d5e374c3c7e2a6cf7c7ad1">&#9670;&nbsp;</a></span>quaternion_vers_euler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void quaternion_vers_euler </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00230.html">Quaternionf</a>&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>roll</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>pitch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>yaw</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00017_aa02d5933c6d5e374c3c7e2a6cf7c7ad1_icgraph.png" border="0" usemap="#aa00017_aa02d5933c6d5e374c3c7e2a6cf7c7ad1_icgraph" alt=""/></div>
+<map name="aa00017_aa02d5933c6d5e374c3c7e2a6cf7c7ad1_icgraph" id="aa00017_aa02d5933c6d5e374c3c7e2a6cf7c7ad1_icgraph">
+<area shape="rect" title=" " alt="" coords="201,5,368,32"/>
+<area shape="rect" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb" title=" " alt="" coords="5,5,153,32"/>
+</map>
+</div>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="a1f05394786ffe2faacd69da28c8e06f3" name="a1f05394786ffe2faacd69da28c8e06f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f05394786ffe2faacd69da28c8e06f3">&#9670;&nbsp;</a></span>b_x</h2>
+<a id="ad2438ce1a9d965da439db90ddd01a0e8" name="ad2438ce1a9d965da439db90ddd01a0e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2438ce1a9d965da439db90ddd01a0e8">&#9670;&nbsp;</a></span>AHRS_Interfaces</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float b_x = 1</td>
+          <td class="memname">const <a class="el" href="a00186.html">AHRS_Interface_t</a>* AHRS_Interfaces[]</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad7e663f57f5b6933ca491125d452c880" name="ad7e663f57f5b6933ca491125d452c880"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7e663f57f5b6933ca491125d452c880">&#9670;&nbsp;</a></span>b_z</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float b_z = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae25f6d5bf3f29ee34c638ecb2c993dc7" name="ae25f6d5bf3f29ee34c638ecb2c993dc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae25f6d5bf3f29ee34c638ecb2c993dc7">&#9670;&nbsp;</a></span>SEq_1</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float SEq_1 = 0.866025</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2120a353ab9b63f94445e0122c174666" name="a2120a353ab9b63f94445e0122c174666"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2120a353ab9b63f94445e0122c174666">&#9670;&nbsp;</a></span>SEq_2</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float SEq_2 = 0.f</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abd75cfb8abb6af941ab35e99a9863bcf" name="abd75cfb8abb6af941ab35e99a9863bcf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd75cfb8abb6af941ab35e99a9863bcf">&#9670;&nbsp;</a></span>SEq_3</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float SEq_3 = 0.f</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9cd67bb03c99afebe3802d131710085d" name="a9cd67bb03c99afebe3802d131710085d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cd67bb03c99afebe3802d131710085d">&#9670;&nbsp;</a></span>SEq_4</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float SEq_4 = 0.5f</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aefabbc5e0bebfe3ad85d4eb66ec57e5c" name="aefabbc5e0bebfe3ad85d4eb66ec57e5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aefabbc5e0bebfe3ad85d4eb66ec57e5c">&#9670;&nbsp;</a></span>w_bx</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float w_bx = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1b6997f5f268f97fa4058089b9a41e73" name="a1b6997f5f268f97fa4058089b9a41e73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b6997f5f268f97fa4058089b9a41e73">&#9670;&nbsp;</a></span>w_by</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float w_by = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a086f18bf5edf965ca3475c1b3f2f52fb" name="a086f18bf5edf965ca3475c1b3f2f52fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a086f18bf5edf965ca3475c1b3f2f52fb">&#9670;&nbsp;</a></span>w_bz</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float w_bz = 0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">    &amp;<a class="code hl_variable" href="a00029.html#ab9a4345c9677baa7755142c7f3c456e1">AHRS_Simple_Interface</a>,</div>
+<div class="line">    &amp;<a class="code hl_variable" href="a00041.html#a14e657001398ff21c5290d899822f8f9">AHRS_Quat_Interface</a>,</div>
+<div class="line">    &amp;<a class="code hl_variable" href="a00014.html#a5fd399a48459d3336e399f001c99f825">AHRS_DT0058_Interface</a></div>
+<div class="line">}</div>
+<div class="ttc" id="aa00014_html_a5fd399a48459d3336e399f001c99f825"><div class="ttname"><a href="a00014.html#a5fd399a48459d3336e399f001c99f825">AHRS_DT0058_Interface</a></div><div class="ttdeci">const AHRS_Interface_t AHRS_DT0058_Interface</div><div class="ttdef"><b>Definition:</b> ahrsdt0058.c:11</div></div>
+<div class="ttc" id="aa00029_html_ab9a4345c9677baa7755142c7f3c456e1"><div class="ttname"><a href="a00029.html#ab9a4345c9677baa7755142c7f3c456e1">AHRS_Simple_Interface</a></div><div class="ttdeci">const AHRS_Interface_t AHRS_Simple_Interface</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:20</div></div>
+<div class="ttc" id="aa00041_html_a14e657001398ff21c5290d899822f8f9"><div class="ttname"><a href="a00041.html#a14e657001398ff21c5290d899822f8f9">AHRS_Quat_Interface</a></div><div class="ttdeci">const AHRS_Interface_t AHRS_Quat_Interface</div><div class="ttdef"><b>Definition:</b> ahrsquat.c:22</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

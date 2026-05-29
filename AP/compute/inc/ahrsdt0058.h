@@ -16,7 +16,7 @@ extern const AHRS_Interface_t AHRS_DT0058_Interface;
  * Results are accessed by IMU_GET_XXX() functions.
  */
 int AHRS_DT0058_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
-        Vector3f *mag, float deltat);
+                       Vector3f *mag, float deltat);
 
 
 #endif  /* AHRS_DT005_H */

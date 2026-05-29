@@ -1,0 +1,8 @@
+<map id="Quaternionf_getScaled" name="Quaternionf_getScaled">
+<area shape="rect" id="node1" title="Multiplies a 3D vector by a scalar." alt="" coords="651,23,821,50"/>
+<area shape="rect" id="node2" href="$a00041.html#a52748091a7e13612f6fe73cad2f1dadb" title=" " alt="" coords="5,23,153,50"/>
+<area shape="rect" id="node3" href="$a00026.html#abc8ae3e325b0b84e82632cd263c30fb0" title=" " alt="" coords="446,23,557,50"/>
+<area shape="rect" id="node4" href="$a00032.html#a7079c3ac4ae2b37c622a486f320e4750" title="Normalizes a 3D vector to have a length of 1." alt="" coords="400,74,603,101"/>
+<area shape="rect" id="node5" href="$a00026.html#a49c5e7438956eaa1ec299954a392d53a" title=" " alt="" coords="211,74,342,101"/>
+<area shape="rect" id="node6" href="$a00017.html#a3bd7bdeac773e7c317be75ca7331b247" title=" " alt="" coords="201,125,352,167"/>
+</map>

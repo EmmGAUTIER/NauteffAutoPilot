@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['yyinput_0',['YYINPUT',['../a00038.html#a36781b6b4384cbb1232f14f4abc7b2ab',1,'apdialog.c']]]
+  ['who_5fam_5fi_5freg_5fm_0',['WHO_AM_I_REG_M',['../a00047.html#adff84ec04e2cddeaee035e437685c2a8',1,'mems.c']]],
+  ['who_5fam_5fi_5freg_5fxg_1',['WHO_AM_I_REG_XG',['../a00047.html#a7faa710b850c8efe77a7bd12b676e8c3',1,'mems.c']]]
 ];

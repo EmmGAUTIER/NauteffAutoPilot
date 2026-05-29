@@ -19,9 +19,9 @@ extern const AHRS_Interface_t AHRS_Quat_Interface;
  * @return 1
  */
 int AHRS_Quat_update(AHRS_Status_t *mstatus,
-                       Vector3f *acc,
-                       Vector3f *gyr,
-                       Vector3f *mag,
-                       float deltat);
+                     Vector3f *acc,
+                     Vector3f *gyr,
+                     Vector3f *mag,
+                     float deltat);
 
 #endif  /* AHRSQUAT_H */

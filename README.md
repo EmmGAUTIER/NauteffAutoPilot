@@ -1,3 +1,5 @@
+![Nuage de mots](wordCloudAutoPilot.svg)
+
 # NauteffAutoPilot
 AutoPilot for boats
 

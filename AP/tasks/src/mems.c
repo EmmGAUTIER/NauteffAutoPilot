@@ -295,34 +295,34 @@ static Calib6_t calibreur;
  */
 
 static Corrector_t corrector =
-        {
-                /* Accelerometer correction */
-                50.731567F,
-                12.749512F,
-                -26.425171F,
-                -0.002399F,
-                -0.002402F,
-                0.002381F,
+{
+    /* Accelerometer correction */
+    50.731567F,
+    12.749512F,
+    -26.425171F,
+    -0.002399F,
+    -0.002402F,
+    0.002381F,
 
-                /* Gyrometer correction */
-                -11.573334F,
-                -41.593998F,
-                -158.863327F,
-                //-0.000312F,
-                //-0.000312F,
-                //0.000312F,
-                +0.000305F,
-                -0.000305F,
-                -0.000305F,
+    /* Gyrometer correction */
+    -11.573334F,
+    -41.593998F,
+    -158.863327F,
+    //-0.000312F,
+    //-0.000312F,
+    //0.000312F,
+    +0.000305F,
+    -0.000305F,
+    -0.000305F,
 
-                /* Magnetometer Corrections */
-                -467.892975F,
-                -812.839966F,
-                -679.364014F,
-                -0.366352F,
-                0.386369F,
-                -0.394172F
-        };
+    /* Magnetometer Corrections */
+    -467.892975F,
+    -812.839966F,
+    -679.364014F,
+    -0.366352F,
+    0.386369F,
+    -0.394172F
+};
 
 /*
  * @brief Converts an array of 3 integers to a Vector3f
@@ -332,7 +332,7 @@ static Corrector_t corrector =
 INLINE Vector3f Vector3f_fromInts(int i[])
 {
     Vector3f v =
-            { (float) i[0], (float) i[1], (float) i[2] };
+    { (float) i[0], (float) i[1], (float) i[2] };
     return v;
 }
 
@@ -345,25 +345,25 @@ INLINE Vector3f Vector3f_fromInts(int i[])
  * @retval HAL_StatusTypeDef : HAL_OK si succès, sinon code d’erreur HAL
  */
 HAL_StatusTypeDef SPI_DMA_Transfer(SPI_HandleTypeDef *hspi, uint8_t *txBuffer,
-        uint8_t *rxBuffer, uint16_t size,
-        TickType_t timeout)
+                                   uint8_t *rxBuffer, uint16_t size,
+                                   TickType_t timeout)
 {
     // BaseType_t ret;
     HAL_StatusTypeDef status;
 
     // ret = xSemaphoreTake(semspi2, timeout);
-    xSemaphoreTake(semspi2, (TickType_t )0);
+    xSemaphoreTake(semspi2, (TickType_t)0);
 
     // Lancer l’échange DMA (non bloquant)
     status = HAL_SPI_TransmitReceive_DMA(hspi, txBuffer, rxBuffer, size);
 
-    if (status != HAL_OK)
+    if(status != HAL_OK)
     {
         return status;
     }
 
     // Attente de fin via callback et sémaphore
-    if (xSemaphoreTake(semspi2, timeout) != pdTRUE)
+    if(xSemaphoreTake(semspi2, timeout) != pdTRUE)
     {
         return HAL_TIMEOUT;
     }
@@ -390,7 +390,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     //{
     // errCode = hspi->ErrorCode;
     //}
-    if (hspi->Instance == SPI2)
+    if(hspi->Instance == SPI2)
     {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(semspi2, &xHigherPriorityTaskWoken);
@@ -403,7 +403,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
  */
 void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
 {
-    if (hspi->Instance == SPI2)
+    if(hspi->Instance == SPI2)
     {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(semspi2, &xHigherPriorityTaskWoken);
@@ -429,10 +429,10 @@ HAL_StatusTypeDef LSM9DS1_WriteRegister(int agmag, uint8_t reg, uint8_t value)
 
     /* CS_A/G low : select device */
     LL_GPIO_ResetOutputPin(GPIOB,
-            (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
+                           (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
 
     HAL_StatusTypeDef status = SPI_DMA_Transfer(&hspi2, tx, rx, 2,
-            pdMS_TO_TICKS(10));
+                               pdMS_TO_TICKS(10));
 
     /* CS_A/G high : deselect device */
     LL_GPIO_SetOutputPin(GPIOB, (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
@@ -457,16 +457,16 @@ int LSM9DS1_ReadRegister(int agmag, uint8_t reg, uint8_t *value)
      * de 7 octets (1 octet d'adresse + 6 octets de données) pour le transfert SPI en DMA.
      */
     uint8_t bufferTx[7] =
-            { reg | 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+    { reg | 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
     uint8_t bufferRx[7] =
-            { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+    { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
     /* CS_A/G low : select device */
     LL_GPIO_ResetOutputPin(GPIOB,
-            (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
+                           (agmag == 1) ? LL_GPIO_PIN_11 : LL_GPIO_PIN_12);
     res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 2, pdMS_TO_TICKS(10));
 
-    if (res == HAL_OK)
+    if(res == HAL_OK)
     {
         *value = bufferRx[1];
     }
@@ -496,7 +496,7 @@ int LSM9DS1_ReadVec(int agmag, int *values)
     uint8_t maskRDY;
     uint32_t pin;
 
-    switch (agmag)
+    switch(agmag)
     {
     case 1: // Acc
         regaddr = 0x27 | 0x80;
@@ -530,25 +530,25 @@ int LSM9DS1_ReadVec(int agmag, int *values)
      * RX   | ignored  |STATUS_REG|  X MSB | X LSB | Y MSB | Y LSB | Z MSB | Z LSB |
      */
     uint8_t bufferTx[8] =
-            { regaddr, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+    { regaddr, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
     uint8_t bufferRx[8] =
-            { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+    { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
     LL_GPIO_ResetOutputPin(GPIOB, pin); // CS_A/G or CS_M low : select device
     res = SPI_DMA_Transfer(&hspi2, bufferTx, bufferRx, 8, pdMS_TO_TICKS(100));
     LL_GPIO_SetOutputPin(GPIOB, pin); /* CS_A/G high : deselect device */
 
-    if (agmag == 3)
+    if(agmag == 3)
     {
         static int i = 0;
         i++;
     }
 
-    if ((res == HAL_OK) && ((bufferRx[1] & maskRDY) == maskRDY))
+    if((res == HAL_OK) && ((bufferRx[1] & maskRDY) == maskRDY))
     {
-        values[0] = (int16_t) (bufferRx[2] | (bufferRx[3] << 8));
-        values[1] = (int16_t) (bufferRx[4] | (bufferRx[5] << 8));
-        values[2] = (int16_t) (bufferRx[6] | (bufferRx[7] << 8));
+        values[0] = (int16_t)(bufferRx[2] | (bufferRx[3] << 8));
+        values[1] = (int16_t)(bufferRx[4] | (bufferRx[5] << 8));
+        values[2] = (int16_t)(bufferRx[6] | (bufferRx[7] << 8));
         //ret = 1;
         ret = bufferRx[1];
     }
@@ -607,17 +607,17 @@ int Mems_task_init()
 
     /* create tick timer  (without starting it) */
     timerMEMs = xTimerCreate("MEMs",
-            pdMS_TO_TICKS(MEMS_PERIOD_MS),
-            pdTRUE, /* Auto reload (repeat indefinitely) */
-            (void*) 0, /* Timer ID, not used */
-            timerMEMsCallback);
+                             pdMS_TO_TICKS(MEMS_PERIOD_MS),
+                             pdTRUE, /* Auto reload (repeat indefinitely) */
+                             (void*) 0, /* Timer ID, not used */
+                             timerMEMsCallback);
 
     /* create tick timer  (without starting it) */
     timerPoll = xTimerCreate("MEMs",
-            pdMS_TO_TICKS(MEMS_PERIOD_POLL),
-            pdTRUE, /* Auto reload (repeat indefinitely) */
-            (void*) 0, /* Timer ID, not used */
-            timerPOLLCallback);
+                             pdMS_TO_TICKS(MEMS_PERIOD_POLL),
+                             pdTRUE, /* Auto reload (repeat indefinitely) */
+                             (void*) 0, /* Timer ID, not used */
+                             timerPOLLCallback);
 
     return 0;
 }
@@ -635,11 +635,11 @@ void timerMEMsCallback(TimerHandle_t xTimer)
     (void) xTimer;
 
     static MEMS_Msg_t command =
-            {
-                    .msgType = MEMS_MSG_TICK
-            };
+    {
+        .msgType = MEMS_MSG_TICK
+    };
 
-    xQueueSend(msgQueueMEMs, (const void* )&command, (TickType_t )0);
+    xQueueSend(msgQueueMEMs, (const void*)&command, (TickType_t)0);
 
     return;
 }
@@ -657,11 +657,11 @@ void timerPOLLCallback(TimerHandle_t xTimer)
     (void) xTimer;
 
     static MEMS_Msg_t command =
-            {
-                    .msgType = MEMS_MSG_POLL
-            };
+    {
+        .msgType = MEMS_MSG_POLL
+    };
 
-    xQueueSend(msgQueueMEMs, (const void* )&command, (TickType_t )0);
+    xQueueSend(msgQueueMEMs, (const void*)&command, (TickType_t)0);
 
     return;
 }
@@ -687,7 +687,7 @@ int LSM9DS1_init(void)
     whoami = 0x0;
     res = LSM9DS1_ReadRegister(1, 0x0F, &whoami); /* Acc&gyr */
 
-    if (res != HAL_OK || whoami != 0x68)
+    if(res != HAL_OK || whoami != 0x68)
     {
         return -1;
     }
@@ -695,7 +695,7 @@ int LSM9DS1_init(void)
     whoami = 0x0;
     res = LSM9DS1_ReadRegister(2, 0x0F, &whoami); /* mag */
 
-    if (res != HAL_OK || whoami != 0x3D)
+    if(res != HAL_OK || whoami != 0x3D)
     {
         return -1;
     }
@@ -715,7 +715,7 @@ int LSM9DS1_init(void)
     /* Set ODR_G output data rate and FS gyrometer full scale */
     res = LSM9DS1_WriteRegister(1, CTRL_REG1_G, LSM9DS1_ODR | LSM9DS1_FS_G);
 
-    if (res != HAL_OK)
+    if(res != HAL_OK)
     {
         return -1;
     }
@@ -728,7 +728,7 @@ int LSM9DS1_init(void)
 
     /* Output data rate, x&y ultra high performance mode, Temperature compensation */
     LSM9DS1_WriteRegister(2, CTRL_REG1_M,
-            (0x1 << 7) | (LSM9DS1_DO) | (0x03 << 2));
+                          (0x1 << 7) | (LSM9DS1_DO) | (0x03 << 2));
     LSM9DS1_WriteRegister(2, CTRL_REG2_M, LSM9DS1_FS_M); /* Full scale  */
     LSM9DS1_WriteRegister(2, CTRL_REG3_M, (0x1 << 7) | 0x00); /* I2C disable, Continuous conversion mode */
     LSM9DS1_WriteRegister(2, CTRL_REG4_M, 0x03 << 2); /* Z axis ultra high performance */
@@ -790,8 +790,8 @@ void Mems_task(void *param)
     AHRS_Interfaces[ahrsType]->AHRS_init(&ahrs);
     //AHRS_Interfaces[ahrsType]->
 
-    xTimerStart(timerMEMs, (TickType_t )0);
-    xTimerStart(timerPoll, (TickType_t )0);
+    xTimerStart(timerMEMs, (TickType_t)0);
+    xTimerStart(timerPoll, (TickType_t)0);
 
     xSemaphoreGive(semspi2);
 
@@ -803,26 +803,27 @@ void Mems_task(void *param)
 
     //LSM9DS1_WriteRegister(2, CTRL_REG1_M, (0x1 << 7) | (0x02 << 2)); // | (0x01 << 1) );
 
-    for (;;)
+    for(;;)
     {
         ret = xQueueReceive(msgQueueMEMs, &MEMS_Msg, pdMS_TO_TICKS(500));
 
-        if (ret == pdPASS)
+        if(ret == pdPASS)
         {
 
-            switch (MEMS_Msg.msgType)
+            switch(MEMS_Msg.msgType)
             {
             case MEMS_MSG_POLL:
                 int accrdstat = LSM9DS1_ReadAcc(intacc);
                 int gyrrdstat = LSM9DS1_ReadGyr(intgyr);
                 int magrdstat = LSM9DS1_ReadMag(intmag);
 
-                if (accrdstat > 0)
+                if(accrdstat > 0)
                 {
                     DBG_PRINT_RAW_VALUES_ACC(
-                            (snprintf(message, sizeof(message), "ACC : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intacc[0], intacc[1], intacc[2]),
-                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
-                    if (status == MEMS_Status_Calibrate)
+                        (snprintf(message, sizeof(message), "ACC : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intacc[0], intacc[1], intacc[2]),
+                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+
+                    if(status == MEMS_Status_Calibrate)
                     {
                         retCalib = Calib6_addSample(&calibreur, 0, intacc);
                     }
@@ -836,12 +837,13 @@ void Mems_task(void *param)
                     }
                 }
 
-                if (gyrrdstat > 0)
+                if(gyrrdstat > 0)
                 {
                     DBG_PRINT_RAW_VALUES_GYR(
-                            (snprintf(message, sizeof(message), "GYR : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intgyr[0], intgyr[1], intgyr[2]),
-                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
-                    if (status == MEMS_Status_Calibrate)
+                        (snprintf(message, sizeof(message), "GYR : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intgyr[0], intgyr[1], intgyr[2]),
+                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+
+                    if(status == MEMS_Status_Calibrate)
                     {
                         retCalib = Calib6_addSample(&calibreur, 1, intgyr);
                     }
@@ -854,12 +856,13 @@ void Mems_task(void *param)
                     }
                 }
 
-                if (magrdstat > 0)
+                if(magrdstat > 0)
                 {
                     DBG_PRINT_RAW_VALUES_MAG(
-                            (snprintf(message, sizeof(message), "MAG : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intmag[0], intmag[1], intmag[2]),
-                                    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
-                    if (status == MEMS_Status_Calibrate)
+                        (snprintf(message, sizeof(message), "MAG : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intmag[0], intmag[1], intmag[2]),
+                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+
+                    if(status == MEMS_Status_Calibrate)
                     {
                         retCalib = Calib6_addSample(&calibreur, 2, intmag);
                     }
@@ -872,109 +875,112 @@ void Mems_task(void *param)
                     }
                 }
 
-                if (status == MEMS_Status_Calibrate)
+                if(status == MEMS_Status_Calibrate)
                 {
                     DBG_PRINT_CALIB(
-                            (snprintf(message, sizeof(message), "CALIB : stab. %4x %2d  %2d   nb %5d  %2d %5d\n",
-                            calibreur.facesDone,
-                            calibreur.stabOnFace,
-                            calibreur.faceIdx,
-                            calibreur.stabNumber,
-                            calibreur.accumulating,
-                            calibreur.nbSampleAcc),
-                            svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                        (snprintf(message, sizeof(message), "CALIB : stab. %4x %2d  %2d   nb %5d  %2d %5d\n",
+                                  calibreur.facesDone,
+                                  calibreur.stabOnFace,
+                                  calibreur.faceIdx,
+                                  calibreur.stabNumber,
+                                  calibreur.accumulating,
+                                  calibreur.nbSampleAcc),
+                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
-                    if (Calib6_hasEnoughSamples(&calibreur))
+                    if(Calib6_hasEnoughSamples(&calibreur))
                     {
 
                         Calib6_ComputeCorrector(&calibreur, &corrector);
 
-                        xTimerStart(timerMEMs, (TickType_t )0);
+                        xTimerStart(timerMEMs, (TickType_t)0);
 
                         status = MEMS_Status_Measure;
                         /* Stops sending messages for computing AHRS */
 
                         DBG_PRINT_CALIB(
-                                (snprintf(message, sizeof(message),
-                                "CALIB ACC : %8f %8f %8f   %8f %8f %8f\n",
-                                corrector.accCorrOffsetx,
-                                corrector.accCorrOffsety,
-                                corrector.accCorrOffsetz,
-                                corrector.accCorrGainx,
-                                corrector.accCorrGainy,
-                                corrector.accCorrGainz),
-                                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                            (snprintf(message, sizeof(message),
+                                      "CALIB ACC : %8f %8f %8f   %8f %8f %8f\n",
+                                      corrector.accCorrOffsetx,
+                                      corrector.accCorrOffsety,
+                                      corrector.accCorrOffsetz,
+                                      corrector.accCorrGainx,
+                                      corrector.accCorrGainy,
+                                      corrector.accCorrGainz),
+                             svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                         vTaskDelay(pdMS_TO_TICKS(10));
                         DBG_PRINT_CALIB(
-                                (snprintf(message, sizeof(message),
-                                "CALIB GYR : %8f %8f %8f   %8f %8f %8f\n",
-                                corrector.gyrCorrOffsetx,
-                                corrector.gyrCorrOffsety,
-                                corrector.gyrCorrOffsetz,
-                                corrector.gyrCorrGainx,
-                                corrector.gyrCorrGainy,
-                                corrector.gyrCorrGainz),
-                                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
-                        for (int i = 0; i < 6; i++)
+                            (snprintf(message, sizeof(message),
+                                      "CALIB GYR : %8f %8f %8f   %8f %8f %8f\n",
+                                      corrector.gyrCorrOffsetx,
+                                      corrector.gyrCorrOffsety,
+                                      corrector.gyrCorrOffsetz,
+                                      corrector.gyrCorrGainx,
+                                      corrector.gyrCorrGainy,
+                                      corrector.gyrCorrGainz),
+                             svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+
+                        for(int i = 0; i < 6; i++)
                         {
                             vTaskDelay(pdMS_TO_TICKS(50));
                             snprintf(message, sizeof(message),
-                                    "CALIB MAG %d : %8f %8f %8f\n",
-                                    i,
-                                    calibreur.mag_x[i],
-                                    calibreur.mag_y[i],
-                                    calibreur.mag_z[i]),
-                                    svc_UART_Write(&svc_uart2, message,
-                                            strlen(message), pdMS_TO_TICKS(1));
+                                     "CALIB MAG %d : %8f %8f %8f\n",
+                                     i,
+                                     calibreur.mag_x[i],
+                                     calibreur.mag_y[i],
+                                     calibreur.mag_z[i]),
+                                                     svc_UART_Write(&svc_uart2, message,
+                                                                    strlen(message), pdMS_TO_TICKS(1));
                         }
+
                         DBG_PRINT_CALIB(
-                                (snprintf(message, sizeof(message),
-                                "CALIB MAG : %8f %8f %8f   %8f %8f %8f\n",
-                                corrector.magCorrOffsetx,
-                                corrector.magCorrOffsety,
-                                corrector.magCorrOffsetz,
-                                corrector.magCorrGainx,
-                                corrector.magCorrGainy,
-                                corrector.magCorrGainz),
-                                svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                            (snprintf(message, sizeof(message),
+                                      "CALIB MAG : %8f %8f %8f   %8f %8f %8f\n",
+                                      corrector.magCorrOffsetx,
+                                      corrector.magCorrOffsety,
+                                      corrector.magCorrOffsetz,
+                                      corrector.magCorrGainx,
+                                      corrector.magCorrGainy,
+                                      corrector.magCorrGainz),
+                             svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
                     }
                 }
+
                 (void) retCalib; /* TODO traiter le résultat de retCalib */
                 break;
 
             case MEMS_MSG_TICK:
 
-                if (accNb > 0)
+                if(accNb > 0)
                 {
                     accMeanRaw = vector3f_getScaled(accCumul,
-                            1.F / ((float) accNb));
+                                                    1.F / ((float) accNb));
                 }
 
-                if (gyrNb > 0)
+                if(gyrNb > 0)
                 {
                     gyrMeanRaw = vector3f_getScaled(gyrCumul,
-                            1.F / ((float) gyrNb));
+                                                    1.F / ((float) gyrNb));
                 }
 
-                if (magNb > 0)
+                if(magNb > 0)
                 {
                     magMeanRaw = vector3f_getScaled(magCumul,
-                            1.F / ((float) magNb));
+                                                    1.F / ((float) magNb));
                 }
 
                 tickCurrent = xTaskGetTickCount();
-                deltat = ((float) (tickCurrent - tickPast)) / 1000.F;
+                deltat = ((float)(tickCurrent - tickPast)) / 1000.F;
 
                 DBG_PRINT_MEAN_RAW_VALUES(
-                        (snprintf(message, sizeof(message),
-                        "MEMS raw mean %u %7.4f %d %d %d %+7.3f %+7.3f %+7.3f %+7f %+7f %+7f %+7.4f %+7.4f %+7.4f\n",
-                        tickCurrent,
-                        deltat,
-                        accNb, gyrNb, magNb,
-                        accMeanRaw.x, accMeanRaw.y, accMeanRaw.z,
-                        gyrMeanRaw.x, gyrMeanRaw.y, gyrMeanRaw.z,
-                        magMeanRaw.x, magMeanRaw.y, magMeanRaw.z),
-                        svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                    (snprintf(message, sizeof(message),
+                              "MEMS raw mean %u %7.4f %d %d %d %+7.3f %+7.3f %+7.3f %+7f %+7f %+7f %+7.4f %+7.4f %+7.4f\n",
+                              tickCurrent,
+                              deltat,
+                              accNb, gyrNb, magNb,
+                              accMeanRaw.x, accMeanRaw.y, accMeanRaw.z,
+                              gyrMeanRaw.x, gyrMeanRaw.y, gyrMeanRaw.z,
+                              magMeanRaw.x, magMeanRaw.y, magMeanRaw.z),
+                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 /* offset and gain corrections */
                 accComp = Corrector_getAccCorrected(&corrector, &accMeanRaw);
@@ -982,35 +988,35 @@ void Mems_task(void *param)
                 magComp = Corrector_getMagCorrected(&corrector, &magMeanRaw);
 
                 DBG_PRINT_MEAN_CORR_VALUES(
-                        (snprintf(message, sizeof(message),
-                        "MEMS corrected mean %u %7.4f %d %d %d %+7.3f %+7.3f %+7.3f %+7f %+7f %+7f %+7.4f %+7.4f %+7.4f\n",
-                        tickCurrent,
-                        deltat,
-                        accNb, gyrNb, magNb,
-                        accComp.x, accComp.y, accComp.z,
-                        gyrComp.x, gyrComp.y, gyrComp.z,
-                        magComp.x, magComp.y, magComp.z),
-                        svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                    (snprintf(message, sizeof(message),
+                              "MEMS corrected mean %u %7.4f %d %d %d %+7.3f %+7.3f %+7.3f %+7f %+7f %+7f %+7.4f %+7.4f %+7.4f\n",
+                              tickCurrent,
+                              deltat,
+                              accNb, gyrNb, magNb,
+                              accComp.x, accComp.y, accComp.z,
+                              gyrComp.x, gyrComp.y, gyrComp.z,
+                              magComp.x, magComp.y, magComp.z),
+                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 AHRS_Interfaces[AHRS_TYPE_SIMPLE]->AHRS_update(&ahrs, &accComp, &gyrComp, &magComp, deltat);
 
                 DBG_PRINT_ATTITUDE(
-                        (snprintf(message, sizeof(message),
-                        "ATTITUDE     %+6f %+6f %+6f   %6f\n",
-                        AHRS_Interfaces[ahrsType]->AHRS_get_roll(&ahrs),
-                        AHRS_Interfaces[ahrsType]->AHRS_get_pitch(&ahrs),
-                        AHRS_Interfaces[ahrsType]->AHRS_get_heading(&ahrs),
-                        AHRS_Interfaces[ahrsType]->AHRS_get_yawRate((&ahrs))),
-                        svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                    (snprintf(message, sizeof(message),
+                              "ATTITUDE     %+6f %+6f %+6f   %6f\n",
+                              AHRS_Interfaces[ahrsType]->AHRS_get_roll(&ahrs),
+                              AHRS_Interfaces[ahrsType]->AHRS_get_pitch(&ahrs),
+                              AHRS_Interfaces[ahrsType]->AHRS_get_heading(&ahrs),
+                              AHRS_Interfaces[ahrsType]->AHRS_get_yawRate((&ahrs))),
+                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 Quaternionf orient;
                 orient = AHRS_Interfaces[ahrsType]->AHRS_get_Quaternion(&ahrs);
                 (void) orient; // Avoid compiler warning if unused when debugging
                 DBG_PRINT_QUATERNION(
-                        (snprintf(message, sizeof(message),
-                        "QUATERNION %+f %+f %+f %+f\n",
-                        orient.w, orient.x, orient.y, orient.z),
-                        svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                    (snprintf(message, sizeof(message),
+                              "QUATERNION %+f %+f %+f %+f\n",
+                              orient.w, orient.x, orient.y, orient.z),
+                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 tickPast = tickCurrent;
                 accNb = 0U;
@@ -1036,7 +1042,7 @@ void Mems_task(void *param)
 
                 status = MEMS_Status_Calibrate;
                 /* Stops sending messages for computing AHRS */
-                xTimerStop(timerMEMs, (TickType_t )0);
+                xTimerStop(timerMEMs, (TickType_t)0);
                 Calib6_init(&calibreur);
 
                 break; /* case MEMS_MSG_CALIBRATE: */
@@ -1050,26 +1056,27 @@ void Mems_task(void *param)
             case MEMS_MSG_DISPLAY_CONFIG: /* Display the configuration */
 
                 snprintf(message, sizeof(message),
-                        "MEMS config : poll : %dms  compute : %dms  mag/gyr %f\n",
-                        MEMS_PERIOD_POLL,
-                        MEMS_PERIOD_MS,
-                        ahrs.magVsGyr);
+                         "MEMS config : poll : %dms  compute : %dms  mag/gyr %f\n",
+                         MEMS_PERIOD_POLL,
+                         MEMS_PERIOD_MS,
+                         ahrs.magVsGyr);
                 svc_UART_Write(&svc_uart2, message, strlen(message),
-                        pdMS_TO_TICKS(1));
+                               pdMS_TO_TICKS(1));
 
                 break; /* case MEMS_MSG_DISPLAY_CONFIG: */
 
             case MEMS_MSG_SET_AHRS_TYPE : /* Change algorythm of data fusion */
+
                 /* note : Mustn't happen when autopilot engaged */
 
-                if ((MEMS_Msg.data.ahrsType >= 0) &&  (MEMS_Msg.data.ahrsType < AHRS_TYPES_NUMBER))
+                if((MEMS_Msg.data.ahrsType >= 0) && (MEMS_Msg.data.ahrsType < AHRS_TYPES_NUMBER))
                 {
                     ahrsType = MEMS_Msg.data.ahrsType;
                     AHRS_Interfaces[ahrsType]->AHRS_init(&ahrs);
-                    snprintf (message, sizeof(message),
-                            "MEMS AHRS type set to %d\n", ahrsType);
+                    snprintf(message, sizeof(message),
+                             "MEMS AHRS type set to %d\n", ahrsType);
                     svc_UART_Write(&svc_uart2, message, strlen(message),
-                            pdMS_TO_TICKS(1));
+                                   pdMS_TO_TICKS(1));
                 }
 
                 break; /* case MEMS_MSG_SET_AHRS_TYPE: */
@@ -1083,7 +1090,7 @@ void Mems_task(void *param)
         {
             strcpy(message, "MEMS Error receive from queue\n");
             svc_UART_Write(&svc_uart2, message, strlen(message),
-                    pdMS_TO_TICKS(100));
+                           pdMS_TO_TICKS(100));
         }
     }
 }

@@ -1,0 +1,15 @@
+<map id="Dialog_task" name="Dialog_task">
+<area shape="rect" id="node1" title=" " alt="" coords="5,157,104,184"/>
+<area shape="rect" id="node2" href="$a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="152,157,313,184"/>
+<area shape="rect" id="node3" href="$a00062.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="361,5,528,32"/>
+<area shape="rect" id="node4" href="$a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="391,56,498,83"/>
+<area shape="rect" id="node5" href="$a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="381,107,509,133"/>
+<area shape="rect" id="node6" href="$a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="391,157,499,184"/>
+<area shape="rect" id="node7" href="$a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="397,208,492,235"/>
+<area shape="rect" id="node8" href="$a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="415,259,474,285"/>
+<area shape="rect" id="node9" href="$a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="381,309,509,336"/>
+<area shape="rect" id="node10" href="$a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="784,284,948,311"/>
+<area shape="rect" id="node11" href="$a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="576,360,736,387"/>
+<area shape="rect" id="node13" href="$a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="603,309,709,336"/>
+<area shape="rect" id="node12" href="$a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="803,360,929,387"/>
+</map>

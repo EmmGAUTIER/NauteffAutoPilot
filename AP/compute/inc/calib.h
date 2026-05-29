@@ -104,33 +104,33 @@ typedef struct
 INLINE Vector3f Corrector_getAccCorrected(Corrector_t *corr, Vector3f *acc)
 {
     Vector3f result =
-            {
-                    (acc->x + corr->accCorrOffsetx) * corr->accCorrGainx,
-                    (acc->y + corr->accCorrOffsety) * corr->accCorrGainy,
-                    (acc->z + corr->accCorrOffsetz) * corr->accCorrGainz
-            };
+    {
+        (acc->x + corr->accCorrOffsetx) * corr->accCorrGainx,
+        (acc->y + corr->accCorrOffsety) * corr->accCorrGainy,
+        (acc->z + corr->accCorrOffsetz) * corr->accCorrGainz
+    };
     return result;
 }
 INLINE Vector3f Corrector_getGyrCorrected(const Corrector_t *corr,
         const Vector3f *gyr)
 {
     Vector3f result =
-            {
-                    (gyr->x + corr->gyrCorrOffsetx) * corr->gyrCorrGainx,
-                    (gyr->y + corr->gyrCorrOffsety) * corr->gyrCorrGainy,
-                    (gyr->z + corr->gyrCorrOffsetz) * corr->gyrCorrGainz
-            };
+    {
+        (gyr->x + corr->gyrCorrOffsetx) * corr->gyrCorrGainx,
+        (gyr->y + corr->gyrCorrOffsety) * corr->gyrCorrGainy,
+        (gyr->z + corr->gyrCorrOffsetz) * corr->gyrCorrGainz
+    };
     return result;
 }
 INLINE Vector3f Corrector_getMagCorrected(const Corrector_t *corr,
         const Vector3f *mag)
 {
     Vector3f result =
-            {
-                    (mag->x + corr->magCorrOffsetx) * corr->magCorrGainx,
-                    (mag->y + corr->magCorrOffsety) * corr->magCorrGainy,
-                    (mag->z + corr->magCorrOffsetz) * corr->magCorrGainz
-            };
+    {
+        (mag->x + corr->magCorrOffsetx) * corr->magCorrGainx,
+        (mag->y + corr->magCorrOffsety) * corr->magCorrGainy,
+        (mag->z + corr->magCorrOffsetz) * corr->magCorrGainz
+    };
     return result;
 }
 

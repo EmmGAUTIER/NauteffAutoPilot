@@ -33,16 +33,19 @@ SOFTWARE.
 #include <stm32l4xx_ll_gpio.h>
 #include <stm32l4xx_ll_usart.h>
 
-typedef enum {
+typedef enum
+{
     BLINK_MSG_TICK = 1,       /*Clock tick send to start flash(es) sequence */
     BLINK_MSG_STOP,           /* stop blinking */
     BLINK_MSG_START,          /* start blinking */
     BLINK_SET_FLASH_DURATION, /* set flash duration */
 } Blink_Msg_Type_t;
 
-typedef struct {
+typedef struct
+{
     Blink_Msg_Type_t msgType;
-    union {
+    union
+    {
         float duration;
     } data;
 } Blink_Msg_t;

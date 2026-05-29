@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: mems.h File Reference</title>
+<title>Nauteff auto pilot: ahrssimple.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,225 +63,280 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_f6024555edb91c92286789204247ac6f.html">tasks</a></li><li class="navelem"><a class="el" href="dir_96b134f082932b0ffaad969aba350d0a.html">inc</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_9dfa3f9a64349c3632ba595b490a8ee1.html">compute</a></li><li class="navelem"><a class="el" href="dir_a916071c727a11f0597e20cb00a44bbc.html">inc</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">mems.h File Reference</div></div>
+  <div class="headertitle"><div class="title">ahrssimple.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00091.png" border="0" usemap="#amems_8hdep" alt=""/></div>
-<map name="amems_8hdep" id="amems_8hdep">
-<area shape="rect" title=" " alt="" coords="178,5,253,32"/>
-<area shape="rect" href="a00038.html" title=" " alt="" coords="5,80,95,107"/>
-<area shape="rect" href="a00035.html" title=" " alt="" coords="119,80,202,107"/>
-<area shape="rect" href="a00044.html" title=" " alt="" coords="226,80,317,107"/>
-<area shape="rect" href="a00029.html" title=" " alt="" coords="341,80,415,107"/>
+<div class="center"><img src="a00091.png" border="0" usemap="#aahrssimple_8hdep" alt=""/></div>
+<map name="aahrssimple_8hdep" id="aahrssimple_8hdep">
+<area shape="rect" title=" " alt="" coords="144,5,251,32"/>
+<area shape="rect" href="a00017.html" title=" " alt="" coords="5,80,67,107"/>
+<area shape="rect" href="a00041.html" title=" " alt="" coords="91,80,181,107"/>
+<area shape="rect" href="a00029.html" title=" " alt="" coords="206,80,311,107"/>
+<area shape="rect" href="a00047.html" title=" " alt="" coords="335,80,409,107"/>
 </map>
 </div>
 </div>
 <p><a href="a00089_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00224.html">MEMS_Msg_t</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ae3673af6dd372239a2ab9133c4210ff1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#ae3673af6dd372239a2ab9133c4210ff1">MEMS_STANDARD_GRAVITY</a>&#160;&#160;&#160;9.80665F</td></tr>
-<tr class="separator:ae3673af6dd372239a2ab9133c4210ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1553d5495b645b2353979f88e96c04ad"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a1553d5495b645b2353979f88e96c04ad">MEMS_STANDARD_MAGNETIC_TESLA</a>&#160;&#160;&#160;0.00005F</td></tr>
-<tr class="separator:a1553d5495b645b2353979f88e96c04ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5504137038aa9e989399a4342f3b0a45"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a5504137038aa9e989399a4342f3b0a45">MEMS_STANDARD_MAGNETIC_GAUSS</a>&#160;&#160;&#160;0.5F</td></tr>
-<tr class="separator:a5504137038aa9e989399a4342f3b0a45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a181fe73a522a602120fd2f683f5fede5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5">MEMS_MsgType_t</a> { <br />
-&#160;&#160;<a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a0f241622e44d1eb8349d251c21d04185">MEMS_MSG_NONE</a> = 0
-, <a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a4b6e48cbc5271af357ab88c97aa29282">MEMS_MSG_ACC_READY</a>
-, <a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a8e0e47c671b5a41cb9136a8673c2981c">MEMS_MSG_GYR_READY</a>
-, <a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a1e67c86644b42d85429e38e173d358ce">MEMS_MSG_MAG_READY</a>
-, <br />
-&#160;&#160;<a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a5779571adfd250752efd5bbc15332479">MEMS_MSG_POLL</a>
-, <a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5ad9cf02ef3a1adac700d8532aa447ea26">MEMS_MSG_TICK</a>
-, <a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5acf9df41063b447f7db931af3a3d0406a">MEMS_MSG_CALIBRATE</a>
-, <a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5ad50b0785c8626be7b3dea415b72afcbf">MEMS_MSG_DISPLAY_CONFIG</a>
-, <br />
-&#160;&#160;<a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5af3d5babf85c7b2d5e1cdf5d1f4d31da2">MEMS_MSG_SET_MAG_VS_GYR</a>
-<br />
- }</td></tr>
-<tr class="separator:a181fe73a522a602120fd2f683f5fede5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afccbdbd7bcb7f5f6a39bdfe4ead05dbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#afccbdbd7bcb7f5f6a39bdfe4ead05dbd">MEMS_INIT_MAG_VS_GYRO</a>&#160;&#160;&#160;0.1F /* Répartition de partie du compas et dy gyromètre pour le cap */</td></tr>
+<tr class="separator:afccbdbd7bcb7f5f6a39bdfe4ead05dbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5e9a97e8107336f2f03804f9b5b9e55f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a5e9a97e8107336f2f03804f9b5b9e55f">init_taskMEMs</a> (void)</td></tr>
-<tr class="separator:a5e9a97e8107336f2f03804f9b5b9e55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a850d8249599ac5dd77cae18946511d5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a850d8249599ac5dd77cae18946511d5d">taskMEMs</a> (void *pvParameters)</td></tr>
-<tr class="separator:a850d8249599ac5dd77cae18946511d5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a309f5113d92f82743986103bcdff529f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a309f5113d92f82743986103bcdff529f">MEMSSendTimerCallback</a> (TimerHandle_t xTimer)</td></tr>
-<tr class="separator:a309f5113d92f82743986103bcdff529f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a965d6ed904e7367d81ef3ad4eab53b0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a965d6ed904e7367d81ef3ad4eab53b0a">AHRS_Simple_init</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:a965d6ed904e7367d81ef3ad4eab53b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7ea64af1dac32b3af3a4a898b940824"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#aa7ea64af1dac32b3af3a4a898b940824">AHRS_Simple_update</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus, <a class="el" href="a00198.html">Vector3f</a> *acc, <a class="el" href="a00198.html">Vector3f</a> *gyr, <a class="el" href="a00198.html">Vector3f</a> *mag, float deltat)</td></tr>
+<tr class="separator:aa7ea64af1dac32b3af3a4a898b940824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99e255d454934a950557acb0d7c5ff8b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a99e255d454934a950557acb0d7c5ff8b">AHRS_Simple_get_roll</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:a99e255d454934a950557acb0d7c5ff8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdb7694e72ef0086cffbd2f42cbf5597"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#abdb7694e72ef0086cffbd2f42cbf5597">AHRS_Simple_get_pitch</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:abdb7694e72ef0086cffbd2f42cbf5597"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8530b51082df899680f1127779b4e4a9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a8530b51082df899680f1127779b4e4a9">AHRS_Simple_get_heading</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:a8530b51082df899680f1127779b4e4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e975d6ad3a26580e61d3d82e15bf894"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a6e975d6ad3a26580e61d3d82e15bf894">AHRS_Simple_get_yawRate</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:a6e975d6ad3a26580e61d3d82e15bf894"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14e5707d7d94f27f87354e5be35a7d9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a14e5707d7d94f27f87354e5be35a7d9a">AHRS_Simple_set_mag_vs_gyr_prop</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus, float prop)</td></tr>
+<tr class="separator:a14e5707d7d94f27f87354e5be35a7d9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a910f320ae550028afb4e69f3a1fce74c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00230.html">Quaternionf</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#a910f320ae550028afb4e69f3a1fce74c">AHRS_Simple_get_Quaternion</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
+<tr class="separator:a910f320ae550028afb4e69f3a1fce74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ae2fe2051757002be8b61e7ceeeb2bc46"><td class="memItemLeft" align="right" valign="top">QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#ae2fe2051757002be8b61e7ceeeb2bc46">msgQueueMEMs</a></td></tr>
-<tr class="separator:ae2fe2051757002be8b61e7ceeeb2bc46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9a4345c9677baa7755142c7f3c456e1"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00186.html">AHRS_Interface_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00089.html#ab9a4345c9677baa7755142c7f3c456e1">AHRS_Simple_Interface</a></td></tr>
+<tr class="separator:ab9a4345c9677baa7755142c7f3c456e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ae3673af6dd372239a2ab9133c4210ff1" name="ae3673af6dd372239a2ab9133c4210ff1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3673af6dd372239a2ab9133c4210ff1">&#9670;&nbsp;</a></span>MEMS_STANDARD_GRAVITY</h2>
+<a id="afccbdbd7bcb7f5f6a39bdfe4ead05dbd" name="afccbdbd7bcb7f5f6a39bdfe4ead05dbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afccbdbd7bcb7f5f6a39bdfe4ead05dbd">&#9670;&nbsp;</a></span>MEMS_INIT_MAG_VS_GYRO</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MEMS_STANDARD_GRAVITY&#160;&#160;&#160;9.80665F</td>
+          <td class="memname">#define MEMS_INIT_MAG_VS_GYRO&#160;&#160;&#160;0.1F /* Répartition de partie du compas et dy gyromètre pour le cap */</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5504137038aa9e989399a4342f3b0a45" name="a5504137038aa9e989399a4342f3b0a45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5504137038aa9e989399a4342f3b0a45">&#9670;&nbsp;</a></span>MEMS_STANDARD_MAGNETIC_GAUSS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MEMS_STANDARD_MAGNETIC_GAUSS&#160;&#160;&#160;0.5F</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1553d5495b645b2353979f88e96c04ad" name="a1553d5495b645b2353979f88e96c04ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1553d5495b645b2353979f88e96c04ad">&#9670;&nbsp;</a></span>MEMS_STANDARD_MAGNETIC_TESLA</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MEMS_STANDARD_MAGNETIC_TESLA&#160;&#160;&#160;0.00005F</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="a181fe73a522a602120fd2f683f5fede5" name="a181fe73a522a602120fd2f683f5fede5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a181fe73a522a602120fd2f683f5fede5">&#9670;&nbsp;</a></span>MEMS_MsgType_t</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="a00089.html#a181fe73a522a602120fd2f683f5fede5">MEMS_MsgType_t</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5a0f241622e44d1eb8349d251c21d04185" name="a181fe73a522a602120fd2f683f5fede5a0f241622e44d1eb8349d251c21d04185"></a>MEMS_MSG_NONE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5a4b6e48cbc5271af357ab88c97aa29282" name="a181fe73a522a602120fd2f683f5fede5a4b6e48cbc5271af357ab88c97aa29282"></a>MEMS_MSG_ACC_READY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5a8e0e47c671b5a41cb9136a8673c2981c" name="a181fe73a522a602120fd2f683f5fede5a8e0e47c671b5a41cb9136a8673c2981c"></a>MEMS_MSG_GYR_READY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5a1e67c86644b42d85429e38e173d358ce" name="a181fe73a522a602120fd2f683f5fede5a1e67c86644b42d85429e38e173d358ce"></a>MEMS_MSG_MAG_READY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5a5779571adfd250752efd5bbc15332479" name="a181fe73a522a602120fd2f683f5fede5a5779571adfd250752efd5bbc15332479"></a>MEMS_MSG_POLL&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5ad9cf02ef3a1adac700d8532aa447ea26" name="a181fe73a522a602120fd2f683f5fede5ad9cf02ef3a1adac700d8532aa447ea26"></a>MEMS_MSG_TICK&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5acf9df41063b447f7db931af3a3d0406a" name="a181fe73a522a602120fd2f683f5fede5acf9df41063b447f7db931af3a3d0406a"></a>MEMS_MSG_CALIBRATE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5ad50b0785c8626be7b3dea415b72afcbf" name="a181fe73a522a602120fd2f683f5fede5ad50b0785c8626be7b3dea415b72afcbf"></a>MEMS_MSG_DISPLAY_CONFIG&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a181fe73a522a602120fd2f683f5fede5af3d5babf85c7b2d5e1cdf5d1f4d31da2" name="a181fe73a522a602120fd2f683f5fede5af3d5babf85c7b2d5e1cdf5d1f4d31da2"></a>MEMS_MSG_SET_MAG_VS_GYR&#160;</td><td class="fielddoc"></td></tr>
-</table>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a5e9a97e8107336f2f03804f9b5b9e55f" name="a5e9a97e8107336f2f03804f9b5b9e55f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e9a97e8107336f2f03804f9b5b9e55f">&#9670;&nbsp;</a></span>init_taskMEMs()</h2>
+<a id="a8530b51082df899680f1127779b4e4a9" name="a8530b51082df899680f1127779b4e4a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8530b51082df899680f1127779b4e4a9">&#9670;&nbsp;</a></span>AHRS_Simple_get_heading()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00032.html#a8866b5421a676559242721d47fc1fcdc">int</a> init_taskMEMs </td>
+          <td class="memname">float AHRS_Simple_get_heading </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abdb7694e72ef0086cffbd2f42cbf5597" name="abdb7694e72ef0086cffbd2f42cbf5597"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdb7694e72ef0086cffbd2f42cbf5597">&#9670;&nbsp;</a></span>AHRS_Simple_get_pitch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float AHRS_Simple_get_pitch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a910f320ae550028afb4e69f3a1fce74c" name="a910f320ae550028afb4e69f3a1fce74c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a910f320ae550028afb4e69f3a1fce74c">&#9670;&nbsp;</a></span>AHRS_Simple_get_Quaternion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00230.html">Quaternionf</a> AHRS_Simple_get_Quaternion </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a99e255d454934a950557acb0d7c5ff8b" name="a99e255d454934a950557acb0d7c5ff8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99e255d454934a950557acb0d7c5ff8b">&#9670;&nbsp;</a></span>AHRS_Simple_get_roll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float AHRS_Simple_get_roll </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6e975d6ad3a26580e61d3d82e15bf894" name="a6e975d6ad3a26580e61d3d82e15bf894"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e975d6ad3a26580e61d3d82e15bf894">&#9670;&nbsp;</a></span>AHRS_Simple_get_yawRate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float AHRS_Simple_get_yawRate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a965d6ed904e7367d81ef3ad4eab53b0a" name="a965d6ed904e7367d81ef3ad4eab53b0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a965d6ed904e7367d81ef3ad4eab53b0a">&#9670;&nbsp;</a></span>AHRS_Simple_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AHRS_Simple_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a14e5707d7d94f27f87354e5be35a7d9a" name="a14e5707d7d94f27f87354e5be35a7d9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14e5707d7d94f27f87354e5be35a7d9a">&#9670;&nbsp;</a></span>AHRS_Simple_set_mag_vs_gyr_prop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AHRS_Simple_set_mag_vs_gyr_prop </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>prop</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa7ea64af1dac32b3af3a4a898b940824" name="aa7ea64af1dac32b3af3a4a898b940824"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7ea64af1dac32b3af3a4a898b940824">&#9670;&nbsp;</a></span>AHRS_Simple_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> AHRS_Simple_update </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramname"><em>mstatus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramname"><em>acc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramname"><em>gyr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramname"><em>mag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>deltat</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
-Here is the caller graph for this function:</div>
+Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00089_a5e9a97e8107336f2f03804f9b5b9e55f_icgraph.png" border="0" usemap="#aa00089_a5e9a97e8107336f2f03804f9b5b9e55f_icgraph" alt=""/></div>
-<map name="aa00089_a5e9a97e8107336f2f03804f9b5b9e55f_icgraph" id="aa00089_a5e9a97e8107336f2f03804f9b5b9e55f_icgraph">
-<area shape="rect" title=" " alt="" coords="124,5,241,32"/>
-<area shape="rect" href="a00035.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a309f5113d92f82743986103bcdff529f" name="a309f5113d92f82743986103bcdff529f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a309f5113d92f82743986103bcdff529f">&#9670;&nbsp;</a></span>MEMSSendTimerCallback()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MEMSSendTimerCallback </td>
-          <td>(</td>
-          <td class="paramtype">TimerHandle_t&#160;</td>
-          <td class="paramname"><em>xTimer</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a850d8249599ac5dd77cae18946511d5d" name="a850d8249599ac5dd77cae18946511d5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a850d8249599ac5dd77cae18946511d5d">&#9670;&nbsp;</a></span>taskMEMs()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void taskMEMs </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>pvParameters</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00089_a850d8249599ac5dd77cae18946511d5d_icgraph.png" border="0" usemap="#aa00089_a850d8249599ac5dd77cae18946511d5d_icgraph" alt=""/></div>
-<map name="aa00089_a850d8249599ac5dd77cae18946511d5d_icgraph" id="aa00089_a850d8249599ac5dd77cae18946511d5d_icgraph">
-<area shape="rect" title=" " alt="" coords="124,5,213,32"/>
-<area shape="rect" href="a00035.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+<div class="center"><img src="a00089_aa7ea64af1dac32b3af3a4a898b940824_cgraph.png" border="0" usemap="#aa00089_aa7ea64af1dac32b3af3a4a898b940824_cgraph" alt=""/></div>
+<map name="aa00089_aa7ea64af1dac32b3af3a4a898b940824_cgraph" id="aa00089_aa7ea64af1dac32b3af3a4a898b940824_cgraph">
+<area shape="rect" title=" " alt="" coords="5,81,168,108"/>
+<area shape="rect" href="a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="281,5,340,32"/>
+<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="247,56,375,83"/>
+<area shape="rect" href="a00020.html#ac5692debece7126e725e6f78e93680fa" title="Computes the cross product of two 3D vectors." alt="" coords="216,107,405,133"/>
+<area shape="rect" href="a00020.html#af59ede5ab5fcac9a6d79dcac2bf895ff" title="Normalizes a 3D vector to have a length of 1." alt="" coords="221,157,400,184"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="661,31,825,57"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="453,107,613,133"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="481,56,586,83"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="681,107,806,133"/>
+<area shape="rect" href="a00020.html#ad715d385b8495561a0a2f6c97d157229" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="463,157,603,184"/>
+<area shape="rect" href="a00020.html#a210fc338c3a1e2833060cfb6e5c346be" title="Multiplies a 3D vector by a scalar." alt="" coords="460,208,607,235"/>
 </map>
 </div>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="ae2fe2051757002be8b61e7ceeeb2bc46" name="ae2fe2051757002be8b61e7ceeeb2bc46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2fe2051757002be8b61e7ceeeb2bc46">&#9670;&nbsp;</a></span>msgQueueMEMs</h2>
+<a id="ab9a4345c9677baa7755142c7f3c456e1" name="ab9a4345c9677baa7755142c7f3c456e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9a4345c9677baa7755142c7f3c456e1">&#9670;&nbsp;</a></span>AHRS_Simple_Interface</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -290,7 +345,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QueueHandle_t msgQueueMEMs</td>
+          <td class="memname">const <a class="el" href="a00186.html">AHRS_Interface_t</a> AHRS_Simple_Interface</td>
         </tr>
       </table>
   </td>

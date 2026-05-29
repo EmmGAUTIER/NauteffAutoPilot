@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: geom.h File Reference</title>
+<title>Nauteff auto pilot: util.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,203 +63,207 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_9dfa3f9a64349c3632ba595b490a8ee1.html">compute</a></li><li class="navelem"><a class="el" href="dir_a916071c727a11f0597e20cb00a44bbc.html">inc</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_382a97f60b6932328865d4436f266605.html">aux</a></li><li class="navelem"><a class="el" href="dir_20bb0788014b5bf95dec8ec0508b3316.html">inc</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">geom.h File Reference</div></div>
+  <div class="headertitle"><div class="title">util.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for geom.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00081.png" border="0" usemap="#ageom_8h" alt=""/></div>
-<map name="ageom_8h" id="ageom_8h">
-<area shape="rect" title=" " alt="" coords="5,5,76,32"/>
-<area shape="rect" title=" " alt="" coords="5,80,76,107"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
+<div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00082.png" border="0" usemap="#ageom_8hdep" alt=""/></div>
-<map name="ageom_8hdep" id="ageom_8hdep">
-<area shape="rect" title=" " alt="" coords="262,5,333,32"/>
-<area shape="rect" href="a00044.html" title=" " alt="" coords="5,80,96,107"/>
-<area shape="rect" href="a00014.html" title=" " alt="" coords="121,80,191,107"/>
-<area shape="rect" href="a00026.html" title=" " alt="" coords="216,80,275,107"/>
-<area shape="rect" href="a00017.html" title=" " alt="" coords="299,80,399,107"/>
-<area shape="rect" href="a00068.html" title=" " alt="" coords="423,80,513,107"/>
-<area shape="rect" href="a00029.html" title=" " alt="" coords="537,80,612,107"/>
-<area shape="rect" href="a00023.html" title=" " alt="" coords="424,155,512,181"/>
+<div class="center"><img src="a00082.png" border="0" usemap="#autil_8hdep" alt=""/></div>
+<map name="autil_8hdep" id="autil_8hdep">
+<area shape="rect" title=" " alt="" coords="601,5,655,32"/>
+<area shape="rect" href="a00017.html" title=" " alt="" coords="5,80,67,107"/>
+<area shape="rect" href="a00041.html" title=" " alt="" coords="463,155,553,181"/>
+<area shape="rect" href="a00029.html" title=" " alt="" coords="578,155,683,181"/>
+<area shape="rect" href="a00056.html" title=" " alt="" coords="138,155,227,181"/>
+<area shape="rect" href="a00062.html" title=" " alt="" coords="252,155,343,181"/>
+<area shape="rect" href="a00083.html" title=" " alt="" coords="91,80,189,107"/>
+<area shape="rect" href="a00011.html" title=" " alt="" coords="869,155,933,181"/>
+<area shape="rect" href="a00116.html" title=" " alt="" coords="866,80,931,107"/>
+<area shape="rect" href="a00047.html" title=" " alt="" coords="957,155,1032,181"/>
+<area shape="rect" href="a00038.html" title=" " alt="" coords="707,155,765,181"/>
+<area shape="rect" href="a00026.html" title=" " alt="" coords="1056,155,1173,181"/>
+<area shape="rect" href="a00101.html" title=" " alt="" coords="1058,80,1177,107"/>
+<area shape="rect" href="a00059.html" title=" " alt="" coords="367,155,438,181"/>
+<area shape="rect" href="a00131.html" title=" " alt="" coords="264,80,336,107"/>
+<area shape="rect" href="a00002.html" title=" " alt="" coords="790,155,845,181"/>
+<area shape="rect" href="a00068.html" title=" " alt="" coords="634,80,689,107"/>
+<area shape="rect" href="a00053.html" title=" " alt="" coords="31,155,113,181"/>
 </map>
 </div>
 </div>
 <p><a href="a00080_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00108.html">Vector3f</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a 3D vector with float components.  <a href="a00108.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00148.html">Vector3i16</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00152.html">Vector3i32</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ae71449b1cc6e6250b91f539153a7a0d3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#ae71449b1cc6e6250b91f539153a7a0d3">M_PI</a>&#160;&#160;&#160;3.14159265358979323846F</td></tr>
-<tr class="separator:ae71449b1cc6e6250b91f539153a7a0d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a958e4508ed28ee5cc04249144312c15f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a958e4508ed28ee5cc04249144312c15f">M_PI_2</a>&#160;&#160;&#160;1.57079632679489661923</td></tr>
-<tr class="separator:a958e4508ed28ee5cc04249144312c15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb24420b096a677f3a2dc5a72b36bf22"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#aeb24420b096a677f3a2dc5a72b36bf22">M_PI_4</a>&#160;&#160;&#160;0.78539816339744830962</td></tr>
-<tr class="separator:aeb24420b096a677f3a2dc5a72b36bf22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ff374d4809b623599a72f902957798a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a7ff374d4809b623599a72f902957798a">M_PIF</a>&#160;&#160;&#160;3.1415927f</td></tr>
-<tr class="separator:a7ff374d4809b623599a72f902957798a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2900bacda6e934e827e4db2b8981a42e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a2900bacda6e934e827e4db2b8981a42e">M_PI_2F</a>&#160;&#160;&#160;1.5707963f</td></tr>
-<tr class="separator:a2900bacda6e934e827e4db2b8981a42e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad636f4a48ae1fab60f517398696c68fe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#ad636f4a48ae1fab60f517398696c68fe">M_PI_4F</a>&#160;&#160;&#160;0.7853982f</td></tr>
-<tr class="separator:ad636f4a48ae1fab60f517398696c68fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2eb6f9e0395b47b8d5e3eeae4fe0c116"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a>&#160;&#160;&#160;<a class="el" href="a00131.html#a450d87c6a516eb359791b9aa89955cb5">__attribute__</a>((always_inline)) inline</td></tr>
+<tr class="memdesc:a2eb6f9e0395b47b8d5e3eeae4fe0c116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main types declarations.  <a href="a00080.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">More...</a><br /></td></tr>
+<tr class="separator:a2eb6f9e0395b47b8d5e3eeae4fe0c116"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac950c0db046e2f86d15e7ae1f558b017"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#ac950c0db046e2f86d15e7ae1f558b017">INTERRUPT</a>&#160;&#160;&#160;<a class="el" href="a00131.html#a450d87c6a516eb359791b9aa89955cb5">__attribute__</a>((interrupt(&quot;irq&quot;)))</td></tr>
+<tr class="separator:ac950c0db046e2f86d15e7ae1f558b017"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb452686968e48b67397da5f97445f5b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#abb452686968e48b67397da5f97445f5b">bool</a>&#160;&#160;&#160;_Bool</td></tr>
+<tr class="separator:abb452686968e48b67397da5f97445f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a7ee1720c821bd2a2b26c67afdc8b3549"><td class="memItemLeft" align="right" valign="top">typedef volatile uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a7ee1720c821bd2a2b26c67afdc8b3549">vuint8_t</a></td></tr>
+<tr class="separator:a7ee1720c821bd2a2b26c67afdc8b3549"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90521f687dbd4c8eec49c259b253527a"><td class="memItemLeft" align="right" valign="top">typedef volatile uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a90521f687dbd4c8eec49c259b253527a">vuint16_t</a></td></tr>
+<tr class="separator:a90521f687dbd4c8eec49c259b253527a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6eb327e1a47e374f46253e6eed88bf5"><td class="memItemLeft" align="right" valign="top">typedef volatile uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#aa6eb327e1a47e374f46253e6eed88bf5">vuint32_t</a></td></tr>
+<tr class="separator:aa6eb327e1a47e374f46253e6eed88bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a080984095d6ed4f029bd5bb8a0a590cd"><td class="memItemLeft" align="right" valign="top">typedef volatile int8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a080984095d6ed4f029bd5bb8a0a590cd">vint8_t</a></td></tr>
+<tr class="separator:a080984095d6ed4f029bd5bb8a0a590cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f6dcc179d3c49158006865ab81f84f5"><td class="memItemLeft" align="right" valign="top">typedef volatile int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a9f6dcc179d3c49158006865ab81f84f5">vint16_t</a></td></tr>
+<tr class="separator:a9f6dcc179d3c49158006865ab81f84f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f217e412133ffa5803e5d91d0043976"><td class="memItemLeft" align="right" valign="top">typedef volatile int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a6f217e412133ffa5803e5d91d0043976">vint32_t</a></td></tr>
+<tr class="separator:a6f217e412133ffa5803e5d91d0043976"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac291818833b950af7bae60a0e436ae07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#ac291818833b950af7bae60a0e436ae07">vector3f_init</a> (float x, float y, float z)</td></tr>
-<tr class="separator:ac291818833b950af7bae60a0e436ae07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeed09372fe0365947aed8bbd7eecf72d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#aeed09372fe0365947aed8bbd7eecf72d">vector3f_add</a> (<a class="el" href="a00108.html">Vector3f</a> v1, <a class="el" href="a00108.html">Vector3f</a> v2)</td></tr>
-<tr class="memdesc:aeed09372fe0365947aed8bbd7eecf72d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds two 3D vectors component-wise.  <a href="a00080.html#aeed09372fe0365947aed8bbd7eecf72d">More...</a><br /></td></tr>
-<tr class="separator:aeed09372fe0365947aed8bbd7eecf72d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f5d8de2b4a89520605892592e441e8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a7f5d8de2b4a89520605892592e441e8e">vector3f_sub</a> (<a class="el" href="a00108.html">Vector3f</a> v1, <a class="el" href="a00108.html">Vector3f</a> v2)</td></tr>
-<tr class="memdesc:a7f5d8de2b4a89520605892592e441e8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtracts the second 3D vector from the first, component-wise.  <a href="a00080.html#a7f5d8de2b4a89520605892592e441e8e">More...</a><br /></td></tr>
-<tr class="separator:a7f5d8de2b4a89520605892592e441e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5692debece7126e725e6f78e93680fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#ac5692debece7126e725e6f78e93680fa">vector3f_getCrossProduct</a> (<a class="el" href="a00108.html">Vector3f</a> v1, <a class="el" href="a00108.html">Vector3f</a> v2)</td></tr>
-<tr class="memdesc:ac5692debece7126e725e6f78e93680fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the cross product of two 3D vectors.  <a href="a00080.html#ac5692debece7126e725e6f78e93680fa">More...</a><br /></td></tr>
-<tr class="separator:ac5692debece7126e725e6f78e93680fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a903310051218f6081c3491f6c5f5fe45"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a903310051218f6081c3491f6c5f5fe45">vector3f_getDotProduct</a> (<a class="el" href="a00108.html">Vector3f</a> v1, <a class="el" href="a00108.html">Vector3f</a> v2)</td></tr>
-<tr class="memdesc:a903310051218f6081c3491f6c5f5fe45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the dot product (scalar product) of two 3D vectors.  <a href="a00080.html#a903310051218f6081c3491f6c5f5fe45">More...</a><br /></td></tr>
-<tr class="separator:a903310051218f6081c3491f6c5f5fe45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a210fc338c3a1e2833060cfb6e5c346be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a210fc338c3a1e2833060cfb6e5c346be">vector3f_getScaled</a> (<a class="el" href="a00108.html">Vector3f</a> v, float a)</td></tr>
-<tr class="memdesc:a210fc338c3a1e2833060cfb6e5c346be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies a 3D vector by a scalar.  <a href="a00080.html#a210fc338c3a1e2833060cfb6e5c346be">More...</a><br /></td></tr>
-<tr class="separator:a210fc338c3a1e2833060cfb6e5c346be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad715d385b8495561a0a2f6c97d157229"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#ad715d385b8495561a0a2f6c97d157229">vector3f_getNorm</a> (<a class="el" href="a00108.html">Vector3f</a> v)</td></tr>
-<tr class="memdesc:ad715d385b8495561a0a2f6c97d157229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Euclidean norm ("length") of a 3D vector.  <a href="a00080.html#ad715d385b8495561a0a2f6c97d157229">More...</a><br /></td></tr>
-<tr class="separator:ad715d385b8495561a0a2f6c97d157229"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af59ede5ab5fcac9a6d79dcac2bf895ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#af59ede5ab5fcac9a6d79dcac2bf895ff">vector3f_getNormalized</a> (<a class="el" href="a00108.html">Vector3f</a> v)</td></tr>
-<tr class="memdesc:af59ede5ab5fcac9a6d79dcac2bf895ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalizes a 3D vector to have a length of 1.  <a href="a00080.html#af59ede5ab5fcac9a6d79dcac2bf895ff">More...</a><br /></td></tr>
-<tr class="separator:af59ede5ab5fcac9a6d79dcac2bf895ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6260eeb10eab0a3c585e649095accbd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#ab6260eeb10eab0a3c585e649095accbd">vector3f_getCosine</a> (<a class="el" href="a00108.html">Vector3f</a> v1, <a class="el" href="a00108.html">Vector3f</a> v2)</td></tr>
-<tr class="separator:ab6260eeb10eab0a3c585e649095accbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a6260adb84f7a2364745069d05ca3b2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a0a6260adb84f7a2364745069d05ca3b2">cvt_dir_deg_rad</a> (float angle)</td></tr>
-<tr class="separator:a0a6260adb84f7a2364745069d05ca3b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a166a380c966b5df7d57389f9a174ccd3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a166a380c966b5df7d57389f9a174ccd3">cvt_dir_rad_deg</a> (float angle)</td></tr>
-<tr class="separator:a166a380c966b5df7d57389f9a174ccd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9262b9b8f900f512fa47609d84c364e8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a9262b9b8f900f512fa47609d84c364e8">cvt_dir_norm_rad</a> (float angle)</td></tr>
-<tr class="separator:a9262b9b8f900f512fa47609d84c364e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ee7a9700c32ef3525d0b435edeb83ef"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a9ee7a9700c32ef3525d0b435edeb83ef">cvt_dir_norm_deg</a> (float angle)</td></tr>
-<tr class="separator:a9ee7a9700c32ef3525d0b435edeb83ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83bf5c4ed8ea61df4988e20c3573e046"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a83bf5c4ed8ea61df4988e20c3573e046">__attribute__</a> ((always_inline)) inline void setbits(<a class="el" href="a00080.html#aa6eb327e1a47e374f46253e6eed88bf5">vuint32_t</a> *i</td></tr>
+<tr class="separator:a83bf5c4ed8ea61df4988e20c3573e046"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a6c98ca881977d176b66f1ae0b225e262"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a6c98ca881977d176b66f1ae0b225e262">unitxf</a></td></tr>
-<tr class="separator:a6c98ca881977d176b66f1ae0b225e262"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e61d821172380ddc9a0aa3d96d088d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a5e61d821172380ddc9a0aa3d96d088d9">unityf</a></td></tr>
-<tr class="separator:a5e61d821172380ddc9a0aa3d96d088d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9895152fd9b9d8ff4ccd34ca62d0d296"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a9895152fd9b9d8ff4ccd34ca62d0d296">unitzf</a></td></tr>
-<tr class="separator:a9895152fd9b9d8ff4ccd34ca62d0d296"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67f80f3ef3bfe9aa0ee4929235793ba5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a67f80f3ef3bfe9aa0ee4929235793ba5">unitmxf</a></td></tr>
-<tr class="separator:a67f80f3ef3bfe9aa0ee4929235793ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ecc51dc415d7c137702b0fb9d6aab3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a4ecc51dc415d7c137702b0fb9d6aab3a">unitmyf</a></td></tr>
-<tr class="separator:a4ecc51dc415d7c137702b0fb9d6aab3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a154bb61101541166f3de46c53a03f286"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a154bb61101541166f3de46c53a03f286">unitmzf</a></td></tr>
-<tr class="separator:a154bb61101541166f3de46c53a03f286"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0992d31d9822b3ea4309429afcc9b35e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a0992d31d9822b3ea4309429afcc9b35e">Vector3f_null</a></td></tr>
-<tr class="separator:a0992d31d9822b3ea4309429afcc9b35e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50c9e7ceb74c287b6fe8f2b4a9e0db89"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00080.html#aa6eb327e1a47e374f46253e6eed88bf5">vuint32_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#a50c9e7ceb74c287b6fe8f2b4a9e0db89">m</a> { *i |= m</td></tr>
+<tr class="separator:a50c9e7ceb74c287b6fe8f2b4a9e0db89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add0681154f691e6bf331fbf03df4f14e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00080.html#add0681154f691e6bf331fbf03df4f14e">bn</a> { *i |= (0x01 &lt;&lt; bn)</td></tr>
+<tr class="separator:add0681154f691e6bf331fbf03df4f14e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ae71449b1cc6e6250b91f539153a7a0d3" name="ae71449b1cc6e6250b91f539153a7a0d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae71449b1cc6e6250b91f539153a7a0d3">&#9670;&nbsp;</a></span>M_PI</h2>
+<a id="abb452686968e48b67397da5f97445f5b" name="abb452686968e48b67397da5f97445f5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb452686968e48b67397da5f97445f5b">&#9670;&nbsp;</a></span>bool</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define M_PI&#160;&#160;&#160;3.14159265358979323846F</td>
+          <td class="memname">#define bool&#160;&#160;&#160;_Bool</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a958e4508ed28ee5cc04249144312c15f" name="a958e4508ed28ee5cc04249144312c15f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a958e4508ed28ee5cc04249144312c15f">&#9670;&nbsp;</a></span>M_PI_2</h2>
+<a id="a2eb6f9e0395b47b8d5e3eeae4fe0c116" name="a2eb6f9e0395b47b8d5e3eeae4fe0c116"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eb6f9e0395b47b8d5e3eeae4fe0c116">&#9670;&nbsp;</a></span>INLINE</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define M_PI_2&#160;&#160;&#160;1.57079632679489661923</td>
+          <td class="memname">#define INLINE&#160;&#160;&#160;<a class="el" href="a00131.html#a450d87c6a516eb359791b9aa89955cb5">__attribute__</a>((always_inline)) inline</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Main types declarations. </p>
+
+</div>
+</div>
+<a id="ac950c0db046e2f86d15e7ae1f558b017" name="ac950c0db046e2f86d15e7ae1f558b017"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac950c0db046e2f86d15e7ae1f558b017">&#9670;&nbsp;</a></span>INTERRUPT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INTERRUPT&#160;&#160;&#160;<a class="el" href="a00131.html#a450d87c6a516eb359791b9aa89955cb5">__attribute__</a>((interrupt(&quot;irq&quot;)))</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a2900bacda6e934e827e4db2b8981a42e" name="a2900bacda6e934e827e4db2b8981a42e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2900bacda6e934e827e4db2b8981a42e">&#9670;&nbsp;</a></span>M_PI_2F</h2>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a9f6dcc179d3c49158006865ab81f84f5" name="a9f6dcc179d3c49158006865ab81f84f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f6dcc179d3c49158006865ab81f84f5">&#9670;&nbsp;</a></span>vint16_t</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define M_PI_2F&#160;&#160;&#160;1.5707963f</td>
+          <td class="memname">typedef volatile int16_t <a class="el" href="a00080.html#a9f6dcc179d3c49158006865ab81f84f5">vint16_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aeb24420b096a677f3a2dc5a72b36bf22" name="aeb24420b096a677f3a2dc5a72b36bf22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb24420b096a677f3a2dc5a72b36bf22">&#9670;&nbsp;</a></span>M_PI_4</h2>
+<a id="a6f217e412133ffa5803e5d91d0043976" name="a6f217e412133ffa5803e5d91d0043976"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f217e412133ffa5803e5d91d0043976">&#9670;&nbsp;</a></span>vint32_t</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define M_PI_4&#160;&#160;&#160;0.78539816339744830962</td>
+          <td class="memname">typedef volatile int32_t <a class="el" href="a00080.html#a6f217e412133ffa5803e5d91d0043976">vint32_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ad636f4a48ae1fab60f517398696c68fe" name="ad636f4a48ae1fab60f517398696c68fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad636f4a48ae1fab60f517398696c68fe">&#9670;&nbsp;</a></span>M_PI_4F</h2>
+<a id="a080984095d6ed4f029bd5bb8a0a590cd" name="a080984095d6ed4f029bd5bb8a0a590cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a080984095d6ed4f029bd5bb8a0a590cd">&#9670;&nbsp;</a></span>vint8_t</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define M_PI_4F&#160;&#160;&#160;0.7853982f</td>
+          <td class="memname">typedef volatile int8_t <a class="el" href="a00080.html#a080984095d6ed4f029bd5bb8a0a590cd">vint8_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a7ff374d4809b623599a72f902957798a" name="a7ff374d4809b623599a72f902957798a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ff374d4809b623599a72f902957798a">&#9670;&nbsp;</a></span>M_PIF</h2>
+<a id="a90521f687dbd4c8eec49c259b253527a" name="a90521f687dbd4c8eec49c259b253527a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90521f687dbd4c8eec49c259b253527a">&#9670;&nbsp;</a></span>vuint16_t</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define M_PIF&#160;&#160;&#160;3.1415927f</td>
+          <td class="memname">typedef volatile uint16_t <a class="el" href="a00080.html#a90521f687dbd4c8eec49c259b253527a">vuint16_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa6eb327e1a47e374f46253e6eed88bf5" name="aa6eb327e1a47e374f46253e6eed88bf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6eb327e1a47e374f46253e6eed88bf5">&#9670;&nbsp;</a></span>vuint32_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef volatile uint32_t <a class="el" href="a00080.html#aa6eb327e1a47e374f46253e6eed88bf5">vuint32_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ee1720c821bd2a2b26c67afdc8b3549" name="a7ee1720c821bd2a2b26c67afdc8b3549"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ee1720c821bd2a2b26c67afdc8b3549">&#9670;&nbsp;</a></span>vuint8_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef volatile uint8_t <a class="el" href="a00080.html#a7ee1720c821bd2a2b26c67afdc8b3549">vuint8_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -267,626 +271,49 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a0a6260adb84f7a2364745069d05ca3b2" name="a0a6260adb84f7a2364745069d05ca3b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a6260adb84f7a2364745069d05ca3b2">&#9670;&nbsp;</a></span>cvt_dir_deg_rad()</h2>
+<a id="a83bf5c4ed8ea61df4988e20c3573e046" name="a83bf5c4ed8ea61df4988e20c3573e046"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83bf5c4ed8ea61df4988e20c3573e046">&#9670;&nbsp;</a></span>__attribute__()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float cvt_dir_deg_rad </td>
+          <td class="memname">__attribute__ </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>angle</em></td><td>)</td>
+          <td class="paramtype">(always_inline)&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9ee7a9700c32ef3525d0b435edeb83ef" name="a9ee7a9700c32ef3525d0b435edeb83ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ee7a9700c32ef3525d0b435edeb83ef">&#9670;&nbsp;</a></span>cvt_dir_norm_deg()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float cvt_dir_norm_deg </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>angle</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9262b9b8f900f512fa47609d84c364e8" name="a9262b9b8f900f512fa47609d84c364e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9262b9b8f900f512fa47609d84c364e8">&#9670;&nbsp;</a></span>cvt_dir_norm_rad()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float cvt_dir_norm_rad </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>angle</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a166a380c966b5df7d57389f9a174ccd3" name="a166a380c966b5df7d57389f9a174ccd3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a166a380c966b5df7d57389f9a174ccd3">&#9670;&nbsp;</a></span>cvt_dir_rad_deg()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float cvt_dir_rad_deg </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>angle</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00080_a166a380c966b5df7d57389f9a174ccd3_icgraph.png" border="0" usemap="#aa00080_a166a380c966b5df7d57389f9a174ccd3_icgraph" alt=""/></div>
-<map name="aa00080_a166a380c966b5df7d57389f9a174ccd3_icgraph" id="aa00080_a166a380c966b5df7d57389f9a174ccd3_icgraph">
-<area shape="rect" title=" " alt="" coords="160,5,285,32"/>
-<area shape="rect" href="a00044.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="aeed09372fe0365947aed8bbd7eecf72d" name="aeed09372fe0365947aed8bbd7eecf72d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeed09372fe0365947aed8bbd7eecf72d">&#9670;&nbsp;</a></span>vector3f_add()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> vector3f_add </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Adds two 3D vectors component-wise. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v1</td><td>The first vector. </td></tr>
-    <tr><td class="paramname">v2</td><td>The second vector. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The component-wise sum of v1 and v2. </dd></dl>
-
-</div>
-</div>
-<a id="ab6260eeb10eab0a3c585e649095accbd" name="ab6260eeb10eab0a3c585e649095accbd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6260eeb10eab0a3c585e649095accbd">&#9670;&nbsp;</a></span>vector3f_getCosine()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float vector3f_getCosine </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00080_ab6260eeb10eab0a3c585e649095accbd_cgraph.png" border="0" usemap="#aa00080_ab6260eeb10eab0a3c585e649095accbd_cgraph" alt=""/></div>
-<map name="aa00080_ab6260eeb10eab0a3c585e649095accbd_cgraph" id="aa00080_ab6260eeb10eab0a3c585e649095accbd_cgraph">
-<area shape="rect" title=" " alt="" coords="5,31,153,57"/>
-<area shape="rect" href="a00014.html#a903310051218f6081c3491f6c5f5fe45" title="Computes the dot product (scalar product) of two 3D vectors." alt="" coords="201,5,377,32"/>
-<area shape="rect" href="a00014.html#ad715d385b8495561a0a2f6c97d157229" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="219,56,359,83"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="ac5692debece7126e725e6f78e93680fa" name="ac5692debece7126e725e6f78e93680fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5692debece7126e725e6f78e93680fa">&#9670;&nbsp;</a></span>vector3f_getCrossProduct()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> vector3f_getCrossProduct </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the cross product of two 3D vectors. </p>
-<p >The cross product results in a vector perpendicular to both input vectors.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v1</td><td>The first vector. </td></tr>
-    <tr><td class="paramname">v2</td><td>The second vector. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The cross product vector. </dd></dl>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00080_ac5692debece7126e725e6f78e93680fa_icgraph.png" border="0" usemap="#aa00080_ac5692debece7126e725e6f78e93680fa_icgraph" alt=""/></div>
-<map name="aa00080_ac5692debece7126e725e6f78e93680fa_icgraph" id="aa00080_ac5692debece7126e725e6f78e93680fa_icgraph">
-<area shape="rect" title="Computes the cross product of two 3D vectors." alt="" coords="227,56,416,83"/>
-<area shape="rect" href="a00026.html#a212785a20157f9f72833269483fbbdbc" title=" " alt="" coords="26,5,158,32"/>
-<area shape="rect" href="a00026.html#ab565c5a9ef974d7ae8873525de16cb95" title=" " alt="" coords="5,56,179,83"/>
-<area shape="rect" href="a00026.html#a64f87dbfe86c917f34bd87c289857b08" title=" " alt="" coords="24,107,160,133"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a903310051218f6081c3491f6c5f5fe45" name="a903310051218f6081c3491f6c5f5fe45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a903310051218f6081c3491f6c5f5fe45">&#9670;&nbsp;</a></span>vector3f_getDotProduct()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float vector3f_getDotProduct </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the dot product (scalar product) of two 3D vectors. </p>
-<p >The dot product is a scalar value equal to the sum of the products of the corresponding components.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v1</td><td>The first vector. </td></tr>
-    <tr><td class="paramname">v2</td><td>The second vector. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The scalar dot product. </dd></dl>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00080_a903310051218f6081c3491f6c5f5fe45_icgraph.png" border="0" usemap="#aa00080_a903310051218f6081c3491f6c5f5fe45_icgraph" alt=""/></div>
-<map name="aa00080_a903310051218f6081c3491f6c5f5fe45_icgraph" id="aa00080_a903310051218f6081c3491f6c5f5fe45_icgraph">
-<area shape="rect" title="Computes the dot product (scalar product) of two 3D vectors." alt="" coords="227,31,403,57"/>
-<area shape="rect" href="a00026.html#ab565c5a9ef974d7ae8873525de16cb95" title=" " alt="" coords="5,5,179,32"/>
-<area shape="rect" href="a00014.html#ab6260eeb10eab0a3c585e649095accbd" title=" " alt="" coords="18,56,166,83"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="ad715d385b8495561a0a2f6c97d157229" name="ad715d385b8495561a0a2f6c97d157229"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad715d385b8495561a0a2f6c97d157229">&#9670;&nbsp;</a></span>vector3f_getNorm()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float vector3f_getNorm </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the Euclidean norm ("length") of a 3D vector. </p>
-<p >The norm is calculated as sqrt(x^2 + y^2 + z^2).</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>The input vector. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The Euclidean norm of the vector. </dd></dl>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00080_ad715d385b8495561a0a2f6c97d157229_icgraph.png" border="0" usemap="#aa00080_ad715d385b8495561a0a2f6c97d157229_icgraph" alt=""/></div>
-<map name="aa00080_ad715d385b8495561a0a2f6c97d157229_icgraph" id="aa00080_ad715d385b8495561a0a2f6c97d157229_icgraph">
-<area shape="rect" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="453,31,593,57"/>
-<area shape="rect" href="a00014.html#ab6260eeb10eab0a3c585e649095accbd" title=" " alt="" coords="242,5,390,32"/>
-<area shape="rect" href="a00014.html#af59ede5ab5fcac9a6d79dcac2bf895ff" title="Normalizes a 3D vector to have a length of 1." alt="" coords="227,56,405,83"/>
-<area shape="rect" href="a00026.html#a212785a20157f9f72833269483fbbdbc" title=" " alt="" coords="26,5,158,32"/>
-<area shape="rect" href="a00026.html#ab565c5a9ef974d7ae8873525de16cb95" title=" " alt="" coords="5,56,179,83"/>
-<area shape="rect" href="a00026.html#a64f87dbfe86c917f34bd87c289857b08" title=" " alt="" coords="24,107,160,133"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="af59ede5ab5fcac9a6d79dcac2bf895ff" name="af59ede5ab5fcac9a6d79dcac2bf895ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af59ede5ab5fcac9a6d79dcac2bf895ff">&#9670;&nbsp;</a></span>vector3f_getNormalized()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> vector3f_getNormalized </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Normalizes a 3D vector to have a length of 1. </p>
-<p >If the vector has zero length, the zero vector is returned.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>The input vector. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The normalized vector (unit vector), or the zero vector if the input is zero. </dd></dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00080_af59ede5ab5fcac9a6d79dcac2bf895ff_cgraph.png" border="0" usemap="#aa00080_af59ede5ab5fcac9a6d79dcac2bf895ff_cgraph" alt=""/></div>
-<map name="aa00080_af59ede5ab5fcac9a6d79dcac2bf895ff_cgraph" id="aa00080_af59ede5ab5fcac9a6d79dcac2bf895ff_cgraph">
-<area shape="rect" title="Normalizes a 3D vector to have a length of 1." alt="" coords="5,31,184,57"/>
-<area shape="rect" href="a00014.html#ad715d385b8495561a0a2f6c97d157229" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="235,5,375,32"/>
-<area shape="rect" href="a00014.html#a210fc338c3a1e2833060cfb6e5c346be" title="Multiplies a 3D vector by a scalar." alt="" coords="232,56,379,83"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00080_af59ede5ab5fcac9a6d79dcac2bf895ff_icgraph.png" border="0" usemap="#aa00080_af59ede5ab5fcac9a6d79dcac2bf895ff_icgraph" alt=""/></div>
-<map name="aa00080_af59ede5ab5fcac9a6d79dcac2bf895ff_icgraph" id="aa00080_af59ede5ab5fcac9a6d79dcac2bf895ff_icgraph">
-<area shape="rect" title="Normalizes a 3D vector to have a length of 1." alt="" coords="227,56,405,83"/>
-<area shape="rect" href="a00026.html#a212785a20157f9f72833269483fbbdbc" title=" " alt="" coords="26,5,158,32"/>
-<area shape="rect" href="a00026.html#ab565c5a9ef974d7ae8873525de16cb95" title=" " alt="" coords="5,56,179,83"/>
-<area shape="rect" href="a00026.html#a64f87dbfe86c917f34bd87c289857b08" title=" " alt="" coords="24,107,160,133"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a210fc338c3a1e2833060cfb6e5c346be" name="a210fc338c3a1e2833060cfb6e5c346be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a210fc338c3a1e2833060cfb6e5c346be">&#9670;&nbsp;</a></span>vector3f_getScaled()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> vector3f_getScaled </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>a</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Multiplies a 3D vector by a scalar. </p>
-<p >Each component of the vector is multiplied by the scalar value.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>The input vector. </td></tr>
-    <tr><td class="paramname">a</td><td>The scalar value. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The scaled vector. </dd></dl>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00080_a210fc338c3a1e2833060cfb6e5c346be_icgraph.png" border="0" usemap="#aa00080_a210fc338c3a1e2833060cfb6e5c346be_icgraph" alt=""/></div>
-<map name="aa00080_a210fc338c3a1e2833060cfb6e5c346be_icgraph" id="aa00080_a210fc338c3a1e2833060cfb6e5c346be_icgraph">
-<area shape="rect" title="Multiplies a 3D vector by a scalar." alt="" coords="453,31,600,57"/>
-<area shape="rect" href="a00026.html#a64f87dbfe86c917f34bd87c289857b08" title=" " alt="" coords="24,5,160,32"/>
-<area shape="rect" href="a00014.html#af59ede5ab5fcac9a6d79dcac2bf895ff" title="Normalizes a 3D vector to have a length of 1." alt="" coords="227,56,405,83"/>
-<area shape="rect" href="a00026.html#a212785a20157f9f72833269483fbbdbc" title=" " alt="" coords="26,56,158,83"/>
-<area shape="rect" href="a00026.html#ab565c5a9ef974d7ae8873525de16cb95" title=" " alt="" coords="5,107,179,133"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="ac291818833b950af7bae60a0e436ae07" name="ac291818833b950af7bae60a0e436ae07"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac291818833b950af7bae60a0e436ae07">&#9670;&nbsp;</a></span>vector3f_init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> vector3f_init </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>z</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7f5d8de2b4a89520605892592e441e8e" name="a7f5d8de2b4a89520605892592e441e8e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f5d8de2b4a89520605892592e441e8e">&#9670;&nbsp;</a></span>vector3f_sub()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> vector3f_sub </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00108.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>v2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Subtracts the second 3D vector from the first, component-wise. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v1</td><td>The vector to subtract from. </td></tr>
-    <tr><td class="paramname">v2</td><td>The vector to subtract. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The component-wise difference v1 - v2. </dd></dl>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="a67f80f3ef3bfe9aa0ee4929235793ba5" name="a67f80f3ef3bfe9aa0ee4929235793ba5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67f80f3ef3bfe9aa0ee4929235793ba5">&#9670;&nbsp;</a></span>unitmxf</h2>
+<a id="add0681154f691e6bf331fbf03df4f14e" name="add0681154f691e6bf331fbf03df4f14e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add0681154f691e6bf331fbf03df4f14e">&#9670;&nbsp;</a></span>bn</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> unitmxf</td>
+          <td class="memname">const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> bn { *i |= (0x01 &lt;&lt; bn)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a4ecc51dc415d7c137702b0fb9d6aab3a" name="a4ecc51dc415d7c137702b0fb9d6aab3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ecc51dc415d7c137702b0fb9d6aab3a">&#9670;&nbsp;</a></span>unitmyf</h2>
+<a id="a50c9e7ceb74c287b6fe8f2b4a9e0db89" name="a50c9e7ceb74c287b6fe8f2b4a9e0db89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50c9e7ceb74c287b6fe8f2b4a9e0db89">&#9670;&nbsp;</a></span>m</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> unitmyf</td>
+          <td class="memname">const <a class="el" href="a00080.html#aa6eb327e1a47e374f46253e6eed88bf5">vuint32_t</a> m { *i |= m</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a154bb61101541166f3de46c53a03f286" name="a154bb61101541166f3de46c53a03f286"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a154bb61101541166f3de46c53a03f286">&#9670;&nbsp;</a></span>unitmzf</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> unitmzf</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6c98ca881977d176b66f1ae0b225e262" name="a6c98ca881977d176b66f1ae0b225e262"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c98ca881977d176b66f1ae0b225e262">&#9670;&nbsp;</a></span>unitxf</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> unitxf</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5e61d821172380ddc9a0aa3d96d088d9" name="a5e61d821172380ddc9a0aa3d96d088d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e61d821172380ddc9a0aa3d96d088d9">&#9670;&nbsp;</a></span>unityf</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> unityf</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9895152fd9b9d8ff4ccd34ca62d0d296" name="a9895152fd9b9d8ff4ccd34ca62d0d296"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9895152fd9b9d8ff4ccd34ca62d0d296">&#9670;&nbsp;</a></span>unitzf</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> unitzf</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0992d31d9822b3ea4309429afcc9b35e" name="a0992d31d9822b3ea4309429afcc9b35e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0992d31d9822b3ea4309429afcc9b35e">&#9670;&nbsp;</a></span>Vector3f_null</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> Vector3f_null</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

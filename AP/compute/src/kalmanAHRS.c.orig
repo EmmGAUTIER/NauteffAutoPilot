@@ -111,7 +111,8 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
     north_body = vector3f_getNormalized(
             vector3f_getCrossProduct(east_body, acc_body));
 
-    Vector3f v1 = north_body;
+    // Vector3f v1 = north_body;
+
     //snprintf(message, sizeof message, "Nord haha %+7.3f %+7.3f %+7.3f\n", v1.x, v1.y, v1.z);
     //svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
 
@@ -164,9 +165,8 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
     }
     else
     {
-        Quaternionf qrot =
-        { 1.0f, 0.5f * gyr->x, gyr->y, gyr->z };
-        Quaternionf qe = Quaternionf_mul(ahrs->quaternion, qrot);
+        Quaternionf qrot = { 1.0f, 0.5f * gyr->x, gyr->y, gyr->z };
+        //Quaternionf qe = Quaternionf_mul(ahrs->quaternion, qrot);
         //qe.w = ahrs->quaternion.w*cw - ahrs->quaternion.x*sx - ahrs->quaternion.y*sy - ahrs->quaternion.z*sz;
         //qe.x = ahrs->quaternion.w*sx + ahrs->quaternion.x*cw + ahrs->quaternion.y*sz - ahrs->quaternion.z*sy;
         //qe.y = ahrs->quaternion.w*sy - ahrs->quaternion.x*sz + ahrs->quaternion.y*cw + ahrs->quaternion.z*sx;

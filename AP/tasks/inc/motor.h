@@ -129,7 +129,7 @@ void MOTOR_MSG_moveTime(float time);
 void MOTOR_MSG_set_cvt_angle_time(float cvt);
 
 /*
- * @brief Set the high pass filter coefficient 
+ * @brief Set the high pass filter coefficient
  * @param cvt Coefficient between 0 and 1 for the high pass filter
  * Usage is to be defined later.
  * @return void

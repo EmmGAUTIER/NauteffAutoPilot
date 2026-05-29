@@ -1,0 +1,12 @@
+<map id="SPI_DMA_Transfer" name="SPI_DMA_Transfer">
+<area shape="rect" id="node1" title="Fonction d’échange SPI en DMA (full&#45;duplex)." alt="" coords="695,56,833,83"/>
+<area shape="rect" id="node2" href="$a00047.html#a5fb6671548b30dd6c1fbe1cd793c6791" title=" " alt="" coords="469,5,646,32"/>
+<area shape="rect" id="node6" href="$a00047.html#a14b708887a1b0d8d1255000e0aa094e6" title=" " alt="" coords="484,107,631,133"/>
+<area shape="rect" id="node10" href="$a00047.html#ac4993c29880d074c20a6fa8184a1677c" title=" " alt="" coords="468,56,647,83"/>
+<area shape="rect" id="node3" href="$a00047.html#a5294868e32077d594c618fe1918ad28e" title=" " alt="" coords="289,5,400,32"/>
+<area shape="rect" id="node4" href="$a00047.html#a962fb0798587c614bec98b2863016d24" title=" " alt="" coords="124,5,221,32"/>
+<area shape="rect" id="node5" href="$a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+<area shape="rect" id="node7" href="$a00047.html#ad595e047dbdfde1ad5ef2e63e91d0a4d" title=" " alt="" coords="271,56,418,83"/>
+<area shape="rect" id="node8" href="$a00047.html#a41c3cfa0812f85bcec409525ff525767" title=" " alt="" coords="271,107,418,133"/>
+<area shape="rect" id="node9" href="$a00047.html#ac60f1657fd4e9eeb1fa1721ca95e5666" title=" " alt="" coords="269,157,420,184"/>
+</map>

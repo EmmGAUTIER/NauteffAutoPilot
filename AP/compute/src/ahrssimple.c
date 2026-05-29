@@ -17,7 +17,8 @@
 
 #define MEMS_INIT_MAG_VS_GYRO 0.1F /* Répartition de partie du compas et du gyromètre pour le cap */
 
-const AHRS_Interface_t AHRS_Simple_Interface = {
+const AHRS_Interface_t AHRS_Simple_Interface =
+{
     .AHRS_init = AHRS_Simple_init,
     .AHRS_get_roll            = AHRS_Simple_get_roll,
     .AHRS_get_pitch           = AHRS_Simple_get_pitch,
@@ -114,20 +115,20 @@ int AHRS_Simple_update(AHRS_Status_t *mstatus,
 
 #if 0
     snprintf(message, sizeof(message) - 1,
-            "IMU mag %+6f %+6f %+6f   acc %+6f %+6f %+6f    east%+6f %+6f %+6f\n",
-            acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, east.x, east.y,
-            east.z);
+             "IMU mag %+6f %+6f %+6f   acc %+6f %+6f %+6f    east%+6f %+6f %+6f\n",
+             acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, east.x, east.y,
+             east.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
 #if 0
     snprintf(message, sizeof(message) - 1,
-            "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
-            east.x, east.y, east.z, north.x, north.y, north.z);
+             "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
+             east.x, east.y, east.z, north.x, north.y, north.z);
     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 #endif
 
-    if ((!mstatus->initialized) || isnan(mstatus->heading))
+    if((!mstatus->initialized) || isnan(mstatus->heading))
     {
         /* First call heading unknown */
         /* Let's start with magnetometer value */
@@ -136,7 +137,7 @@ int AHRS_Simple_update(AHRS_Status_t *mstatus,
     }
     else
     {
-        if (isnan(gyr->z))
+        if(isnan(gyr->z))
         {
             gyr->z = 0.F;
         }
@@ -159,9 +160,9 @@ int AHRS_Simple_update(AHRS_Status_t *mstatus,
 
         /* compute the vector beta magnetic value + (1-beta) estimated direction */
         newdir_x = mstatus->magVsGyr * dirmag_x
-                + (1.F - mstatus->magVsGyr) * direstim_x;
+                   + (1.F - mstatus->magVsGyr) * direstim_x;
         newdir_y = mstatus->magVsGyr * dirmag_y
-                + (1.F - mstatus->magVsGyr) * direstim_y;
+                   + (1.F - mstatus->magVsGyr) * direstim_y;
         /* newdir_x,y points to the direction */
 
 #if 0

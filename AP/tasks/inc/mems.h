@@ -48,7 +48,7 @@ typedef enum
     MEMS_Status_Init,
     MEMS_Status_Measure,
     MEMS_Status_Calibrate,
-}MEMS_Status_t;
+} MEMS_Status_t;
 
 typedef struct
 {

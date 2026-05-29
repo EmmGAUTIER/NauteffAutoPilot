@@ -17,13 +17,14 @@
 #include "autopilot.h"
 #include "blink.h"
 
-TaskHandle_t tasksHandles [] = {
-        [0] = NULL, /* taskMotor     */
-        [1] = NULL, /* taskMEMs      */
-        [2] = NULL, /* taskDialogIn  */
-        [3] = NULL, /* taskAutoPilot */
-        [4] = NULL, /* taskService   */
-        [5] = NULL  /* taskBlink     */
+TaskHandle_t tasksHandles [] =
+{
+    [0] = NULL, /* taskMotor     */
+    [1] = NULL, /* taskMEMs      */
+    [2] = NULL, /* taskDialogIn  */
+    [3] = NULL, /* taskAutoPilot */
+    [4] = NULL, /* taskService   */
+    [5] = NULL  /* taskBlink     */
 };
 int tasksNumber = sizeof(tasksHandles) / sizeof(tasksHandles[0]);
 

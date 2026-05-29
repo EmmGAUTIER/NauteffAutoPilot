@@ -55,19 +55,19 @@ typedef struct
     int dirother2;
 } SelectValues;
 static SelectValues svs[] =
-        {
-                { +1, 2, 0, 1 }, /* First face : z down, x and y near horizontal */
-                /* turn right 90 deg. viewed from 'rear' */
-                { +1, 1, 0, 2 }, /* 2nd face : y down, x and z near horizontal */
-                /* turn right 90 deg. again */
-                { -1, 2, 0, 1 }, /* 3rd face : z up, x and y near horizontal */
-                /* turn right 90 deg. again */
-                { -1, 1, 0, 2 }, /* 4th face : y up, x and z near horizontal */
-                /* turn right 90 deg. again, turn 90 deg. by lifting rear */
-                { 1, 0, 1, 2 }, /* 5th face : x down, y and z nearly horizontal */
-                /* turn 180 deg. x down */
-                { -1, 0, 1, 2 }/* 6th face  x up, y and z nearly horizontal */
-        };
+{
+    { +1, 2, 0, 1 }, /* First face : z down, x and y near horizontal */
+    /* turn right 90 deg. viewed from 'rear' */
+    { +1, 1, 0, 2 }, /* 2nd face : y down, x and z near horizontal */
+    /* turn right 90 deg. again */
+    { -1, 2, 0, 1 }, /* 3rd face : z up, x and y near horizontal */
+    /* turn right 90 deg. again */
+    { -1, 1, 0, 2 }, /* 4th face : y up, x and z near horizontal */
+    /* turn right 90 deg. again, turn 90 deg. by lifting rear */
+    { 1, 0, 1, 2 }, /* 5th face : x down, y and z nearly horizontal */
+    /* turn 180 deg. x down */
+    { -1, 0, 1, 2 }/* 6th face  x up, y and z nearly horizontal */
+};
 
 /*
  * @brief Determine on which face the accelerometer is
@@ -79,11 +79,11 @@ int Calib6_getFace(const int *accint)
 {
     int faceIdx = -1;
 
-    for (int i = 0; i < 6 && faceIdx == -1; i++)
+    for(int i = 0; i < 6 && faceIdx == -1; i++)
     {
         SelectValues *sv = &svs[i];
 
-        if (sv->s1 * accint[sv->dirref]
+        if(sv->s1 * accint[sv->dirref]
                 > 2 * (abs(accint[sv->dirother1]) + abs(accint[sv->dirother2])))
         {
             faceIdx = i;
@@ -106,7 +106,7 @@ void Calib6_init(Calib6_t *calib)
 }
 
 int Calib6_addSample(Calib6_t *calib, const Calib6_typeSensor_t type,
-        const int *values)
+                     const int *values)
 {
     int ret;
     int faceIdx;
@@ -119,11 +119,11 @@ int Calib6_addSample(Calib6_t *calib, const Calib6_typeSensor_t type,
 
     ret = 0;
 
-    switch (type)
+    switch(type)
     {
     case Calib6_TypeAcc:
 
-        if (calib->started == 0)
+        if(calib->started == 0)
         {
             calib->acclpf[0] = values[0];
             calib->acclpf[1] = values[1];
@@ -131,24 +131,24 @@ int Calib6_addSample(Calib6_t *calib, const Calib6_typeSensor_t type,
             calib->started = 1;
         }
 
-        calib->acclpf[0] = (int) (calib->acclpf[0] * LPF_COEF
-                + values[0] * (1.F - LPF_COEF));
-        calib->acclpf[1] = (int) (calib->acclpf[1] * LPF_COEF
-                + values[1] * (1.F - LPF_COEF));
-        calib->acclpf[2] = (int) (calib->acclpf[2] * LPF_COEF
-                + values[2] * (1.F - LPF_COEF));
+        calib->acclpf[0] = (int)(calib->acclpf[0] * LPF_COEF
+                                 + values[0] * (1.F - LPF_COEF));
+        calib->acclpf[1] = (int)(calib->acclpf[1] * LPF_COEF
+                                 + values[1] * (1.F - LPF_COEF));
+        calib->acclpf[2] = (int)(calib->acclpf[2] * LPF_COEF
+                                 + values[2] * (1.F - LPF_COEF));
         diff = abs(calib->acclpf[0] - values[0])
-                + abs(calib->acclpf[1] - values[1])
-                + abs(calib->acclpf[2] - values[2]);
+               + abs(calib->acclpf[1] - values[1])
+               + abs(calib->acclpf[2] - values[2]);
         faceIdx = Calib6_getFace(values);
         stabOnFace = ((faceIdx >= 0) && (faceIdx == calib->faceIdx)
-                && (diff < STABILITY_THRESHOLD));
+                      && (diff < STABILITY_THRESHOLD));
         faceCalibrated = ((faceIdx >= 0)
-                && (calib->facesDone & (0x1 << faceIdx)));
+                          && (calib->facesDone & (0x1 << faceIdx)));
 
-        if (stabOnFace)
+        if(stabOnFace)
         {
-            if (calib->stabNumber < MIN_STAB_NUMBER)
+            if(calib->stabNumber < MIN_STAB_NUMBER)
             {
                 calib->stabNumber++;
             }
@@ -158,7 +158,7 @@ int Calib6_addSample(Calib6_t *calib, const Calib6_typeSensor_t type,
             }
         }
 
-        if (calib->accumulating && stabOnFace && (!faceCalibrated))
+        if(calib->accumulating && stabOnFace && (!faceCalibrated))
         {
             calib->accint[0] += values[0];
             calib->accint[1] += values[1];
@@ -166,56 +166,58 @@ int Calib6_addSample(Calib6_t *calib, const Calib6_typeSensor_t type,
             calib->nbSampleAcc++;
         }
 
-        if (calib->accumulating && ((!stabOnFace) || ((calib->nbSampleAcc >= MAX_SAMPLES_NUMBER) && (calib->nbSampleGyr >= MAX_SAMPLES_NUMBER)
-                && (calib->nbSampleMag >= MAX_SAMPLES_NUMBER))))
+        if(calib->accumulating && ((!stabOnFace) || ((calib->nbSampleAcc >= MAX_SAMPLES_NUMBER)
+                                   && (calib->nbSampleGyr >= MAX_SAMPLES_NUMBER)
+                                   && (calib->nbSampleMag >= MAX_SAMPLES_NUMBER))))
         {
-            if ((calib->nbSampleAcc >= MIN_SAMPLES_NUMBER)
+            if((calib->nbSampleAcc >= MIN_SAMPLES_NUMBER)
                     && (calib->nbSampleGyr >= MIN_SAMPLES_NUMBER)
                     && (calib->nbSampleMag >= MIN_SAMPLES_NUMBER))
             {
                 float nbSampleDivider;
                 nbSampleDivider = (float) calib->nbSampleAcc;
                 calib->acc_x[faceIdx] = ((float) calib->accint[0])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 calib->acc_y[faceIdx] = ((float) calib->accint[1])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 calib->acc_z[faceIdx] = ((float) calib->accint[2])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 nbSampleDivider = (float) calib->nbSampleGyr;
                 calib->gyr_x[faceIdx] = ((float) calib->gyrint[0])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 calib->gyr_y[faceIdx] = ((float) calib->gyrint[1])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 calib->gyr_z[faceIdx] = ((float) calib->gyrint[2])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 nbSampleDivider = (float) calib->nbSampleMag;
                 calib->mag_x[faceIdx] = ((float) calib->magint[0])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 calib->mag_y[faceIdx] = ((float) calib->magint[1])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 calib->mag_z[faceIdx] = ((float) calib->magint[2])
-                        / nbSampleDivider;
+                                        / nbSampleDivider;
                 calib->facesDone = calib->facesDone | (0x1 << faceIdx);
                 char message[128];
                 snprintf(message, sizeof(message),
-                        "CALIB : face %d done  acc %f %f %f   gyr %+7.2f %+7.2f %+7.2f   mag %+7.2f %+7.2f %+7.2f\n",
-                        faceIdx,
-                        calib->acc_x[faceIdx], calib->acc_y[faceIdx],
-                        calib->acc_z[faceIdx],
-                        calib->gyr_x[faceIdx], calib->gyr_y[faceIdx],
-                        calib->gyr_z[faceIdx],
-                        calib->mag_x[faceIdx], calib->mag_y[faceIdx],
-                        calib->mag_z[faceIdx]);
+                         "CALIB : face %d done  acc %f %f %f   gyr %+7.2f %+7.2f %+7.2f   mag %+7.2f %+7.2f %+7.2f\n",
+                         faceIdx,
+                         calib->acc_x[faceIdx], calib->acc_y[faceIdx],
+                         calib->acc_z[faceIdx],
+                         calib->gyr_x[faceIdx], calib->gyr_y[faceIdx],
+                         calib->gyr_z[faceIdx],
+                         calib->mag_x[faceIdx], calib->mag_y[faceIdx],
+                         calib->mag_z[faceIdx]);
                 snprintf(message, sizeof(message), "CALIB acc %f %f %f\n",
-                        calib->acc_x[faceIdx], calib->acc_y[faceIdx],
-                        calib->acc_z[faceIdx]);
+                         calib->acc_x[faceIdx], calib->acc_y[faceIdx],
+                         calib->acc_z[faceIdx]);
                 svc_UART_Write(&svc_uart2, message, strlen(message),
-                        pdMS_TO_TICKS(1));
+                               pdMS_TO_TICKS(1));
             }
             else
             {
                 /* not enough int samples collected clear accumulated values for next trial */
             }
+
             calib->accint[0] = 0;
             calib->accint[1] = 0;
             calib->accint[2] = 0;
@@ -238,23 +240,25 @@ int Calib6_addSample(Calib6_t *calib, const Calib6_typeSensor_t type,
         break;
 
     case Calib6_TypeGyr:
-        if (calib->accumulating)
+        if(calib->accumulating)
         {
             calib->gyrint[0] += values[0];
             calib->gyrint[1] += values[1];
             calib->gyrint[2] += values[2];
             calib->nbSampleGyr++;
         }
+
         break;
 
     case Calib6_TypeMag:
-        if (calib->accumulating)
+        if(calib->accumulating)
         {
             calib->magint[0] += values[0];
             calib->magint[1] += values[1];
             calib->magint[2] += values[2];
             calib->nbSampleMag++;
         }
+
         break;
     }
 
@@ -283,7 +287,7 @@ int Calib6_ComputeCorrector(Calib6_t *calib, Corrector_t *corr)
 {
     int res;
 
-    if (calib->facesDone != 0x3F)
+    if(calib->facesDone != 0x3F)
     {
         res = -1;
     }
@@ -315,12 +319,14 @@ int Calib6_ComputeCorrector(Calib6_t *calib, Corrector_t *corr)
 
         /* Gyro bias */
         meanx = meany = meanz = .0F;
-        for (int i = 0; i < 6; i++)
+
+        for(int i = 0; i < 6; i++)
         {
             meanx += calib->gyr_x[i];
             meany += calib->gyr_y[i];
             meanz += calib->gyr_z[i];
         }
+
         meanx /= 6.F;
         meany /= 6.F;
         meanz /= 6.F;
@@ -336,7 +342,8 @@ int Calib6_ComputeCorrector(Calib6_t *calib, Corrector_t *corr)
         maxx = minx = calib->mag_x[0];
         maxy = miny = calib->mag_y[0];
         maxz = minz = calib->mag_z[0];
-        for (int i = 1; i < 6; i++)
+
+        for(int i = 1; i < 6; i++)
         {
             minx = fminf(minx, calib->mag_x[i]);
             miny = fminf(miny, calib->mag_y[i]);
@@ -357,5 +364,6 @@ int Calib6_ComputeCorrector(Calib6_t *calib, Corrector_t *corr)
 
         res = 0;
     }
+
     return res;
 }

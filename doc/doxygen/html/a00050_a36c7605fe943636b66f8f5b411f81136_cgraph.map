@@ -1,0 +1,7 @@
+<map id="svc_internal_UART_Write" name="svc_internal_UART_Write">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,191,57"/>
+<area shape="rect" id="node2" href="$a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="447,5,611,32"/>
+<area shape="rect" id="node3" href="$a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="239,81,399,108"/>
+<area shape="rect" id="node5" href="$a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="266,31,371,57"/>
+<area shape="rect" id="node4" href="$a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="466,81,591,108"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="AHRS_Status_t" name="AHRS_Status_t">
+<area shape="rect" id="node1" title=" " alt="" coords="40,219,159,428"/>
+<area shape="rect" id="node2" href="$a00198.html" title="Structure representing a 3D vector with float components." alt="" coords="5,13,81,119"/>
+<area shape="rect" id="node3" href="$a00230.html" title="Structure representing a quaternion with float components." alt="" coords="106,5,205,127"/>
+</map>

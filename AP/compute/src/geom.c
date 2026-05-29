@@ -201,7 +201,7 @@ float normalize_angle_rad(float angle)
 {
     float na;
 
-    if (angle >= 0.0F)
+    if(angle >= 0.0F)
     {
         na = fmodf(angle, 2.0F * M_PIF);
     }

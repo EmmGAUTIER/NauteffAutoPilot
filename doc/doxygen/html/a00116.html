@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: CalibrationEllipsoidResult_t Struct Reference</title>
+<title>Nauteff auto pilot: calib.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,79 +61,377 @@ $(function() {
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_9dfa3f9a64349c3632ba595b490a8ee1.html">compute</a></li><li class="navelem"><a class="el" href="dir_a916071c727a11f0597e20cb00a44bbc.html">inc</a></li>  </ul>
+</div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="a00113.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">CalibrationEllipsoidResult_t Struct Reference</div></div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">calib.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Collaboration diagram for CalibrationEllipsoidResult_t:</div>
+<div class="textblock"><code>#include &quot;<a class="el" href="a00080_source.html">util.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00119_source.html">geom.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for calib.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00114.png" border="0" usemap="#aCalibrationEllipsoidResult__t_coll__map" alt="Collaboration graph"/></div>
-<map name="aCalibrationEllipsoidResult__t_coll__map" id="aCalibrationEllipsoidResult__t_coll__map">
-<area shape="rect" title=" " alt="" coords="5,175,207,267"/>
-<area shape="rect" href="a00108.html" title="Structure representing a 3D vector with float components." alt="" coords="68,5,144,112"/>
+<div class="center"><img src="a00117.png" border="0" usemap="#acalib_8h" alt=""/></div>
+<map name="acalib_8h" id="acalib_8h">
+<area shape="rect" title=" " alt="" coords="43,5,108,32"/>
+<area shape="rect" href="a00080.html" title=" " alt="" coords="5,80,60,107"/>
+<area shape="rect" href="a00119.html" title=" " alt="" coords="84,80,155,107"/>
+<area shape="rect" title=" " alt="" coords="84,155,155,181"/>
 </map>
 </div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00118.png" border="0" usemap="#acalib_8hdep" alt=""/></div>
+<map name="acalib_8hdep" id="acalib_8hdep">
+<area shape="rect" title=" " alt="" coords="51,5,117,32"/>
+<area shape="rect" href="a00011.html" title=" " alt="" coords="5,80,69,107"/>
+<area shape="rect" href="a00047.html" title=" " alt="" coords="93,80,168,107"/>
+</map>
+</div>
+</div>
+<p><a href="a00116_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a7267cc9dd8bed11022ae76a1ca9573c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00108.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a7267cc9dd8bed11022ae76a1ca9573c1">offset</a></td></tr>
-<tr class="separator:a7267cc9dd8bed11022ae76a1ca9573c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40cc6f02e9151fde94ba8e682ad556e5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a40cc6f02e9151fde94ba8e682ad556e5">M</a> [3][3]</td></tr>
-<tr class="separator:a40cc6f02e9151fde94ba8e682ad556e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99e2f3f4bb917e7f0717cccdf31d141f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a99e2f3f4bb917e7f0717cccdf31d141f">quality</a></td></tr>
-<tr class="separator:a99e2f3f4bb917e7f0717cccdf31d141f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00190.html">Calib6_t</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00194.html">Corrector_t</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a5709d1e40b4771429fd864f0a7f323d3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3">Calib6_typeSensor_t</a> { <a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3acc3030b34bdb8e166c253f38e1827930">Calib6_TypeAcc</a> = 0
+, <a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3a3a094e939681849f89ef4148cfc7080f">Calib6_TypeGyr</a>
+, <a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3a5e0908537a33f2645dacafbe54a6d4da">Calib6_TypeMag</a>
+ }</td></tr>
+<tr class="separator:a5709d1e40b4771429fd864f0a7f323d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:aefde2a034fbeea4d85675a591fa1a4fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00080.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="a00198.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#aefde2a034fbeea4d85675a591fa1a4fd">Corrector_getAccCorrected</a> (<a class="el" href="a00194.html">Corrector_t</a> *corr, <a class="el" href="a00198.html">Vector3f</a> *acc)</td></tr>
+<tr class="separator:aefde2a034fbeea4d85675a591fa1a4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a81126c245d6681c2a94a8397d49a48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00080.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="a00198.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a6a81126c245d6681c2a94a8397d49a48">Corrector_getGyrCorrected</a> (const <a class="el" href="a00194.html">Corrector_t</a> *corr, const <a class="el" href="a00198.html">Vector3f</a> *gyr)</td></tr>
+<tr class="separator:a6a81126c245d6681c2a94a8397d49a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9378fd22df436355a70203bad5edb8af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00080.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="a00198.html">Vector3f</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a9378fd22df436355a70203bad5edb8af">Corrector_getMagCorrected</a> (const <a class="el" href="a00194.html">Corrector_t</a> *corr, const <a class="el" href="a00198.html">Vector3f</a> *mag)</td></tr>
+<tr class="separator:a9378fd22df436355a70203bad5edb8af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2045e43ed87a04df16914157ea4decc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a2045e43ed87a04df16914157ea4decc7">Calib6_init</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib)</td></tr>
+<tr class="separator:a2045e43ed87a04df16914157ea4decc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a9ba0d675d84ecec777ff9ef73404d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a4a9ba0d675d84ecec777ff9ef73404d3">Calib6_getFace</a> (const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> *accint)</td></tr>
+<tr class="separator:a4a9ba0d675d84ecec777ff9ef73404d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55d30a57ced2043d0903c37c8254e0f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a55d30a57ced2043d0903c37c8254e0f5">Calib6_addSample</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib, const <a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3">Calib6_typeSensor_t</a> type, const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> *values)</td></tr>
+<tr class="separator:a55d30a57ced2043d0903c37c8254e0f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dfb40a8c2e305a52c8012788fd9e842"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a3dfb40a8c2e305a52c8012788fd9e842">Calib6_hasEnoughSamples</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib)</td></tr>
+<tr class="separator:a3dfb40a8c2e305a52c8012788fd9e842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae00a86a8efd65c1534256918b72996b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#ae00a86a8efd65c1534256918b72996b1">Calib6_getPhase</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib)</td></tr>
+<tr class="separator:ae00a86a8efd65c1534256918b72996b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3632d89fda0a3a65fae450b066768d3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#a3632d89fda0a3a65fae450b066768d3e">Calib6_isPhaseComplete</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib)</td></tr>
+<tr class="separator:a3632d89fda0a3a65fae450b066768d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade2302afb58c89ac29a9b322ae587093"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00116.html#ade2302afb58c89ac29a9b322ae587093">Calib6_ComputeCorrector</a> (<a class="el" href="a00190.html">Calib6_t</a> *calib, <a class="el" href="a00194.html">Corrector_t</a> *corr)</td></tr>
+<tr class="separator:ade2302afb58c89ac29a9b322ae587093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a40cc6f02e9151fde94ba8e682ad556e5" name="a40cc6f02e9151fde94ba8e682ad556e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40cc6f02e9151fde94ba8e682ad556e5">&#9670;&nbsp;</a></span>M</h2>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a5709d1e40b4771429fd864f0a7f323d3" name="a5709d1e40b4771429fd864f0a7f323d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5709d1e40b4771429fd864f0a7f323d3">&#9670;&nbsp;</a></span>Calib6_typeSensor_t</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float CalibrationEllipsoidResult_t::M[3][3]</td>
+          <td class="memname">enum <a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3">Calib6_typeSensor_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5709d1e40b4771429fd864f0a7f323d3acc3030b34bdb8e166c253f38e1827930" name="a5709d1e40b4771429fd864f0a7f323d3acc3030b34bdb8e166c253f38e1827930"></a>Calib6_TypeAcc&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5709d1e40b4771429fd864f0a7f323d3a3a094e939681849f89ef4148cfc7080f" name="a5709d1e40b4771429fd864f0a7f323d3a3a094e939681849f89ef4148cfc7080f"></a>Calib6_TypeGyr&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5709d1e40b4771429fd864f0a7f323d3a5e0908537a33f2645dacafbe54a6d4da" name="a5709d1e40b4771429fd864f0a7f323d3a5e0908537a33f2645dacafbe54a6d4da"></a>Calib6_TypeMag&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a55d30a57ced2043d0903c37c8254e0f5" name="a55d30a57ced2043d0903c37c8254e0f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55d30a57ced2043d0903c37c8254e0f5">&#9670;&nbsp;</a></span>Calib6_addSample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_addSample </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="a00116.html#a5709d1e40b4771429fd864f0a7f323d3">Calib6_typeSensor_t</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> *&#160;</td>
+          <td class="paramname"><em>values</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00116_a55d30a57ced2043d0903c37c8254e0f5_cgraph.png" border="0" usemap="#aa00116_a55d30a57ced2043d0903c37c8254e0f5_cgraph" alt=""/></div>
+<map name="aa00116_a55d30a57ced2043d0903c37c8254e0f5_cgraph" id="aa00116_a55d30a57ced2043d0903c37c8254e0f5_cgraph">
+<area shape="rect" title=" " alt="" coords="5,183,148,209"/>
+<area shape="rect" href="a00011.html#a4a9ba0d675d84ecec777ff9ef73404d3" title=" " alt="" coords="196,107,316,133"/>
+<area shape="rect" href="a00050.html#a8866b5421a676559242721d47fc1fcdc" title=" " alt="" coords="237,157,275,184"/>
+<area shape="rect" href="a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="227,259,285,285"/>
+<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="420,208,548,235"/>
+<area shape="rect" href="a00050.html#af0b843e95b71e99f178f067d104c34c1" title=" " alt="" coords="364,81,604,108"/>
+<area shape="rect" href="a00050.html#a36c7605fe943636b66f8f5b411f81136" title=" " alt="" coords="391,157,577,184"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="652,107,812,133"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="879,81,1005,108"/>
+<area shape="rect" href="a00005.html#ab3e01b9f2d18902b5ae589d07c638dd8" title="Skips len bytes in the buffer (advances idxStart)." alt="" coords="683,5,781,32"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="860,208,1024,235"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="679,208,785,235"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ade2302afb58c89ac29a9b322ae587093" name="ade2302afb58c89ac29a9b322ae587093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade2302afb58c89ac29a9b322ae587093">&#9670;&nbsp;</a></span>Calib6_ComputeCorrector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_ComputeCorrector </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="a00194.html">Corrector_t</a> *&#160;</td>
+          <td class="paramname"><em>corr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a7267cc9dd8bed11022ae76a1ca9573c1" name="a7267cc9dd8bed11022ae76a1ca9573c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7267cc9dd8bed11022ae76a1ca9573c1">&#9670;&nbsp;</a></span>offset</h2>
+<a id="a4a9ba0d675d84ecec777ff9ef73404d3" name="a4a9ba0d675d84ecec777ff9ef73404d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a9ba0d675d84ecec777ff9ef73404d3">&#9670;&nbsp;</a></span>Calib6_getFace()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00108.html">Vector3f</a> CalibrationEllipsoidResult_t::offset</td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_getFace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> *&#160;</td>
+          <td class="paramname"><em>accint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00116_a4a9ba0d675d84ecec777ff9ef73404d3_icgraph.png" border="0" usemap="#aa00116_a4a9ba0d675d84ecec777ff9ef73404d3_icgraph" alt=""/></div>
+<map name="aa00116_a4a9ba0d675d84ecec777ff9ef73404d3_icgraph" id="aa00116_a4a9ba0d675d84ecec777ff9ef73404d3_icgraph">
+<area shape="rect" title=" " alt="" coords="196,5,316,32"/>
+<area shape="rect" href="a00011.html#a55d30a57ced2043d0903c37c8254e0f5" title=" " alt="" coords="5,5,148,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae00a86a8efd65c1534256918b72996b1" name="ae00a86a8efd65c1534256918b72996b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae00a86a8efd65c1534256918b72996b1">&#9670;&nbsp;</a></span>Calib6_getPhase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_getPhase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a99e2f3f4bb917e7f0717cccdf31d141f" name="a99e2f3f4bb917e7f0717cccdf31d141f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99e2f3f4bb917e7f0717cccdf31d141f">&#9670;&nbsp;</a></span>quality</h2>
+<a id="a3dfb40a8c2e305a52c8012788fd9e842" name="a3dfb40a8c2e305a52c8012788fd9e842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3dfb40a8c2e305a52c8012788fd9e842">&#9670;&nbsp;</a></span>Calib6_hasEnoughSamples()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float CalibrationEllipsoidResult_t::quality</td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_hasEnoughSamples </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li><a class="el" href="a00011.html">calculs.c</a></li>
-</ul>
+<a id="a2045e43ed87a04df16914157ea4decc7" name="a2045e43ed87a04df16914157ea4decc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2045e43ed87a04df16914157ea4decc7">&#9670;&nbsp;</a></span>Calib6_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Calib6_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00116_a2045e43ed87a04df16914157ea4decc7_cgraph.png" border="0" usemap="#aa00116_a2045e43ed87a04df16914157ea4decc7_cgraph" alt=""/></div>
+<map name="aa00116_a2045e43ed87a04df16914157ea4decc7_cgraph" id="aa00116_a2045e43ed87a04df16914157ea4decc7_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,96,32"/>
+<area shape="rect" href="a00068.html#a313175102214d45434bf045db18dddf0" title=" " alt="" coords="144,5,220,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a3632d89fda0a3a65fae450b066768d3e" name="a3632d89fda0a3a65fae450b066768d3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3632d89fda0a3a65fae450b066768d3e">&#9670;&nbsp;</a></span>Calib6_isPhaseComplete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Calib6_isPhaseComplete </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00190.html">Calib6_t</a> *&#160;</td>
+          <td class="paramname"><em>calib</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefde2a034fbeea4d85675a591fa1a4fd" name="aefde2a034fbeea4d85675a591fa1a4fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefde2a034fbeea4d85675a591fa1a4fd">&#9670;&nbsp;</a></span>Corrector_getAccCorrected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00080.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="a00198.html">Vector3f</a> Corrector_getAccCorrected </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00194.html">Corrector_t</a> *&#160;</td>
+          <td class="paramname"><em>corr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramname"><em>acc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6a81126c245d6681c2a94a8397d49a48" name="a6a81126c245d6681c2a94a8397d49a48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a81126c245d6681c2a94a8397d49a48">&#9670;&nbsp;</a></span>Corrector_getGyrCorrected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00080.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="a00198.html">Vector3f</a> Corrector_getGyrCorrected </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="a00194.html">Corrector_t</a> *&#160;</td>
+          <td class="paramname"><em>corr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramname"><em>gyr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9378fd22df436355a70203bad5edb8af" name="a9378fd22df436355a70203bad5edb8af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9378fd22df436355a70203bad5edb8af">&#9670;&nbsp;</a></span>Corrector_getMagCorrected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00080.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a> <a class="el" href="a00198.html">Vector3f</a> Corrector_getMagCorrected </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="a00194.html">Corrector_t</a> *&#160;</td>
+          <td class="paramname"><em>corr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramname"><em>mag</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

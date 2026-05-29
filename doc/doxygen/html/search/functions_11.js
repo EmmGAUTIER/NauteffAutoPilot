@@ -1,0 +1,16 @@
+var searchData=
+[
+  ['vector3f_5fadd_0',['vector3f_add',['../a00119.html#aeed09372fe0365947aed8bbd7eecf72d',1,'vector3f_add(Vector3f v1, Vector3f v2):&#160;geom.c'],['../a00020.html#aeed09372fe0365947aed8bbd7eecf72d',1,'vector3f_add(Vector3f v1, Vector3f v2):&#160;geom.c']]],
+  ['vector3f_5ffromints_1',['Vector3f_fromInts',['../a00047.html#adc532422cd68a3316d5f8f5a96f4f980',1,'mems.c']]],
+  ['vector3f_5fgetcosine_2',['vector3f_getCosine',['../a00020.html#ab6260eeb10eab0a3c585e649095accbd',1,'vector3f_getCosine(Vector3f v1, Vector3f v2):&#160;geom.c'],['../a00119.html#ab6260eeb10eab0a3c585e649095accbd',1,'vector3f_getCosine(Vector3f v1, Vector3f v2):&#160;geom.c']]],
+  ['vector3f_5fgetcrossproduct_3',['vector3f_getCrossProduct',['../a00020.html#ac5692debece7126e725e6f78e93680fa',1,'vector3f_getCrossProduct(Vector3f v1, Vector3f v2):&#160;geom.c'],['../a00119.html#ac5692debece7126e725e6f78e93680fa',1,'vector3f_getCrossProduct(Vector3f v1, Vector3f v2):&#160;geom.c']]],
+  ['vector3f_5fgetdotproduct_4',['vector3f_getDotProduct',['../a00020.html#a903310051218f6081c3491f6c5f5fe45',1,'vector3f_getDotProduct(Vector3f v1, Vector3f v2):&#160;geom.c'],['../a00119.html#a903310051218f6081c3491f6c5f5fe45',1,'vector3f_getDotProduct(Vector3f v1, Vector3f v2):&#160;geom.c']]],
+  ['vector3f_5fgetnorm_5',['vector3f_getNorm',['../a00020.html#ad715d385b8495561a0a2f6c97d157229',1,'vector3f_getNorm(Vector3f v):&#160;geom.c'],['../a00119.html#ad715d385b8495561a0a2f6c97d157229',1,'vector3f_getNorm(Vector3f v):&#160;geom.c']]],
+  ['vector3f_5fgetnormalized_6',['vector3f_getNormalized',['../a00119.html#af59ede5ab5fcac9a6d79dcac2bf895ff',1,'vector3f_getNormalized(Vector3f v):&#160;geom.c'],['../a00020.html#af59ede5ab5fcac9a6d79dcac2bf895ff',1,'vector3f_getNormalized(Vector3f v):&#160;geom.c']]],
+  ['vector3f_5fgetscaled_7',['vector3f_getScaled',['../a00020.html#a210fc338c3a1e2833060cfb6e5c346be',1,'vector3f_getScaled(Vector3f v, float a):&#160;geom.c'],['../a00119.html#a210fc338c3a1e2833060cfb6e5c346be',1,'vector3f_getScaled(Vector3f v, float a):&#160;geom.c']]],
+  ['vector3f_5fgetsquarediff_8',['Vector3f_getSquareDiff',['../a00020.html#adc72e5e25e5e4e4f13574cd772b8f65e',1,'Vector3f_getSquareDiff(Vector3f v1, Vector3f v2):&#160;geom.c'],['../a00119.html#adc72e5e25e5e4e4f13574cd772b8f65e',1,'Vector3f_getSquareDiff(Vector3f v1, Vector3f v2):&#160;geom.c']]],
+  ['vector3f_5finit_9',['vector3f_init',['../a00020.html#ac291818833b950af7bae60a0e436ae07',1,'vector3f_init(float x, float y, float z):&#160;geom.c'],['../a00119.html#ac291818833b950af7bae60a0e436ae07',1,'vector3f_init(float x, float y, float z):&#160;geom.c']]],
+  ['vector3f_5fsub_10',['vector3f_sub',['../a00020.html#a7f5d8de2b4a89520605892592e441e8e',1,'vector3f_sub(Vector3f v1, Vector3f v2):&#160;geom.c'],['../a00119.html#a7f5d8de2b4a89520605892592e441e8e',1,'vector3f_sub(Vector3f v1, Vector3f v2):&#160;geom.c']]],
+  ['vprintf_5f_11',['vprintf_',['../a00074.html#aa199d9388f8dcddcda1a0451315cae89',1,'printf.h']]],
+  ['vsnprintf_5f_12',['vsnprintf_',['../a00008.html#af37254f8c6a2d9d51e82c85fd666f88e',1,'vsnprintf_(char *buffer, size_t count, const char *format, va_list va):&#160;printf.c'],['../a00074.html#af37254f8c6a2d9d51e82c85fd666f88e',1,'vsnprintf_(char *buffer, size_t count, const char *format, va_list va):&#160;printf.c']]]
+];

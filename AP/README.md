@@ -3,7 +3,7 @@
 ## Répertoire tasks
 Ce répertoire contient les sources des tâches.
 Les tâches utilisent un boucle infinie qui lit les informations et ordres dans des messages
-qui sont transférées dans des queues et traitent ces messages. La tâche Blink, très imple,
+qui sont transférées dans des queues et traitent ces messages. La tâche Blink, très simple,
 est un bon début de lecture pour comprendre ces mécanismes.
 
     
@@ -14,13 +14,13 @@ Cette tâche fait clignoter une LED. Elle est utilisée uniquement pour la mise 
 ### Tâche mems
 Elle gère les capteurs MEMS (LSM9DS1) et envoie les information d'orientation vers la tâche autopilot et vers UART2.
 Elle lit les données brutes de des capteurs, applique les correction de biais et de gain,
-calcule le cap, le roulis et le tangage et le quaternion d'orientation et les diffuse.   
+calcule le cap, le roulis, le tangage et le quaternion d'orientation, puis les diffuse.   
 Cette tâche permet aussi l'étalonnage des capteurs.
 
 ### Tâche autopilot
 Elle recçoit les information d'orientation du navire les ordres du navigateur et les informations du moteur.
-À réception de l'ordre de maintenir un cap, elle compare le cap demandé et la cap demandé et
-envoie les commandes de barre à la tâche moteur. Elle implémente un régulateur PID.
+À réception de l'ordre de maintenir un cap, elle compare le l'orientation du navire et la cap demandé et
+envoie les commandes de barre à la tâche moteur pour maintenir ce cap. Elle implémente un régulateur PID.
    
 ### Tâche motor
 Elle assure la commande et la surveillance du moteur. Elle reçoit ses ordres de la tâche autopilot.

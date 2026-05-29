@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: mems.h Source File</title>
+<title>Nauteff auto pilot: ahrssimple.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,88 +63,103 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_f6024555edb91c92286789204247ac6f.html">tasks</a></li><li class="navelem"><a class="el" href="dir_96b134f082932b0ffaad969aba350d0a.html">inc</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_f7374e2e0880857e633dae119bf6e1b2.html">AP</a></li><li class="navelem"><a class="el" href="dir_9dfa3f9a64349c3632ba595b490a8ee1.html">compute</a></li><li class="navelem"><a class="el" href="dir_a916071c727a11f0597e20cb00a44bbc.html">inc</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">mems.h</div></div>
+  <div class="headertitle"><div class="title">ahrssimple.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="a00089.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">MIT License</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"></span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">Copyright (c) 2025 Emmanuel Gautier / Nauteff</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"></span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">in the Software without restriction, including without limitation the rights</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">copies of the Software, and to permit persons to whom the Software is</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"></span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">The above copyright notice and this permission notice shall be included in all</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">copies or substantial portions of the Software.</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"></span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">SOFTWARE.</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">*/</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keywordtype">int</span> <a class="code hl_function" href="a00089.html#a5e9a97e8107336f2f03804f9b5b9e55f">init_taskMEMs</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keywordtype">void</span> <a class="code hl_function" href="a00089.html#a850d8249599ac5dd77cae18946511d5d">taskMEMs</a>(<span class="keywordtype">void</span> *pvParameters);</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">extern</span> QueueHandle_t <a class="code hl_variable" href="a00089.html#ae2fe2051757002be8b61e7ceeeb2bc46">msgQueueMEMs</a>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5">   31</a></span><span class="keyword">typedef</span> <span class="keyword">enum</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>{</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a0f241622e44d1eb8349d251c21d04185">   33</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a0f241622e44d1eb8349d251c21d04185">MEMS_MSG_NONE</a> = 0,</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a4b6e48cbc5271af357ab88c97aa29282">   34</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a4b6e48cbc5271af357ab88c97aa29282">MEMS_MSG_ACC_READY</a>,</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a8e0e47c671b5a41cb9136a8673c2981c">   35</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a8e0e47c671b5a41cb9136a8673c2981c">MEMS_MSG_GYR_READY</a>,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a1e67c86644b42d85429e38e173d358ce">   36</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a1e67c86644b42d85429e38e173d358ce">MEMS_MSG_MAG_READY</a>,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a5779571adfd250752efd5bbc15332479">   37</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5a5779571adfd250752efd5bbc15332479">MEMS_MSG_POLL</a>,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5ad9cf02ef3a1adac700d8532aa447ea26">   38</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5ad9cf02ef3a1adac700d8532aa447ea26">MEMS_MSG_TICK</a>,</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5acf9df41063b447f7db931af3a3d0406a">   39</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5acf9df41063b447f7db931af3a3d0406a">MEMS_MSG_CALIBRATE</a>,</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5ad50b0785c8626be7b3dea415b72afcbf">   40</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5ad50b0785c8626be7b3dea415b72afcbf">MEMS_MSG_DISPLAY_CONFIG</a>,</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="a00089.html#a181fe73a522a602120fd2f683f5fede5af3d5babf85c7b2d5e1cdf5d1f4d31da2">   41</a></span>    <a class="code hl_enumvalue" href="a00089.html#a181fe73a522a602120fd2f683f5fede5af3d5babf85c7b2d5e1cdf5d1f4d31da2">MEMS_MSG_SET_MAG_VS_GYR</a>,</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>} <a class="code hl_enumeration" href="a00089.html#a181fe73a522a602120fd2f683f5fede5">MEMS_MsgType_t</a>;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="a00224.html">   44</a></span><span class="keyword">typedef</span> <span class="keyword">struct</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>{</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="a00224.html#a5c1dc4d7f21264a69745d366789196d8">   46</a></span>    <a class="code hl_enumeration" href="a00089.html#a181fe73a522a602120fd2f683f5fede5">MEMS_MsgType_t</a> <a class="code hl_variable" href="a00224.html#a5c1dc4d7f21264a69745d366789196d8">msgType</a>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="comment">// unsigned number; // For debug purpose</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">union</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    {</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="a00224.html#aba229b21979c58b5e24bf1546e9fb40f">   50</a></span>        <span class="keywordtype">float</span> <a class="code hl_variable" href="a00224.html#aba229b21979c58b5e24bf1546e9fb40f">mag_vs_gyr</a>;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="a00224.html#a8a9587841731237351e23d298c9e4e1c">   51</a></span>    } data;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>} <a class="code hl_struct" href="a00224.html">MEMS_Msg_t</a>;</div>
+<a href="a00089.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#ifndef AHRSSIMPLE_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#define AHRSSIMPLE_H</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">/* Réglages du calul */</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno"><a class="line" href="a00089.html#afccbdbd7bcb7f5f6a39bdfe4ead05dbd">    7</a></span><span class="preprocessor">#define MEMS_INIT_MAG_VS_GYRO 0.1F </span><span class="comment">/* Répartition de partie du compas et dy gyromètre pour le cap */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_struct" href="a00186.html">AHRS_Interface_t</a> <a class="code hl_variable" href="a00089.html#ab9a4345c9677baa7755142c7f3c456e1">AHRS_Simple_Interface</a>;</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"> * @brief Initialise the AHRS_Simple_status_t structure.</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> * @param mstatus Pointer to the AHRS_Simple_status_t structure to initialize.</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"> * return None.</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keywordtype">void</span> <a class="code hl_function" href="a00089.html#a965d6ed904e7367d81ef3ad4eab53b0a">AHRS_Simple_init</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * @brief Compute new orientation whith mems values</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> * @parameter mstatus pointer to AHRS structure to update</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * @parameter acc pointer to accelerometer data</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * @parameter gyr pointer to gyroscope data</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * @parameter mag pointer to magnetometer data</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * @parameter deltat time elapsed since last update in seconds</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * @return 1</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keywordtype">int</span> <a class="code hl_function" href="a00089.html#aa7ea64af1dac32b3af3a4a898b940824">AHRS_Simple_update</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus,</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                       <a class="code hl_struct" href="a00198.html">Vector3f</a> *acc,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                       <a class="code hl_struct" href="a00198.html">Vector3f</a> *gyr,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                       <a class="code hl_struct" href="a00198.html">Vector3f</a> *mag,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                       <span class="keywordtype">float</span> deltat);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"> * @brief Get the roll angle from the AHRS status.</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> * @return The roll angle in radians.</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00089.html#a99e255d454934a950557acb0d7c5ff8b">AHRS_Simple_get_roll</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"> * @brief Get the pitch angle from the AHRS status.</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> * @return The pitch angle in radians.</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00089.html#abdb7694e72ef0086cffbd2f42cbf5597">AHRS_Simple_get_pitch</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * @brief Get the heading angle from the AHRS status.</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00089.html#a8530b51082df899680f1127779b4e4a9">AHRS_Simple_get_heading</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="a00089.html#a309f5113d92f82743986103bcdff529f">   54</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00089.html#a309f5113d92f82743986103bcdff529f">MEMSSendTimerCallback</a>(TimerHandle_t xTimer);</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="a00089.html#ae3673af6dd372239a2ab9133c4210ff1">   56</a></span><span class="preprocessor">#define MEMS_STANDARD_GRAVITY 9.80665F</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="a00089.html#a1553d5495b645b2353979f88e96c04ad">   57</a></span><span class="preprocessor">#define MEMS_STANDARD_MAGNETIC_TESLA 0.00005F</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="a00089.html#a5504137038aa9e989399a4342f3b0a45">   58</a></span><span class="preprocessor">#define MEMS_STANDARD_MAGNETIC_GAUSS 0.5F</span></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5">MEMS_MsgType_t</a></div><div class="ttdeci">MEMS_MsgType_t</div><div class="ttdef"><b>Definition:</b> mems.h:32</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5a0f241622e44d1eb8349d251c21d04185"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5a0f241622e44d1eb8349d251c21d04185">MEMS_MSG_NONE</a></div><div class="ttdeci">@ MEMS_MSG_NONE</div><div class="ttdef"><b>Definition:</b> mems.h:33</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5a1e67c86644b42d85429e38e173d358ce"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5a1e67c86644b42d85429e38e173d358ce">MEMS_MSG_MAG_READY</a></div><div class="ttdeci">@ MEMS_MSG_MAG_READY</div><div class="ttdef"><b>Definition:</b> mems.h:36</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5a4b6e48cbc5271af357ab88c97aa29282"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5a4b6e48cbc5271af357ab88c97aa29282">MEMS_MSG_ACC_READY</a></div><div class="ttdeci">@ MEMS_MSG_ACC_READY</div><div class="ttdef"><b>Definition:</b> mems.h:34</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5a5779571adfd250752efd5bbc15332479"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5a5779571adfd250752efd5bbc15332479">MEMS_MSG_POLL</a></div><div class="ttdeci">@ MEMS_MSG_POLL</div><div class="ttdef"><b>Definition:</b> mems.h:37</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5a8e0e47c671b5a41cb9136a8673c2981c"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5a8e0e47c671b5a41cb9136a8673c2981c">MEMS_MSG_GYR_READY</a></div><div class="ttdeci">@ MEMS_MSG_GYR_READY</div><div class="ttdef"><b>Definition:</b> mems.h:35</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5acf9df41063b447f7db931af3a3d0406a"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5acf9df41063b447f7db931af3a3d0406a">MEMS_MSG_CALIBRATE</a></div><div class="ttdeci">@ MEMS_MSG_CALIBRATE</div><div class="ttdef"><b>Definition:</b> mems.h:39</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5ad50b0785c8626be7b3dea415b72afcbf"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5ad50b0785c8626be7b3dea415b72afcbf">MEMS_MSG_DISPLAY_CONFIG</a></div><div class="ttdeci">@ MEMS_MSG_DISPLAY_CONFIG</div><div class="ttdef"><b>Definition:</b> mems.h:40</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5ad9cf02ef3a1adac700d8532aa447ea26"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5ad9cf02ef3a1adac700d8532aa447ea26">MEMS_MSG_TICK</a></div><div class="ttdeci">@ MEMS_MSG_TICK</div><div class="ttdef"><b>Definition:</b> mems.h:38</div></div>
-<div class="ttc" id="aa00089_html_a181fe73a522a602120fd2f683f5fede5af3d5babf85c7b2d5e1cdf5d1f4d31da2"><div class="ttname"><a href="a00089.html#a181fe73a522a602120fd2f683f5fede5af3d5babf85c7b2d5e1cdf5d1f4d31da2">MEMS_MSG_SET_MAG_VS_GYR</a></div><div class="ttdeci">@ MEMS_MSG_SET_MAG_VS_GYR</div><div class="ttdef"><b>Definition:</b> mems.h:41</div></div>
-<div class="ttc" id="aa00089_html_a309f5113d92f82743986103bcdff529f"><div class="ttname"><a href="a00089.html#a309f5113d92f82743986103bcdff529f">MEMSSendTimerCallback</a></div><div class="ttdeci">void MEMSSendTimerCallback(TimerHandle_t xTimer)</div></div>
-<div class="ttc" id="aa00089_html_a5e9a97e8107336f2f03804f9b5b9e55f"><div class="ttname"><a href="a00089.html#a5e9a97e8107336f2f03804f9b5b9e55f">init_taskMEMs</a></div><div class="ttdeci">int init_taskMEMs(void)</div><div class="ttdef"><b>Definition:</b> mems.c:536</div></div>
-<div class="ttc" id="aa00089_html_a850d8249599ac5dd77cae18946511d5d"><div class="ttname"><a href="a00089.html#a850d8249599ac5dd77cae18946511d5d">taskMEMs</a></div><div class="ttdeci">void taskMEMs(void *pvParameters)</div><div class="ttdef"><b>Definition:</b> mems.c:661</div></div>
-<div class="ttc" id="aa00089_html_ae2fe2051757002be8b61e7ceeeb2bc46"><div class="ttname"><a href="a00089.html#ae2fe2051757002be8b61e7ceeeb2bc46">msgQueueMEMs</a></div><div class="ttdeci">QueueHandle_t msgQueueMEMs</div><div class="ttdef"><b>Definition:</b> mems.c:308</div></div>
-<div class="ttc" id="aa00224_html"><div class="ttname"><a href="a00224.html">MEMS_Msg_t</a></div><div class="ttdef"><b>Definition:</b> mems.h:45</div></div>
-<div class="ttc" id="aa00224_html_a5c1dc4d7f21264a69745d366789196d8"><div class="ttname"><a href="a00224.html#a5c1dc4d7f21264a69745d366789196d8">MEMS_Msg_t::msgType</a></div><div class="ttdeci">MEMS_MsgType_t msgType</div><div class="ttdef"><b>Definition:</b> mems.h:46</div></div>
-<div class="ttc" id="aa00224_html_aba229b21979c58b5e24bf1546e9fb40f"><div class="ttname"><a href="a00224.html#aba229b21979c58b5e24bf1546e9fb40f">MEMS_Msg_t::mag_vs_gyr</a></div><div class="ttdeci">float mag_vs_gyr</div><div class="ttdef"><b>Definition:</b> mems.h:50</div></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * @brief Get the yawrate from the AHRS status.</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * yawrate is the rotation speed around z axis, in rad/s</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00089.html#a6e975d6ad3a26580e61d3d82e15bf894">AHRS_Simple_get_yawRate</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * @brief Set the proportion of magnetometer vs gyroscope for heading estimation.</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> * prop is a value between 0 and 1, where 0 means only gyroscope is used and 1 means only magnetometer is used.</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="keywordtype">void</span> <a class="code hl_function" href="a00089.html#a14e5707d7d94f27f87354e5be35a7d9a">AHRS_Simple_set_mag_vs_gyr_prop</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus, <span class="keywordtype">float</span> prop);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * @brief Get the quaternion of orientatoin from the AHRS status.</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * @return The quaternion of orientation.</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><a class="code hl_struct" href="a00230.html">Quaternionf</a> <a class="code hl_function" href="a00089.html#a910f320ae550028afb4e69f3a1fce74c">AHRS_Simple_get_Quaternion</a>(<a class="code hl_struct" href="a00182.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">#endif </span><span class="comment">/* AHRSSIMPLE_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aa00089_html_a14e5707d7d94f27f87354e5be35a7d9a"><div class="ttname"><a href="a00089.html#a14e5707d7d94f27f87354e5be35a7d9a">AHRS_Simple_set_mag_vs_gyr_prop</a></div><div class="ttdeci">void AHRS_Simple_set_mag_vs_gyr_prop(AHRS_Status_t *mstatus, float prop)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:65</div></div>
+<div class="ttc" id="aa00089_html_a6e975d6ad3a26580e61d3d82e15bf894"><div class="ttname"><a href="a00089.html#a6e975d6ad3a26580e61d3d82e15bf894">AHRS_Simple_get_yawRate</a></div><div class="ttdeci">float AHRS_Simple_get_yawRate(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:60</div></div>
+<div class="ttc" id="aa00089_html_a8530b51082df899680f1127779b4e4a9"><div class="ttname"><a href="a00089.html#a8530b51082df899680f1127779b4e4a9">AHRS_Simple_get_heading</a></div><div class="ttdeci">float AHRS_Simple_get_heading(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:55</div></div>
+<div class="ttc" id="aa00089_html_a910f320ae550028afb4e69f3a1fce74c"><div class="ttname"><a href="a00089.html#a910f320ae550028afb4e69f3a1fce74c">AHRS_Simple_get_Quaternion</a></div><div class="ttdeci">Quaternionf AHRS_Simple_get_Quaternion(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:72</div></div>
+<div class="ttc" id="aa00089_html_a965d6ed904e7367d81ef3ad4eab53b0a"><div class="ttname"><a href="a00089.html#a965d6ed904e7367d81ef3ad4eab53b0a">AHRS_Simple_init</a></div><div class="ttdeci">void AHRS_Simple_init(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:31</div></div>
+<div class="ttc" id="aa00089_html_a99e255d454934a950557acb0d7c5ff8b"><div class="ttname"><a href="a00089.html#a99e255d454934a950557acb0d7c5ff8b">AHRS_Simple_get_roll</a></div><div class="ttdeci">float AHRS_Simple_get_roll(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:45</div></div>
+<div class="ttc" id="aa00089_html_aa7ea64af1dac32b3af3a4a898b940824"><div class="ttname"><a href="a00089.html#aa7ea64af1dac32b3af3a4a898b940824">AHRS_Simple_update</a></div><div class="ttdeci">int AHRS_Simple_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:89</div></div>
+<div class="ttc" id="aa00089_html_ab9a4345c9677baa7755142c7f3c456e1"><div class="ttname"><a href="a00089.html#ab9a4345c9677baa7755142c7f3c456e1">AHRS_Simple_Interface</a></div><div class="ttdeci">const AHRS_Interface_t AHRS_Simple_Interface</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:20</div></div>
+<div class="ttc" id="aa00089_html_abdb7694e72ef0086cffbd2f42cbf5597"><div class="ttname"><a href="a00089.html#abdb7694e72ef0086cffbd2f42cbf5597">AHRS_Simple_get_pitch</a></div><div class="ttdeci">float AHRS_Simple_get_pitch(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:50</div></div>
+<div class="ttc" id="aa00182_html"><div class="ttname"><a href="a00182.html">AHRS_Status_t</a></div><div class="ttdef"><b>Definition:</b> ahrs.h:22</div></div>
+<div class="ttc" id="aa00186_html"><div class="ttname"><a href="a00186.html">AHRS_Interface_t</a></div><div class="ttdef"><b>Definition:</b> ahrs.h:34</div></div>
+<div class="ttc" id="aa00198_html"><div class="ttname"><a href="a00198.html">Vector3f</a></div><div class="ttdoc">Structure representing a 3D vector with float components.</div><div class="ttdef"><b>Definition:</b> geom.h:55</div></div>
+<div class="ttc" id="aa00230_html"><div class="ttname"><a href="a00230.html">Quaternionf</a></div><div class="ttdoc">Structure representing a quaternion with float components.</div><div class="ttdef"><b>Definition:</b> quat.h:57</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

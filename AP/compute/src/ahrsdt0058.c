@@ -8,7 +8,8 @@
 #include "ahrs.h"
 #include "ahrsdt0058.h"
 
-const AHRS_Interface_t AHRS_DT0058_Interface = {
+const AHRS_Interface_t AHRS_DT0058_Interface =
+{
     .AHRS_init = AHRS_init,
     .AHRS_get_roll            = AHRS_get_roll,
     .AHRS_get_pitch           = AHRS_get_pitch,
@@ -19,7 +20,7 @@ const AHRS_Interface_t AHRS_DT0058_Interface = {
 };
 
 int AHRS_DT0058_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
-        Vector3f *mag, float deltat)
+                       Vector3f *mag, float deltat)
 {
     /*-----------------------------------------------------------*/
     /* From Application Note DT0058 from ST Microelectronics     */

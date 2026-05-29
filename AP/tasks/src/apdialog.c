@@ -122,37 +122,37 @@ typedef struct
 
 /* Table of known keywords */
 static const TokenEntry tokenTable[] =
-        {
-                { "calibrate", TOKEN_CALIBRATE },
-                { "AP", TOKEN_AP },
-                { "AHRS", TOKEN_AHRS },
-                { "config", TOKEN_CONFIG },
-                { "display", TOKEN_DISPLAY },
-                { "DT0058", TOKEN_DT0058 },
-                { "GPS", TOKEN_GPS },
-                { "heading", TOKEN_HEADING },
-                { "hwms", TOKEN_HWMS},
-                { "idle", TOKEN_IDLE },
-                { "Kd", TOKEN_KD },
-                { "Ki", TOKEN_KI },
-                { "Kp", TOKEN_KP },
-                { "mag_vs_gyr", TOKEN_MAG_VS_GYR },
-                { "MEMS", TOKEN_MEMS },
-                { "mode", TOKEN_MODE },
-                { "motor", TOKEN_MOTOR },
-                { "motor_angletime", TOKEN_MOTOR_CVT_ANGLE_TIME },
-                { "motor_hpf_coeff", TOKEN_MOTOR_HPF_COEFF },
-                { "motor_threshold", TOKEN_MOTOR_THRESHOLD },
-                { "port", TOKEN_PORT },
-                { "quat", TOKEN_QUAT },
-                { "select", TOKEN_SELECT },
-                { "set", TOKEN_SET },
-                { "Simple", TOKEN_SIMPLE },
-                { "starboard", TOKEN_STARBOARD },
-                { "turn", TOKEN_TURN },
-                { "wind", TOKEN_WIND },
-                { NULL, TOKEN_UNKNOWN }
-        };
+{
+    { "calibrate", TOKEN_CALIBRATE },
+    { "AP", TOKEN_AP },
+    { "AHRS", TOKEN_AHRS },
+    { "config", TOKEN_CONFIG },
+    { "display", TOKEN_DISPLAY },
+    { "DT0058", TOKEN_DT0058 },
+    { "GPS", TOKEN_GPS },
+    { "heading", TOKEN_HEADING },
+    { "hwms", TOKEN_HWMS},
+    { "idle", TOKEN_IDLE },
+    { "Kd", TOKEN_KD },
+    { "Ki", TOKEN_KI },
+    { "Kp", TOKEN_KP },
+    { "mag_vs_gyr", TOKEN_MAG_VS_GYR },
+    { "MEMS", TOKEN_MEMS },
+    { "mode", TOKEN_MODE },
+    { "motor", TOKEN_MOTOR },
+    { "motor_angletime", TOKEN_MOTOR_CVT_ANGLE_TIME },
+    { "motor_hpf_coeff", TOKEN_MOTOR_HPF_COEFF },
+    { "motor_threshold", TOKEN_MOTOR_THRESHOLD },
+    { "port", TOKEN_PORT },
+    { "quat", TOKEN_QUAT },
+    { "select", TOKEN_SELECT },
+    { "set", TOKEN_SET },
+    { "Simple", TOKEN_SIMPLE },
+    { "starboard", TOKEN_STARBOARD },
+    { "turn", TOKEN_TURN },
+    { "wind", TOKEN_WIND },
+    { NULL, TOKEN_UNKNOWN }
+};
 
 QueueHandle_t msgQueueDialogIn;
 QueueHandle_t msgQueueDialogOut;
@@ -163,7 +163,7 @@ int Dialog_task_init()
     msgQueueDialogIn = xQueueCreate(10, sizeof(MsgDialog_t));
     msgQueueDialogOut = xQueueCreate(10, sizeof(MsgDialog_t));
 
-    if ((msgQueueDialogIn == (QueueHandle_t) 0) ||
+    if((msgQueueDialogIn == (QueueHandle_t) 0) ||
             (msgQueueDialogOut == (QueueHandle_t) 0))
     {
         return -1;
@@ -187,15 +187,15 @@ int convert_float(const char *token, float *number)
     float divisor = 10.0f;
     int has_digits = 0;
 
-    if (!token || !number)
+    if(!token || !number)
     {
         return 0;
     }
 
 // Gérer le signe éventuel
-    if (token[i] == '+' || token[i] == '-')
+    if(token[i] == '+' || token[i] == '-')
     {
-        if (token[i] == '-')
+        if(token[i] == '-')
         {
             sign = -1;
         }
@@ -204,7 +204,7 @@ int convert_float(const char *token, float *number)
     }
 
 // Partie entière
-    while (token[i] != '\0' && rlib_isdigit((unsigned char) token[i]))
+    while(token[i] != '\0' && rlib_isdigit((unsigned char) token[i]))
     {
         result = result * 10.0f + (token[i] - '0');
         i++;
@@ -212,11 +212,11 @@ int convert_float(const char *token, float *number)
     }
 
 // Partie fractionnaire
-    if (token[i] == '.')
+    if(token[i] == '.')
     {
         i++;
 
-        while (token[i] != '\0' && rlib_isdigit((unsigned char) token[i]))
+        while(token[i] != '\0' && rlib_isdigit((unsigned char) token[i]))
         {
             fraction += (token[i] - '0') / divisor;
             divisor *= 10.0f;
@@ -225,7 +225,7 @@ int convert_float(const char *token, float *number)
         }
     }
 
-    if (!has_digits)
+    if(!has_digits)
     {
         return 0; // Aucun chiffre trouvé
     }
@@ -254,9 +254,9 @@ int convert_number(const char *token)
     int i = 0;
 
     /* Check for an optional sign */
-    if (token[i] == '+' || token[i] == '-')
+    if(token[i] == '+' || token[i] == '-')
     {
-        if (token[i] == '-')
+        if(token[i] == '-')
         {
             sign = -1;
         }
@@ -265,7 +265,7 @@ int convert_number(const char *token)
     }
 
     /* Process each digit character until the end of the string */
-    while (token[i] != '\0' && rlib_isdigit((unsigned char) token[i]))
+    while(token[i] != '\0' && rlib_isdigit((unsigned char) token[i]))
     {
         /* Multiply current result by 10 and add the numeric value of the digit
          */
@@ -298,11 +298,11 @@ int read_token(char token[], int max_len)
     int pos = 0;
 
 // Skip any leading spaces or tabs
-    while ((c = YYINPUT) == ' ' || c == '\t')
+    while((c = YYINPUT) == ' ' || c == '\t')
         ; // do nothing
 
 // If the first non-space char is newline or EOF, return it directly.
-    if (c == '\n' || c == '\r')
+    if(c == '\n' || c == '\r')
     {
         token[0] = '\0';
         return c;
@@ -311,13 +311,14 @@ int read_token(char token[], int max_len)
 // Read characters until a space, tab, newline, or EOF is found.
     do
     {
-        if (pos < max_len - 1)
+        if(pos < max_len - 1)
         {
             token[pos++] = (char) c;
         }
 
         c = YYINPUT;
-    } while (c != ' ' && c != '\t' && c != '\n' && c != '\r');
+    }
+    while(c != ' ' && c != '\t' && c != '\n' && c != '\r');
 
     token[pos] = '\0';
     return c;
@@ -343,34 +344,34 @@ TokenType lookup_token(const char *token)
     /* Check if the token is a number: optional sign and at least one digit.
      We assume that any token starting with a digit or a sign followed by a
      digit is a valid number token. */
-    if (token[0] == '+' || token[0] == '-' ||
+    if(token[0] == '+' || token[0] == '-' ||
             rlib_isdigit((unsigned char) token[0]))
     {
         int pos = (token[0] == '+' || token[0] == '-') ? 1 : 0;
 
-        if (token[pos] != '\0' && rlib_isdigit((unsigned char) token[pos]))
+        if(token[pos] != '\0' && rlib_isdigit((unsigned char) token[pos]))
         {
             return TOKEN_NUMBER;
         }
     }
 
     /* Look up in the keyword table */
-    for (i = 0; tokenTable[i].keyword != NULL; i++)
+    for(i = 0; tokenTable[i].keyword != NULL; i++)
     {
         int j = 0;
 
         /* Compare the token and the keyword character by character,
          using only functions from ctype for case handling */
-        while (tokenTable[i].keyword[j] != '\0' && token[j] != '\0')
+        while(tokenTable[i].keyword[j] != '\0' && token[j] != '\0')
         {
-            if (rlib_tolower((unsigned char) token[j]) !=
+            if(rlib_tolower((unsigned char) token[j]) !=
                     rlib_tolower((unsigned char) tokenTable[i].keyword[j]))
                 break;
 
             j++;
         }
 
-        if (tokenTable[i].keyword[j] == '\0' && token[j] == '\0')
+        if(tokenTable[i].keyword[j] == '\0' && token[j] == '\0')
         {
             return tokenTable[i].type;
         }
@@ -402,7 +403,7 @@ void parse_command_line(void)
     MEMS_Msg_t msgMEMs;
     MsgMotor_t msgMotor;
 
-    for (int i = 0; i < MAX_TOKENS; i++)
+    for(int i = 0; i < MAX_TOKENS; i++)
     {
         tokenTypes[i] = TOKEN_UNKNOWN; // Initialize token strings to empty
     }
@@ -417,18 +418,19 @@ void parse_command_line(void)
         /* If the token string is empty, it means that the newline or EOF was
          encountered before any token was read; we skip processing in that
          case. */
-        if (tokens[tokenCount][0] != '\0')
+        if(tokens[tokenCount][0] != '\0')
         {
             tokenTypes[tokenCount] = lookup_token(tokens[tokenCount]);
             tokenCount++;
 
-            if (tokenCount >= MAX_TOKENS)
+            if(tokenCount >= MAX_TOKENS)
             {
                 // We limit to MAX_TOKENS tokens per command
                 break;
             }
         }
-    } while (terminator != '\n' && terminator != '\r');
+    }
+    while(terminator != '\n' && terminator != '\r');
 
     /* Now process the command based on the tokens read.
      The grammar (as described in your file) specifies the following
@@ -445,28 +447,29 @@ void parse_command_line(void)
      to execute.
      */
 
-    switch (tokenTypes[0])
+    switch(tokenTypes[0])
     {
     case TOKEN_TURN:
-        if (((tokenTypes[1] == TOKEN_PORT) || tokenTypes[1] == TOKEN_STARBOARD)
+        if(((tokenTypes[1] == TOKEN_PORT) || tokenTypes[1] == TOKEN_STARBOARD)
                 && (tokenTypes[2] == TOKEN_NUMBER))
         {
             int angle = convert_number(tokens[2]);
             msgAutoPilot.msgType = AP_MSG_TURN;
             msgAutoPilot.data.reqTurnAngle =
-                    (tokenTypes[1] == TOKEN_PORT) ? -angle : angle;
+                (tokenTypes[1] == TOKEN_PORT) ? -angle : angle;
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
         }
         else
         {
             return; // Syntax error
         }
+
         break;
 
-        /* Mode idle | ( heading [number] ) */
-        /* set mode idle or heading heading to steer optional */
+    /* Mode idle | ( heading [number] ) */
+    /* set mode idle or heading heading to steer optional */
     case TOKEN_MODE:
-        switch (tokenTypes[1])
+        switch(tokenTypes[1])
         {
         /* Mode idle */
         case TOKEN_IDLE:
@@ -474,9 +477,9 @@ void parse_command_line(void)
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
             break;
 
-            /* mode heading, optional heading number */
+        /* mode heading, optional heading number */
         case TOKEN_HEADING:
-            switch (tokenTypes[2])
+            switch(tokenTypes[2])
             {
             case TOKEN_NUMBER:
                 int heading = convert_number(tokens[2]);
@@ -493,6 +496,7 @@ void parse_command_line(void)
             default:
                 return; // Syntax error
             }
+
             break;
 
         case TOKEN_GPS:
@@ -505,9 +509,9 @@ void parse_command_line(void)
             return; // Syntax error
         }
 
-        /* calibration commands */
+    /* calibration commands */
     case TOKEN_CALIBRATE:
-        switch (tokenTypes[1])
+        switch(tokenTypes[1])
         {
         /*calibrate MEMS */
         case TOKEN_MEMS:
@@ -519,29 +523,30 @@ void parse_command_line(void)
             return; // Syntax error
         }
 
-        /* Set parameters SET <param> <value> */
+    /* Set parameters SET <param> <value> */
     case TOKEN_SET:
-        if (tokenTypes[2] == TOKEN_NUMBER)
+        if(tokenTypes[2] == TOKEN_NUMBER)
         {
-            if (convert_float(tokens[2], &numberValue))
+            if(convert_float(tokens[2], &numberValue))
             {
                 // Process the parameter setting based on tokenTypes[1]
                 // For example, if tokenTypes[1] is TOKEN_PROPORTIONAL, set
                 // the proportional coefficient This part depends on how you
                 // want to structure your parameter setting commands
-                switch (tokenTypes[1])
+                switch(tokenTypes[1])
                 {
                 case TOKEN_KP:
                     msgAutoPilot.msgType = AP_MSG_PARAM;
                     msgAutoPilot.data.coefficient.param_number =
-                            AP_PARAM_KP;
+                        AP_PARAM_KP;
                     msgAutoPilot.data.coefficient.param_value = numberValue;
                     xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
                     break;
+
                 case TOKEN_KI:
                     msgAutoPilot.msgType = AP_MSG_PARAM;
                     msgAutoPilot.data.coefficient.param_number =
-                            AP_PARAM_KI;
+                        AP_PARAM_KI;
                     msgAutoPilot.data.coefficient.param_value = numberValue;
                     xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
                     break;
@@ -549,7 +554,7 @@ void parse_command_line(void)
                 case TOKEN_KD:
                     msgAutoPilot.msgType = AP_MSG_PARAM;
                     msgAutoPilot.data.coefficient.param_number =
-                            AP_PARAM_KD;
+                        AP_PARAM_KD;
                     msgAutoPilot.data.coefficient.param_value = numberValue;
                     xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
                     break;
@@ -588,15 +593,18 @@ void parse_command_line(void)
                 return; // Syntax error in number format
             }
         }
+
         break;
 
-        /* display configurations or statuses */
+    /* display configurations or statuses */
     case TOKEN_DISPLAY:
-        switch (tokenTypes[1]) {
-       
+        switch(tokenTypes[1])
+        {
+
         case TOKEN_MEMS: /* display MEMS ... */
 
-            switch (tokenTypes[2]) {
+            switch(tokenTypes[2])
+            {
 
             case TOKEN_CONFIG: /* display MEMS config */
 
@@ -607,34 +615,36 @@ void parse_command_line(void)
 
             default:
 
-                return; 
+                return;
 
             }
+
             break;
 
         case TOKEN_HWMS: /* High Water MarkS : display stack usage of each task */
 
             /* task list is in taskHandles[] */
-            for (int i = 0 ; i<tasksNumber ; i++)
+            for(int i = 0 ; i < tasksNumber ; i++)
             {
                 /* each task has its own stack.*/
                 /* High water mark tels the usage of the task's stack. */
                 /* get task name and high water mark of task. */
                 UBaseType_t hwm = uxTaskGetStackHighWaterMark(tasksHandles[i]);
                 char* taskName = pcTaskGetName(tasksHandles[i]);
-                int nbcar = snprintf(message, sizeof(message), "TASK HWMS %d  %16s : %u bytes\n", i, taskName, hwm * sizeof(StackType_t));
+                int nbcar = snprintf(message, sizeof(message), "TASK HWMS %d  %16s : %u bytes\n", i, taskName,
+                                     hwm * sizeof(StackType_t));
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U);
             }
 
             break; /* TOKEN_HWMS */
-           
+
         case TOKEN_MOTOR: /* display motor ... */
-            switch (tokenTypes[2])
+            switch(tokenTypes[2])
             {
-           
+
             case TOKEN_CONFIG: /* display motor config */
 
-                snprintf (message, sizeof(message) - 1, "Motor config ?\n");
+                snprintf(message, sizeof(message) - 1, "Motor config ?\n");
                 svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 
                 msgMotor.msgType = MSG_MOTOR_DISPLAY_CONFIG;
@@ -644,11 +654,12 @@ void parse_command_line(void)
             default:
                 return;
             }
+
             break;
 
-            /* display AP ...  AP for autopilot */
+        /* display AP ...  AP for autopilot */
         case TOKEN_AP:
-            switch (tokenTypes[2])
+            switch(tokenTypes[2])
             {
 
             case TOKEN_CONFIG: /* display AP config */
@@ -661,6 +672,7 @@ void parse_command_line(void)
             default:
                 return;
             }
+
             break;
 
         default:
@@ -668,40 +680,41 @@ void parse_command_line(void)
         }
 
     case TOKEN_AHRS:
-            
-        switch (tokenTypes[1])
+
+        switch(tokenTypes[1])
         {
 
-            case TOKEN_SELECT:
-                AHRS_Types ahrsType = TOKEN_UNKNOWN;
-                
-                switch (tokenTypes[2])
-                {
-                    case TOKEN_SIMPLE:
-                        
-                        ahrsType = AHRS_TYPE_SIMPLE;
+        case TOKEN_SELECT:
+            AHRS_Types ahrsType = TOKEN_UNKNOWN;
 
-                        break;
+            switch(tokenTypes[2])
+            {
+            case TOKEN_SIMPLE:
 
-                    case TOKEN_QUAT:
-                        
-                        ahrsType = AHRS_TYPE_QUAT;
+                ahrsType = AHRS_TYPE_SIMPLE;
 
-                        break;
+                break;
 
-                    default:
-                        break; // Syntax error: unrecognized AHRS type
+            case TOKEN_QUAT:
 
-                } 
-                if (ahrsType != AHRS_TYPE_NONE)
-                {
-                    AP_MSG_Select_AHRS(ahrsType);
-                }
+                ahrsType = AHRS_TYPE_QUAT;
 
                 break;
 
             default:
-                break;
+                break; // Syntax error: unrecognized AHRS type
+
+            }
+
+            if(ahrsType != AHRS_TYPE_NONE)
+            {
+                AP_MSG_Select_AHRS(ahrsType);
+            }
+
+            break;
+
+        default:
+            break;
         }
 
         break;
@@ -716,7 +729,7 @@ void parse_command_line(void)
 void Dialog_task(void *args __attribute__((unused)))
 {
 
-    for (;;)
+    for(;;)
     {
         parse_command_line();
     }

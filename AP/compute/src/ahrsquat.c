@@ -19,7 +19,8 @@
 
 #define MEMS_INIT_MAG_VS_GYRO 0.1F /* Répartition de partie du compas et du gyromètre pour le cap */
 
-const AHRS_Interface_t AHRS_Quat_Interface = {
+const AHRS_Interface_t AHRS_Quat_Interface =
+{
     .AHRS_init = AHRS_Simple_init,
     .AHRS_get_roll            = AHRS_get_roll,
     .AHRS_get_pitch           = AHRS_get_pitch,
@@ -36,7 +37,7 @@ const AHRS_Interface_t AHRS_Quat_Interface = {
  * @note z axis of device points downward
  */
 int AHRS_Quat_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
-        Vector3f *mag, float deltat)
+                     Vector3f *mag, float deltat)
 {
     //char message[100]; /* for debugging only */
     Quaternionf q; /* new quaternion */
@@ -58,11 +59,11 @@ int AHRS_Quat_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
     gyro_quat_derivative.z = -gyr->z;
 
     Quaternionf q_dot = Quaternionf_mul(mstatus->orientation,
-            gyro_quat_derivative);
+                                        gyro_quat_derivative);
     q_dot = Quaternionf_getScaled(q_dot, 0.5f);
 
     q_pred = Quaternionf_add(mstatus->orientation,
-            Quaternionf_getScaled(q_dot, deltat));
+                             Quaternionf_getScaled(q_dot, deltat));
     q_pred = Quaternionf_getNormalized(q_pred);
 
     // Step 2: Compute the reference orientation using accelerometer and magnetometer data
@@ -81,7 +82,7 @@ int AHRS_Quat_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
     /* we have North, East and down, let's compute the quaternion of orientation */
     q_ref = calculer_orientation_navire(north, east, down);
 
-    if (mstatus->initialized == false)
+    if(mstatus->initialized == false)
     {
         mstatus->orientation = q_ref;
     }
@@ -98,7 +99,7 @@ int AHRS_Quat_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
     float roll, pitch, yaw;
     quaternion_vers_euler(q, &roll, &pitch, &yaw);
 
-    if (mstatus->initialized == false)
+    if(mstatus->initialized == false)
     {
         mstatus->yawRate = 0.;
     }
@@ -111,18 +112,18 @@ int AHRS_Quat_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
 
         /* Roll rate, around x axis of surface */
         mstatus->rollRate = gyr->x * (1.0f - 2.0f * (q2q2 + q3q3))
-                + gyr->y * (2.0f * (q.x * q.y + q.w * q.z))
-                + gyr->z * (2.0f * (q.x * q.z - q.w * q.y));
+                            + gyr->y * (2.0f * (q.x * q.y + q.w * q.z))
+                            + gyr->z * (2.0f * (q.x * q.z - q.w * q.y));
 
         /* Pitch rate, around y axis of surface */
         mstatus->pitchRate = gyr->x * (2.0f * (q.x * q.y - q.w * q.z))
-                + gyr->y * (1.0f - 2.0f * (q1q1 + q3q3))
-                + gyr->z * (2.0f * (q.y * q.z + q.w * q.x));
+                             + gyr->y * (1.0f - 2.0f * (q1q1 + q3q3))
+                             + gyr->z * (2.0f * (q.y * q.z + q.w * q.x));
 
         /* Yaw rate, along z axis of surface */
         mstatus->yawRate = gyr->x * (2.0f * (q.x * q.z + q.w * q.y))
-                + gyr->y * (2.0f * (q.y * q.z - q.w * q.x))
-                + gyr->z * (1.0f - 2.0f * (q1q1 + q2q2));
+                           + gyr->y * (2.0f * (q.y * q.z - q.w * q.x))
+                           + gyr->z * (1.0f - 2.0f * (q1q1 + q2q2));
 
     }
 

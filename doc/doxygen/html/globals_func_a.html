@@ -66,23 +66,47 @@ $(function() {
 &#160;
 
 <h3><a id="index_a" name="index_a"></a>- a -</h3><ul>
-<li>AP_compute()&#160;:&#160;<a class="el" href="a00044.html#a66c63d2a1c789bbd50c864f1c94460d8">autopilot.c</a></li>
-<li>AP_get_engaged()&#160;:&#160;<a class="el" href="a00044.html#af2a63bbc036d20a357cd135b273963b4">autopilot.c</a></li>
-<li>AP_get_heading_dir()&#160;:&#160;<a class="el" href="a00044.html#a5ed94a85c3e7cab053c7455a73fa5f4c">autopilot.c</a></li>
-<li>AP_init()&#160;:&#160;<a class="el" href="a00044.html#a0e32f4113b24d51f69ee2064c4875995">autopilot.c</a></li>
-<li>AP_MSG_MotorStalled()&#160;:&#160;<a class="el" href="a00044.html#a14066c755203e21a14b76d501503eef2">autopilot.c</a>, <a class="el" href="a00098.html#a14066c755203e21a14b76d501503eef2">autopilot.h</a></li>
-<li>AP_MSG_MotorStopped()&#160;:&#160;<a class="el" href="a00044.html#a60f91561bc8afa9c05dc4aa999614771">autopilot.c</a></li>
-<li>AP_new_values()&#160;:&#160;<a class="el" href="a00044.html#afa8c4bb9dc2009e2a7dee4f0e290c8c5">autopilot.c</a></li>
-<li>AP_set_mode_heading()&#160;:&#160;<a class="el" href="a00044.html#a9d6276b9ad0b1f218e4db68ca0dd5a62">autopilot.c</a></li>
-<li>AP_set_mode_idle()&#160;:&#160;<a class="el" href="a00044.html#af6663ef3860cc9454511614ab488900a">autopilot.c</a></li>
-<li>AP_turn()&#160;:&#160;<a class="el" href="a00044.html#a601303505481aa87ba2050ac8c6ef504">autopilot.c</a></li>
-<li>apmain()&#160;:&#160;<a class="el" href="a00035.html#a3ecc3c4ea937a5d2e86bd65848aa2551">apmain.c</a>, <a class="el" href="a00083.html#acc396f74f00f5d41b7654388d2af38f5">apmain.h</a></li>
-<li>autopilot_sendValues()&#160;:&#160;<a class="el" href="a00044.html#aee821c56569949acb15f33b6b9126906">autopilot.c</a>, <a class="el" href="a00098.html#aee821c56569949acb15f33b6b9126906">autopilot.h</a></li>
-<li>aux_USART_getc()&#160;:&#160;<a class="el" href="a00065.html#ad29758b4b162562f2ff3e4faba841875">aux_usart.h</a></li>
-<li>aux_USART_Init()&#160;:&#160;<a class="el" href="a00065.html#ad4ad96c795e2961d40b3329dc0d27d53">aux_usart.h</a></li>
-<li>aux_USART_Init_all()&#160;:&#160;<a class="el" href="a00065.html#a6676106e1eae4ceb9ceeeb016d77b505">aux_usart.h</a></li>
-<li>aux_USART_IRQHandler()&#160;:&#160;<a class="el" href="a00065.html#a6a31e9fe88e90e9f3ac4afcb3df0919c">aux_usart.h</a></li>
-<li>aux_USART_write()&#160;:&#160;<a class="el" href="a00065.html#a3130983cef9d33dba9240b8691223357">aux_usart.h</a></li>
+<li>AHRS_DT0058_update()&#160;:&#160;<a class="el" href="a00113.html#a2f831d9c8fa5b8c0e431d9aac69d67d0">ahrsdt0058.h</a>, <a class="el" href="a00014.html#a2f831d9c8fa5b8c0e431d9aac69d67d0">ahrsdt0058.c</a></li>
+<li>AHRS_firstUpdate()&#160;:&#160;<a class="el" href="a00026.html#adca7bfbfb59a3341800845fc5b77b184">kalmanAHRS.c</a></li>
+<li>AHRS_get_gravity()&#160;:&#160;<a class="el" href="a00101.html#aee5e6c0fb92395c624c3a466a812a07f">kalmanAHRS.h</a></li>
+<li>AHRS_get_heading()&#160;:&#160;<a class="el" href="a00017.html#aafbe1e32e529a951c5a7b2abc0d803a3">ahrs.c</a>, <a class="el" href="a00095.html#aafbe1e32e529a951c5a7b2abc0d803a3">ahrs.h</a>, <a class="el" href="a00101.html#ad675f40e6aed7b5a38a3296c44feaf7e">kalmanAHRS.h</a></li>
+<li>AHRS_get_pitch()&#160;:&#160;<a class="el" href="a00017.html#afd68e05312decd599783b33b3da7b1d3">ahrs.c</a>, <a class="el" href="a00095.html#afd68e05312decd599783b33b3da7b1d3">ahrs.h</a>, <a class="el" href="a00101.html#ae38ec89f3122c265a9fcaf17283429dc">kalmanAHRS.h</a></li>
+<li>AHRS_get_Quaternion()&#160;:&#160;<a class="el" href="a00095.html#ae991b3a46353130b66e20d8cb3053d88">ahrs.h</a>, <a class="el" href="a00101.html#ac34bde3a7f705668cc93ea602ecba3d1">kalmanAHRS.h</a>, <a class="el" href="a00017.html#ae991b3a46353130b66e20d8cb3053d88">ahrs.c</a></li>
+<li>AHRS_get_roll()&#160;:&#160;<a class="el" href="a00017.html#a56484f46471712bfc47bd066488b8511">ahrs.c</a>, <a class="el" href="a00095.html#a56484f46471712bfc47bd066488b8511">ahrs.h</a>, <a class="el" href="a00101.html#a5bb718fb680bdaf9f60660adc348f935">kalmanAHRS.h</a></li>
+<li>AHRS_get_yawRate()&#160;:&#160;<a class="el" href="a00017.html#aead537e023527d91301cd5ca17bd9c17">ahrs.c</a>, <a class="el" href="a00095.html#aead537e023527d91301cd5ca17bd9c17">ahrs.h</a></li>
+<li>AHRS_init()&#160;:&#160;<a class="el" href="a00017.html#a618298c6bba8b28006f83840c64108fd">ahrs.c</a>, <a class="el" href="a00101.html#a557281e2660cc40f7d96f769c3ff0445">kalmanAHRS.h</a>, <a class="el" href="a00095.html#a618298c6bba8b28006f83840c64108fd">ahrs.h</a>, <a class="el" href="a00026.html#ae1f915453ffbfc2a682d36b35a91a8dc">kalmanAHRS.c</a></li>
+<li>AHRS_Quat_update()&#160;:&#160;<a class="el" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb">ahrsquat.c</a>, <a class="el" href="a00098.html#a52748091a7e13612f6fe73cad2f1dadb">ahrsquat.h</a></li>
+<li>AHRS_set_mag_vs_gyr_prop()&#160;:&#160;<a class="el" href="a00017.html#aa841e662fd69e3fc2a25e9987100e499">ahrs.c</a>, <a class="el" href="a00095.html#aa841e662fd69e3fc2a25e9987100e499">ahrs.h</a></li>
+<li>AHRS_Simple_get_heading()&#160;:&#160;<a class="el" href="a00029.html#a8530b51082df899680f1127779b4e4a9">ahrssimple.c</a>, <a class="el" href="a00089.html#a8530b51082df899680f1127779b4e4a9">ahrssimple.h</a></li>
+<li>AHRS_Simple_get_pitch()&#160;:&#160;<a class="el" href="a00029.html#abdb7694e72ef0086cffbd2f42cbf5597">ahrssimple.c</a>, <a class="el" href="a00089.html#abdb7694e72ef0086cffbd2f42cbf5597">ahrssimple.h</a></li>
+<li>AHRS_Simple_get_Quaternion()&#160;:&#160;<a class="el" href="a00029.html#a910f320ae550028afb4e69f3a1fce74c">ahrssimple.c</a>, <a class="el" href="a00089.html#a910f320ae550028afb4e69f3a1fce74c">ahrssimple.h</a></li>
+<li>AHRS_Simple_get_roll()&#160;:&#160;<a class="el" href="a00029.html#a99e255d454934a950557acb0d7c5ff8b">ahrssimple.c</a>, <a class="el" href="a00089.html#a99e255d454934a950557acb0d7c5ff8b">ahrssimple.h</a></li>
+<li>AHRS_Simple_get_yawRate()&#160;:&#160;<a class="el" href="a00089.html#a6e975d6ad3a26580e61d3d82e15bf894">ahrssimple.h</a>, <a class="el" href="a00029.html#a6e975d6ad3a26580e61d3d82e15bf894">ahrssimple.c</a></li>
+<li>AHRS_Simple_init()&#160;:&#160;<a class="el" href="a00029.html#a965d6ed904e7367d81ef3ad4eab53b0a">ahrssimple.c</a>, <a class="el" href="a00089.html#a965d6ed904e7367d81ef3ad4eab53b0a">ahrssimple.h</a></li>
+<li>AHRS_Simple_set_mag_vs_gyr_prop()&#160;:&#160;<a class="el" href="a00029.html#a14e5707d7d94f27f87354e5be35a7d9a">ahrssimple.c</a>, <a class="el" href="a00089.html#a14e5707d7d94f27f87354e5be35a7d9a">ahrssimple.h</a></li>
+<li>AHRS_Simple_update()&#160;:&#160;<a class="el" href="a00029.html#aa7ea64af1dac32b3af3a4a898b940824">ahrssimple.c</a>, <a class="el" href="a00089.html#aa7ea64af1dac32b3af3a4a898b940824">ahrssimple.h</a></li>
+<li>AHRS_update()&#160;:&#160;<a class="el" href="a00026.html#abc8ae3e325b0b84e82632cd263c30fb0">kalmanAHRS.c</a>, <a class="el" href="a00095.html#ae25330d51426485223f6ef1b5ba8e5c6">ahrs.h</a>, <a class="el" href="a00101.html#abc8ae3e325b0b84e82632cd263c30fb0">kalmanAHRS.h</a></li>
+<li>AHRS_updateold()&#160;:&#160;<a class="el" href="a00026.html#a49c5e7438956eaa1ec299954a392d53a">kalmanAHRS.c</a></li>
+<li>AP_compute()&#160;:&#160;<a class="el" href="a00062.html#a66c63d2a1c789bbd50c864f1c94460d8">autopilot.c</a></li>
+<li>AP_get_engaged()&#160;:&#160;<a class="el" href="a00062.html#af2a63bbc036d20a357cd135b273963b4">autopilot.c</a></li>
+<li>AP_get_heading_dir()&#160;:&#160;<a class="el" href="a00062.html#a5ed94a85c3e7cab053c7455a73fa5f4c">autopilot.c</a></li>
+<li>AP_init()&#160;:&#160;<a class="el" href="a00062.html#a0e32f4113b24d51f69ee2064c4875995">autopilot.c</a></li>
+<li>AP_MSG_MotorStalled()&#160;:&#160;<a class="el" href="a00062.html#a14066c755203e21a14b76d501503eef2">autopilot.c</a>, <a class="el" href="a00140.html#a14066c755203e21a14b76d501503eef2">autopilot.h</a></li>
+<li>AP_MSG_MotorStopped()&#160;:&#160;<a class="el" href="a00062.html#a60f91561bc8afa9c05dc4aa999614771">autopilot.c</a></li>
+<li>AP_MSG_Select_AHRS()&#160;:&#160;<a class="el" href="a00062.html#a4fc8a3debbdfe072eed3d6ac10b3f024">autopilot.c</a>, <a class="el" href="a00140.html#a4fc8a3debbdfe072eed3d6ac10b3f024">autopilot.h</a></li>
+<li>AP_MSG_send_AHRS_values()&#160;:&#160;<a class="el" href="a00062.html#a0878425b9d4a3f71f6b29815859d914d">autopilot.c</a>, <a class="el" href="a00140.html#a287a4975779d87e19a0f1d598d0ea74a">autopilot.h</a></li>
+<li>AP_new_values()&#160;:&#160;<a class="el" href="a00062.html#afa8c4bb9dc2009e2a7dee4f0e290c8c5">autopilot.c</a></li>
+<li>AP_set_mode_heading()&#160;:&#160;<a class="el" href="a00062.html#a9d6276b9ad0b1f218e4db68ca0dd5a62">autopilot.c</a></li>
+<li>AP_set_mode_idle()&#160;:&#160;<a class="el" href="a00062.html#af6663ef3860cc9454511614ab488900a">autopilot.c</a></li>
+<li>AP_turn()&#160;:&#160;<a class="el" href="a00062.html#a601303505481aa87ba2050ac8c6ef504">autopilot.c</a></li>
+<li>apmain()&#160;:&#160;<a class="el" href="a00122.html#acc396f74f00f5d41b7654388d2af38f5">apmain.h</a>, <a class="el" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551">apmain.c</a></li>
+<li>AutoPilot_task()&#160;:&#160;<a class="el" href="a00140.html#a421d0a876f1cc1f9b789660eee5232f1">autopilot.h</a></li>
+<li>AutoPilot_task_init()&#160;:&#160;<a class="el" href="a00062.html#a4ad269e2d2f5146e2859a80834d513c5">autopilot.c</a>, <a class="el" href="a00140.html#a4ad269e2d2f5146e2859a80834d513c5">autopilot.h</a></li>
+<li>aux_USART_getc()&#160;:&#160;<a class="el" href="a00083.html#ad29758b4b162562f2ff3e4faba841875">aux_usart.h</a></li>
+<li>aux_USART_Init()&#160;:&#160;<a class="el" href="a00083.html#ad4ad96c795e2961d40b3329dc0d27d53">aux_usart.h</a></li>
+<li>aux_USART_Init_all()&#160;:&#160;<a class="el" href="a00083.html#a6676106e1eae4ceb9ceeeb016d77b505">aux_usart.h</a></li>
+<li>aux_USART_IRQHandler()&#160;:&#160;<a class="el" href="a00083.html#a6a31e9fe88e90e9f3ac4afcb3df0919c">aux_usart.h</a></li>
+<li>aux_USART_write()&#160;:&#160;<a class="el" href="a00083.html#a3130983cef9d33dba9240b8691223357">aux_usart.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

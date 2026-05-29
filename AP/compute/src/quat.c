@@ -27,7 +27,7 @@
 #include "quat.h"
 
 Quaternionf Quaternionf_unit =
-        { 1.0F, .0F, .0F, .0F };
+{ 1.0F, .0F, .0F, .0F };
 
 Quaternionf Quaternionf_init(float q, float x, float y, float z)
 {
@@ -42,26 +42,26 @@ Quaternionf Quaternionf_init(float q, float x, float y, float z)
 Quaternionf Quaternionf_add(Quaternionf v1, Quaternionf v2)
 {
     Quaternionf result =
-            { v1.w + v2.w, v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
+    { v1.w + v2.w, v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
     return result;
 }
 
 Quaternionf Quaternionf_sub(Quaternionf v1, Quaternionf v2)
 {
     Quaternionf result =
-            { v1.w - v2.w, v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
+    { v1.w - v2.w, v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
     return result;
 }
 
 Quaternionf Quaternionf_mul(Quaternionf q1, Quaternionf q2)
 {
     Quaternionf result =
-            {
-                    q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
-                    q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
-                    q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
-                    q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w
-            };
+    {
+        q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
+        q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
+        q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
+        q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w
+    };
     return result;
 }
 
@@ -73,7 +73,7 @@ float Quaternionf_getDotProduct(Quaternionf q1, Quaternionf q2)
 Quaternionf Quaternionf_getScaled(Quaternionf q, float a)
 {
     Quaternionf result =
-            { q.w * a, q.x * a, q.y * a, q.z * a };
+    { q.w * a, q.x * a, q.y * a, q.z * a };
     return result;
 }
 
@@ -86,10 +86,10 @@ Quaternionf Quaternionf_getNormalized(Quaternionf v)
 {
     float norm = Quaternionf_getNorm(v);
 
-    if (norm == 0.0F)
+    if(norm == 0.0F)
     {
         Quaternionf zero =
-                { 0.0F, 0.0F, 0.0F, 0.0F };
+        { 0.0F, 0.0F, 0.0F, 0.0F };
         return zero;
     }
 

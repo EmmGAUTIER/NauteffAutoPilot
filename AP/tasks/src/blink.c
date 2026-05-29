@@ -36,19 +36,17 @@
  * Here we define the period of the timer.
  */
 
- #define BLINK_PERIOD_MS 2000
+#define BLINK_PERIOD_MS 2000
 
 #include "blink.h"
 
 static QueueHandle_t Blink_Queue_Msg = NULL;
 static TimerHandle_t Blink_Timer = NULL;
 
-
 void Blink_stop(void)
 {
-
     /* message struct may be static because it is never changed */
-    static Blink_Msg_t msg = {.msgType=BLINK_MSG_STOP};
+    static Blink_Msg_t msg = {.msgType = BLINK_MSG_STOP};
 
     xQueueSend(Blink_Queue_Msg, &msg, pdMS_TO_TICKS(0));
 
@@ -57,9 +55,8 @@ void Blink_stop(void)
 
 void Blink_start(void)
 {
-
     /* message struct may be static because it is never changed */
-    static Blink_Msg_t msg = {.msgType=BLINK_MSG_STOP};
+    static Blink_Msg_t msg = {.msgType = BLINK_MSG_STOP};
 
     xQueueSend(Blink_Queue_Msg, &msg, pdMS_TO_TICKS(0));
 
@@ -92,19 +89,16 @@ void Blink_set_flash_duration(float duration)
  */
 void Blink_Timer_Callback(TimerHandle_t xTimer)
 {
-    (void) xTimer; /* statement to avoid unused parameter warning */
+    (void)xTimer; /* statement to avoid unused parameter warning */
 
     /* The message is contained in a struct.
      * it is declared static to avoid using stack.
      * Only one blink task, so only one timer and callback execution at a time,
      * so no risk of overwriting the message before it is sent.
      */
-    static Blink_Msg_t command =
-            {
-                    .msgType = BLINK_MSG_TICK
-            };
+    static Blink_Msg_t command = {.msgType = BLINK_MSG_TICK};
 
-    xQueueSend(Blink_Queue_Msg, (const void* )&command, (TickType_t )0);
+    xQueueSend(Blink_Queue_Msg, (const void *)&command, (TickType_t)0);
 
     return;
 }
@@ -116,7 +110,7 @@ void Blink_Timer_Callback(TimerHandle_t xTimer)
  * @return none
  *
  * Tasks have to use queues and timers. These have to be created
- * before starting scheduler so when tasks begin they can use them. 
+ * before starting scheduler so when tasks begin they can use them.
  * The queue is used to send ticks and messages to the task.
  *
  */
@@ -126,12 +120,10 @@ void Blink_task_init()
     Blink_Queue_Msg = xQueueCreate(1, sizeof(Blink_Msg_t));
 
     /* Create a timer that sends messages periodically to the task */
-    Blink_Timer = xTimerCreate("BLINK",
-                  pdMS_TO_TICKS(BLINK_PERIOD_MS),
-                  pdTRUE, /* Auto reload (repeat indefinitely) */
-                  (void*) 0, /* Timer ID, not used */
-                  Blink_Timer_Callback);
-
+    Blink_Timer = xTimerCreate("BLINK", pdMS_TO_TICKS(BLINK_PERIOD_MS),
+                               pdTRUE, /* Auto reload (repeat indefinitely) */
+                               (void *)0, /* Timer ID, not used */
+                               Blink_Timer_Callback);
 }
 
 /*
@@ -144,17 +136,17 @@ void Blink_task_init()
 
 void Blink_task(void *param)
 {
-    (void) param;
+    (void)param;
     BaseType_t ret;
     Blink_Msg_t message;
 
-    for (;;) /* infinite loop */
+    for(;;)  /* infinite loop */
     {
-
         ret = xQueueReceive(Blink_Queue_Msg, &message, pdMS_TO_TICKS(0));
-        if (ret == pdPASS)
+
+        if(ret == pdPASS)
         {
-                ;
+            ;
         }
 
         /* We use delays to make very simple code */
@@ -173,5 +165,4 @@ void Blink_task(void *param)
     }
 
     /* Mustn't be reached */
-
 }

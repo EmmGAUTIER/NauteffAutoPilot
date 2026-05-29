@@ -8,7 +8,8 @@
 
 #define AHRS_TYPES_NUMBER 1
 
-typedef enum {
+typedef enum
+{
     AHRS_TYPE_NONE = -1,
     AHRS_TYPE_SIMPLE = 0,
     AHRS_TYPE_QUAT,
@@ -31,15 +32,16 @@ typedef struct
     float  hdg_x, hdg_y;
 } AHRS_Status_t;
 
-typedef struct {
-    void (*AHRS_init) (AHRS_Status_t*);
+typedef struct
+{
+    void (*AHRS_init)(AHRS_Status_t*);
     float (*AHRS_get_roll)(AHRS_Status_t*);
     float (*AHRS_get_pitch)(AHRS_Status_t*);
     float (*AHRS_get_heading)(AHRS_Status_t*);
     float (*AHRS_get_yawRate)(AHRS_Status_t*);
     void (*AHRS_set_mag_vs_gyr_prop)(AHRS_Status_t*, float prop);
     int (*AHRS_update)(AHRS_Status_t*, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
-    Quaternionf (*AHRS_get_Quaternion)(AHRS_Status_t*);
+    Quaternionf(*AHRS_get_Quaternion)(AHRS_Status_t*);
 } AHRS_Interface_t;
 
 extern const AHRS_Interface_t *AHRS_Interfaces[];
@@ -61,10 +63,10 @@ void AHRS_init(AHRS_Status_t *mstatus);
  * @return 1
  */
 int AHRS_update(AHRS_Status_t *mstatus,
-                       Vector3f *acc,
-                       Vector3f *gyr,
-                       Vector3f *mag,
-                       float deltat);
+                Vector3f *acc,
+                Vector3f *gyr,
+                Vector3f *mag,
+                float deltat);
 
 /*
  * @brief Get the roll angle from the AHRS status.

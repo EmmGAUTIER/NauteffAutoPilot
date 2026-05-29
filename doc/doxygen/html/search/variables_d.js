@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['offset_0',['offset',['../a00116.html#a7267cc9dd8bed11022ae76a1ca9573c1',1,'CalibrationEllipsoidResult_t']]],
-  ['orientation_1',['orientation',['../a00160.html#ac541c40e026dff6581978b7178dc9373',1,'IMU_Status_t']]],
-  ['overcurrenttime_2',['overCurrentTime',['../a00124.html#a0dc851c73ee7d65066e0df0f2bab01e1',1,'MotorData']]]
+  ['nbsampleacc_0',['nbSampleAcc',['../a00190.html#a3b635eddfcadf4909b239f55e31eb7a5',1,'Calib6_t']]],
+  ['nbsamplegyr_1',['nbSampleGyr',['../a00190.html#aaff24f7a5cfa2e6919c0538e23964188',1,'Calib6_t']]],
+  ['nbsamplemag_2',['nbSampleMag',['../a00190.html#a8bf821fc54feacde8e5e63cdde7d8cc4',1,'Calib6_t']]]
 ];

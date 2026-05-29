@@ -1,14 +1,15 @@
 var searchData=
 [
-  ['taskautopilot_0',['taskAutoPilot',['../a00098.html#aa28d3c9d0d4fea70b8866eebbd739611',1,'autopilot.h']]],
-  ['taskblink_1',['taskBlink',['../a00035.html#af8a03753d4360bd6dcad755f1d794362',1,'apmain.c']]],
-  ['taskdialogbis_2',['taskDialogBis',['../a00095.html#a22da3d1b29b0ad1eff58eeee2306d4eb',1,'apdialog.h']]],
-  ['taskdialogin_3',['taskDialogIn',['../a00038.html#aa8cb42729b2ad233b7308cfd229df56d',1,'taskDialogIn(void *args __attribute__((unused))):&#160;apdialog.c'],['../a00095.html#ac9746733d00092ea5ca7375ba48240b1',1,'taskDialogIn(void *param):&#160;apdialog.h']]],
-  ['taskdialogout_4',['taskDialogOut',['../a00095.html#aaf437009039ed90f4ca29bcdde9a2b31',1,'apdialog.h']]],
-  ['taskmems_5',['taskMEMs',['../a00029.html#a2c9e2386e46707d38b5ad776a7e37eae',1,'taskMEMs(void *param):&#160;mems.c'],['../a00089.html#a850d8249599ac5dd77cae18946511d5d',1,'taskMEMs(void *pvParameters):&#160;mems.c']]],
-  ['taskmotor_6',['taskMotor',['../a00041.html#aa33e12cdfd20052a9803a45d77995b1a',1,'taskMotor(void *parameters):&#160;motor.c'],['../a00092.html#a2396aef1acbf273c69dace7828ec540a',1,'taskMotor(void *):&#160;motor.c']]],
-  ['taskservice_7',['taskService',['../a00032.html#ab95d0ad82b3794ccb901903ed840335d',1,'taskService(void *):&#160;service.c'],['../a00086.html#ab95d0ad82b3794ccb901903ed840335d',1,'taskService(void *):&#160;service.c']]],
-  ['timerapcallback_8',['timerAPCallback',['../a00044.html#a41adfc2eac01bcee05be3cfbd9d7064b',1,'autopilot.c']]],
-  ['timermemscallback_9',['timerMEMsCallback',['../a00029.html#a8f18bf28ec8f1905dbccff937ef60672',1,'mems.c']]],
-  ['timerpollcallback_10',['timerPOLLCallback',['../a00029.html#a4b3313f8bb698df86526b01ea3546eb5',1,'mems.c']]]
+  ['service_5ftask_0',['Service_task',['../a00125.html#abb30b4435857c1f6737ea564258d8cc6',1,'Service_task(void *):&#160;service.c'],['../a00050.html#abb30b4435857c1f6737ea564258d8cc6',1,'Service_task(void *):&#160;service.c']]],
+  ['service_5ftask_5finit_1',['Service_task_init',['../a00050.html#aa976a4a5d02f7a0b4e14a37b76f6eec5',1,'Service_task_init():&#160;service.c'],['../a00125.html#aa976a4a5d02f7a0b4e14a37b76f6eec5',1,'Service_task_init():&#160;service.c']]],
+  ['snprintf_5f_2',['snprintf_',['../a00008.html#a5b16fca837f5301cb0c01fa668f044f4',1,'snprintf_(char *buffer, size_t count, const char *format,...):&#160;printf.c'],['../a00074.html#a5b16fca837f5301cb0c01fa668f044f4',1,'snprintf_(char *buffer, size_t count, const char *format,...):&#160;printf.c']]],
+  ['spi_5fdma_5ftransfer_3',['SPI_DMA_Transfer',['../a00047.html#a0e21cdfa6bbe2e3cce537fa2b17deeaa',1,'mems.c']]],
+  ['sprintf_5f_4',['sprintf_',['../a00008.html#a989410555ef35cd646c15d51e649faaa',1,'sprintf_(char *buffer, const char *format,...):&#160;printf.c'],['../a00074.html#a989410555ef35cd646c15d51e649faaa',1,'sprintf_(char *buffer, const char *format,...):&#160;printf.c']]],
+  ['strcpy_5',['strcpy',['../a00068.html#a66e363031a1cbf510d5eafe40d49a790',1,'rlib.h']]],
+  ['strlen_6',['strlen',['../a00068.html#aa383452fe445bfae989358c9d7d96f4f',1,'rlib.h']]],
+  ['svc_5finit_5fuart_7',['svc_init_UART',['../a00050.html#aa6ed815b156a748a4a2f908bb2d9a6ff',1,'service.c']]],
+  ['svc_5finternal_5fuart_5fendwritedma_8',['svc_internal_UART_EndWriteDMA',['../a00050.html#af0b843e95b71e99f178f067d104c34c1',1,'service.c']]],
+  ['svc_5finternal_5fuart_5fwrite_9',['svc_internal_UART_Write',['../a00050.html#a36c7605fe943636b66f8f5b411f81136',1,'service.c']]],
+  ['svc_5fuart_5fgetc_10',['svc_UART_getc',['../a00050.html#a07a9fbf5b0b93c82edb8d1d7582f7019',1,'svc_UART_getc(ServiceUartHandle_t *svc_uart, TickType_t delay):&#160;service.c'],['../a00125.html#a07a9fbf5b0b93c82edb8d1d7582f7019',1,'svc_UART_getc(ServiceUartHandle_t *svc_uart, TickType_t delay):&#160;service.c']]],
+  ['svc_5fuart_5fwrite_11',['svc_UART_Write',['../a00050.html#aca9a2b5d52ea7cb385abffb611d72361',1,'svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, TickType_t delay):&#160;service.c'],['../a00125.html#aca9a2b5d52ea7cb385abffb611d72361',1,'svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, TickType_t delay):&#160;service.c']]]
 ];
