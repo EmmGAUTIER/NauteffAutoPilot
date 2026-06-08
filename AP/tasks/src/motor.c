@@ -139,60 +139,6 @@ QueueHandle_t msgQueueMotor = (QueueHandle_t)0;
  */
 static uint16_t adc_values[2];
 
-typedef struct
-{
-    /* Status */
-    uint32_t status;
-
-    /* Tuning Data */
-    float threshold; /* Threshold motor command */
-    float hpf_coeff; /* High pass filter coefficient */
-    /**/
-    /* Data for duration and move */
-    float HelmAngleEstimated; /* Estimated helm angle (rad) */
-    float helmAngleRequested; /* Requested steer angle (rad) */
-    float turnTimeReq;        /* Turn angle requested */
-    /* (rad counterclockwise ie with sign) */
-    float turnTimeRemaining;  /* Turning time Remaining positive */
-    float stopTimeRemaining;  /* Time since motor powered off */
-    float overCurrentTime;    /* Time since start of overcurrent */
-    /**/
-    /* Values of calibration */
-    float vcurrentNone;    /* adc value of current when not moving */
-    float vcurrentFree;    /* adc value of current when moving with no effort */
-    float vcurrentBlocked; /* adc value of current when motor blocked */
-    float vPowerStandard;  /* Standard power voltage */
-    float timeToStart;     /* Time to start the motor */
-    float timeToStop;      /* Time to stop the motor */
-    float cvt_angle_time;  /* Conversion helm angle to time */
-    float currentStalled;  /* Current when motor is stalled */
-
-    /* measured values */
-    float vPower;   /* Actual voltage*/
-    float vCurrent; /* Actual current */
-} MotorData;
-
-MotorData motorData = {.status = MOTOR_STATUS_IDLE,
-                       .helmAngleRequested = 0.F,
-                       .HelmAngleEstimated = 0.F,
-                       .turnTimeReq = 0.F,
-                       .turnTimeRemaining = 0.F,
-
-                       .vcurrentNone = MOTOR_V_CURRENT_NONE,
-                       .vcurrentFree = MOTOR_V_CURRENT_FREE,
-                       .vcurrentBlocked = MOTOR_V_CURRENT_BLOCKED,
-                       .timeToStart = MOTOR_TIME_START,
-                       .timeToStop = MOTOR_TIME_STOP,
-                       .currentStalled = 1.0F,
-                       .cvt_angle_time = MOTOR_CVT_ANGLE_TIME,
-                       .hpf_coeff = MOTOR_HPF_COEF,
-                       .threshold = MOTOR_THRESHOLD,
-
-                       .vPowerStandard = 12.F,
-                       .vPower = 0.F,
-                       .vCurrent = 0.F
-                      };
-
 /*****************************************************************************\
 *       Low level commands of motor and clutch                                *
  ******************************************************************************
@@ -446,22 +392,88 @@ void Motor_set_cvt_angle_time(float cvt)
 }
 
 /****************************************************************************\
-*     Function that control the motor                                        *
- ******************************************************************************
- *                                                                            *
- * These functions control the motor, they :                                  *
- *  - send commands to the motor and clutch,                                  *
- *  - receive new values of voltage and current,                              *
- *  - estimate the helm angle,                                                *
- *  - stop motor if helm is at angle or in case of overcurrent,               *
- *  - keep state of the motor and estimated helm angle.                       *
- *  - send messages to autopilot task in case of stall or stop.               *
- *                                                                            *
- * Theses functions use MotorData struct to store state of motor              *
- * They use MOTOR_LLXXX() function to send commands to motor driver           *
- * They are called by taskMotor()                                             *
- *                                                                            *
- \****************************************************************************/
+*     Functions and struct to control the actuator and clutch                *
+******************************************************************************
+*                                                                            *
+* These functions control the motor, they :                                  *
+*  - send commands to the motor and clutch,                                  *
+*  - receive new values of voltage and current,                              *
+*  - estimate the helm angle,                                                *
+*  - stop motor if helm is at angle or in case of overcurrent,               *
+*  - keep state of the motor and estimated helm angle.                       *
+*  - send messages to autopilot task in case of stall or stop.               *
+*                                                                            *
+* Theses functions use MotorData struct to store state of motor              *
+* They use MOTOR_LLXXX() function to send commands to motor driver           *
+* They are called by taskMotor()                                             *
+*                                                                            *
+\****************************************************************************/
+
+typedef struct {
+    Motor_status_transition_t transitions[];
+
+} Motor_status_transition_t;
+
+typedef struct
+{
+    /* Status */
+    uint32_t status;
+
+    /* Tuning Data */
+    float threshold; /* Threshold motor command */
+    float hpf_coeff; /* High pass filter coefficient */
+    /**/
+    /* Data for duration and move */
+    float HelmAngleEstimated; /* Estimated helm angle (rad) */
+    float helmAngleRequested; /* Requested steer angle (rad) */
+    float turnTimeReq;        /* Turn angle requested */
+    /* (rad counterclockwise ie with sign) */
+    float turnTimeRemaining;  /* Turning time Remaining positive */
+    float stopTimeRemaining;  /* Time since motor powered off */
+    float overCurrentTime;    /* Time since start of overcurrent */
+    /**/
+    /* Values of calibration */
+    float vcurrentNone;    /* adc value of current when not moving */
+    float vcurrentFree;    /* adc value of current when moving with no effort */
+    float vcurrentBlocked; /* adc value of current when motor blocked */
+    float vPowerStandard;  /* Standard power voltage */
+    float timeToStart;     /* Time to start the motor */
+    float timeToStop;      /* Time to stop the motor */
+    float cvt_angle_time;  /* Conversion helm angle to time */
+    float currentStalled;  /* Current when motor is stalled */
+
+    /* measured values */
+    float vPower;   /* Actual voltage*/
+    float vCurrent; /* Actual current */
+} MotorData;
+
+MotorData motorData = {.status = MOTOR_STATUS_IDLE,
+                       .helmAngleRequested = 0.F,
+                       .HelmAngleEstimated = 0.F,
+                       .turnTimeReq = 0.F,
+                       .turnTimeRemaining = 0.F,
+
+                       .vcurrentNone = MOTOR_V_CURRENT_NONE,
+                       .vcurrentFree = MOTOR_V_CURRENT_FREE,
+                       .vcurrentBlocked = MOTOR_V_CURRENT_BLOCKED,
+                       .timeToStart = MOTOR_TIME_START,
+                       .timeToStop = MOTOR_TIME_STOP,
+                       .currentStalled = 1.0F,
+                       .cvt_angle_time = MOTOR_CVT_ANGLE_TIME,
+                       .hpf_coeff = MOTOR_HPF_COEF,
+                       .threshold = MOTOR_THRESHOLD,
+
+                       .vPowerStandard = 12.F,
+                       .vPower = 0.F,
+                       .vCurrent = 0.F
+                      };
+
+
+
+
+
+
+
 
 /*
  * @brief Update motor status with new values of voltage and current
