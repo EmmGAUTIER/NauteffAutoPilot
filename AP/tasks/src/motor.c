@@ -6,6 +6,7 @@
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
+
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
@@ -25,6 +26,7 @@
 /****************************************************************************\
  *             Contrôle du moteur et de l'embrayage                          *
  *****************************************************************************
+ *                                                                           *
  * Ces fonction permettent le contrôle de l'actuateur, elles assurent :      *
  *   - la commande d'embrayage ;                                             *
  *   - la commande du moteur pendant un temps imparti ou un angle estimé ;   *
@@ -46,6 +48,7 @@
  * Des fonction Motor_XXX() mettent à jour cette structure et commandent     *
  * l'actuateur et l'embrayage.                                               *
  * Rappel : L'angle de barre est positif vers tribord et négatif à babord.   *
+ *                                                                           *
  \***************************************************************************/
 
 #include <math.h>
@@ -73,7 +76,7 @@
 
 /* Définition de M_PI, il est parfois non défini */
 #ifndef M_PI
-#define M_PI 3.14159265358979323846
+#define M_PI ((float)3.14159265358979323846)
 #endif
 
 /*
@@ -84,17 +87,15 @@
 #define DBG_ADC_PRINT(X) (X)
 
 /****************************************************************************\
- *                 Default values for parameters                              *
- *****************************************************************************/
+*                 Default values for parameters                              *
+*  Rappel : 2 PI / 360 = 0,01745329..                                        *
+*****************************************************************************/
 
-#define MOTOR_HPF_COEF (0.0F)
-#define MOTOR_THRESHOLD (1.0F * ((float)M_PI / 180.F))
-#define MOTOR_CVT_ANGLE_TIME                                                   \
-    (2.0F) /* Estimated conversion between time and helm move angle */
-#define MOTOR_TIME_START                                                       \
-    (0.1F) /* Maximum time to allow over current when starting motor */
-#define MOTOR_TIME_STOP                                                        \
-    (0.2F) /* Time to wait for motor to stop before opposite move order  */
+#define MOTOR_HPF_COEF       (0.0F)
+#define MOTOR_THRESHOLD      (2.0F * ((float)M_PI / 180.F))
+#define MOTOR_CVT_ANGLE_TIME (2.0F) /* Estimated conversion between time and helm move angle */
+#define MOTOR_TIME_START     (0.1F) /* Maximum time to allow over current when starting motor (s) */
+#define MOTOR_TIME_STOP      (0.5F) /* Time to wait for motor to stop before opposite move order (s) */
 
 #define MOTOR_EVENT_STALLED (0x1 << 0)
 #define MOTOR_EVENT_STOP (0x1 << 1)
@@ -112,7 +113,7 @@
 #define ADC_CVT_TO_CURRENT (0.0004F) /* Ratio  ADC val. and current */
 
 /* status bits of motor */
-/* More than minimum required so easier to test */
+/* More than minimum required so easier to code and test */
 #define MOTOR_STATUS_ENGAGED (0x1 << 0)       /* 0 clutch out, 1 : clutch in*/
 #define MOTOR_STATUS_MOVING_TIME (0x1 << 1)   /* moving for time */
 #define MOTOR_STATUS_MOVING_ANGLE (0x1 << 2)  /* moving helm to angle */
@@ -161,8 +162,6 @@ typedef struct
     float vcurrentFree;    /* adc value of current when moving with no effort */
     float vcurrentBlocked; /* adc value of current when motor blocked */
     float vPowerStandard;  /* Standard power voltage */
-    float vPowerMin;       /* Minimum power voltage */
-    float vPowerMax;       /* Maximum power voltage */
     float timeToStart;     /* Time to start the motor */
     float timeToStop;      /* Time to stop the motor */
     float cvt_angle_time;  /* Conversion helm angle to time */
@@ -190,8 +189,6 @@ MotorData motorData = {.status = MOTOR_STATUS_IDLE,
                        .threshold = MOTOR_THRESHOLD,
 
                        .vPowerStandard = 12.F,
-                       .vPowerMin = 10.,
-                       .vPowerMax = 15.F,
                        .vPower = 0.F,
                        .vCurrent = 0.F
                       };
@@ -276,8 +273,7 @@ INLINE static void Motor_LL_runToStarboard(void)
 INLINE static void Motor_LL_stop(void)
 {
     /* Reset PWN, INA and INB */
-    LL_GPIO_ResetOutputPin(GPIOA,
-                           LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
 
     DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL stop\n", 14, 0U));
 }
@@ -294,12 +290,10 @@ INLINE static void Motor_LL_stop(void)
 
 INLINE static void Motor_LL_tillerEngage(void)
 {
-    LL_GPIO_ResetOutputPin(GPIOA,
-                           LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
     LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
 
-    DBG_MOTOR_PRINT(
-        svc_UART_Write(&svc_uart2, "MOTOR LL engage tiller\n", 23, 0U));
+    DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL engage tiller\n", 23, 0U));
 }
 
 /**
@@ -315,8 +309,7 @@ INLINE static void Motor_LL_tillerDisengage(void)
     LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_5 |
                            LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
 
-    DBG_MOTOR_PRINT(
-        svc_UART_Write(&svc_uart2, "MOTOR LL disengage tiller\n", 26, 0U));
+    DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL disengage tiller\n", 26, 0U));
 }
 
 /****************************************************************************\
@@ -332,7 +325,7 @@ INLINE static void Motor_LL_tillerDisengage(void)
  *                                                                            *
  * They have no return value.                                                 *
  * Their prototype is :                                                       *
- * void MOTOR_MSG_XXX(...)                                                    *
+ * void Motor_msg_XXX(...)                                                    *
  *                                                                            *
  \****************************************************************************/
 
@@ -343,9 +336,9 @@ INLINE static void Motor_LL_tillerDisengage(void)
  * @param void
  * @return void
  */
-void MOTOR_MSG_letInClutch(void)
+void Motor_msg_engage_actuator(void)
 {
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_EMBRAYE};
+    static Motor_msg_t msg = {.msgType = MOTOR_MSG_EMBRAYE};
     xQueueSend(msgQueueMotor, &msg, 0);
 }
 
@@ -356,9 +349,9 @@ void MOTOR_MSG_letInClutch(void)
  * @param void
  * @return void
  */
-void MOTOR_MSG_letOutClutch(void)
+void Motor_msg_disengage_actuator(void)
 {
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_DEBRAYE};
+    static Motor_msg_t msg = {.msgType = MOTOR_MSG_DEBRAYE};
     xQueueSend(msgQueueMotor, &msg, 0);
 }
 
@@ -371,9 +364,9 @@ void MOTOR_MSG_letOutClutch(void)
  * @param angle angle to steer is in radians
  * @return void
  */
-void MOTOR_MSG_setHelmAngle(float angle)
+void Motor_msg_set_helm_angle(float angle)
 {
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_SET_HELM_ANGLE};
+    static Motor_msg_t msg = {.msgType = MOTOR_MSG_SET_HELM_ANGLE};
     msg.data.steerAngle = angle;
     xQueueSend(msgQueueMotor, &msg, 0);
 }
@@ -387,9 +380,9 @@ void MOTOR_MSG_setHelmAngle(float angle)
  * @param time in seconds to run the motor, positive: starboard, negative: port.
  * @return void
  */
-void MOTOR_MSG_moveTime(float time)
+void Motor_msg_move_time(float time)
 {
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_MOVE_TIME};
+    static Motor_msg_t msg = {.msgType = MOTOR_MSG_MOVE_TIME};
     msg.data.moveTime = time;
     xQueueSend(msgQueueMotor, &msg, 0);
 }
@@ -402,9 +395,9 @@ void MOTOR_MSG_moveTime(float time)
  * the direction of the motor instead of swaping motor wires.
  * @return none
  */
-void MOTOR_MSG_set_cvt_angle_time(float cvt)
+void Motor_msg_set_cvt_angle_time(float cvt)
 {
-    static MsgMotor_t msg = {.msgType = MSG_MOTOR_SET_CVT_ANGLE_TIME};
+    static Motor_msg_t msg = {.msgType = MOTOR_MSG_SET_CVT_ANGLE_TIME};
     msg.data.cvtAngleTime = cvt;
     xQueueSend(msgQueueMotor, &msg, 0);
 }
@@ -415,9 +408,9 @@ void MOTOR_MSG_set_cvt_angle_time(float cvt)
  * @param coef between 0 and 1.
  * @return none
  */
-void MOTOR_MSG_set_hpf_coeff(float coef)
+void Motor_msg_set_hpf_coeff(float coef)
 {
-    MsgMotor_t msg = {.msgType = MSG_MOTOR_SET_HPF_COEF,
+    Motor_msg_t msg = {.msgType = MOTOR_MSG_SET_HPF_COEF,
                       .data.hpf_coeff = coef
                      };
 
@@ -429,9 +422,9 @@ void MOTOR_MSG_set_hpf_coeff(float coef)
  * @param coef between 0 and 1.
  * @return none
  */
-void MOTOR_MSG_set_threshold(float thr)
+void Motor_msg_set_threshold(float thr)
 {
-    MsgMotor_t msg = {.msgType = MSG_MOTOR_SET_THRESHOLD,
+    Motor_msg_t msg = {.msgType = MOTOR_MSG_SET_THRESHOLD,
                       .data.threshold = thr
                      };
 
@@ -480,7 +473,7 @@ void Motor_set_cvt_angle_time(float cvt)
  * @param deltat Time since last call in seconds
  * @param vPower Voltage of power supply
  * @param iMotor Current through motor
- * @return void
+ * @return motorEvent
  */
 uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
 {
@@ -514,7 +507,7 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
             motorData.turnTimeReq = 0.F;
             motorEvent |= MOTOR_EVENT_STALLED;
             DBG_MOTOR_PRINT(
-                svc_UART_Write(&svc_uart2, "MOTOR Overcurrent stop\n", 23, 0U));
+                svc_UART_Write(&svc_uart2, "MOTOR overcurrent stop\n", 23, 0U));
         }
     }
     else
@@ -528,10 +521,12 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
         // DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR S_10\n", 11, 0U));
 
         /* Estimate new position of motor */
-        dirSign = (motorData.status & MOTOR_STATUS_DIR_STARBOARD) ? 1 : -1;
-#if 1
         float angleMove;
+        float angleMoveFiltered;
         int hdgSign;
+        //int moveSign;
+
+        dirSign = (motorData.status & MOTOR_STATUS_DIR_STARBOARD) ? 1 : -1;
 
         if(fabs(motorData.HelmAngleEstimated) > 0.2 * (M_PIF / 180.F))
         {
@@ -544,24 +539,29 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
 
         angleMove = motorData.cvt_angle_time * deltat * dirSign;
 
-        /* TODO : reduce estimated helm angle */
-        (void)hdgSign; /* to be used later, avoid compiler warning for "set but
-                          unused" */
-
-        angleMove *= (1.0F + motorData.hpf_coeff * hdgSign * dirSign);
-
-        motorData.HelmAngleEstimated += angleMove;
-
+#if 0
+        angleMoveFiltered = angleMove * (1.0F + motorData.hpf_coeff * dirSign);
+        motorData.HelmAngleEstimated += angleMoveFiltered;
 #else
-        motorData.HelmAngleEstimated +=
-            motorData.cvt_angle_time * deltat * dirSign;
-        motorData.HelmAngleEstimated *= 1.0 / (1.0 + motorData.hpf_coeff);
+        motorData.HelmAngleEstimated += angleMove;
+        angleMoveFiltered = angleMove;
+        motorData.HelmAngleEstimated *= (1.0 + motorData.hpf_coeff);
 #endif
 
-        deltaAngle =
-            motorData.helmAngleRequested - motorData.HelmAngleEstimated;
+        DBG_MOTOR_PRINT((snprintf(message, sizeof(message),
+                                  "MOTOR estimatedHelm %6f   angleMove %6f  angleMoveFiltered %6f\n",
+                                  motorData.HelmAngleEstimated,
+                                  angleMove,
+                                  angleMoveFiltered),
+                         svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
 
-        if(deltaAngle * dirSign < motorData.threshold * dirSign)
+
+        deltaAngle = motorData.helmAngleRequested - motorData.HelmAngleEstimated;
+
+        // Test with error sign
+        // if(deltaAngle * dirSign < motorData.threshold * dirSign)
+
+        if (fabsf(deltaAngle) < motorData.threshold)
         {
             /* Nearly reached requested angle */
             Motor_LL_stop();
@@ -572,8 +572,7 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
             motorData.status |= MOTOR_STATUS_STOPPING;
             motorData.turnTimeRemaining = motorData.timeToStop;
 
-            // DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR S_11\n", 11,
-            // 0U));
+            DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR stopping\n", 15, 0U));
 
             DBG_MOTOR_PRINT((nbcar = snprintf(message, sizeof(message),
                                               "MOTOR estimated angle %f\n",
@@ -597,9 +596,7 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
             // DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR S_12\n", 11,
             // 0U));
 
-            DBG_MOTOR_PRINT((nbcar = snprintf(message, sizeof(message),
-                                              "MOTOR end moving time\n",
-                                              motorData.HelmAngleEstimated),
+            DBG_MOTOR_PRINT((nbcar = snprintf(message, sizeof(message), "MOTOR end moving time\n"),
                              svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
         }
     }
@@ -621,6 +618,12 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
             motorData.HelmAngleEstimated = motorData.helmAngleRequested;
 
             motorEvent |= MOTOR_EVENT_STOP;
+
+            if (motorEvent & MOTOR_EVENT_STALLED)
+            {
+                DBG_MOTOR_PRINT (svc_UART_Write(&svc_uart2, "MOTOR stalled stop\n", 14, 0U));
+            }
+
         }
     }
 
@@ -637,7 +640,7 @@ uint32_t Motor_newValues(float deltat, float vPower, float iMotor)
  * it sets the time to move to timeToMove;
  * @return void
  */
-void Motor_moveTime(float timeToMove)
+void Motor_move_time(float timeToMove)
 {
     int32_t dirSignMoving;
     int32_t dirSignToMove;
@@ -710,7 +713,7 @@ void Motor_moveTime(float timeToMove)
     return;
 }
 
-void Motor_setHelmAngle(float angle)
+void Motor_set_helm_angle(float angle)
 {
     float deltaAngle;
 
@@ -791,7 +794,7 @@ void Motor_disengageTiller()
  */
 int Motor_task_init()
 {
-    msgQueueMotor = xQueueCreate(10, sizeof(MsgMotor_t));
+    msgQueueMotor = xQueueCreate(10, sizeof(Motor_msg_t));
 
     if(msgQueueMotor == (QueueHandle_t)0)
     {
@@ -815,8 +818,9 @@ void Motor_task(void *parameters)
 
     size_t ret;
     unsigned int motorEvent;  /* Motor event type */
-    MsgMotor_t msgMoteur;     /* Message to motor task */
+    Motor_msg_t msgMoteur;     /* Message to motor task */
     char message[200];        /* Text buffer for messaging */
+    int nbcar;                /* Number of characters put in message */
     unsigned int counter = 0; /* Counter for periodic printing of values */
 
     DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart1, "Motor start task\n", 17, 0U));
@@ -831,7 +835,7 @@ void Motor_task(void *parameters)
 
     for(;;)  /* boucle infernale */
     {
-        msgMoteur.msgType = MSG_MOTOR_NONE;
+        msgMoteur.msgType = MOTOR_MSG_NONE;
 
         ret = xQueueReceive(msgQueueMotor, &msgMoteur, pdMS_TO_TICKS(500));
 
@@ -844,7 +848,7 @@ void Motor_task(void *parameters)
              * overcurrent If motor running estimate helm angle or time
              * running
              */
-            case MSG_MOTOR_ADC_VALUES:
+            case MOTOR_MSG_ADC_VALUES:
 
                 motorData.vPower =
                     ((float)msgMoteur.data.adcValues.adc_power) *
@@ -853,8 +857,7 @@ void Motor_task(void *parameters)
                     ((float)msgMoteur.data.adcValues.adc_current) *
                     ADC_CVT_TO_CURRENT;
 
-                motorEvent = Motor_newValues(ADC_PERIOD, motorData.vPower,
-                                             motorData.vCurrent);
+                motorEvent = Motor_newValues(ADC_PERIOD, motorData.vPower, motorData.vCurrent);
 
                 if(counter % (((motorData.status & MOTOR_STATUS_RUNNING))
                               ? 1
@@ -863,7 +866,7 @@ void Motor_task(void *parameters)
                 {
                     DBG_ADC_PRINT(
                         (snprintf(message, sizeof(message),
-                                  "ADC --> %d %5.2f %5.3f\n", counter,
+                                  "ADC  %d %5.2f %5.3f\n", counter,
                                   motorData.vPower, motorData.vCurrent),
                          svc_UART_Write(&svc_uart2, message,
                                         strlen(message), 0U)));
@@ -872,8 +875,7 @@ void Motor_task(void *parameters)
                 /* Vérifie que le moteur n'est pas bloqué */
                 if(motorEvent & MOTOR_EVENT_STALLED)
                 {
-                    /* if stalled send a message (UART2) and warn autopilot
-                     * task */
+                    /* if stalled send a message (UART2) and warn autopilot task */
                     svc_UART_Write(&svc_uart2, "MOTOR stalled\n", 14, 0U);
                     AP_MSG_MotorStalled();
                 }
@@ -881,28 +883,28 @@ void Motor_task(void *parameters)
                 break; /* case MSG_MOTOR_ADC_VALUES: */
 
             /* Set helm angle : */
-            case MSG_MOTOR_SET_HELM_ANGLE:
+            case MOTOR_MSG_SET_HELM_ANGLE:
 
-                Motor_setHelmAngle(msgMoteur.data.steerAngle);
+                Motor_set_helm_angle(msgMoteur.data.steerAngle);
 
                 break; /* case MSG_MOTOR_SET_HELM_ANGLE: */
 
             /* Disengage Motor */
-            case MSG_MOTOR_DEBRAYE:
+            case MOTOR_MSG_DEBRAYE:
 
                 Motor_disengageTiller();
 
                 break; /* case MSG_MOTOR_DEBRAYE: */
 
-            case MSG_MOTOR_EMBRAYE: /* Engage Motor */
+            case MOTOR_MSG_EMBRAYE: /* Engage Motor */
 
                 Motor_engageTiller();
 
                 break; /* case MSG_MOTOR_ENBRAYE: */
 
-            case MSG_MOTOR_MOVE_TIME: /* Move motor for time */
+            case MOTOR_MSG_MOVE_TIME: /* Move motor for time */
 
-                Motor_moveTime(msgMoteur.data.moveTime);
+                Motor_move_time(msgMoteur.data.moveTime);
                 DBG_MOTOR_PRINT((snprintf(message, sizeof(message),
                                           "MOTOR move time %.3f\n",
                                           msgMoteur.data.moveTime),
@@ -911,52 +913,51 @@ void Motor_task(void *parameters)
 
                 break; /* case MSG_MOTOR_MOVE_TIME: */
 
-            case MSG_MOTOR_DISPLAY_CONFIG: /* Display configuration  */
+            case MOTOR_MSG_DISPLAY_CONFIG: /* Display configuration  */
 
-                int nbcar =
-                    snprintf(message, sizeof(message),
-                             "MOTOR config : cvt angle time %f hpfcoeff %f "
-                             "threshold %f\n",
-                             motorData.cvt_angle_time, motorData.hpf_coeff,
-                             motorData.threshold);
+                nbcar = snprintf(message, sizeof(message),
+                                 "MOTOR config : cvt angle time %f hpfcoeff %f "
+                                 "threshold %f\n",
+                                 motorData.cvt_angle_time, motorData.hpf_coeff,
+                                 motorData.threshold);
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U);
 
                 break; /* case MSG_MOTOR_DISPLAY_CONFIG: */
 
             /* Set conversion coefficient between angle and time */
-            case MSG_MOTOR_SET_CVT_ANGLE_TIME:
+            case MOTOR_MSG_SET_CVT_ANGLE_TIME:
 
                 Motor_set_cvt_angle_time(msgMoteur.data.cvtAngleTime);
-                DBG_MOTOR_PRINT((snprintf(message, sizeof(message),
-                                          "MOTOR set cvt angle time %6f\n",
-                                          msgMoteur.data.cvtAngleTime),
-                                 svc_UART_Write(&svc_uart2, message,
-                                                strlen(message), 0U)));
+
+                snprintf(message, sizeof(message),
+                         "MOTOR param cvt angle time %6f\n",
+                         msgMoteur.data.cvtAngleTime);
+                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 
                 break; /* case MSG_MOTOR_SET_CVT_ANGLE_TIME: */
 
             /* Set coefficient of high pass filter of estimated position
              */
-            case MSG_MOTOR_SET_HPF_COEF:
+            case MOTOR_MSG_SET_HPF_COEF:
 
                 motorData.hpf_coeff = msgMoteur.data.hpf_coeff;
-                DBG_MOTOR_PRINT((snprintf(message, sizeof(message),
-                                          "MOTOR set hpf coefficient %6f\n",
-                                          msgMoteur.data.moveTime),
-                                 svc_UART_Write(&svc_uart2, message,
-                                                strlen(message), 0U)));
+
+                snprintf(message, sizeof(message),
+                         "MOTOR param hpf coefficient %6f\n",
+                          msgMoteur.data.moveTime);
+                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 
                 break; /* MSG_MOTOR_SET_HPF_COEF:  */
 
             /* Set threshold of a command motor */
-            case MSG_MOTOR_SET_THRESHOLD:
+            case MOTOR_MSG_SET_THRESHOLD:
 
                 motorData.threshold = msgMoteur.data.threshold;
-                DBG_MOTOR_PRINT((snprintf(message, sizeof(message),
-                                          "MOTOR set threshold %6f\n",
-                                          msgMoteur.data.moveTime),
-                                 svc_UART_Write(&svc_uart2, message,
-                                                strlen(message), 0U)));
+
+                snprintf(message, sizeof(message),
+                         "MOTOR param set threshold %6f\n",
+                         msgMoteur.data.moveTime);
+                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 
                 break; /* case MSG_MOTOR_SET_THRESHOLD:  */
 
@@ -987,11 +988,12 @@ void Motor_task(void *parameters)
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
     /* One interrupt, so static variable */
-    static MsgMotor_t msgMotor; /* Message to the task */
+    static Motor_msg_t msgMotor; /* Message to the task with ADC values */
 
     static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-    msgMotor.msgType = MSG_MOTOR_ADC_VALUES;
+    msgMotor.msgType = MOTOR_MSG_ADC_VALUES;
+    /* ADC values are stored in adc_values[0..1], interrupt is fired after */
     msgMotor.data.adcValues.adc_power = adc_values[0];
     msgMotor.data.adcValues.adc_current = adc_values[1];
 

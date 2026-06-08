@@ -1,22 +1,21 @@
 
 #include <math.h>
-
-//#include "printf.h"
-//#include "util.h"
-//#include "rlib.h"
 #include <stdbool.h>
+
 #include "ahrs.h"
 #include "ahrsdt0058.h"
 
 const AHRS_Interface_t AHRS_DT0058_Interface =
 {
-    .AHRS_init = AHRS_init,
+    .AHRS_init                = AHRS_init,
     .AHRS_get_roll            = AHRS_get_roll,
     .AHRS_get_pitch           = AHRS_get_pitch,
     .AHRS_get_heading         = AHRS_get_heading,
     .AHRS_get_yawRate         = AHRS_get_yawRate,
     .AHRS_set_mag_vs_gyr_prop = AHRS_set_mag_vs_gyr_prop,
-    .AHRS_update              = AHRS_DT0058_update
+    .AHRS_update              = AHRS_DT0058_update,
+    .AHRS_get_Quaternion      = AHRS_get_Quaternion,
+    .name                     = "DT0058",
 };
 
 int AHRS_DT0058_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,

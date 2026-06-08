@@ -26,7 +26,8 @@ const AHRS_Interface_t AHRS_Simple_Interface =
     .AHRS_get_yawRate         = AHRS_Simple_get_yawRate,
     .AHRS_set_mag_vs_gyr_prop = AHRS_Simple_set_mag_vs_gyr_prop,
     .AHRS_update              = AHRS_Simple_update,
-    .AHRS_get_Quaternion      = AHRS_Simple_get_Quaternion
+    .AHRS_get_Quaternion      = AHRS_Simple_get_Quaternion,
+    .name                     = "Simple",
 };
 
 void AHRS_Simple_init(AHRS_Status_t * mstatus)

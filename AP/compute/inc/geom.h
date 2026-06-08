@@ -208,4 +208,11 @@ float cvt_dir_norm_deg(float angle);
  */
 float normalize_angle_rad(float angle);
 
+/*
+ * @brief Normalizes an angle in radians to the range [-PI, PI[.
+ * @param angle The input angle in radians.
+ * @return The normalized angle in radians, in the range [-PI, PI[.
+ */
+float normalize_angle_rad_centered(float angle);
+
 #endif /* GEOM_H */

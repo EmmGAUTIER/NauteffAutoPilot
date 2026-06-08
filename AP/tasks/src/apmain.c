@@ -28,14 +28,12 @@ TaskHandle_t tasksHandles [] =
 };
 int tasksNumber = sizeof(tasksHandles) / sizeof(tasksHandles[0]);
 
-//extern int _sram2;
-//extern int _eram2;
-
 void panic(int panicType)
 {
     MOTOR_stopPanic();
     /* Alarm_give(); */
     /* TODO fire a reset witth special condition */
+    /* TODO Mettre dans une macro pour être sûr de ne pas utiliser de pile */
 }
 
 void apmain()

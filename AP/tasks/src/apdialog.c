@@ -147,7 +147,7 @@ static const TokenEntry tokenTable[] =
     { "quat", TOKEN_QUAT },
     { "select", TOKEN_SELECT },
     { "set", TOKEN_SET },
-    { "Simple", TOKEN_SIMPLE },
+    { "simple", TOKEN_SIMPLE },
     { "starboard", TOKEN_STARBOARD },
     { "turn", TOKEN_TURN },
     { "wind", TOKEN_WIND },
@@ -401,7 +401,7 @@ void parse_command_line(void)
     //char nbcar;
     MsgAutoPilot_t msgAutoPilot;
     MEMS_Msg_t msgMEMs;
-    MsgMotor_t msgMotor;
+    Motor_msg_t msgMotor;
 
     for(int i = 0; i < MAX_TOKENS; i++)
     {
@@ -560,7 +560,7 @@ void parse_command_line(void)
                     break;
 
                 case TOKEN_MOTOR_CVT_ANGLE_TIME:
-                    msgMotor.msgType = MSG_MOTOR_SET_CVT_ANGLE_TIME;
+                    msgMotor.msgType = MOTOR_MSG_SET_CVT_ANGLE_TIME;
                     msgMotor.data.cvtAngleTime = numberValue;
                     xQueueSend(msgQueueMotor, &msgMotor, 0);
                     break;
@@ -572,13 +572,13 @@ void parse_command_line(void)
                     break;
 
                 case TOKEN_MOTOR_THRESHOLD:
-                    msgMotor.msgType = MSG_MOTOR_SET_THRESHOLD;
+                    msgMotor.msgType = MOTOR_MSG_SET_THRESHOLD;
                     msgMotor.data.threshold = numberValue;
                     xQueueSend(msgQueueMotor, &msgMotor, 0);
                     break;
 
                 case TOKEN_MOTOR_HPF_COEFF:
-                    msgMotor.msgType = MSG_MOTOR_SET_HPF_COEF;
+                    msgMotor.msgType = MOTOR_MSG_SET_HPF_COEF;
                     msgMotor.data.hpf_coeff = numberValue;
                     xQueueSend(msgQueueMotor, &msgMotor, 0);
                     break;
@@ -647,7 +647,7 @@ void parse_command_line(void)
                 snprintf(message, sizeof(message) - 1, "Motor config ?\n");
                 svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 
-                msgMotor.msgType = MSG_MOTOR_DISPLAY_CONFIG;
+                msgMotor.msgType = MOTOR_MSG_DISPLAY_CONFIG;
                 xQueueSend(msgQueueMotor, &msgMotor, 0);
                 break;
 
@@ -685,7 +685,7 @@ void parse_command_line(void)
         {
 
         case TOKEN_SELECT:
-            AHRS_Types ahrsType = TOKEN_UNKNOWN;
+            AHRS_Types ahrsType = AHRS_TYPE_NONE;
 
             switch(tokenTypes[2])
             {
@@ -701,10 +701,19 @@ void parse_command_line(void)
 
                 break;
 
+            case TOKEN_DT0058:
+
+                ahrsType = AHRS_TYPE_DT0058;
+
+                break;
+
             default:
                 break; // Syntax error: unrecognized AHRS type
 
             }
+
+            snprintf(message,sizeof(message), "DIALOG select AHRS type %d\n", ahrsType);
+            svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 
             if(ahrsType != AHRS_TYPE_NONE)
             {

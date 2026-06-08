@@ -6,7 +6,7 @@
 
 //#include "ahrssimple.h"
 
-#define AHRS_TYPES_NUMBER 1
+#define AHRS_TYPES_NUMBER 3
 
 typedef enum
 {
@@ -42,6 +42,7 @@ typedef struct
     void (*AHRS_set_mag_vs_gyr_prop)(AHRS_Status_t*, float prop);
     int (*AHRS_update)(AHRS_Status_t*, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat);
     Quaternionf(*AHRS_get_Quaternion)(AHRS_Status_t*);
+    const char* name;
 } AHRS_Interface_t;
 
 extern const AHRS_Interface_t *AHRS_Interfaces[];

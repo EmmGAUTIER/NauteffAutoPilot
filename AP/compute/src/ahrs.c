@@ -155,8 +155,8 @@ void quaternion_vers_euler(Quaternionf q, float *roll, float *pitch, float *yaw)
     *roll = -atan2f(sinr_cosp, cosr_cosp);
 
     // pitch (y-axis rotation)
-    double sinp = sqrt(1 + 2 * (q.w * q.y - q.x * q.z));
-    double cosp = sqrt(1 - 2 * (q.w * q.y - q.x * q.z));
+    float sinp = sqrt(1 + 2 * (q.w * q.y - q.x * q.z));
+    float cosp = sqrt(1 - 2 * (q.w * q.y - q.x * q.z));
     *pitch = -2 * atan2(sinp, cosp) - M_PI / 2;
 
     // Lacet (rotation autour de z) = cap

@@ -22,12 +22,24 @@
  SOFTWARE.
  */
 
+/****************************************************************************\
+*     MEMS.c : MEMS devices managment and data fusion                        *
+******************************************************************************
+*                                                                            *
+* Cette partie est en cours de développement.                                *
+*                                                                            *
+* Elle permet d'accéder à plusieurs algorithmes de fusion de données.        *
+* Elle gère le dialogue avec les capteurs MEMS (LSM9DS1), le calcul de       *
+* l'attitude et de l'orientation du bateau, la calibration des capteurs.     *
+*                                                                            *
+\****************************************************************************/
+
 #define DBG_PRINT_RAW_VALUES_ACC(X)
 #define DBG_PRINT_RAW_VALUES_GYR(X)
 #define DBG_PRINT_RAW_VALUES_MAG(X)
 #define DBG_PRINT_MEAN_RAW_VALUES(X)
 #define DBG_PRINT_CALIB(X) (X)
-#define DBG_PRINT_MEAN_CORR_VALUES(X)
+#define DBG_PRINT_MEAN_CORR_VALUES(X) (X)
 #define DBG_PRINT_ATTITUDE(X)  (X)
 #define DBG_PRINT_QUATERNION(X)
 #define DBG_PRINT_MADGWICK(X)
@@ -627,8 +639,8 @@ int Mems_task_init()
  * It is called every MEMS_PERIOD_MS milliseconds by the timer timerMEMs.
  * Upon reception of this message the task computes mean values of the sensors,
  * compute the attitude and sends it to the autopilot task.
- * @ param xTimer The timer handle (not used)
- * @ return None
+ * @param xTimer The timer handle (not used)
+ * @return None
  */
 void timerMEMsCallback(TimerHandle_t xTimer)
 {
@@ -649,8 +661,8 @@ void timerMEMsCallback(TimerHandle_t xTimer)
  * It is called every MEMS_PERIOD_POLL milliseconds by the timer timerPOLLs.
  * Upon reception of this message the task reads the status registers of the sensors,
  * and reads data if they are available
- * @ param xTimer The timer handle (not used)
- * @ return None
+ * @param xTimer The timer handle (not used)
+ * @return None
  */
 void timerPOLLCallback(TimerHandle_t xTimer)
 {
@@ -998,7 +1010,7 @@ void Mems_task(void *param)
                               magComp.x, magComp.y, magComp.z),
                      svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
 
-                AHRS_Interfaces[AHRS_TYPE_SIMPLE]->AHRS_update(&ahrs, &accComp, &gyrComp, &magComp, deltat);
+                AHRS_Interfaces[ahrsType]->AHRS_update(&ahrs, &accComp, &gyrComp, &magComp, deltat);
 
                 DBG_PRINT_ATTITUDE(
                     (snprintf(message, sizeof(message),
@@ -1051,14 +1063,22 @@ void Mems_task(void *param)
 
                 AHRS_Interfaces[ahrsType]->AHRS_set_mag_vs_gyr_prop(&ahrs, MEMS_Msg.data.mag_vs_gyr);
 
+                snprintf(message, sizeof(message),
+                         "MEMS param : mag/gyr : %f\n",
+                         ahrs.magVsGyr);
+                svc_UART_Write(&svc_uart2, message, strlen(message),
+                                pdMS_TO_TICKS(1));
+
                 break; /* case MEMS_MSG_SET_MAG_VS_GYR: */
 
             case MEMS_MSG_DISPLAY_CONFIG: /* Display the configuration */
 
                 snprintf(message, sizeof(message),
-                         "MEMS config : poll : %dms  compute : %dms  mag/gyr %f\n",
+                         "MEMS config : poll : %dms  compute : %dms  %s  mag/gyr %f\n",
                          MEMS_PERIOD_POLL,
                          MEMS_PERIOD_MS,
+                         AHRS_Interfaces[ahrsType]->name,
+                         //ahrsType,
                          ahrs.magVsGyr);
                 svc_UART_Write(&svc_uart2, message, strlen(message),
                                pdMS_TO_TICKS(1));
@@ -1072,9 +1092,9 @@ void Mems_task(void *param)
                 if((MEMS_Msg.data.ahrsType >= 0) && (MEMS_Msg.data.ahrsType < AHRS_TYPES_NUMBER))
                 {
                     ahrsType = MEMS_Msg.data.ahrsType;
-                    AHRS_Interfaces[ahrsType]->AHRS_init(&ahrs);
+                    //AHRS_Interfaces[ahrsType]->AHRS_init(&ahrs);
                     snprintf(message, sizeof(message),
-                             "MEMS AHRS type set to %d\n", ahrsType);
+                             "MEMS param AHRS type set to %d\n", ahrsType);
                     svc_UART_Write(&svc_uart2, message, strlen(message),
                                    pdMS_TO_TICKS(1));
                 }

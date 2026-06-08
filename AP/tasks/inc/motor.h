@@ -47,19 +47,19 @@ void Motor_task();
 
 typedef enum
 {
-    MSG_MOTOR_NONE = 0,
-    MSG_MOTOR_ADC_VALUES,
-    MSG_MOTOR_EMBRAYE,
-    MSG_MOTOR_DEBRAYE,
-    MSG_MOTOR_SET_HELM_ANGLE,
-    MSG_MOTOR_MOVE_TIME,
-    MSG_MOTOR_MOVE_DONE,
-    MSG_MOTOR_DISPLAY_CONFIG,
-    MSG_MOTOR_DEFAULT,
-    MSG_MOTOR_SET_CVT_ANGLE_TIME,
-    MSG_MOTOR_SET_HPF_COEF,
-    MSG_MOTOR_SET_THRESHOLD,
-} MsgMotorType_t;
+    MOTOR_MSG_NONE = 0,
+    MOTOR_MSG_ADC_VALUES,
+    MOTOR_MSG_EMBRAYE,
+    MOTOR_MSG_DEBRAYE,
+    MOTOR_MSG_SET_HELM_ANGLE,
+    MOTOR_MSG_MOVE_TIME,
+    MOTOR_MSG_MOVE_DONE,
+    MOTOR_MSG_DISPLAY_CONFIG,
+    MOTOR_MSG_DEFAULT,
+    MOTOR_MSG_SET_CVT_ANGLE_TIME,
+    MOTOR_MSG_SET_HPF_COEF,
+    MOTOR_MSG_SET_THRESHOLD,
+} Motor_msg_type_t;
 
 typedef struct
 {
@@ -80,7 +80,7 @@ typedef struct
         float hpf_coeff;
         float threshold;
     } data;
-} MsgMotor_t;
+} Motor_msg_t;
 
 /**
  * @brief Send the order "engage clutch" to motor task
@@ -88,7 +88,7 @@ typedef struct
  * Motor task stops motor if it is running and engage clutch.
  * @return none
  */
-void MOTOR_MSG_letInClutch();
+void Motor_msg_engage_actuator();
 
 /**
  * @brief send the order disengage clutch to motor task
@@ -97,7 +97,7 @@ void MOTOR_MSG_letInClutch();
  * Task motor sends a message later when motor is stopped if it was moving.
  * @return none
  */
-void MOTOR_MSG_letOutClutch();
+void Motor_msg_disengage_actuator();
 
 /**
  * @brief send the order move angle
@@ -107,7 +107,7 @@ void MOTOR_MSG_letOutClutch();
  *
  * @return none
  */
-void MOTOR_MSG_setHelmAngle(float angle);
+void Motor_msg_set_helm_angle(float angle);
 
 /**
  * @brief send the order move for a time
@@ -119,14 +119,14 @@ void MOTOR_MSG_setHelmAngle(float angle);
  * Used for moving continuously with repeated pushes on button.
  * @return none
  */
-void MOTOR_MSG_moveTime(float time);
+void Motor_msg_move_time(float time);
 
 /*
  * @brief Set the conversion factor between helm angle and time
  * @param cvt Conversion factor angle (radians) to time (seconds)
  * @return void
  */
-void MOTOR_MSG_set_cvt_angle_time(float cvt);
+void Motor_msg_set_cvt_angle_time(float cvt);
 
 /*
  * @brief Set the high pass filter coefficient
@@ -134,7 +134,7 @@ void MOTOR_MSG_set_cvt_angle_time(float cvt);
  * Usage is to be defined later.
  * @return void
  */
-void MOTOR_MSG_set_hpf_coeff(float cvt);
+void Motor_msg_set_hpf_coeff(float cvt);
 
 /*
  * @brief Set the threshold of angle to move the motor
@@ -144,7 +144,7 @@ void MOTOR_MSG_set_hpf_coeff(float cvt);
  * Starting the motor consumes a lot of energy and is less efficient.
  * @return void
  */
-void MOTOR_MSG_set_threshold(float cvt);
+void Motor_msg_set_threshold(float cvt);
 
 /*
  * @brief Stop motor in case pf panic.

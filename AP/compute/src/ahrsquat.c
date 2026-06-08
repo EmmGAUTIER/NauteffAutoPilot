@@ -21,13 +21,15 @@
 
 const AHRS_Interface_t AHRS_Quat_Interface =
 {
-    .AHRS_init = AHRS_Simple_init,
+    .AHRS_init                = AHRS_init,
     .AHRS_get_roll            = AHRS_get_roll,
     .AHRS_get_pitch           = AHRS_get_pitch,
     .AHRS_get_heading         = AHRS_get_heading,
     .AHRS_get_yawRate         = AHRS_get_yawRate,
     .AHRS_set_mag_vs_gyr_prop = AHRS_set_mag_vs_gyr_prop,
-    .AHRS_update              = AHRS_Quat_update
+    .AHRS_update              = AHRS_Quat_update,
+    .AHRS_get_Quaternion      = AHRS_get_Quaternion,
+    .name                     = "Quat",
 };
 
 /*

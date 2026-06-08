@@ -80,6 +80,7 @@ const char *APParameterNames[] =
 void AP_init(APStatus_t *aps);
 int AP_set_mode_idle(APStatus_t *aps);
 int AP_set_mode_heading(APStatus_t *aps);
+int AP_set_mode_heading_dir(APStatus_t *aps, int hdg);
 int AP_turn(APStatus_t *aps, float angle);
 int AP_get_engaged(APStatus_t *aps);
 float AP_get_heading_dir(APStatus_t *aps);
@@ -213,7 +214,20 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
             case AP_MSG_MODE_HEADING:
 
                 AP_set_mode_heading(&APStatus);
-                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP Mode heading %.1f\n", AP_get_heading_dir(&APStatus)),
+                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message),
+                                                  "AP Mode heading current %.1f\n",
+                                                  AP_get_heading_dir(&APStatus)),
+                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                timestamp = xTaskGetTickCount();
+
+                break; /* case AP_MSG_MODE_HEADING */
+
+            case AP_MSG_MODE_HEADING_DIR:
+
+                AP_set_mode_heading_dir(&APStatus, msg.data.reqHeading);
+                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message),
+                                                  "AP Mode heading dir %.1f\n",
+                                                  msg.data.reqHeading* (M_PI / 180.F)),
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 timestamp = xTaskGetTickCount();
 
@@ -246,10 +260,10 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
 
             case AP_MSG_PARAM:
 
-                DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message) - 1, "AP param %s %f\n",
-                                                  APParameterNames[(int)msg.data.coefficient.param_number],
-                                                  msg.data.coefficient.param_value),
-                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                nbcar = snprintf(message, sizeof(message) - 1, "AP param %s %f\n",
+                                 APParameterNames[(int)msg.data.coefficient.param_number],
+                                 msg.data.coefficient.param_value);
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
 
                 // APStatus.headingToSteer = msg.data.reqHeading;
                 switch(msg.data.coefficient.param_number)
@@ -311,8 +325,8 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                                  "AP config: Kp %8f  Ki %8f  Kd %8f\n",
                                  APStatus.kp,
                                  APStatus.ki,
-                                 APStatus.kd,
-                                 svc_UART_Write(&svc_uart2, message, nbcar, 0U));
+                                 APStatus.kd);
+                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
 
                 break; /* case AP_MSG_DISPLAY_CONFIG: */
 
@@ -396,13 +410,14 @@ int AP_set_mode_idle(APStatus_t *aps)
     aps->currentGap = 0.F;
     aps->integratedGap = 0.F;
 
-    MOTOR_MSG_letOutClutch();
+    Motor_msg_disengage_actuator();
 
     return 0;
 }
 
 /*
  * @brief Set heading mode (maintaining heading)
+ * The heading to steer is set to the actual heading of the ship
  * @param APStatus_t *aps AutoPilot structure
  * @return none
  */
@@ -417,12 +432,36 @@ int AP_set_mode_heading(APStatus_t *aps)
         aps->currentGap = 0;
         aps->integratedGap = 0;
 
-        MOTOR_MSG_letInClutch();
+        Motor_msg_engage_actuator();
     }
 
     /* else : Already engaged, Nothing to do*/
     return 0;
 }
+/*
+ * @brief Set heading mode (maintaining heading)
+ * The heading to steer is set to the actual heading of the ship
+ * @param APStatus_t *aps AutoPilot structure
+ * @return none
+ */
+int AP_set_mode_heading_dir(APStatus_t *aps, int hdg)
+{
+    /* change state engage to 1 */
+    /* No order to send to motor since heading to steer is actual heading */
+    if(aps->engaged == 0)
+    {
+        aps->engaged = 1;
+        aps->headingToSteerRadians = hdg;
+        aps->currentGap = 0;
+        aps->integratedGap = 0;
+
+        Motor_msg_engage_actuator();
+    }
+
+    /* else : Already engaged, Nothing to do*/
+    return 0;
+}
+
 
 /*
  * @brief Turn helm or change direction to steer
@@ -435,7 +474,7 @@ int AP_turn(APStatus_t *aps, float angle)
 {
     if(aps->engaged == 0)
     {
-        MOTOR_MSG_moveTime(angle >= 0. ? - AP_TIME_ONE_MOVE : AP_TIME_ONE_MOVE);
+        Motor_msg_move_time(angle >= 0. ? - AP_TIME_ONE_MOVE : AP_TIME_ONE_MOVE);
     }
     else
     {
@@ -496,14 +535,15 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
      * The order to send to motor task is also stored in APStatus_t structure for information.
     */
 
+    float previousHeading = aps->currentHeading;
     aps->currentHeading = heading;
 
     if(aps->engaged)
     {
-        aps->currentGap = (aps->headingToSteerRadians - heading);
+        aps->currentGap = normalize_angle_rad_centered(heading - aps->headingToSteerRadians);
         aps->integratedGap += aps->currentGap * deltat;
-        //aps->yawRate = -yawRate;
-        aps->yawRate = aps->yawRate * (1.0F - AP_LPF_YAW_RATE) - yawRate * AP_LPF_YAW_RATE;
+        //aps->yawRate = aps->yawRate * (1.0F - AP_LPF_YAW_RATE) - yawRate * AP_LPF_YAW_RATE;
+        aps->yawRate = heading - previousHeading;
 
         /* Integrated gap is maintained in [ - AP_MAX_INTEGRAL_GAP +AP_MAX_INTEGRAL_GAP] */
         if(aps->integratedGap > AP_MAX_INTEGRAL_GAP)
@@ -521,14 +561,15 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
                    + (aps->yawRate * aps->kd);      /* Derivative */
 
         DB_PRINT_PID((nbcar = snprintf(message, sizeof(message) - 1,
-                                       "AP PID %8f %8f %8f %8f\n",
+                                       "AP PID %8f %8f %8f %8f %8f\n",
+                                       aps->headingToSteerRadians,
                                        aps->currentGap,
                                        aps->integratedGap,
                                        aps->yawRate,
                                        steerReq),
                       svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
 
-        MOTOR_MSG_setHelmAngle(steerReq);
+        Motor_msg_set_helm_angle(steerReq);
 
     }
 

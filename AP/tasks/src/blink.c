@@ -66,7 +66,6 @@ void Blink_start(void)
 void Blink_set_flash_duration(float duration)
 {
     Blink_Msg_t msg;
-    BaseType_t ret;
 
     msg.msgType = BLINK_SET_FLASH_DURATION;
     msg.data.duration = duration;
