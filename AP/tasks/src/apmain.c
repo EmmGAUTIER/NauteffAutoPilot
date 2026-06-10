@@ -16,6 +16,7 @@
 #include "apdialog.h"
 #include "autopilot.h"
 #include "blink.h"
+#include "test.h"
 
 TaskHandle_t tasksHandles [] =
 {
@@ -49,6 +50,9 @@ void apmain()
     AutoPilot_task_init();
     Service_task_init();
     Blink_task_init();
+    Test_task_init();
+    
+        
 
     /* Create tasks */
     ret &= xTaskCreate(Motor_task,     "Motor",      configMINIMAL_STACK_SIZE + 500, (void *)0, 3, tasksHandles + 0);
@@ -57,6 +61,7 @@ void apmain()
     ret &= xTaskCreate(AutoPilot_task, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, tasksHandles + 3);
     ret &= xTaskCreate(Service_task,   "SVC",        configMINIMAL_STACK_SIZE + 200, (void *)0, 5, tasksHandles + 4);
     ret &= xTaskCreate(Blink_task,     "Blink",      configMINIMAL_STACK_SIZE + 100, (void *)0, 2, tasksHandles + 5);
+    ret &= xTaskCreate(Test_task,      "Test",       configMINIMAL_STACK_SIZE + 200, (void *)0, 2, tasksHandles + 5);
 
     /* Start scheduler, should never return */
     vTaskStartScheduler();

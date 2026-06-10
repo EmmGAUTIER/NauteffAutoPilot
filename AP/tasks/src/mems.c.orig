@@ -1067,7 +1067,7 @@ void Mems_task(void *param)
                          "MEMS param : mag/gyr : %f\n",
                          ahrs.magVsGyr);
                 svc_UART_Write(&svc_uart2, message, strlen(message),
-                               pdMS_TO_TICKS(1));
+                                pdMS_TO_TICKS(1));
 
                 break; /* case MEMS_MSG_SET_MAG_VS_GYR: */
 

@@ -225,8 +225,7 @@ float normalize_angle_rad_centered(float angle)
     {
         na = 2.0F * M_PIF - fmodf(-angle, 2.0F * M_PIF);
     }
-
-    if(na > M_PIF)
+    if (na > M_PIF)
     {
         na -= 2.0F * M_PIF;
     }

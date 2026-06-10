@@ -227,7 +227,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                 AP_set_mode_heading_dir(&APStatus, msg.data.reqHeading);
                 DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message),
                                                   "AP Mode heading dir %.1f\n",
-                                                  msg.data.reqHeading * (M_PI / 180.F)),
+                                                  msg.data.reqHeading* (M_PI / 180.F)),
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
                 timestamp = xTaskGetTickCount();
 
