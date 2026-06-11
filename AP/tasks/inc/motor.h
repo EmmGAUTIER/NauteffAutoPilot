@@ -41,7 +41,7 @@ SOFTWARE.
 
 #include "util.h"
 
-extern QueueHandle_t msgQueueMotor;
+//extern QueueHandle_t msgQueueMotor;
 int Motor_task_init();
 void Motor_task();
 
@@ -124,6 +124,8 @@ void Motor_msg_move_time(float time);
 /*
  * @brief Set the conversion factor between helm angle and time
  * @param cvt Conversion factor angle (radians) to time (seconds)
+  * cvt has to be positive. in a future version it may be used  revert
+ * the direction of the motor instead of swaping motor wires.
  * @return void
  */
 void Motor_msg_set_cvt_angle_time(float cvt);
@@ -145,6 +147,13 @@ void Motor_msg_set_hpf_coeff(float cvt);
  * @return void
  */
 void Motor_msg_set_threshold(float cvt);
+
+/*
+ @brief Asks motor task to display motor configuration
+ @param none
+ @return none
+ */
+void Motor_msg_display_config(void);
 
 /*
  * @brief Stop motor in case pf panic.

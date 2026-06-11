@@ -45,5 +45,7 @@ INLINE void setbits(vuint32_t * i, const vuint32_t m) { *i |= m; }
 INLINE void clearbits(vuint32_t * i, const vuint32_t m) { *i &= ~m; }
 INLINE void setbit(vuint32_t * i, const int bn)    { *i |= (0x01 << bn); }
 INLINE void clearbit(vuint32_t * i, const int bn)    { *i &= ~(0x1 << bn); }
+INLINE void setresetbits(vuint32_t * i, const vuint32_t s, const vuint32_t r) { *i = (*i | s) & (~r); }
+INLINE void togglebit(vuint32_t * i, const int bn) { *i ^= (0x1 << bn); }
 
 #endif /* UTIL_H_ */

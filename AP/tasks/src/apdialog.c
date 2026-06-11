@@ -563,9 +563,7 @@ void parse_command_line(void)
                     break;
 
                 case TOKEN_MOTOR_CVT_ANGLE_TIME:
-                    msgMotor.msgType = MOTOR_MSG_SET_CVT_ANGLE_TIME;
-                    msgMotor.data.cvtAngleTime = numberValue;
-                    xQueueSend(msgQueueMotor, &msgMotor, 0);
+                    Motor_msg_set_cvt_angle_time(numberValue);
                     break;
 
                 case TOKEN_MAG_VS_GYR:
@@ -575,15 +573,11 @@ void parse_command_line(void)
                     break;
 
                 case TOKEN_MOTOR_THRESHOLD:
-                    msgMotor.msgType = MOTOR_MSG_SET_THRESHOLD;
-                    msgMotor.data.threshold = numberValue;
-                    xQueueSend(msgQueueMotor, &msgMotor, 0);
+                    Motor_msg_set_threshold(numberValue);
                     break;
 
                 case TOKEN_MOTOR_HPF_COEFF:
-                    msgMotor.msgType = MOTOR_MSG_SET_HPF_COEF;
-                    msgMotor.data.hpf_coeff = numberValue;
-                    xQueueSend(msgQueueMotor, &msgMotor, 0);
+                    Motor_msg_set_hpf_coeff(numberValue);
                     break;
 
                 default:
@@ -650,8 +644,7 @@ void parse_command_line(void)
                 snprintf(message, sizeof(message) - 1, "Motor config ?\n");
                 svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 
-                msgMotor.msgType = MOTOR_MSG_DISPLAY_CONFIG;
-                xQueueSend(msgQueueMotor, &msgMotor, 0);
+                Motor_msg_display_config();
                 break;
 
             default:
@@ -733,10 +726,13 @@ void parse_command_line(void)
 
     case TOKEN_TEST:
         
-        snprintf(message, sizeof(message), "DIALOG test\n");
-        svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-
-        Test_msg_start (1);
+        if (tokenTypes[1] == TOKEN_NUMBER)
+        {
+            int test_number = (int)convert_number(tokens[1]);
+            snprintf(message, sizeof(message), "DIALOG start test %d\n", test_number);
+            svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+            Test_msg_start(test_number);
+        }
 
         break;
 

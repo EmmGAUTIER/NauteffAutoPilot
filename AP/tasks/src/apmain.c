@@ -25,7 +25,8 @@ TaskHandle_t tasksHandles [] =
     [2] = NULL, /* taskDialogIn  */
     [3] = NULL, /* taskAutoPilot */
     [4] = NULL, /* taskService   */
-    [5] = NULL  /* taskBlink     */
+    [5] = NULL,  /* taskBlink     */
+    [6] = NULL  /* taskTest      */
 };
 int tasksNumber = sizeof(tasksHandles) / sizeof(tasksHandles[0]);
 
@@ -61,7 +62,7 @@ void apmain()
     ret &= xTaskCreate(AutoPilot_task, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, tasksHandles + 3);
     ret &= xTaskCreate(Service_task,   "SVC",        configMINIMAL_STACK_SIZE + 200, (void *)0, 5, tasksHandles + 4);
     ret &= xTaskCreate(Blink_task,     "Blink",      configMINIMAL_STACK_SIZE + 100, (void *)0, 2, tasksHandles + 5);
-    ret &= xTaskCreate(Test_task,      "Test",       configMINIMAL_STACK_SIZE + 200, (void *)0, 2, tasksHandles + 5);
+    ret &= xTaskCreate(Test_task,      "Test",       configMINIMAL_STACK_SIZE + 200, (void *)0, 2, tasksHandles + 6);
 
     /* Start scheduler, should never return */
     vTaskStartScheduler();

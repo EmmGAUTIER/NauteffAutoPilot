@@ -41,15 +41,29 @@
 #include "motor.h"
 #include "test.h"
 
-Test_call_t tests1 [] =
+Test_call_t test0 [] =
 {
     {"engage",    1000, Motor_msg_engage_actuator,     ARG_NONE, {}},
     {"disengage", 1000, Motor_msg_disengage_actuator,  ARG_NONE, {}},
     {"turn +1",    500, Motor_msg_move_time,           ARG_FLOAT, {.value.f = 1.0F}},
-    {"engage",    1000, Motor_msg_engage_actuator,     ARG_NONE, {}},
+    {"engage",    2000, Motor_msg_engage_actuator,     ARG_NONE, {}},
     {"disengage", 1000, Motor_msg_disengage_actuator,  ARG_NONE, {}},
     {"end", 0, (void*)0, ARG_NONE, {} }
 };
+Test_call_t test1 [] =
+{
+    {"disengage", 1000, Motor_msg_disengage_actuator,  ARG_NONE, {}},
+    {"turn +0.5s",   1000, Motor_msg_move_time,           ARG_FLOAT, {.value.f = +0.2F}},
+    {"turn +0.5s",   1000, Motor_msg_move_time,           ARG_FLOAT, {.value.f = +0.2F}},
+    {"turn +0.5s",   1000, Motor_msg_move_time,           ARG_FLOAT, {.value.f = +0.2F}},
+    {"turn -0.5s",   1000, Motor_msg_move_time,           ARG_FLOAT, {.value.f = -0.2F}},
+    {"turn -0.5s",   1000, Motor_msg_move_time,           ARG_FLOAT, {.value.f = -0.2F}},
+    {"turn -0.5s",   1000, Motor_msg_move_time,           ARG_FLOAT, {.value.f = -0.2F}},
+    {"end", 0, (void*)0, ARG_NONE, {} }
+};
+
+Test_call_t* tests_list[] = {test0, test1}; 
+
 
 static QueueHandle_t test_msg_queue = NULL;
 static TimerHandle_t test_timer = NULL;
@@ -166,7 +180,7 @@ void Test_task(void *param)
                 {
                     snprintf (message, sizeof(message), "TEST tick %d\n", test_idx);
                     svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-#if 1
+
                     /* Call the function with the argument if any */
                     switch(test_calls[test_idx].arg_type)
                     {
@@ -183,7 +197,6 @@ void Test_task(void *param)
                         /* should never happen */
                         break;
                     }
-#endif
                     test_idx++;
                     }
                 
@@ -195,14 +208,17 @@ void Test_task(void *param)
                 break;
 
             case TEST_MSG_START:
-                snprintf (message, sizeof(message), "TEST start %d\n", test_msg.data.test_number);
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-                test_calls = tests1;
-                test_idx = 0;
-                call = &test_calls[test_idx];
-                if (call->func_ptr != (void*)0)
+                if (test_msg.data.test_number >= 0 && test_msg.data.test_number < sizeof(tests_list) / sizeof(tests_list[0]))
                 {
-                    xTimerStart(test_timer, pdMS_TO_TICKS(call->delay));
+                    snprintf (message, sizeof(message), "TEST start %d\n", test_msg.data.test_number);
+                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                    test_calls = tests_list[test_msg.data.test_number];
+                    test_idx = 0;
+                    call = &test_calls[test_idx];
+                    if (call->func_ptr != (void*)0)
+                    {
+                        xTimerStart(test_timer, pdMS_TO_TICKS(call->delay));
+                    }
                 }
                 
                 break;
