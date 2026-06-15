@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: Quaternionf Struct Reference</title>
+<title>Nauteff auto pilot: Motor_t Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -66,88 +66,304 @@ $(function() {
   <div class="summary">
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="a00165.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">Quaternionf Struct Reference</div></div>
+  <div class="headertitle"><div class="title">Motor_t Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
-
-<p>Structure representing a quaternion with float components.  
- <a href="a00168.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="a00074_source.html">quat.h</a>&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for Quaternionf:</div>
+Collaboration diagram for Motor_t:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00166.png" border="0" usemap="#aQuaternionf_coll__map" alt="Collaboration graph"/></div>
-<map name="aQuaternionf_coll__map" id="aQuaternionf_coll__map">
-<area shape="rect" title="Structure representing a quaternion with float components." alt="" coords="5,5,104,127"/>
+<div class="center"><img src="a00166.png" border="0" usemap="#aMotor__t_coll__map" alt="Collaboration graph"/></div>
+<map name="aMotor__t_coll__map" id="aMotor__t_coll__map">
+<area shape="rect" title=" " alt="" coords="5,5,197,229"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:abc69ce991b2c8b2efce4ccf5b6b7b062"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#abc69ce991b2c8b2efce4ccf5b6b7b062">w</a></td></tr>
-<tr class="separator:abc69ce991b2c8b2efce4ccf5b6b7b062"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf6cf3d25eb2dea1404f9f662c0b5d9b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#acf6cf3d25eb2dea1404f9f662c0b5d9b">x</a></td></tr>
-<tr class="separator:acf6cf3d25eb2dea1404f9f662c0b5d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38802f36206dd2f052f048423a03a2eb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a38802f36206dd2f052f048423a03a2eb">y</a></td></tr>
-<tr class="separator:a38802f36206dd2f052f048423a03a2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc141a1c86f7c8c111cc262f54b7eb6e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#afc141a1c86f7c8c111cc262f54b7eb6e">z</a></td></tr>
-<tr class="separator:afc141a1c86f7c8c111cc262f54b7eb6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13ce060180ec7819c1cf129de0283dec"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a13ce060180ec7819c1cf129de0283dec">status</a></td></tr>
+<tr class="separator:a13ce060180ec7819c1cf129de0283dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8946246661599733bca861913a24c46"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#aa8946246661599733bca861913a24c46">threshold</a></td></tr>
+<tr class="separator:aa8946246661599733bca861913a24c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c6b6441880436846426d0b0aaf1159c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a2c6b6441880436846426d0b0aaf1159c">hpf_coeff</a></td></tr>
+<tr class="separator:a2c6b6441880436846426d0b0aaf1159c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a817bf92499f404b7920506340887a062"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a817bf92499f404b7920506340887a062">helm_angle_estimated</a></td></tr>
+<tr class="separator:a817bf92499f404b7920506340887a062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe8a137f3632737d0bc1b05f81801f3d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#afe8a137f3632737d0bc1b05f81801f3d">helm_angle_requested</a></td></tr>
+<tr class="separator:afe8a137f3632737d0bc1b05f81801f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fafb3539a71ea139232d117b652c6c3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a4fafb3539a71ea139232d117b652c6c3">turning_time_requested</a></td></tr>
+<tr class="separator:a4fafb3539a71ea139232d117b652c6c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a630b791d58c1dc7de1c77b6c013f7987"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a630b791d58c1dc7de1c77b6c013f7987">turning_time</a></td></tr>
+<tr class="separator:a630b791d58c1dc7de1c77b6c013f7987"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae29f463ceb3a473344690f58ac7688ed"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#ae29f463ceb3a473344690f58ac7688ed">stopping_time</a></td></tr>
+<tr class="separator:ae29f463ceb3a473344690f58ac7688ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa52460ef757af2b412dfb7f3c6172b6a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#aa52460ef757af2b412dfb7f3c6172b6a">starting_time</a></td></tr>
+<tr class="separator:aa52460ef757af2b412dfb7f3c6172b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e08e3a0411421e3689940e94bcd823b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a0e08e3a0411421e3689940e94bcd823b">overcurrent_start_time</a></td></tr>
+<tr class="separator:a0e08e3a0411421e3689940e94bcd823b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49e1d6015562c5fb8b26b162fcf6514e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a49e1d6015562c5fb8b26b162fcf6514e">vcurrent_free</a></td></tr>
+<tr class="separator:a49e1d6015562c5fb8b26b162fcf6514e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa70d1a64e5f4cb825c2695aaa933f5f0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#aa70d1a64e5f4cb825c2695aaa933f5f0">vcurrent_stalled</a></td></tr>
+<tr class="separator:aa70d1a64e5f4cb825c2695aaa933f5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3befe51696a58b4b2ae93fc7d33fb1a9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a3befe51696a58b4b2ae93fc7d33fb1a9">v_power_standard</a></td></tr>
+<tr class="separator:a3befe51696a58b4b2ae93fc7d33fb1a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ec110929ac4806ff04d4dbe1b3cb93a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a5ec110929ac4806ff04d4dbe1b3cb93a">time_to_start</a></td></tr>
+<tr class="separator:a5ec110929ac4806ff04d4dbe1b3cb93a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe96a3f39338bc379c7f87f5e779baf1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#abe96a3f39338bc379c7f87f5e779baf1">time_to_stop</a></td></tr>
+<tr class="separator:abe96a3f39338bc379c7f87f5e779baf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f256a6ab5f6ab1952fbe3bb6851df79"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a9f256a6ab5f6ab1952fbe3bb6851df79">cvt_angle_time</a></td></tr>
+<tr class="separator:a9f256a6ab5f6ab1952fbe3bb6851df79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a968f6c1ea02bcc1f002b259d21b9d5c2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#a968f6c1ea02bcc1f002b259d21b9d5c2">supply_voltage</a></td></tr>
+<tr class="separator:a968f6c1ea02bcc1f002b259d21b9d5c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab489149896323b6bc458d430ebde0899"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html#ab489149896323b6bc458d430ebde0899">motor_current</a></td></tr>
+<tr class="separator:ab489149896323b6bc458d430ebde0899"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Structure representing a quaternion with float components. </p>
-<p >componants are named x, y and z </p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="abc69ce991b2c8b2efce4ccf5b6b7b062" name="abc69ce991b2c8b2efce4ccf5b6b7b062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc69ce991b2c8b2efce4ccf5b6b7b062">&#9670;&nbsp;</a></span>w</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9f256a6ab5f6ab1952fbe3bb6851df79" name="a9f256a6ab5f6ab1952fbe3bb6851df79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f256a6ab5f6ab1952fbe3bb6851df79">&#9670;&nbsp;</a></span>cvt_angle_time</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float Quaternionf::w</td>
+          <td class="memname">float Motor_t::cvt_angle_time</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="acf6cf3d25eb2dea1404f9f662c0b5d9b" name="acf6cf3d25eb2dea1404f9f662c0b5d9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf6cf3d25eb2dea1404f9f662c0b5d9b">&#9670;&nbsp;</a></span>x</h2>
+<a id="a817bf92499f404b7920506340887a062" name="a817bf92499f404b7920506340887a062"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a817bf92499f404b7920506340887a062">&#9670;&nbsp;</a></span>helm_angle_estimated</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float Quaternionf::x</td>
+          <td class="memname">float Motor_t::helm_angle_estimated</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a38802f36206dd2f052f048423a03a2eb" name="a38802f36206dd2f052f048423a03a2eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38802f36206dd2f052f048423a03a2eb">&#9670;&nbsp;</a></span>y</h2>
+<a id="afe8a137f3632737d0bc1b05f81801f3d" name="afe8a137f3632737d0bc1b05f81801f3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe8a137f3632737d0bc1b05f81801f3d">&#9670;&nbsp;</a></span>helm_angle_requested</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float Quaternionf::y</td>
+          <td class="memname">float Motor_t::helm_angle_requested</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="afc141a1c86f7c8c111cc262f54b7eb6e" name="afc141a1c86f7c8c111cc262f54b7eb6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc141a1c86f7c8c111cc262f54b7eb6e">&#9670;&nbsp;</a></span>z</h2>
+<a id="a2c6b6441880436846426d0b0aaf1159c" name="a2c6b6441880436846426d0b0aaf1159c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c6b6441880436846426d0b0aaf1159c">&#9670;&nbsp;</a></span>hpf_coeff</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float Quaternionf::z</td>
+          <td class="memname">float Motor_t::hpf_coeff</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab489149896323b6bc458d430ebde0899" name="ab489149896323b6bc458d430ebde0899"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab489149896323b6bc458d430ebde0899">&#9670;&nbsp;</a></span>motor_current</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::motor_current</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0e08e3a0411421e3689940e94bcd823b" name="a0e08e3a0411421e3689940e94bcd823b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e08e3a0411421e3689940e94bcd823b">&#9670;&nbsp;</a></span>overcurrent_start_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::overcurrent_start_time</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa52460ef757af2b412dfb7f3c6172b6a" name="aa52460ef757af2b412dfb7f3c6172b6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa52460ef757af2b412dfb7f3c6172b6a">&#9670;&nbsp;</a></span>starting_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::starting_time</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a13ce060180ec7819c1cf129de0283dec" name="a13ce060180ec7819c1cf129de0283dec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13ce060180ec7819c1cf129de0283dec">&#9670;&nbsp;</a></span>status</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Motor_t::status</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae29f463ceb3a473344690f58ac7688ed" name="ae29f463ceb3a473344690f58ac7688ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae29f463ceb3a473344690f58ac7688ed">&#9670;&nbsp;</a></span>stopping_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::stopping_time</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a968f6c1ea02bcc1f002b259d21b9d5c2" name="a968f6c1ea02bcc1f002b259d21b9d5c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a968f6c1ea02bcc1f002b259d21b9d5c2">&#9670;&nbsp;</a></span>supply_voltage</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::supply_voltage</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa8946246661599733bca861913a24c46" name="aa8946246661599733bca861913a24c46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8946246661599733bca861913a24c46">&#9670;&nbsp;</a></span>threshold</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::threshold</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5ec110929ac4806ff04d4dbe1b3cb93a" name="a5ec110929ac4806ff04d4dbe1b3cb93a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ec110929ac4806ff04d4dbe1b3cb93a">&#9670;&nbsp;</a></span>time_to_start</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::time_to_start</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe96a3f39338bc379c7f87f5e779baf1" name="abe96a3f39338bc379c7f87f5e779baf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe96a3f39338bc379c7f87f5e779baf1">&#9670;&nbsp;</a></span>time_to_stop</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::time_to_stop</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a630b791d58c1dc7de1c77b6c013f7987" name="a630b791d58c1dc7de1c77b6c013f7987"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a630b791d58c1dc7de1c77b6c013f7987">&#9670;&nbsp;</a></span>turning_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::turning_time</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4fafb3539a71ea139232d117b652c6c3" name="a4fafb3539a71ea139232d117b652c6c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fafb3539a71ea139232d117b652c6c3">&#9670;&nbsp;</a></span>turning_time_requested</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::turning_time_requested</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3befe51696a58b4b2ae93fc7d33fb1a9" name="a3befe51696a58b4b2ae93fc7d33fb1a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3befe51696a58b4b2ae93fc7d33fb1a9">&#9670;&nbsp;</a></span>v_power_standard</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::v_power_standard</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a49e1d6015562c5fb8b26b162fcf6514e" name="a49e1d6015562c5fb8b26b162fcf6514e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49e1d6015562c5fb8b26b162fcf6514e">&#9670;&nbsp;</a></span>vcurrent_free</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::vcurrent_free</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa70d1a64e5f4cb825c2695aaa933f5f0" name="aa70d1a64e5f4cb825c2695aaa933f5f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa70d1a64e5f4cb825c2695aaa933f5f0">&#9670;&nbsp;</a></span>vcurrent_stalled</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Motor_t::vcurrent_stalled</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -155,7 +371,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li><a class="el" href="a00074_source.html">quat.h</a></li>
+<li><a class="el" href="a00059.html">motor.c</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -243,7 +243,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
 
             case AP_MSG_TURN:
 
-                AP_turn(&APStatus, msg.data.reqTurnAngle * (- M_PI / 180.F));
+                AP_turn(&APStatus, msg.data.reqTurnAngle * (M_PI / 180.F));
 
                 DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP turn %8f\n", msg.data.reqTurnAngle),
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
@@ -474,7 +474,8 @@ int AP_turn(APStatus_t *aps, float angle)
 {
     if(aps->engaged == 0)
     {
-        Motor_msg_move_time(angle >= 0. ? - AP_TIME_ONE_MOVE : AP_TIME_ONE_MOVE);
+        //Motor_msg_move_time(angle >= 0. ? - AP_TIME_ONE_MOVE : AP_TIME_ONE_MOVE);
+        Motor_msg_move_time(angle);
     }
     else
     {

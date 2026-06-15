@@ -1,0 +1,4 @@
+<map id="rbuffer_getNextBlock" name="rbuffer_getNextBlock">
+<area shape="rect" id="node1" title="Gets the next contiguous block of data available for reading." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node2" href="$a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="213,5,339,32"/>
+</map>

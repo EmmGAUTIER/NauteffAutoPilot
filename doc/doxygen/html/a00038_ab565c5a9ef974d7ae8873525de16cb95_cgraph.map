@@ -1,6 +1,6 @@
 <map id="IMU_new_values_essai" name="IMU_new_values_essai">
 <area shape="rect" id="node1" title=" " alt="" coords="5,107,179,133"/>
-<area shape="rect" id="node2" href="$a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="292,5,351,32"/>
+<area shape="rect" id="node2" href="$a00071.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="292,5,351,32"/>
 <area shape="rect" id="node3" href="$a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="257,56,385,83"/>
 <area shape="rect" id="node8" href="$a00020.html#ac5692debece7126e725e6f78e93680fa" title="Computes the cross product of two 3D vectors." alt="" coords="227,107,416,133"/>
 <area shape="rect" id="node9" href="$a00020.html#a903310051218f6081c3491f6c5f5fe45" title="Computes the dot product (scalar product) of two 3D vectors." alt="" coords="233,157,409,184"/>

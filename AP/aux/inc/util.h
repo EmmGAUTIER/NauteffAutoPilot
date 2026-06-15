@@ -24,6 +24,8 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
+#include <stdint.h>
+
 //extern volatile int marque;
 //extern volatile int marque_read;
 

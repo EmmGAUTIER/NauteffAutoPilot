@@ -86,83 +86,89 @@ $(function() {
 <code>#include &quot;stm32l4xx_ll_gpio.h&quot;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;stm32l452xx.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="a00074_source.html">printf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00068_source.html">rlib.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00125_source.html">service.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00080_source.html">util.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00137_source.html">apdialog.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00140_source.html">autopilot.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00131_source.html">motor.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00077_source.html">printf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00071_source.html">rlib.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00131_source.html">service.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00083_source.html">util.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00143_source.html">apdialog.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00146_source.html">autopilot.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00137_source.html">motor.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for motor.c:</div>
 <div class="dyncontent">
 <div class="center"><img src="a00060.png" border="0" usemap="#amotor_8c" alt=""/></div>
 <map name="amotor_8c" id="amotor_8c">
-<area shape="rect" title=" " alt="" coords="693,5,763,32"/>
-<area shape="rect" title=" " alt="" coords="71,80,139,107"/>
+<area shape="rect" title=" " alt="" coords="709,5,779,32"/>
+<area shape="rect" title=" " alt="" coords="121,80,189,107"/>
 <area shape="rect" title=" " alt="" coords="5,155,101,181"/>
-<area shape="rect" title=" " alt="" coords="593,80,730,107"/>
+<area shape="rect" title=" " alt="" coords="917,80,1054,107"/>
 <area shape="rect" title=" " alt="" coords="125,155,200,181"/>
-<area shape="rect" title=" " alt="" coords="755,80,837,107"/>
-<area shape="rect" title=" " alt="" coords="862,80,925,107"/>
-<area shape="rect" title=" " alt="" coords="949,80,1025,107"/>
-<area shape="rect" title=" " alt="" coords="1049,80,1197,107"/>
+<area shape="rect" title=" " alt="" coords="1079,80,1161,107"/>
+<area shape="rect" title=" " alt="" coords="1186,80,1249,107"/>
+<area shape="rect" title=" " alt="" coords="1273,80,1349,107"/>
+<area shape="rect" title=" " alt="" coords="1373,80,1521,107"/>
 <area shape="rect" title=" " alt="" coords="225,155,378,181"/>
-<area shape="rect" title=" " alt="" coords="1318,304,1389,331"/>
+<area shape="rect" title=" " alt="" coords="717,304,787,331"/>
 <area shape="rect" title=" " alt="" coords="402,155,521,181"/>
-<area shape="rect" href="a00074.html" title=" " alt="" coords="1606,80,1674,107"/>
-<area shape="rect" href="a00068.html" title=" " alt="" coords="514,80,569,107"/>
-<area shape="rect" href="a00080.html" title=" " alt="" coords="545,155,599,181"/>
-<area shape="rect" href="a00125.html" title=" " alt="" coords="1435,80,1517,107"/>
-<area shape="rect" href="a00137.html" title=" " alt="" coords="1699,80,1789,107"/>
-<area shape="rect" href="a00140.html" title=" " alt="" coords="1273,80,1365,107"/>
-<area shape="rect" href="a00131.html" title=" " alt="" coords="265,80,337,107"/>
-<area shape="rect" title=" " alt="" coords="1667,155,1741,181"/>
-<area shape="rect" title=" " alt="" coords="1765,155,1840,181"/>
-<area shape="rect" href="a00077.html" title=" " alt="" coords="1566,155,1642,181"/>
-<area shape="rect" title=" " alt="" coords="1411,155,1541,181"/>
-<area shape="rect" title=" " alt="" coords="1563,229,1645,256"/>
-<area shape="rect" href="a00107.html" title=" " alt="" coords="1367,229,1430,256"/>
-<area shape="rect" href="a00095.html" title=" " alt="" coords="1273,155,1335,181"/>
-<area shape="rect" href="a00119.html" title=" " alt="" coords="1273,229,1343,256"/>
+<area shape="rect" href="a00077.html" title=" " alt="" coords="1545,80,1613,107"/>
+<area shape="rect" href="a00071.html" title=" " alt="" coords="513,80,567,107"/>
+<area shape="rect" href="a00083.html" title=" " alt="" coords="545,155,599,181"/>
+<area shape="rect" href="a00131.html" title=" " alt="" coords="759,80,841,107"/>
+<area shape="rect" href="a00143.html" title=" " alt="" coords="1637,80,1728,107"/>
+<area shape="rect" href="a00146.html" title=" " alt="" coords="643,80,735,107"/>
+<area shape="rect" href="a00137.html" title=" " alt="" coords="315,80,387,107"/>
+<area shape="rect" title=" " alt="" coords="1492,155,1567,181"/>
+<area shape="rect" title=" " alt="" coords="1591,155,1665,181"/>
+<area shape="rect" href="a00080.html" title=" " alt="" coords="762,155,838,181"/>
+<area shape="rect" title=" " alt="" coords="863,155,993,181"/>
+<area shape="rect" title=" " alt="" coords="863,229,945,256"/>
+<area shape="rect" href="a00110.html" title=" " alt="" coords="606,229,669,256"/>
+<area shape="rect" href="a00098.html" title=" " alt="" coords="675,155,738,181"/>
+<area shape="rect" href="a00122.html" title=" " alt="" coords="717,229,787,256"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00158.html">MotorData</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00168.html">Motor_t</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ae71449b1cc6e6250b91f539153a7a0d3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae71449b1cc6e6250b91f539153a7a0d3">M_PI</a>&#160;&#160;&#160;3.14159265358979323846</td></tr>
+<tr class="memitem:ae71449b1cc6e6250b91f539153a7a0d3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae71449b1cc6e6250b91f539153a7a0d3">M_PI</a>&#160;&#160;&#160;((float)3.14159265358979323846)</td></tr>
 <tr class="separator:ae71449b1cc6e6250b91f539153a7a0d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9797041b3bc42a6ebbc287a0d23ba5c9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a9797041b3bc42a6ebbc287a0d23ba5c9">NB_VAL_ADC</a>&#160;&#160;&#160;10</td></tr>
+<tr class="separator:a9797041b3bc42a6ebbc287a0d23ba5c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28df3c175713353a69f5ae59aad052df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a28df3c175713353a69f5ae59aad052df">DBG_MOTOR_PRINT</a>(X)&#160;&#160;&#160;(X)</td></tr>
 <tr class="separator:a28df3c175713353a69f5ae59aad052df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa95ccb6e4e8f2c1659cf1c305ab45659"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#aa95ccb6e4e8f2c1659cf1c305ab45659">DBG_MOTOR_LL_PRINT</a>(X)&#160;&#160;&#160;(X)</td></tr>
+<tr class="separator:aa95ccb6e4e8f2c1659cf1c305ab45659"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32c490da336a5b0a5cc052f70875aeb1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a32c490da336a5b0a5cc052f70875aeb1">DBG_ADC_PRINT</a>(X)&#160;&#160;&#160;(X)</td></tr>
 <tr class="separator:a32c490da336a5b0a5cc052f70875aeb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa60f1de93cc4d6207af242cc63459aa3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#aa60f1de93cc4d6207af242cc63459aa3">MOTOR_HPF_COEF</a>&#160;&#160;&#160;(0.0F)</td></tr>
 <tr class="separator:aa60f1de93cc4d6207af242cc63459aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1716bb84b986bff87ca1337e2925fda"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae1716bb84b986bff87ca1337e2925fda">MOTOR_THRESHOLD</a>&#160;&#160;&#160;(1.0F * ((float)<a class="el" href="a00107.html#ae71449b1cc6e6250b91f539153a7a0d3">M_PI</a> / 180.F))</td></tr>
+<tr class="memitem:ae1716bb84b986bff87ca1337e2925fda"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae1716bb84b986bff87ca1337e2925fda">MOTOR_THRESHOLD</a>&#160;&#160;&#160;(1.0F * ((float)<a class="el" href="a00110.html#ae71449b1cc6e6250b91f539153a7a0d3">M_PI</a> / 180.F)) /* threshold 1 deg. */</td></tr>
 <tr class="separator:ae1716bb84b986bff87ca1337e2925fda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c800893e7510051b15f015988f8f8f5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a4c800893e7510051b15f015988f8f8f5">MOTOR_CVT_ANGLE_TIME</a>&#160;&#160;&#160;    (2.0F) /* Estimated conversion between time and helm move angle */</td></tr>
+<tr class="memitem:a4c800893e7510051b15f015988f8f8f5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a4c800893e7510051b15f015988f8f8f5">MOTOR_CVT_ANGLE_TIME</a>&#160;&#160;&#160;(2.0F) /* Estimated conversion between time and helm move angle */</td></tr>
 <tr class="separator:a4c800893e7510051b15f015988f8f8f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af49b93f93a0544a3924d2764559d2ee3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#af49b93f93a0544a3924d2764559d2ee3">MOTOR_TIME_START</a>&#160;&#160;&#160;    (0.1F) /* Maximum time to allow over current when starting motor */</td></tr>
+<tr class="memitem:af49b93f93a0544a3924d2764559d2ee3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#af49b93f93a0544a3924d2764559d2ee3">MOTOR_TIME_START</a>&#160;&#160;&#160;(0.05F) /* Maximum time to allow over current when starting motor (<a class="el" href="a00083.html#a9c19701a191e1491dd96b283ad82bbdd">s</a>) */</td></tr>
 <tr class="separator:af49b93f93a0544a3924d2764559d2ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97c3b49a55336f7aca44320fbed7c3f3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a97c3b49a55336f7aca44320fbed7c3f3">MOTOR_TIME_STOP</a>&#160;&#160;&#160;    (0.2F) /* Time to wait for motor to stop before opposite move order  */</td></tr>
+<tr class="memitem:a97c3b49a55336f7aca44320fbed7c3f3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a97c3b49a55336f7aca44320fbed7c3f3">MOTOR_TIME_STOP</a>&#160;&#160;&#160;(0.2F) /* Time to wait for motor to stop before opposite move order (<a class="el" href="a00083.html#a9c19701a191e1491dd96b283ad82bbdd">s</a>) */</td></tr>
 <tr class="separator:a97c3b49a55336f7aca44320fbed7c3f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18b866192d7b4b819d98f8141822df24"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a18b866192d7b4b819d98f8141822df24">MOTOR_EVENT_STALLED</a>&#160;&#160;&#160;(0x1 &lt;&lt; 0)</td></tr>
 <tr class="separator:a18b866192d7b4b819d98f8141822df24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44e79b6ae157c01f2497e8c5694a60f6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a44e79b6ae157c01f2497e8c5694a60f6">MOTOR_EVENT_STOP</a>&#160;&#160;&#160;(0x1 &lt;&lt; 1)</td></tr>
 <tr class="separator:a44e79b6ae157c01f2497e8c5694a60f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc34f43e42ea7ca7adf7a4654988b26d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#afc34f43e42ea7ca7adf7a4654988b26d">MOTOR_EVENT_STOPPING</a>&#160;&#160;&#160;(0x1 &lt;&lt; 2)</td></tr>
+<tr class="separator:afc34f43e42ea7ca7adf7a4654988b26d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd7c8c289e93e489d3ee473a8d230dc5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#abd7c8c289e93e489d3ee473a8d230dc5">MOTOR_V_CURRENT_NONE</a>&#160;&#160;&#160;(0.F)</td></tr>
 <tr class="separator:abd7c8c289e93e489d3ee473a8d230dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c8ccb6aa8a0b8b523111c9507d5efaa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a9c8ccb6aa8a0b8b523111c9507d5efaa">MOTOR_V_CURRENT_FREE</a>&#160;&#160;&#160;(.1F)</td></tr>
 <tr class="separator:a9c8ccb6aa8a0b8b523111c9507d5efaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07cee329548512811c3ae2810c754a3a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a07cee329548512811c3ae2810c754a3a">MOTOR_V_CURRENT_BLOCKED</a>&#160;&#160;&#160;(1.0F)     /*  */</td></tr>
 <tr class="separator:a07cee329548512811c3ae2810c754a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae068bb96d2ffb6dbc0716405a20eae0c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae068bb96d2ffb6dbc0716405a20eae0c">ADC_PERIOD</a>&#160;&#160;&#160;(0.01F)                 /* 100 ms */</td></tr>
-<tr class="separator:ae068bb96d2ffb6dbc0716405a20eae0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad392f31da8262b7e77c758c737cbb74b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ad392f31da8262b7e77c758c737cbb74b">MOTOR_V_POWER_STANDARD</a>&#160;&#160;&#160;(12.0F)</td></tr>
+<tr class="separator:ad392f31da8262b7e77c758c737cbb74b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a354f31906fc54407560bdc171d1de57e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a354f31906fc54407560bdc171d1de57e">MOTOR_TIME_TO_STOP</a>&#160;&#160;&#160;(0.1F)          /* 100 ms */</td></tr>
 <tr class="separator:a354f31906fc54407560bdc171d1de57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53919d7094499edb2bd432017960151f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a53919d7094499edb2bd432017960151f">MOTOR_MAX_TIME_OVERCURRENT</a>&#160;&#160;&#160;(0.02F) /* 20 ms */</td></tr>
@@ -183,48 +189,66 @@ Macros</h2></td></tr>
 <tr class="separator:a5e553c1bf254795edabf8f5089d1d927"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01339bd10b34a4eb67ba45f5d748157c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a01339bd10b34a4eb67ba45f5d748157c">MOTOR_STATUS_IDLE</a>&#160;&#160;&#160;(0x1 &lt;&lt; 5)          /* motor idle i.e. stopped */</td></tr>
 <tr class="separator:a01339bd10b34a4eb67ba45f5d748157c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa50421de153b29a274a884ea35afa24a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#aa50421de153b29a274a884ea35afa24a">MOTOR_STATUS_RUNNING</a>&#160;&#160;&#160;(0x1 &lt;&lt; 6)       /* motor running */</td></tr>
-<tr class="separator:aa50421de153b29a274a884ea35afa24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52a3de649d7387c7cd6bca53d6fcb476"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a52a3de649d7387c7cd6bca53d6fcb476">MOTOR_STATUS_STOPPING</a>&#160;&#160;&#160;(0x1 &lt;&lt; 7)      /* motor stopping */</td></tr>
 <tr class="separator:a52a3de649d7387c7cd6bca53d6fcb476"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd6f45e6fb6ca300b2131ccc3b3d6395"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#acd6f45e6fb6ca300b2131ccc3b3d6395">MOTOR_STATUS_STALLED</a>&#160;&#160;&#160;(0x1 &lt;&lt; 8)       /* motor stalled */</td></tr>
 <tr class="separator:acd6f45e6fb6ca300b2131ccc3b3d6395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f345aa0ca452b291d39dbf952b2e279"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a5f345aa0ca452b291d39dbf952b2e279">MOTOR_STATUS_STARTING_RUN</a>&#160;&#160;&#160;(0x1 &lt;&lt; 9)  /* motor starting to run ie accelerating */</td></tr>
+<tr class="separator:a5f345aa0ca452b291d39dbf952b2e279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1e7e59d9d1f36317d366d7789ec11d5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ab1e7e59d9d1f36317d366d7789ec11d5">MOTOR_STATUS_DIR_ANY</a>&#160;&#160;&#160;(<a class="el" href="a00059.html#ac58da863e26f070c1ac0625bf52305b6">MOTOR_STATUS_DIR_STARBOARD</a> | <a class="el" href="a00059.html#a5e553c1bf254795edabf8f5089d1d927">MOTOR_STATUS_DIR_PORT</a>)</td></tr>
+<tr class="separator:ab1e7e59d9d1f36317d366d7789ec11d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa50421de153b29a274a884ea35afa24a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#aa50421de153b29a274a884ea35afa24a">MOTOR_STATUS_RUNNING</a>&#160;&#160;&#160;(<a class="el" href="a00059.html#a639f34cdf8b918588401a6ee1d055408">MOTOR_STATUS_MOVING_TIME</a> | <a class="el" href="a00059.html#aa88cf233c357531a915cb070711f1a81">MOTOR_STATUS_MOVING_ANGLE</a>)</td></tr>
+<tr class="separator:aa50421de153b29a274a884ea35afa24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0bf5334e4fe85e13ab5b9c3d2071b6f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a0bf5334e4fe85e13ab5b9c3d2071b6f8">MOTOR_MSG_letInClutch</a> (void)</td></tr>
-<tr class="memdesc:a0bf5334e4fe85e13ab5b9c3d2071b6f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send the order "engage clutch" to motor task.  <a href="a00059.html#a0bf5334e4fe85e13ab5b9c3d2071b6f8">More...</a><br /></td></tr>
-<tr class="separator:a0bf5334e4fe85e13ab5b9c3d2071b6f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ee69017e45f41a438fd76673da6e113"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a5ee69017e45f41a438fd76673da6e113">MOTOR_MSG_letOutClutch</a> (void)</td></tr>
-<tr class="memdesc:a5ee69017e45f41a438fd76673da6e113"><td class="mdescLeft">&#160;</td><td class="mdescRight">send the order disengage clutch to motor task  <a href="a00059.html#a5ee69017e45f41a438fd76673da6e113">More...</a><br /></td></tr>
-<tr class="separator:a5ee69017e45f41a438fd76673da6e113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a7a0eea9f4c0a4912cb81a577d8c6ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a8a7a0eea9f4c0a4912cb81a577d8c6ce">MOTOR_MSG_setHelmAngle</a> (float angle)</td></tr>
-<tr class="memdesc:a8a7a0eea9f4c0a4912cb81a577d8c6ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">send the order move angle  <a href="a00059.html#a8a7a0eea9f4c0a4912cb81a577d8c6ce">More...</a><br /></td></tr>
-<tr class="separator:a8a7a0eea9f4c0a4912cb81a577d8c6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39aba34c5e0746953b9dce97e9bc7c68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a39aba34c5e0746953b9dce97e9bc7c68">MOTOR_MSG_moveTime</a> (float time)</td></tr>
-<tr class="memdesc:a39aba34c5e0746953b9dce97e9bc7c68"><td class="mdescLeft">&#160;</td><td class="mdescRight">send the order move for a time  <a href="a00059.html#a39aba34c5e0746953b9dce97e9bc7c68">More...</a><br /></td></tr>
-<tr class="separator:a39aba34c5e0746953b9dce97e9bc7c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4246cb15bb6ae30a5935f4e0df31e63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae4246cb15bb6ae30a5935f4e0df31e63">MOTOR_MSG_set_cvt_angle_time</a> (float cvt)</td></tr>
-<tr class="separator:ae4246cb15bb6ae30a5935f4e0df31e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2bea4229ce4543966390c255b9ad61c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ac2bea4229ce4543966390c255b9ad61c">MOTOR_MSG_set_hpf_coeff</a> (float coef)</td></tr>
-<tr class="separator:ac2bea4229ce4543966390c255b9ad61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad79b76525c9b48f20a396c695d604ffd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ad79b76525c9b48f20a396c695d604ffd">MOTOR_MSG_set_threshold</a> (float thr)</td></tr>
-<tr class="separator:ad79b76525c9b48f20a396c695d604ffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af21b447acab649620ca700b2ca98533b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#af21b447acab649620ca700b2ca98533b">Motor_set_cvt_angle_time</a> (float cvt)</td></tr>
-<tr class="separator:af21b447acab649620ca700b2ca98533b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdc006e72aa64ec5140fca4b7cec3062"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#acdc006e72aa64ec5140fca4b7cec3062">Motor_newValues</a> (float deltat, float vPower, float iMotor)</td></tr>
-<tr class="separator:acdc006e72aa64ec5140fca4b7cec3062"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48030b8ad89c4fe0abca20165c61f07f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a48030b8ad89c4fe0abca20165c61f07f">Motor_moveTime</a> (float timeToMove)</td></tr>
-<tr class="memdesc:a48030b8ad89c4fe0abca20165c61f07f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move the motor for a given time.  <a href="a00059.html#a48030b8ad89c4fe0abca20165c61f07f">More...</a><br /></td></tr>
-<tr class="separator:a48030b8ad89c4fe0abca20165c61f07f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f8d7a96d8f202e07e1cea78ebab1223"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a1f8d7a96d8f202e07e1cea78ebab1223">Motor_setHelmAngle</a> (float angle)</td></tr>
-<tr class="separator:a1f8d7a96d8f202e07e1cea78ebab1223"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44dc60d14b1baa6400716426a5ad9dbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a44dc60d14b1baa6400716426a5ad9dbb">Motor_engageTiller</a> ()</td></tr>
-<tr class="separator:a44dc60d14b1baa6400716426a5ad9dbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6150878b7f5297bccae651b5d85e923"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ab6150878b7f5297bccae651b5d85e923">Motor_disengageTiller</a> ()</td></tr>
-<tr class="separator:ab6150878b7f5297bccae651b5d85e923"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62cff2f3ec42ff68c9cecde80cfb5679"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a62cff2f3ec42ff68c9cecde80cfb5679">Motor_msg_engage_actuator</a> (void)</td></tr>
+<tr class="memdesc:a62cff2f3ec42ff68c9cecde80cfb5679"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send the order "engage clutch" to motor task.  <a href="a00059.html#a62cff2f3ec42ff68c9cecde80cfb5679">More...</a><br /></td></tr>
+<tr class="separator:a62cff2f3ec42ff68c9cecde80cfb5679"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d8967df53402e612c52e32863546459"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a7d8967df53402e612c52e32863546459">Motor_msg_disengage_actuator</a> (void)</td></tr>
+<tr class="memdesc:a7d8967df53402e612c52e32863546459"><td class="mdescLeft">&#160;</td><td class="mdescRight">send the order disengage clutch to motor task  <a href="a00059.html#a7d8967df53402e612c52e32863546459">More...</a><br /></td></tr>
+<tr class="separator:a7d8967df53402e612c52e32863546459"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5b1bd029369f1283e33e3ce30a0fa35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#af5b1bd029369f1283e33e3ce30a0fa35">Motor_msg_set_helm_angle</a> (float angle)</td></tr>
+<tr class="memdesc:af5b1bd029369f1283e33e3ce30a0fa35"><td class="mdescLeft">&#160;</td><td class="mdescRight">send the order move angle  <a href="a00059.html#af5b1bd029369f1283e33e3ce30a0fa35">More...</a><br /></td></tr>
+<tr class="separator:af5b1bd029369f1283e33e3ce30a0fa35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59dc6696095234ec87f6dceb98ceb9cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a59dc6696095234ec87f6dceb98ceb9cd">Motor_msg_move_time</a> (float time)</td></tr>
+<tr class="memdesc:a59dc6696095234ec87f6dceb98ceb9cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">send the order move for a time  <a href="a00059.html#a59dc6696095234ec87f6dceb98ceb9cd">More...</a><br /></td></tr>
+<tr class="separator:a59dc6696095234ec87f6dceb98ceb9cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93e213f1b3bd22fb5e5669fae1956456"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a93e213f1b3bd22fb5e5669fae1956456">Motor_msg_set_cvt_angle_time</a> (float cvt)</td></tr>
+<tr class="separator:a93e213f1b3bd22fb5e5669fae1956456"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcdf9b0a01973c4ec04f56b39a8ff860"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#afcdf9b0a01973c4ec04f56b39a8ff860">Motor_msg_set_hpf_coeff</a> (float coef)</td></tr>
+<tr class="separator:afcdf9b0a01973c4ec04f56b39a8ff860"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad65086395e98dedebb8f31d301809d55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ad65086395e98dedebb8f31d301809d55">Motor_msg_set_threshold</a> (float thr)</td></tr>
+<tr class="separator:ad65086395e98dedebb8f31d301809d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05ed0d391610946ce1255c9645c4bd84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a05ed0d391610946ce1255c9645c4bd84">Motor_msg_display_config</a> (void)</td></tr>
+<tr class="separator:a05ed0d391610946ce1255c9645c4bd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0300ece27bdc23a8545f7aa869760ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ac0300ece27bdc23a8545f7aa869760ae">Motor_msg_display_status</a> (void)</td></tr>
+<tr class="separator:ac0300ece27bdc23a8545f7aa869760ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d536cb6dc56a7806aa5e098b31bc6e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a0d536cb6dc56a7806aa5e098b31bc6e8">Motor_init</a> (<a class="el" href="a00168.html">Motor_t</a> *motor)</td></tr>
+<tr class="separator:a0d536cb6dc56a7806aa5e098b31bc6e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a987f3214f52655fdbf3f192318478e7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a987f3214f52655fdbf3f192318478e7f">Motor_set_cvt_angle_time</a> (<a class="el" href="a00168.html">Motor_t</a> *motor, float cvt)</td></tr>
+<tr class="separator:a987f3214f52655fdbf3f192318478e7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9ebd5f0a835a7c6628b015ec2dae657"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ad9ebd5f0a835a7c6628b015ec2dae657">Motor_set_hpf_coeff</a> (<a class="el" href="a00168.html">Motor_t</a> *motor, float hpf_coeff)</td></tr>
+<tr class="separator:ad9ebd5f0a835a7c6628b015ec2dae657"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae64b290488333ddec8fb2ac80e7ae4e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae64b290488333ddec8fb2ac80e7ae4e6">Motor_set_threshold</a> (<a class="el" href="a00168.html">Motor_t</a> *motor, float threshold)</td></tr>
+<tr class="separator:ae64b290488333ddec8fb2ac80e7ae4e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2edc83fdbbcc72bb302c7efe61714817"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a2edc83fdbbcc72bb302c7efe61714817">Motor_get_text_config</a> (<a class="el" href="a00168.html">Motor_t</a> *motor, char *str, <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> len)</td></tr>
+<tr class="separator:a2edc83fdbbcc72bb302c7efe61714817"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadeff93195ed2100501fd142a08163c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#aadeff93195ed2100501fd142a08163c7">Motor_get_text_status</a> (<a class="el" href="a00168.html">Motor_t</a> *motor, char *str, <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> len)</td></tr>
+<tr class="separator:aadeff93195ed2100501fd142a08163c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bbbd1b7051e3701c851145dddbc4ff4"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a0bbbd1b7051e3701c851145dddbc4ff4">Motor_new_values</a> (<a class="el" href="a00168.html">Motor_t</a> *motor, float deltat, float suply_voltage, float motor_current)</td></tr>
+<tr class="separator:a0bbbd1b7051e3701c851145dddbc4ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6c3f223527b5a06d06e25a24b4715d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#af6c3f223527b5a06d06e25a24b4715d5">Motor_move_time</a> (<a class="el" href="a00168.html">Motor_t</a> *motor, float time_to_move)</td></tr>
+<tr class="memdesc:af6c3f223527b5a06d06e25a24b4715d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move the motor for a given time.  <a href="a00059.html#af6c3f223527b5a06d06e25a24b4715d5">More...</a><br /></td></tr>
+<tr class="separator:af6c3f223527b5a06d06e25a24b4715d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa807b1d5038e32b7f3bb3dc1057424a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#aa807b1d5038e32b7f3bb3dc1057424a6">Motor_set_helm_angle</a> (<a class="el" href="a00168.html">Motor_t</a> *motor, float angle)</td></tr>
+<tr class="separator:aa807b1d5038e32b7f3bb3dc1057424a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bf8f71ad51a2e91ac9f5f945b5bda7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a9bf8f71ad51a2e91ac9f5f945b5bda7b">Motor_engage_actuator</a> (<a class="el" href="a00168.html">Motor_t</a> *motor)</td></tr>
+<tr class="separator:a9bf8f71ad51a2e91ac9f5f945b5bda7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0272c7db0fbafa4241ba93a849718ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ac0272c7db0fbafa4241ba93a849718ad">Motor_disengage_actuator</a> (<a class="el" href="a00168.html">Motor_t</a> *motor)</td></tr>
+<tr class="separator:ac0272c7db0fbafa4241ba93a849718ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa57d79899719bf0d29588eaee44fa2c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#aa57d79899719bf0d29588eaee44fa2c3">Motor_task_init</a> ()</td></tr>
-<tr class="memdesc:aa57d79899719bf0d29588eaee44fa2c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialise the motor task This function must be called before starting tasmMotor task.  <a href="a00059.html#aa57d79899719bf0d29588eaee44fa2c3">More...</a><br /></td></tr>
+<tr class="memdesc:aa57d79899719bf0d29588eaee44fa2c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialise the motor task This function must be called before starting Motor task.  <a href="a00059.html#aa57d79899719bf0d29588eaee44fa2c3">More...</a><br /></td></tr>
 <tr class="separator:aa57d79899719bf0d29588eaee44fa2c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae68efef717f3a191436388c86b11bbe1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae68efef717f3a191436388c86b11bbe1">Motor_task</a> (void *parameters)</td></tr>
 <tr class="memdesc:ae68efef717f3a191436388c86b11bbe1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Motor control task.  <a href="a00059.html#ae68efef717f3a191436388c86b11bbe1">More...</a><br /></td></tr>
@@ -234,12 +258,19 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:a7eaa5b7b6928ac1e075cf920317b29c5"><td class="memItemLeft" >struct {</td></tr>
+<tr class="memitem:a0d9a83249cfa3741d8a73e3bf3fcdfc1"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="a00059.html#a40928753b464c4ceb7f2ac751ea69f23">vPower</a></td></tr>
+<tr class="separator:a0d9a83249cfa3741d8a73e3bf3fcdfc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bd0761d6867b353f56902dcba105663"><td class="memItemLeft" >&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="a00059.html#a1ed27d7c554926ef362a5017ba8e07bb">iMotor</a></td></tr>
+<tr class="separator:a1bd0761d6867b353f56902dcba105663"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eaa5b7b6928ac1e075cf920317b29c5"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a7eaa5b7b6928ac1e075cf920317b29c5">adcs</a> [10]</td></tr>
+<tr class="separator:a7eaa5b7b6928ac1e075cf920317b29c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae04f4ed375e0330dd45730a744862239"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#ae04f4ed375e0330dd45730a744862239">idxadc</a> = 0</td></tr>
+<tr class="separator:ae04f4ed375e0330dd45730a744862239"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac3d2c59ee0e3bbae1b99529a154eb62"><td class="memItemLeft" align="right" valign="top">TIM_HandleTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#aac3d2c59ee0e3bbae1b99529a154eb62">htim3</a></td></tr>
 <tr class="separator:aac3d2c59ee0e3bbae1b99529a154eb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d83db39766518000532e9a2667b57ef"><td class="memItemLeft" align="right" valign="top">QueueHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a3d83db39766518000532e9a2667b57ef">msgQueueMotor</a> = (QueueHandle_t)0</td></tr>
-<tr class="separator:a3d83db39766518000532e9a2667b57ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf5bcf39f693387e5067b405ab08db5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00158.html">MotorData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#acf5bcf39f693387e5067b405ab08db5d">motorData</a></td></tr>
-<tr class="separator:acf5bcf39f693387e5067b405ab08db5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22b804736f5648d52f639b2647d4ed13"><td class="memItemLeft" align="right" valign="top">ADC_HandleTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00059.html#a22b804736f5648d52f639b2647d4ed13">hadc1</a></td></tr>
+<tr class="separator:a22b804736f5648d52f639b2647d4ed13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a0021c9725e8a23aa23eb88e2a18976c2" name="a0021c9725e8a23aa23eb88e2a18976c2"></a>
@@ -270,20 +301,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ae068bb96d2ffb6dbc0716405a20eae0c" name="ae068bb96d2ffb6dbc0716405a20eae0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae068bb96d2ffb6dbc0716405a20eae0c">&#9670;&nbsp;</a></span>ADC_PERIOD</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define ADC_PERIOD&#160;&#160;&#160;(0.01F)                 /* 100 ms */</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a32c490da336a5b0a5cc052f70875aeb1" name="a32c490da336a5b0a5cc052f70875aeb1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a32c490da336a5b0a5cc052f70875aeb1">&#9670;&nbsp;</a></span>DBG_ADC_PRINT</h2>
 
@@ -292,6 +309,24 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define DBG_ADC_PRINT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">X</td><td>)</td>
+          <td>&#160;&#160;&#160;(X)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa95ccb6e4e8f2c1659cf1c305ab45659" name="aa95ccb6e4e8f2c1659cf1c305ab45659"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa95ccb6e4e8f2c1659cf1c305ab45659">&#9670;&nbsp;</a></span>DBG_MOTOR_LL_PRINT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DBG_MOTOR_LL_PRINT</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">X</td><td>)</td>
@@ -327,7 +362,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define M_PI&#160;&#160;&#160;3.14159265358979323846</td>
+          <td class="memname">#define M_PI&#160;&#160;&#160;((float)3.14159265358979323846)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -341,7 +376,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MOTOR_CVT_ANGLE_TIME&#160;&#160;&#160;    (2.0F) /* Estimated conversion between time and helm move angle */</td>
+          <td class="memname">#define MOTOR_CVT_ANGLE_TIME&#160;&#160;&#160;(2.0F) /* Estimated conversion between time and helm move angle */</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -376,6 +411,20 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="afc34f43e42ea7ca7adf7a4654988b26d" name="afc34f43e42ea7ca7adf7a4654988b26d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc34f43e42ea7ca7adf7a4654988b26d">&#9670;&nbsp;</a></span>MOTOR_EVENT_STOPPING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MOTOR_EVENT_STOPPING&#160;&#160;&#160;(0x1 &lt;&lt; 2)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa60f1de93cc4d6207af242cc63459aa3" name="aa60f1de93cc4d6207af242cc63459aa3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa60f1de93cc4d6207af242cc63459aa3">&#9670;&nbsp;</a></span>MOTOR_HPF_COEF</h2>
 
@@ -398,6 +447,20 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define MOTOR_MAX_TIME_OVERCURRENT&#160;&#160;&#160;(0.02F) /* 20 ms */</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab1e7e59d9d1f36317d366d7789ec11d5" name="ab1e7e59d9d1f36317d366d7789ec11d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1e7e59d9d1f36317d366d7789ec11d5">&#9670;&nbsp;</a></span>MOTOR_STATUS_DIR_ANY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MOTOR_STATUS_DIR_ANY&#160;&#160;&#160;(<a class="el" href="a00059.html#ac58da863e26f070c1ac0625bf52305b6">MOTOR_STATUS_DIR_STARBOARD</a> | <a class="el" href="a00059.html#a5e553c1bf254795edabf8f5089d1d927">MOTOR_STATUS_DIR_PORT</a>)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -495,7 +558,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MOTOR_STATUS_RUNNING&#160;&#160;&#160;(0x1 &lt;&lt; 6)       /* motor running */</td>
+          <td class="memname">#define MOTOR_STATUS_RUNNING&#160;&#160;&#160;(<a class="el" href="a00059.html#a639f34cdf8b918588401a6ee1d055408">MOTOR_STATUS_MOVING_TIME</a> | <a class="el" href="a00059.html#aa88cf233c357531a915cb070711f1a81">MOTOR_STATUS_MOVING_ANGLE</a>)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -510,6 +573,20 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define MOTOR_STATUS_STALLED&#160;&#160;&#160;(0x1 &lt;&lt; 8)       /* motor stalled */</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5f345aa0ca452b291d39dbf952b2e279" name="a5f345aa0ca452b291d39dbf952b2e279"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f345aa0ca452b291d39dbf952b2e279">&#9670;&nbsp;</a></span>MOTOR_STATUS_STARTING_RUN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MOTOR_STATUS_STARTING_RUN&#160;&#160;&#160;(0x1 &lt;&lt; 9)  /* motor starting to run ie accelerating */</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -537,7 +614,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MOTOR_THRESHOLD&#160;&#160;&#160;(1.0F * ((float)<a class="el" href="a00107.html#ae71449b1cc6e6250b91f539153a7a0d3">M_PI</a> / 180.F))</td>
+          <td class="memname">#define MOTOR_THRESHOLD&#160;&#160;&#160;(1.0F * ((float)<a class="el" href="a00110.html#ae71449b1cc6e6250b91f539153a7a0d3">M_PI</a> / 180.F)) /* threshold 1 deg. */</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -551,7 +628,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MOTOR_TIME_START&#160;&#160;&#160;    (0.1F) /* Maximum time to allow over current when starting motor */</td>
+          <td class="memname">#define MOTOR_TIME_START&#160;&#160;&#160;(0.05F) /* Maximum time to allow over current when starting motor (<a class="el" href="a00083.html#a9c19701a191e1491dd96b283ad82bbdd">s</a>) */</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -565,7 +642,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MOTOR_TIME_STOP&#160;&#160;&#160;    (0.2F) /* Time to wait for motor to stop before opposite move order  */</td>
+          <td class="memname">#define MOTOR_TIME_STOP&#160;&#160;&#160;(0.2F) /* Time to wait for motor to stop before opposite move order (<a class="el" href="a00083.html#a9c19701a191e1491dd96b283ad82bbdd">s</a>) */</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -628,6 +705,34 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="ad392f31da8262b7e77c758c737cbb74b" name="ad392f31da8262b7e77c758c737cbb74b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad392f31da8262b7e77c758c737cbb74b">&#9670;&nbsp;</a></span>MOTOR_V_POWER_STANDARD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MOTOR_V_POWER_STANDARD&#160;&#160;&#160;(12.0F)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9797041b3bc42a6ebbc287a0d23ba5c9" name="a9797041b3bc42a6ebbc287a0d23ba5c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9797041b3bc42a6ebbc287a0d23ba5c9">&#9670;&nbsp;</a></span>NB_VAL_ADC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NB_VAL_ADC&#160;&#160;&#160;10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="af20a88180db1113be1e89266917d148b" name="af20a88180db1113be1e89266917d148b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af20a88180db1113be1e89266917d148b">&#9670;&nbsp;</a></span>HAL_ADC_ConvCpltCallback()</h2>
@@ -647,16 +752,17 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ab6150878b7f5297bccae651b5d85e923" name="ab6150878b7f5297bccae651b5d85e923"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6150878b7f5297bccae651b5d85e923">&#9670;&nbsp;</a></span>Motor_disengageTiller()</h2>
+<a id="ac0272c7db0fbafa4241ba93a849718ad" name="ac0272c7db0fbafa4241ba93a849718ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0272c7db0fbafa4241ba93a849718ad">&#9670;&nbsp;</a></span>Motor_disengage_actuator()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Motor_disengageTiller </td>
+          <td class="memname">void Motor_disengage_actuator </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -664,16 +770,17 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a44dc60d14b1baa6400716426a5ad9dbb" name="a44dc60d14b1baa6400716426a5ad9dbb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44dc60d14b1baa6400716426a5ad9dbb">&#9670;&nbsp;</a></span>Motor_engageTiller()</h2>
+<a id="a9bf8f71ad51a2e91ac9f5f945b5bda7b" name="a9bf8f71ad51a2e91ac9f5f945b5bda7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bf8f71ad51a2e91ac9f5f945b5bda7b">&#9670;&nbsp;</a></span>Motor_engage_actuator()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Motor_engageTiller </td>
+          <td class="memname">void Motor_engage_actuator </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -681,18 +788,114 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a48030b8ad89c4fe0abca20165c61f07f" name="a48030b8ad89c4fe0abca20165c61f07f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48030b8ad89c4fe0abca20165c61f07f">&#9670;&nbsp;</a></span>Motor_moveTime()</h2>
+<a id="a2edc83fdbbcc72bb302c7efe61714817" name="a2edc83fdbbcc72bb302c7efe61714817"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2edc83fdbbcc72bb302c7efe61714817">&#9670;&nbsp;</a></span>Motor_get_text_config()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Motor_moveTime </td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Motor_get_text_config </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aadeff93195ed2100501fd142a08163c7" name="aadeff93195ed2100501fd142a08163c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadeff93195ed2100501fd142a08163c7">&#9670;&nbsp;</a></span>Motor_get_text_status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> Motor_get_text_status </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0d536cb6dc56a7806aa5e098b31bc6e8" name="a0d536cb6dc56a7806aa5e098b31bc6e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d536cb6dc56a7806aa5e098b31bc6e8">&#9670;&nbsp;</a></span>Motor_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Motor_init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af6c3f223527b5a06d06e25a24b4715d5" name="af6c3f223527b5a06d06e25a24b4715d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6c3f223527b5a06d06e25a24b4715d5">&#9670;&nbsp;</a></span>Motor_move_time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Motor_move_time </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>timeToMove</em></td><td>)</td>
+          <td class="paramname"><em>time_to_move</em>&#160;</td>
+        </tr>
+        <tr>
           <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -708,50 +911,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a0bf5334e4fe85e13ab5b9c3d2071b6f8" name="a0bf5334e4fe85e13ab5b9c3d2071b6f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0bf5334e4fe85e13ab5b9c3d2071b6f8">&#9670;&nbsp;</a></span>MOTOR_MSG_letInClutch()</h2>
+<a id="a7d8967df53402e612c52e32863546459" name="a7d8967df53402e612c52e32863546459"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d8967df53402e612c52e32863546459">&#9670;&nbsp;</a></span>Motor_msg_disengage_actuator()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void MOTOR_MSG_letInClutch </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send the order "engage clutch" to motor task. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">none</td><td>Motor task stops motor if it is running and engage clutch. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>none </dd></dl>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00059_a0bf5334e4fe85e13ab5b9c3d2071b6f8_icgraph.png" border="0" usemap="#aa00059_a0bf5334e4fe85e13ab5b9c3d2071b6f8_icgraph" alt=""/></div>
-<map name="aa00059_a0bf5334e4fe85e13ab5b9c3d2071b6f8_icgraph" id="aa00059_a0bf5334e4fe85e13ab5b9c3d2071b6f8_icgraph">
-<area shape="rect" title="Send the order &quot;engage clutch&quot; to motor task." alt="" coords="377,5,563,32"/>
-<area shape="rect" href="a00062.html#a9d6276b9ad0b1f218e4db68ca0dd5a62" title=" " alt="" coords="160,5,329,32"/>
-<area shape="rect" href="a00062.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a5ee69017e45f41a438fd76673da6e113" name="a5ee69017e45f41a438fd76673da6e113"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ee69017e45f41a438fd76673da6e113">&#9670;&nbsp;</a></span>MOTOR_MSG_letOutClutch()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MOTOR_MSG_letOutClutch </td>
+          <td class="memname">void Motor_msg_disengage_actuator </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -770,24 +937,133 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00059_a5ee69017e45f41a438fd76673da6e113_icgraph.png" border="0" usemap="#aa00059_a5ee69017e45f41a438fd76673da6e113_icgraph" alt=""/></div>
-<map name="aa00059_a5ee69017e45f41a438fd76673da6e113_icgraph" id="aa00059_a5ee69017e45f41a438fd76673da6e113_icgraph">
-<area shape="rect" title="send the order disengage clutch to motor task" alt="" coords="349,5,545,32"/>
-<area shape="rect" href="a00062.html#af6663ef3860cc9454511614ab488900a" title=" " alt="" coords="160,5,301,32"/>
-<area shape="rect" href="a00062.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
+<div class="center"><img src="a00059_a7d8967df53402e612c52e32863546459_icgraph.png" border="0" usemap="#aa00059_a7d8967df53402e612c52e32863546459_icgraph" alt=""/></div>
+<map name="aa00059_a7d8967df53402e612c52e32863546459_icgraph" id="aa00059_a7d8967df53402e612c52e32863546459_icgraph">
+<area shape="rect" title="send the order disengage clutch to motor task" alt="" coords="349,5,519,47"/>
+<area shape="rect" href="a00065.html#af6663ef3860cc9454511614ab488900a" title=" " alt="" coords="160,13,301,39"/>
+<area shape="rect" href="a00065.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,13,112,39"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="a39aba34c5e0746953b9dce97e9bc7c68" name="a39aba34c5e0746953b9dce97e9bc7c68"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39aba34c5e0746953b9dce97e9bc7c68">&#9670;&nbsp;</a></span>MOTOR_MSG_moveTime()</h2>
+<a id="a05ed0d391610946ce1255c9645c4bd84" name="a05ed0d391610946ce1255c9645c4bd84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05ed0d391610946ce1255c9645c4bd84">&#9670;&nbsp;</a></span>Motor_msg_display_config()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void MOTOR_MSG_moveTime </td>
+          <td class="memname">void Motor_msg_display_config </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00059_a05ed0d391610946ce1255c9645c4bd84_icgraph.png" border="0" usemap="#aa00059_a05ed0d391610946ce1255c9645c4bd84_icgraph" alt=""/></div>
+<map name="aa00059_a05ed0d391610946ce1255c9645c4bd84_icgraph" id="aa00059_a05ed0d391610946ce1255c9645c4bd84_icgraph">
+<area shape="rect" title=" " alt="" coords="480,5,675,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac0300ece27bdc23a8545f7aa869760ae" name="ac0300ece27bdc23a8545f7aa869760ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0300ece27bdc23a8545f7aa869760ae">&#9670;&nbsp;</a></span>Motor_msg_display_status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Motor_msg_display_status </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00059_ac0300ece27bdc23a8545f7aa869760ae_icgraph.png" border="0" usemap="#aa00059_ac0300ece27bdc23a8545f7aa869760ae_icgraph" alt=""/></div>
+<map name="aa00059_ac0300ece27bdc23a8545f7aa869760ae_icgraph" id="aa00059_ac0300ece27bdc23a8545f7aa869760ae_icgraph">
+<area shape="rect" title=" " alt="" coords="480,5,676,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a62cff2f3ec42ff68c9cecde80cfb5679" name="a62cff2f3ec42ff68c9cecde80cfb5679"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62cff2f3ec42ff68c9cecde80cfb5679">&#9670;&nbsp;</a></span>Motor_msg_engage_actuator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Motor_msg_engage_actuator </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send the order "engage clutch" to motor task. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">none</td><td>Motor task stops motor if it is running and engage clutch. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>none </dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00059_a62cff2f3ec42ff68c9cecde80cfb5679_cgraph.png" border="0" usemap="#aa00059_a62cff2f3ec42ff68c9cecde80cfb5679_cgraph" alt=""/></div>
+<map name="aa00059_a62cff2f3ec42ff68c9cecde80cfb5679_cgraph" id="aa00059_a62cff2f3ec42ff68c9cecde80cfb5679_cgraph">
+<area shape="rect" title="Send the order &quot;engage clutch&quot; to motor task." alt="" coords="5,31,216,57"/>
+<area shape="rect" href="a00071.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="299,5,357,32"/>
+<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="264,56,392,83"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="648,31,812,57"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="440,107,600,133"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="467,56,573,83"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="667,107,793,133"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00059_a62cff2f3ec42ff68c9cecde80cfb5679_icgraph.png" border="0" usemap="#aa00059_a62cff2f3ec42ff68c9cecde80cfb5679_icgraph" alt=""/></div>
+<map name="aa00059_a62cff2f3ec42ff68c9cecde80cfb5679_icgraph" id="aa00059_a62cff2f3ec42ff68c9cecde80cfb5679_icgraph">
+<area shape="rect" title="Send the order &quot;engage clutch&quot; to motor task." alt="" coords="401,31,612,57"/>
+<area shape="rect" href="a00065.html#a9d6276b9ad0b1f218e4db68ca0dd5a62" title=" " alt="" coords="172,5,341,32"/>
+<area shape="rect" href="a00065.html#a25a4b846419f0843e9516b27fc86fd77" title=" " alt="" coords="160,56,353,83"/>
+<area shape="rect" href="a00065.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,31,112,57"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a59dc6696095234ec87f6dceb98ceb9cd" name="a59dc6696095234ec87f6dceb98ceb9cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59dc6696095234ec87f6dceb98ceb9cd">&#9670;&nbsp;</a></span>Motor_msg_move_time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Motor_msg_move_time </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>time</em></td><td>)</td>
@@ -807,24 +1083,24 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00059_a39aba34c5e0746953b9dce97e9bc7c68_icgraph.png" border="0" usemap="#aa00059_a39aba34c5e0746953b9dce97e9bc7c68_icgraph" alt=""/></div>
-<map name="aa00059_a39aba34c5e0746953b9dce97e9bc7c68_icgraph" id="aa00059_a39aba34c5e0746953b9dce97e9bc7c68_icgraph">
-<area shape="rect" title="send the order move for a time" alt="" coords="280,5,465,32"/>
-<area shape="rect" href="a00062.html#a601303505481aa87ba2050ac8c6ef504" title=" " alt="" coords="160,5,232,32"/>
-<area shape="rect" href="a00062.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
+<div class="center"><img src="a00059_a59dc6696095234ec87f6dceb98ceb9cd_icgraph.png" border="0" usemap="#aa00059_a59dc6696095234ec87f6dceb98ceb9cd_icgraph" alt=""/></div>
+<map name="aa00059_a59dc6696095234ec87f6dceb98ceb9cd_icgraph" id="aa00059_a59dc6696095234ec87f6dceb98ceb9cd_icgraph">
+<area shape="rect" title="send the order move for a time" alt="" coords="280,5,456,32"/>
+<area shape="rect" href="a00065.html#a601303505481aa87ba2050ac8c6ef504" title=" " alt="" coords="160,5,232,32"/>
+<area shape="rect" href="a00065.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="ae4246cb15bb6ae30a5935f4e0df31e63" name="ae4246cb15bb6ae30a5935f4e0df31e63"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4246cb15bb6ae30a5935f4e0df31e63">&#9670;&nbsp;</a></span>MOTOR_MSG_set_cvt_angle_time()</h2>
+<a id="a93e213f1b3bd22fb5e5669fae1956456" name="a93e213f1b3bd22fb5e5669fae1956456"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93e213f1b3bd22fb5e5669fae1956456">&#9670;&nbsp;</a></span>Motor_msg_set_cvt_angle_time()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void MOTOR_MSG_set_cvt_angle_time </td>
+          <td class="memname">void Motor_msg_set_cvt_angle_time </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>cvt</em></td><td>)</td>
@@ -832,53 +1108,28 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00059_a93e213f1b3bd22fb5e5669fae1956456_icgraph.png" border="0" usemap="#aa00059_a93e213f1b3bd22fb5e5669fae1956456_icgraph" alt=""/></div>
+<map name="aa00059_a93e213f1b3bd22fb5e5669fae1956456_icgraph" id="aa00059_a93e213f1b3bd22fb5e5669fae1956456_icgraph">
+<area shape="rect" title=" " alt="" coords="480,5,709,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
 
 </div>
 </div>
-<a id="ac2bea4229ce4543966390c255b9ad61c" name="ac2bea4229ce4543966390c255b9ad61c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2bea4229ce4543966390c255b9ad61c">&#9670;&nbsp;</a></span>MOTOR_MSG_set_hpf_coeff()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MOTOR_MSG_set_hpf_coeff </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>coef</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad79b76525c9b48f20a396c695d604ffd" name="ad79b76525c9b48f20a396c695d604ffd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad79b76525c9b48f20a396c695d604ffd">&#9670;&nbsp;</a></span>MOTOR_MSG_set_threshold()</h2>
+<a id="af5b1bd029369f1283e33e3ce30a0fa35" name="af5b1bd029369f1283e33e3ce30a0fa35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5b1bd029369f1283e33e3ce30a0fa35">&#9670;&nbsp;</a></span>Motor_msg_set_helm_angle()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void MOTOR_MSG_set_threshold </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>thr</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8a7a0eea9f4c0a4912cb81a577d8c6ce" name="a8a7a0eea9f4c0a4912cb81a577d8c6ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a7a0eea9f4c0a4912cb81a577d8c6ce">&#9670;&nbsp;</a></span>MOTOR_MSG_setHelmAngle()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MOTOR_MSG_setHelmAngle </td>
+          <td class="memname">void Motor_msg_set_helm_angle </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>angle</em></td><td>)</td>
@@ -901,25 +1152,89 @@ To turn starboard, i.e. right, helm has to be moved to port and vice versa.</dd>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00059_a8a7a0eea9f4c0a4912cb81a577d8c6ce_icgraph.png" border="0" usemap="#aa00059_a8a7a0eea9f4c0a4912cb81a577d8c6ce_icgraph" alt=""/></div>
-<map name="aa00059_a8a7a0eea9f4c0a4912cb81a577d8c6ce_icgraph" id="aa00059_a8a7a0eea9f4c0a4912cb81a577d8c6ce_icgraph">
-<area shape="rect" title="send the order move angle" alt="" coords="331,5,537,32"/>
-<area shape="rect" href="a00062.html#afa8c4bb9dc2009e2a7dee4f0e290c8c5" title=" " alt="" coords="160,5,283,32"/>
-<area shape="rect" href="a00062.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,5,112,32"/>
+<div class="center"><img src="a00059_af5b1bd029369f1283e33e3ce30a0fa35_icgraph.png" border="0" usemap="#aa00059_af5b1bd029369f1283e33e3ce30a0fa35_icgraph" alt=""/></div>
+<map name="aa00059_af5b1bd029369f1283e33e3ce30a0fa35_icgraph" id="aa00059_af5b1bd029369f1283e33e3ce30a0fa35_icgraph">
+<area shape="rect" title="send the order move angle" alt="" coords="331,5,493,47"/>
+<area shape="rect" href="a00065.html#afa8c4bb9dc2009e2a7dee4f0e290c8c5" title=" " alt="" coords="160,13,283,39"/>
+<area shape="rect" href="a00065.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,13,112,39"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="acdc006e72aa64ec5140fca4b7cec3062" name="acdc006e72aa64ec5140fca4b7cec3062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdc006e72aa64ec5140fca4b7cec3062">&#9670;&nbsp;</a></span>Motor_newValues()</h2>
+<a id="afcdf9b0a01973c4ec04f56b39a8ff860" name="afcdf9b0a01973c4ec04f56b39a8ff860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcdf9b0a01973c4ec04f56b39a8ff860">&#9670;&nbsp;</a></span>Motor_msg_set_hpf_coeff()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t Motor_newValues </td>
+          <td class="memname">void Motor_msg_set_hpf_coeff </td>
           <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>coef</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00059_afcdf9b0a01973c4ec04f56b39a8ff860_icgraph.png" border="0" usemap="#aa00059_afcdf9b0a01973c4ec04f56b39a8ff860_icgraph" alt=""/></div>
+<map name="aa00059_afcdf9b0a01973c4ec04f56b39a8ff860_icgraph" id="aa00059_afcdf9b0a01973c4ec04f56b39a8ff860_icgraph">
+<area shape="rect" title=" " alt="" coords="480,5,669,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad65086395e98dedebb8f31d301809d55" name="ad65086395e98dedebb8f31d301809d55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad65086395e98dedebb8f31d301809d55">&#9670;&nbsp;</a></span>Motor_msg_set_threshold()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Motor_msg_set_threshold </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>thr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00059_ad65086395e98dedebb8f31d301809d55_icgraph.png" border="0" usemap="#aa00059_ad65086395e98dedebb8f31d301809d55_icgraph" alt=""/></div>
+<map name="aa00059_ad65086395e98dedebb8f31d301809d55_icgraph" id="aa00059_ad65086395e98dedebb8f31d301809d55_icgraph">
+<area shape="rect" title=" " alt="" coords="480,5,671,32"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="271,5,432,32"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="124,5,223,32"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0bbbd1b7051e3701c851145dddbc4ff4" name="a0bbbd1b7051e3701c851145dddbc4ff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bbbd1b7051e3701c851145dddbc4ff4">&#9670;&nbsp;</a></span>Motor_new_values()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Motor_new_values </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>deltat</em>, </td>
         </tr>
@@ -927,13 +1242,13 @@ Here is the caller graph for this function:</div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>vPower</em>, </td>
+          <td class="paramname"><em>suply_voltage</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>iMotor</em>&#160;</td>
+          <td class="paramname"><em>motor_current</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -945,8 +1260,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="af21b447acab649620ca700b2ca98533b" name="af21b447acab649620ca700b2ca98533b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af21b447acab649620ca700b2ca98533b">&#9670;&nbsp;</a></span>Motor_set_cvt_angle_time()</h2>
+<a id="a987f3214f52655fdbf3f192318478e7f" name="a987f3214f52655fdbf3f192318478e7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a987f3214f52655fdbf3f192318478e7f">&#9670;&nbsp;</a></span>Motor_set_cvt_angle_time()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -954,27 +1269,103 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">void Motor_set_cvt_angle_time </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>cvt</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>cvt</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a1f8d7a96d8f202e07e1cea78ebab1223" name="a1f8d7a96d8f202e07e1cea78ebab1223"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f8d7a96d8f202e07e1cea78ebab1223">&#9670;&nbsp;</a></span>Motor_setHelmAngle()</h2>
+<a id="aa807b1d5038e32b7f3bb3dc1057424a6" name="aa807b1d5038e32b7f3bb3dc1057424a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa807b1d5038e32b7f3bb3dc1057424a6">&#9670;&nbsp;</a></span>Motor_set_helm_angle()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Motor_setHelmAngle </td>
+          <td class="memname">void Motor_set_helm_angle </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>angle</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>angle</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad9ebd5f0a835a7c6628b015ec2dae657" name="ad9ebd5f0a835a7c6628b015ec2dae657"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9ebd5f0a835a7c6628b015ec2dae657">&#9670;&nbsp;</a></span>Motor_set_hpf_coeff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Motor_set_hpf_coeff </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>hpf_coeff</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae64b290488333ddec8fb2ac80e7ae4e6" name="ae64b290488333ddec8fb2ac80e7ae4e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae64b290488333ddec8fb2ac80e7ae4e6">&#9670;&nbsp;</a></span>Motor_set_threshold()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Motor_set_threshold </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00168.html">Motor_t</a> *&#160;</td>
+          <td class="paramname"><em>motor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>threshold</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1038,13 +1429,13 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Initialise the motor task This function must be called before starting tasmMotor task. </p>
+<p>Initialise the motor task This function must be called before starting Motor task. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="a00059_aa57d79899719bf0d29588eaee44fa2c3_icgraph.png" border="0" usemap="#aa00059_aa57d79899719bf0d29588eaee44fa2c3_icgraph" alt=""/></div>
 <map name="aa00059_aa57d79899719bf0d29588eaee44fa2c3_icgraph" id="aa00059_aa57d79899719bf0d29588eaee44fa2c3_icgraph">
-<area shape="rect" title="Initialise the motor task This function must be called before starting tasmMotor task." alt="" coords="124,5,247,32"/>
+<area shape="rect" title="Initialise the motor task This function must be called before starting Motor task." alt="" coords="124,5,247,32"/>
 <area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="5,5,76,32"/>
 </map>
 </div>
@@ -1052,6 +1443,42 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a7eaa5b7b6928ac1e075cf920317b29c5" name="a7eaa5b7b6928ac1e075cf920317b29c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eaa5b7b6928ac1e075cf920317b29c5">&#9670;&nbsp;</a></span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct  { ... }  adcs[ 10 ]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22b804736f5648d52f639b2647d4ed13" name="a22b804736f5648d52f639b2647d4ed13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b804736f5648d52f639b2647d4ed13">&#9670;&nbsp;</a></span>hadc1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ADC_HandleTypeDef hadc1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aac3d2c59ee0e3bbae1b99529a154eb62" name="aac3d2c59ee0e3bbae1b99529a154eb62"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aac3d2c59ee0e3bbae1b99529a154eb62">&#9670;&nbsp;</a></span>htim3</h2>
 
@@ -1074,49 +1501,42 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="acf5bcf39f693387e5067b405ab08db5d" name="acf5bcf39f693387e5067b405ab08db5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf5bcf39f693387e5067b405ab08db5d">&#9670;&nbsp;</a></span>motorData</h2>
+<a id="ae04f4ed375e0330dd45730a744862239" name="ae04f4ed375e0330dd45730a744862239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae04f4ed375e0330dd45730a744862239">&#9670;&nbsp;</a></span>idxadc</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00158.html">MotorData</a> motorData</td>
+          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> idxadc = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {.status =  (0x1 &lt;&lt; 5)  ,</div>
-<div class="line">                       .helmAngleRequested = 0.F,</div>
-<div class="line">                       .HelmAngleEstimated = 0.F,</div>
-<div class="line">                       .turnTimeReq = 0.F,</div>
-<div class="line">                       .turnTimeRemaining = 0.F,</div>
-<div class="line"> </div>
-<div class="line">                       .vcurrentNone =  (0.F) ,</div>
-<div class="line">                       .vcurrentFree =  (.1F) ,</div>
-<div class="line">                       .vcurrentBlocked =  (1.0F)  ,</div>
-<div class="line">                       .timeToStart =  (0.1F)  ,</div>
-<div class="line">                       .timeToStop =  (0.2F)  ,</div>
-<div class="line">                       .currentStalled = 1.0F,</div>
-<div class="line">                       .cvt_angle_time =  (2.0F)  ,</div>
-<div class="line">                       .hpf_coeff =  (0.0F) ,</div>
-<div class="line">                       .threshold =  (1.0F * ((float) 3.14159265358979323846  / 180.F)) ,</div>
-<div class="line"> </div>
-<div class="line">                       .vPowerStandard = 12.F,</div>
-<div class="line">                       .vPowerMin = 10.,</div>
-<div class="line">                       .vPowerMax = 15.F,</div>
-<div class="line">                       .vPower = 0.F,</div>
-<div class="line">                       .vCurrent = 0.F}</div>
-</div><!-- fragment -->
+
 </div>
 </div>
-<a id="a3d83db39766518000532e9a2667b57ef" name="a3d83db39766518000532e9a2667b57ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d83db39766518000532e9a2667b57ef">&#9670;&nbsp;</a></span>msgQueueMotor</h2>
+<a id="a1ed27d7c554926ef362a5017ba8e07bb" name="a1ed27d7c554926ef362a5017ba8e07bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ed27d7c554926ef362a5017ba8e07bb">&#9670;&nbsp;</a></span>iMotor</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">QueueHandle_t msgQueueMotor = (QueueHandle_t)0</td>
+          <td class="memname">float iMotor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a40928753b464c4ceb7f2ac751ea69f23" name="a40928753b464c4ceb7f2ac751ea69f23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40928753b464c4ceb7f2ac751ea69f23">&#9670;&nbsp;</a></span>vPower</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float vPower</td>
         </tr>
       </table>
 </div><div class="memdoc">

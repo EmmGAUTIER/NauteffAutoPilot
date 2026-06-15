@@ -1,4 +1,5 @@
-<map id="CalibrationEllipsoidResult_t" name="CalibrationEllipsoidResult_t">
-<area shape="rect" id="node1" title=" " alt="" coords="5,175,207,267"/>
-<area shape="rect" id="node2" href="$a00108.html" title="Structure representing a 3D vector with float components." alt="" coords="68,5,144,112"/>
+<map id="madgwickAHRS.h" name="madgwickAHRS.h">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,143,32"/>
+<area shape="rect" id="node2" href="$a00110.html" title=" " alt="" coords="43,80,105,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="39,155,109,181"/>
 </map>

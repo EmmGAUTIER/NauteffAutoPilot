@@ -79,15 +79,15 @@ $(function() {
 <code>#include &quot;semphr.h&quot;</code><br />
 <code>#include &quot;stream_buffer.h&quot;</code><br />
 <code>#include &quot;stm32l4xx_hal.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00074_source.html">printf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00080_source.html">util.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00068_source.html">rlib.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00119_source.html">geom.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00107_source.html">quat.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00125_source.html">service.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00095_source.html">ahrs.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00089_source.html">ahrssimple.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00098_source.html">ahrsquat.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00077_source.html">printf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00083_source.html">util.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00071_source.html">rlib.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00122_source.html">geom.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00110_source.html">quat.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00131_source.html">service.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00098_source.html">ahrs.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00092_source.html">ahrssimple.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00101_source.html">ahrsquat.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ahrsquat.c:</div>
 <div class="dyncontent">
@@ -98,21 +98,21 @@ Include dependency graph for ahrsquat.c:</div>
 <area shape="rect" title=" " alt="" coords="98,80,194,107"/>
 <area shape="rect" title=" " alt="" coords="218,80,301,107"/>
 <area shape="rect" title=" " alt="" coords="325,80,449,107"/>
-<area shape="rect" title=" " alt="" coords="645,155,775,181"/>
-<area shape="rect" href="a00074.html" title=" " alt="" coords="473,80,541,107"/>
-<area shape="rect" href="a00080.html" title=" " alt="" coords="565,155,620,181"/>
-<area shape="rect" href="a00068.html" title=" " alt="" coords="617,80,672,107"/>
-<area shape="rect" href="a00119.html" title=" " alt="" coords="900,155,971,181"/>
-<area shape="rect" href="a00107.html" title=" " alt="" coords="995,155,1057,181"/>
-<area shape="rect" href="a00125.html" title=" " alt="" coords="748,80,829,107"/>
-<area shape="rect" href="a00095.html" title=" " alt="" coords="905,80,968,107"/>
-<area shape="rect" href="a00089.html" title=" " alt="" coords="1043,80,1150,107"/>
-<area shape="rect" href="a00098.html" title=" " alt="" coords="1174,80,1265,107"/>
-<area shape="rect" title=" " alt="" coords="367,155,442,181"/>
-<area shape="rect" title=" " alt="" coords="466,155,541,181"/>
-<area shape="rect" title=" " alt="" coords="901,229,972,256"/>
-<area shape="rect" href="a00077.html" title=" " alt="" coords="800,155,876,181"/>
-<area shape="rect" title=" " alt="" coords="794,229,877,256"/>
+<area shape="rect" title=" " alt="" coords="409,155,539,181"/>
+<area shape="rect" href="a00077.html" title=" " alt="" coords="952,80,1020,107"/>
+<area shape="rect" href="a00083.html" title=" " alt="" coords="664,155,719,181"/>
+<area shape="rect" href="a00071.html" title=" " alt="" coords="683,80,737,107"/>
+<area shape="rect" href="a00122.html" title=" " alt="" coords="743,155,813,181"/>
+<area shape="rect" href="a00110.html" title=" " alt="" coords="837,155,900,181"/>
+<area shape="rect" href="a00131.html" title=" " alt="" coords="525,80,607,107"/>
+<area shape="rect" href="a00098.html" title=" " alt="" coords="813,80,876,107"/>
+<area shape="rect" href="a00092.html" title=" " alt="" coords="1045,80,1151,107"/>
+<area shape="rect" href="a00101.html" title=" " alt="" coords="1175,80,1266,107"/>
+<area shape="rect" title=" " alt="" coords="949,155,1023,181"/>
+<area shape="rect" title=" " alt="" coords="1047,155,1122,181"/>
+<area shape="rect" title=" " alt="" coords="705,229,776,256"/>
+<area shape="rect" href="a00080.html" title=" " alt="" coords="564,155,640,181"/>
+<area shape="rect" title=" " alt="" coords="561,229,643,256"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -123,12 +123,12 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a52748091a7e13612f6fe73cad2f1dadb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb">AHRS_Quat_update</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus, <a class="el" href="a00198.html">Vector3f</a> *acc, <a class="el" href="a00198.html">Vector3f</a> *gyr, <a class="el" href="a00198.html">Vector3f</a> *mag, float deltat)</td></tr>
+<tr class="memitem:a52748091a7e13612f6fe73cad2f1dadb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb">AHRS_Quat_update</a> (<a class="el" href="a00192.html">AHRS_Status_t</a> *mstatus, <a class="el" href="a00208.html">Vector3f</a> *acc, <a class="el" href="a00208.html">Vector3f</a> *gyr, <a class="el" href="a00208.html">Vector3f</a> *mag, float deltat)</td></tr>
 <tr class="separator:a52748091a7e13612f6fe73cad2f1dadb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a14e657001398ff21c5290d899822f8f9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00186.html">AHRS_Interface_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00041.html#a14e657001398ff21c5290d899822f8f9">AHRS_Quat_Interface</a></td></tr>
+<tr class="memitem:a14e657001398ff21c5290d899822f8f9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00196.html">AHRS_Interface_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00041.html#a14e657001398ff21c5290d899822f8f9">AHRS_Quat_Interface</a></td></tr>
 <tr class="separator:a14e657001398ff21c5290d899822f8f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -156,25 +156,25 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> AHRS_Quat_update </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="a00192.html">AHRS_Status_t</a> *&#160;</td>
           <td class="paramname"><em>mstatus</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="a00208.html">Vector3f</a> *&#160;</td>
           <td class="paramname"><em>acc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="a00208.html">Vector3f</a> *&#160;</td>
           <td class="paramname"><em>gyr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="a00208.html">Vector3f</a> *&#160;</td>
           <td class="paramname"><em>mag</em>, </td>
         </tr>
         <tr>
@@ -202,7 +202,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="a00017.html#aa02d5933c6d5e374c3c7e2a6cf7c7ad1" title=" " alt="" coords="213,173,379,199"/>
 <area shape="rect" href="a00032.html#a7df90ae2e0f619e520db9a25223bf74f" title="Adds two 3D vectors component&#45;wise." alt="" coords="231,223,361,250"/>
 <area shape="rect" href="a00032.html#a0dfc98448fc07734499a42b07cf79718" title="Computes the dot product (scalar product) of two 3D vectors." alt="" coords="231,274,361,301"/>
-<area shape="rect" href="a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="267,325,325,351"/>
+<area shape="rect" href="a00071.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="267,325,325,351"/>
 <area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="232,375,360,402"/>
 <area shape="rect" href="a00020.html#ac5692debece7126e725e6f78e93680fa" title="Computes the cross product of two 3D vectors." alt="" coords="201,426,391,453"/>
 <area shape="rect" href="a00020.html#af59ede5ab5fcac9a6d79dcac2bf895ff" title="Normalizes a 3D vector to have a length of 1." alt="" coords="207,477,385,503"/>
@@ -226,26 +226,30 @@ Here is the call graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="a00186.html">AHRS_Interface_t</a> AHRS_Quat_Interface</td>
+          <td class="memname">const <a class="el" href="a00196.html">AHRS_Interface_t</a> AHRS_Quat_Interface</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">    .AHRS_init = <a class="code hl_function" href="a00029.html#a965d6ed904e7367d81ef3ad4eab53b0a">AHRS_Simple_init</a>,</div>
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">{</div>
+<div class="line">    .AHRS_init                = <a class="code hl_function" href="a00017.html#a618298c6bba8b28006f83840c64108fd">AHRS_init</a>,</div>
 <div class="line">    .AHRS_get_roll            = <a class="code hl_function" href="a00017.html#a56484f46471712bfc47bd066488b8511">AHRS_get_roll</a>,</div>
 <div class="line">    .AHRS_get_pitch           = <a class="code hl_function" href="a00017.html#afd68e05312decd599783b33b3da7b1d3">AHRS_get_pitch</a>,</div>
 <div class="line">    .AHRS_get_heading         = <a class="code hl_function" href="a00017.html#aafbe1e32e529a951c5a7b2abc0d803a3">AHRS_get_heading</a>,</div>
 <div class="line">    .AHRS_get_yawRate         = <a class="code hl_function" href="a00017.html#aead537e023527d91301cd5ca17bd9c17">AHRS_get_yawRate</a>,</div>
 <div class="line">    .AHRS_set_mag_vs_gyr_prop = <a class="code hl_function" href="a00017.html#aa841e662fd69e3fc2a25e9987100e499">AHRS_set_mag_vs_gyr_prop</a>,</div>
-<div class="line">    .AHRS_update              = <a class="code hl_function" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb">AHRS_Quat_update</a></div>
+<div class="line">    .AHRS_update              = <a class="code hl_function" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb">AHRS_Quat_update</a>,</div>
+<div class="line">    .AHRS_get_Quaternion      = <a class="code hl_function" href="a00017.html#ae991b3a46353130b66e20d8cb3053d88">AHRS_get_Quaternion</a>,</div>
+<div class="line">    .name                     = <span class="stringliteral">&quot;Quat&quot;</span>,</div>
 <div class="line">}</div>
-<div class="ttc" id="aa00017_html_a56484f46471712bfc47bd066488b8511"><div class="ttname"><a href="a00017.html#a56484f46471712bfc47bd066488b8511">AHRS_get_roll</a></div><div class="ttdeci">float AHRS_get_roll(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:61</div></div>
-<div class="ttc" id="aa00017_html_aa841e662fd69e3fc2a25e9987100e499"><div class="ttname"><a href="a00017.html#aa841e662fd69e3fc2a25e9987100e499">AHRS_set_mag_vs_gyr_prop</a></div><div class="ttdeci">void AHRS_set_mag_vs_gyr_prop(AHRS_Status_t *mstatus, float prop)</div><div class="ttdef"><b>Definition:</b> ahrs.c:81</div></div>
-<div class="ttc" id="aa00017_html_aafbe1e32e529a951c5a7b2abc0d803a3"><div class="ttname"><a href="a00017.html#aafbe1e32e529a951c5a7b2abc0d803a3">AHRS_get_heading</a></div><div class="ttdeci">float AHRS_get_heading(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:71</div></div>
-<div class="ttc" id="aa00017_html_aead537e023527d91301cd5ca17bd9c17"><div class="ttname"><a href="a00017.html#aead537e023527d91301cd5ca17bd9c17">AHRS_get_yawRate</a></div><div class="ttdeci">float AHRS_get_yawRate(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:76</div></div>
-<div class="ttc" id="aa00017_html_afd68e05312decd599783b33b3da7b1d3"><div class="ttname"><a href="a00017.html#afd68e05312decd599783b33b3da7b1d3">AHRS_get_pitch</a></div><div class="ttdeci">float AHRS_get_pitch(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:66</div></div>
-<div class="ttc" id="aa00029_html_a965d6ed904e7367d81ef3ad4eab53b0a"><div class="ttname"><a href="a00029.html#a965d6ed904e7367d81ef3ad4eab53b0a">AHRS_Simple_init</a></div><div class="ttdeci">void AHRS_Simple_init(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:31</div></div>
-<div class="ttc" id="aa00041_html_a52748091a7e13612f6fe73cad2f1dadb"><div class="ttname"><a href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb">AHRS_Quat_update</a></div><div class="ttdeci">int AHRS_Quat_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)</div><div class="ttdef"><b>Definition:</b> ahrsquat.c:38</div></div>
+<div class="ttc" id="aa00017_html_a56484f46471712bfc47bd066488b8511"><div class="ttname"><a href="a00017.html#a56484f46471712bfc47bd066488b8511">AHRS_get_roll</a></div><div class="ttdeci">float AHRS_get_roll(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:62</div></div>
+<div class="ttc" id="aa00017_html_a618298c6bba8b28006f83840c64108fd"><div class="ttname"><a href="a00017.html#a618298c6bba8b28006f83840c64108fd">AHRS_init</a></div><div class="ttdeci">void AHRS_init(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:48</div></div>
+<div class="ttc" id="aa00017_html_aa841e662fd69e3fc2a25e9987100e499"><div class="ttname"><a href="a00017.html#aa841e662fd69e3fc2a25e9987100e499">AHRS_set_mag_vs_gyr_prop</a></div><div class="ttdeci">void AHRS_set_mag_vs_gyr_prop(AHRS_Status_t *mstatus, float prop)</div><div class="ttdef"><b>Definition:</b> ahrs.c:82</div></div>
+<div class="ttc" id="aa00017_html_aafbe1e32e529a951c5a7b2abc0d803a3"><div class="ttname"><a href="a00017.html#aafbe1e32e529a951c5a7b2abc0d803a3">AHRS_get_heading</a></div><div class="ttdeci">float AHRS_get_heading(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:72</div></div>
+<div class="ttc" id="aa00017_html_ae991b3a46353130b66e20d8cb3053d88"><div class="ttname"><a href="a00017.html#ae991b3a46353130b66e20d8cb3053d88">AHRS_get_Quaternion</a></div><div class="ttdeci">Quaternionf AHRS_get_Quaternion(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:89</div></div>
+<div class="ttc" id="aa00017_html_aead537e023527d91301cd5ca17bd9c17"><div class="ttname"><a href="a00017.html#aead537e023527d91301cd5ca17bd9c17">AHRS_get_yawRate</a></div><div class="ttdeci">float AHRS_get_yawRate(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:77</div></div>
+<div class="ttc" id="aa00017_html_afd68e05312decd599783b33b3da7b1d3"><div class="ttname"><a href="a00017.html#afd68e05312decd599783b33b3da7b1d3">AHRS_get_pitch</a></div><div class="ttdeci">float AHRS_get_pitch(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrs.c:67</div></div>
+<div class="ttc" id="aa00041_html_a52748091a7e13612f6fe73cad2f1dadb"><div class="ttname"><a href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb">AHRS_Quat_update</a></div><div class="ttdeci">int AHRS_Quat_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)</div><div class="ttdef"><b>Definition:</b> ahrsquat.c:41</div></div>
 </div><!-- fragment -->
 </div>
 </div>

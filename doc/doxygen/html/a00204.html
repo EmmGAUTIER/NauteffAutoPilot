@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: MsgAutoPilot_t Struct Reference</title>
+<title>Nauteff auto pilot: Corrector_t Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -66,262 +66,306 @@ $(function() {
   <div class="summary">
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="a00201.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">MsgAutoPilot_t Struct Reference</div></div>
+  <div class="headertitle"><div class="title">Corrector_t Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="a00098_source.html">autopilot.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00119_source.html">calib.h</a>&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for MsgAutoPilot_t:</div>
+Collaboration diagram for Corrector_t:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00202.png" border="0" usemap="#aMsgAutoPilot__t_coll__map" alt="Collaboration graph"/></div>
-<map name="aMsgAutoPilot__t_coll__map" id="aMsgAutoPilot__t_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,141,288"/>
+<div class="center"><img src="a00202.png" border="0" usemap="#aCorrector__t_coll__map" alt="Collaboration graph"/></div>
+<map name="aCorrector__t_coll__map" id="aCorrector__t_coll__map">
+<area shape="rect" title=" " alt="" coords="5,5,139,229"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa9da63ef3a82a0e1b9316264647e98ec"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#aa9da63ef3a82a0e1b9316264647e98ec">msgType</a></td></tr>
-<tr class="separator:aa9da63ef3a82a0e1b9316264647e98ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04c33497ca61d0639494b67ec47add0d"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a04c33497ca61d0639494b67ec47add0d">defaultCodes</a></td></tr>
-<tr class="separator:a04c33497ca61d0639494b67ec47add0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a07b49c6b02cfa9ca046e7f641663d0"><td class="memItemLeft" >union {</td></tr>
-<tr class="memitem:a7d55b4a1ef753a2f0f0cabfd47df825a"><td class="memItemLeft" >&#160;&#160;&#160;int32_t&#160;&#160;&#160;<a class="el" href="a00204.html#a1689bc61eb99bc65a01e441b5727579e">reqHeading</a></td></tr>
-<tr class="separator:a7d55b4a1ef753a2f0f0cabfd47df825a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1d4758f9a49bffa66a7707cafaf0205"><td class="memItemLeft" >&#160;&#160;&#160;int32_t&#160;&#160;&#160;<a class="el" href="a00204.html#a241f9bfefca58a31ba2acfef1070d68a">reqTurnAngle</a></td></tr>
-<tr class="separator:ac1d4758f9a49bffa66a7707cafaf0205"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab52eb3f6e3c2cd89b9c67988aec3ec1f"><td class="memItemLeft" >&#160;&#160;&#160;struct {</td></tr>
-<tr class="memitem:a19ca7e81296325962819097a942fdc33"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="a00204.html#a3001f4954e980a1aa2fd1a12673d9b00">heading</a></td></tr>
-<tr class="separator:a19ca7e81296325962819097a942fdc33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0426d734f2768f030b662e190acc758d"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="a00204.html#a4cb192dc5bab0f7427bba071e79735c7">roll</a></td></tr>
-<tr class="separator:a0426d734f2768f030b662e190acc758d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad522efbbca2aee5af5b128ddf641af96"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="a00204.html#aa66a3cfa5f0f5f8d3c2f13e99f47785f">pitch</a></td></tr>
-<tr class="separator:ad522efbbca2aee5af5b128ddf641af96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae582c6267632111efb890d87f7979b3"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="a00204.html#aa0d8553855fd0a7064bd75594cc7c69b">yawRate</a></td></tr>
-<tr class="separator:aae582c6267632111efb890d87f7979b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab52eb3f6e3c2cd89b9c67988aec3ec1f"><td class="memItemLeft" valign="top">&#160;&#160;&#160;}&#160;&#160;&#160;<a class="el" href="a00204.html#ac197dea867dbf24c3a53bb69a62d1fba">IMUData</a></td></tr>
-<tr class="separator:ab52eb3f6e3c2cd89b9c67988aec3ec1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff04dfa19b2894956ceb261c703e68c5"><td class="memItemLeft" >&#160;&#160;&#160;struct {</td></tr>
-<tr class="memitem:a9b114ee776543b113e0de429495b723c"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;unsigned&#160;&#160;&#160;<a class="el" href="a00204.html#a4d1254299dfad207aa82817e4136bc55">param_number</a></td></tr>
-<tr class="separator:a9b114ee776543b113e0de429495b723c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a907fb04e1a032b0935c99a75ee15b618"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="a00204.html#a51b23153c7fb54030bfa6aa40177f80d">param_value</a></td></tr>
-<tr class="separator:a907fb04e1a032b0935c99a75ee15b618"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff04dfa19b2894956ceb261c703e68c5"><td class="memItemLeft" valign="top">&#160;&#160;&#160;}&#160;&#160;&#160;<a class="el" href="a00204.html#a009f0acfe098ba2b41a771fdbd954431">coefficient</a></td></tr>
-<tr class="separator:aff04dfa19b2894956ceb261c703e68c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a674d38ce3b0aba2b87e04ca1e7007d7f"><td class="memItemLeft" >&#160;&#160;&#160;struct {</td></tr>
-<tr class="memitem:ab3b298105520814b3aa5a529c598e217"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;float&#160;&#160;&#160;<a class="el" href="a00204.html#a57288444a23e8841868bc78e6411cbd8">effort</a></td></tr>
-<tr class="separator:ab3b298105520814b3aa5a529c598e217"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a674d38ce3b0aba2b87e04ca1e7007d7f"><td class="memItemLeft" valign="top">&#160;&#160;&#160;}&#160;&#160;&#160;<a class="el" href="a00204.html#a562248da6462ef2fa05a5aa5fb9ad123">moveReport</a></td></tr>
-<tr class="separator:a674d38ce3b0aba2b87e04ca1e7007d7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a07b49c6b02cfa9ca046e7f641663d0"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a0a07b49c6b02cfa9ca046e7f641663d0">data</a></td></tr>
-<tr class="separator:a0a07b49c6b02cfa9ca046e7f641663d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf7cac7095994ae8326d68fb972576c2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#abf7cac7095994ae8326d68fb972576c2">accCorrOffsetx</a></td></tr>
+<tr class="separator:abf7cac7095994ae8326d68fb972576c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa65b3aefc3707d8ce06769694f586d4c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#aa65b3aefc3707d8ce06769694f586d4c">accCorrOffsety</a></td></tr>
+<tr class="separator:aa65b3aefc3707d8ce06769694f586d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c09d9a5dce607fd39433a37a375b3b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#aa9c09d9a5dce607fd39433a37a375b3b">accCorrOffsetz</a></td></tr>
+<tr class="separator:aa9c09d9a5dce607fd39433a37a375b3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8b56333b856ca748580f790535cab4f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#ab8b56333b856ca748580f790535cab4f">accCorrGainx</a></td></tr>
+<tr class="separator:ab8b56333b856ca748580f790535cab4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cc084dd12cd0054f7d173e48d551a82"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a0cc084dd12cd0054f7d173e48d551a82">accCorrGainy</a></td></tr>
+<tr class="separator:a0cc084dd12cd0054f7d173e48d551a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbc53e9c031105770f8b5d2ff4ecd78e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#afbc53e9c031105770f8b5d2ff4ecd78e">accCorrGainz</a></td></tr>
+<tr class="separator:afbc53e9c031105770f8b5d2ff4ecd78e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac16222a93013feec19439c96d5c35581"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#ac16222a93013feec19439c96d5c35581">gyrCorrOffsetx</a></td></tr>
+<tr class="separator:ac16222a93013feec19439c96d5c35581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67d1a4940fe2b69f6c45c2e56be35637"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a67d1a4940fe2b69f6c45c2e56be35637">gyrCorrOffsety</a></td></tr>
+<tr class="separator:a67d1a4940fe2b69f6c45c2e56be35637"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad18a757a4fb42a8c3b7c4f465af6de25"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#ad18a757a4fb42a8c3b7c4f465af6de25">gyrCorrOffsetz</a></td></tr>
+<tr class="separator:ad18a757a4fb42a8c3b7c4f465af6de25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a5992d5d67d4ffb35c0c8234906d8ce"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a1a5992d5d67d4ffb35c0c8234906d8ce">gyrCorrGainx</a></td></tr>
+<tr class="separator:a1a5992d5d67d4ffb35c0c8234906d8ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae60c1aa9982d749b2152704900fe5632"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#ae60c1aa9982d749b2152704900fe5632">gyrCorrGainy</a></td></tr>
+<tr class="separator:ae60c1aa9982d749b2152704900fe5632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a376c3a08cd2a36b0b386ff995939dcf2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a376c3a08cd2a36b0b386ff995939dcf2">gyrCorrGainz</a></td></tr>
+<tr class="separator:a376c3a08cd2a36b0b386ff995939dcf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa81f021af906ee307eed3976a4e94b14"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#aa81f021af906ee307eed3976a4e94b14">magCorrOffsetx</a></td></tr>
+<tr class="separator:aa81f021af906ee307eed3976a4e94b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9f5fed0b1f030ec93989cc17759edb2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#ac9f5fed0b1f030ec93989cc17759edb2">magCorrOffsety</a></td></tr>
+<tr class="separator:ac9f5fed0b1f030ec93989cc17759edb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86994d97b6de22d4c2cc8b9b97a13a21"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a86994d97b6de22d4c2cc8b9b97a13a21">magCorrOffsetz</a></td></tr>
+<tr class="separator:a86994d97b6de22d4c2cc8b9b97a13a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ad919f8e6e0352102da502fba50c5a3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a2ad919f8e6e0352102da502fba50c5a3">magCorrGainx</a></td></tr>
+<tr class="separator:a2ad919f8e6e0352102da502fba50c5a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af33d06fec1bf99e0b605c006fa57da6c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#af33d06fec1bf99e0b605c006fa57da6c">magCorrGainy</a></td></tr>
+<tr class="separator:af33d06fec1bf99e0b605c006fa57da6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a897da122fb364350e3f6d173c8b048e5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00204.html#a897da122fb364350e3f6d173c8b048e5">magCorrGainz</a></td></tr>
+<tr class="separator:a897da122fb364350e3f6d173c8b048e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a009f0acfe098ba2b41a771fdbd954431" name="a009f0acfe098ba2b41a771fdbd954431"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a009f0acfe098ba2b41a771fdbd954431">&#9670;&nbsp;</a></span></h2>
+<a id="ab8b56333b856ca748580f790535cab4f" name="ab8b56333b856ca748580f790535cab4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8b56333b856ca748580f790535cab4f">&#9670;&nbsp;</a></span>accCorrGainx</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct  { ... }  MsgAutoPilot_t::coefficient</td>
+          <td class="memname">float Corrector_t::accCorrGainx</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a0a07b49c6b02cfa9ca046e7f641663d0" name="a0a07b49c6b02cfa9ca046e7f641663d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a07b49c6b02cfa9ca046e7f641663d0">&#9670;&nbsp;</a></span></h2>
+<a id="a0cc084dd12cd0054f7d173e48d551a82" name="a0cc084dd12cd0054f7d173e48d551a82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cc084dd12cd0054f7d173e48d551a82">&#9670;&nbsp;</a></span>accCorrGainy</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">union  { ... }  MsgAutoPilot_t::data</td>
+          <td class="memname">float Corrector_t::accCorrGainy</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a04c33497ca61d0639494b67ec47add0d" name="a04c33497ca61d0639494b67ec47add0d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04c33497ca61d0639494b67ec47add0d">&#9670;&nbsp;</a></span>defaultCodes</h2>
+<a id="afbc53e9c031105770f8b5d2ff4ecd78e" name="afbc53e9c031105770f8b5d2ff4ecd78e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbc53e9c031105770f8b5d2ff4ecd78e">&#9670;&nbsp;</a></span>accCorrGainz</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t MsgAutoPilot_t::defaultCodes</td>
+          <td class="memname">float Corrector_t::accCorrGainz</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a57288444a23e8841868bc78e6411cbd8" name="a57288444a23e8841868bc78e6411cbd8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57288444a23e8841868bc78e6411cbd8">&#9670;&nbsp;</a></span>effort</h2>
+<a id="abf7cac7095994ae8326d68fb972576c2" name="abf7cac7095994ae8326d68fb972576c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf7cac7095994ae8326d68fb972576c2">&#9670;&nbsp;</a></span>accCorrOffsetx</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float MsgAutoPilot_t::effort</td>
+          <td class="memname">float Corrector_t::accCorrOffsetx</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a3001f4954e980a1aa2fd1a12673d9b00" name="a3001f4954e980a1aa2fd1a12673d9b00"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3001f4954e980a1aa2fd1a12673d9b00">&#9670;&nbsp;</a></span>heading</h2>
+<a id="aa65b3aefc3707d8ce06769694f586d4c" name="aa65b3aefc3707d8ce06769694f586d4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa65b3aefc3707d8ce06769694f586d4c">&#9670;&nbsp;</a></span>accCorrOffsety</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float MsgAutoPilot_t::heading</td>
+          <td class="memname">float Corrector_t::accCorrOffsety</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ac197dea867dbf24c3a53bb69a62d1fba" name="ac197dea867dbf24c3a53bb69a62d1fba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac197dea867dbf24c3a53bb69a62d1fba">&#9670;&nbsp;</a></span></h2>
+<a id="aa9c09d9a5dce607fd39433a37a375b3b" name="aa9c09d9a5dce607fd39433a37a375b3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9c09d9a5dce607fd39433a37a375b3b">&#9670;&nbsp;</a></span>accCorrOffsetz</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct  { ... }  MsgAutoPilot_t::IMUData</td>
+          <td class="memname">float Corrector_t::accCorrOffsetz</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a562248da6462ef2fa05a5aa5fb9ad123" name="a562248da6462ef2fa05a5aa5fb9ad123"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a562248da6462ef2fa05a5aa5fb9ad123">&#9670;&nbsp;</a></span></h2>
+<a id="a1a5992d5d67d4ffb35c0c8234906d8ce" name="a1a5992d5d67d4ffb35c0c8234906d8ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a5992d5d67d4ffb35c0c8234906d8ce">&#9670;&nbsp;</a></span>gyrCorrGainx</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct  { ... }  MsgAutoPilot_t::moveReport</td>
+          <td class="memname">float Corrector_t::gyrCorrGainx</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aa9da63ef3a82a0e1b9316264647e98ec" name="aa9da63ef3a82a0e1b9316264647e98ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9da63ef3a82a0e1b9316264647e98ec">&#9670;&nbsp;</a></span>msgType</h2>
+<a id="ae60c1aa9982d749b2152704900fe5632" name="ae60c1aa9982d749b2152704900fe5632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae60c1aa9982d749b2152704900fe5632">&#9670;&nbsp;</a></span>gyrCorrGainy</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t MsgAutoPilot_t::msgType</td>
+          <td class="memname">float Corrector_t::gyrCorrGainy</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a4d1254299dfad207aa82817e4136bc55" name="a4d1254299dfad207aa82817e4136bc55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d1254299dfad207aa82817e4136bc55">&#9670;&nbsp;</a></span>param_number</h2>
+<a id="a376c3a08cd2a36b0b386ff995939dcf2" name="a376c3a08cd2a36b0b386ff995939dcf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a376c3a08cd2a36b0b386ff995939dcf2">&#9670;&nbsp;</a></span>gyrCorrGainz</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned MsgAutoPilot_t::param_number</td>
+          <td class="memname">float Corrector_t::gyrCorrGainz</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a51b23153c7fb54030bfa6aa40177f80d" name="a51b23153c7fb54030bfa6aa40177f80d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51b23153c7fb54030bfa6aa40177f80d">&#9670;&nbsp;</a></span>param_value</h2>
+<a id="ac16222a93013feec19439c96d5c35581" name="ac16222a93013feec19439c96d5c35581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac16222a93013feec19439c96d5c35581">&#9670;&nbsp;</a></span>gyrCorrOffsetx</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float MsgAutoPilot_t::param_value</td>
+          <td class="memname">float Corrector_t::gyrCorrOffsetx</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aa66a3cfa5f0f5f8d3c2f13e99f47785f" name="aa66a3cfa5f0f5f8d3c2f13e99f47785f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa66a3cfa5f0f5f8d3c2f13e99f47785f">&#9670;&nbsp;</a></span>pitch</h2>
+<a id="a67d1a4940fe2b69f6c45c2e56be35637" name="a67d1a4940fe2b69f6c45c2e56be35637"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67d1a4940fe2b69f6c45c2e56be35637">&#9670;&nbsp;</a></span>gyrCorrOffsety</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float MsgAutoPilot_t::pitch</td>
+          <td class="memname">float Corrector_t::gyrCorrOffsety</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a1689bc61eb99bc65a01e441b5727579e" name="a1689bc61eb99bc65a01e441b5727579e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1689bc61eb99bc65a01e441b5727579e">&#9670;&nbsp;</a></span>reqHeading</h2>
+<a id="ad18a757a4fb42a8c3b7c4f465af6de25" name="ad18a757a4fb42a8c3b7c4f465af6de25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad18a757a4fb42a8c3b7c4f465af6de25">&#9670;&nbsp;</a></span>gyrCorrOffsetz</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t MsgAutoPilot_t::reqHeading</td>
+          <td class="memname">float Corrector_t::gyrCorrOffsetz</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a241f9bfefca58a31ba2acfef1070d68a" name="a241f9bfefca58a31ba2acfef1070d68a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a241f9bfefca58a31ba2acfef1070d68a">&#9670;&nbsp;</a></span>reqTurnAngle</h2>
+<a id="a2ad919f8e6e0352102da502fba50c5a3" name="a2ad919f8e6e0352102da502fba50c5a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ad919f8e6e0352102da502fba50c5a3">&#9670;&nbsp;</a></span>magCorrGainx</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int32_t MsgAutoPilot_t::reqTurnAngle</td>
+          <td class="memname">float Corrector_t::magCorrGainx</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a4cb192dc5bab0f7427bba071e79735c7" name="a4cb192dc5bab0f7427bba071e79735c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cb192dc5bab0f7427bba071e79735c7">&#9670;&nbsp;</a></span>roll</h2>
+<a id="af33d06fec1bf99e0b605c006fa57da6c" name="af33d06fec1bf99e0b605c006fa57da6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af33d06fec1bf99e0b605c006fa57da6c">&#9670;&nbsp;</a></span>magCorrGainy</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float MsgAutoPilot_t::roll</td>
+          <td class="memname">float Corrector_t::magCorrGainy</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aa0d8553855fd0a7064bd75594cc7c69b" name="aa0d8553855fd0a7064bd75594cc7c69b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0d8553855fd0a7064bd75594cc7c69b">&#9670;&nbsp;</a></span>yawRate</h2>
+<a id="a897da122fb364350e3f6d173c8b048e5" name="a897da122fb364350e3f6d173c8b048e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a897da122fb364350e3f6d173c8b048e5">&#9670;&nbsp;</a></span>magCorrGainz</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float MsgAutoPilot_t::yawRate</td>
+          <td class="memname">float Corrector_t::magCorrGainz</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa81f021af906ee307eed3976a4e94b14" name="aa81f021af906ee307eed3976a4e94b14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa81f021af906ee307eed3976a4e94b14">&#9670;&nbsp;</a></span>magCorrOffsetx</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Corrector_t::magCorrOffsetx</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac9f5fed0b1f030ec93989cc17759edb2" name="ac9f5fed0b1f030ec93989cc17759edb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9f5fed0b1f030ec93989cc17759edb2">&#9670;&nbsp;</a></span>magCorrOffsety</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Corrector_t::magCorrOffsety</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a86994d97b6de22d4c2cc8b9b97a13a21" name="a86994d97b6de22d4c2cc8b9b97a13a21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86994d97b6de22d4c2cc8b9b97a13a21">&#9670;&nbsp;</a></span>magCorrOffsetz</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Corrector_t::magCorrOffsetz</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -329,7 +373,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li><a class="el" href="a00098_source.html">autopilot.h</a></li>
+<li><a class="el" href="a00119_source.html">calib.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -1,12 +1,9 @@
 var searchData=
 [
-  ['vcurrent_0',['vCurrent',['../a00158.html#a8462fccee14a00c94ce3b9a93f802974',1,'MotorData']]],
-  ['vcurrentblocked_1',['vcurrentBlocked',['../a00158.html#a3103118fd58d41bf943cf11a88cf1051',1,'MotorData']]],
-  ['vcurrentfree_2',['vcurrentFree',['../a00158.html#a20751d90ea2be1676238e0d5f9d680be',1,'MotorData']]],
-  ['vcurrentnone_3',['vcurrentNone',['../a00158.html#a8eef2408154cd73f063af2c9f37961f4',1,'MotorData']]],
-  ['vector3f_5fnull_4',['Vector3f_null',['../a00020.html#a0992d31d9822b3ea4309429afcc9b35e',1,'Vector3f_null():&#160;geom.c'],['../a00119.html#a0992d31d9822b3ea4309429afcc9b35e',1,'Vector3f_null():&#160;geom.c']]],
-  ['vpower_5',['vPower',['../a00158.html#a73bad1446ea526822ecbaafb929b2363',1,'MotorData']]],
-  ['vpowermax_6',['vPowerMax',['../a00158.html#aa20575a659c434932ffa86addbc28365',1,'MotorData']]],
-  ['vpowermin_7',['vPowerMin',['../a00158.html#a8f53090494d8bce9d59b1d814634fb0b',1,'MotorData']]],
-  ['vpowerstandard_8',['vPowerStandard',['../a00158.html#aa1dccf2dc1ba216023d43351171a3509',1,'MotorData']]]
+  ['v_5fpower_5fstandard_0',['v_power_standard',['../a00168.html#a3befe51696a58b4b2ae93fc7d33fb1a9',1,'Motor_t']]],
+  ['value_1',['value',['../a00336.html#a08094662e6bfc37829deb1cba7e0fab1',1,'Argument']]],
+  ['vcurrent_5ffree_2',['vcurrent_free',['../a00168.html#a49e1d6015562c5fb8b26b162fcf6514e',1,'Motor_t']]],
+  ['vcurrent_5fstalled_3',['vcurrent_stalled',['../a00168.html#aa70d1a64e5f4cb825c2695aaa933f5f0',1,'Motor_t']]],
+  ['vector3f_5fnull_4',['Vector3f_null',['../a00020.html#a0992d31d9822b3ea4309429afcc9b35e',1,'Vector3f_null():&#160;geom.c'],['../a00122.html#a0992d31d9822b3ea4309429afcc9b35e',1,'Vector3f_null():&#160;geom.c']]],
+  ['vpower_5',['vPower',['../a00059.html#a40928753b464c4ceb7f2ac751ea69f23',1,'motor.c']]]
 ];

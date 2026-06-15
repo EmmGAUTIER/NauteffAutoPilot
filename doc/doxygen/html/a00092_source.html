@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: mahonyAHRS.h Source File</title>
+<title>Nauteff auto pilot: ahrssimple.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,49 +67,99 @@ $(function() {
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">mahonyAHRS.h</div></div>
+  <div class="headertitle"><div class="title">ahrssimple.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="a00092.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//=====================================================================================================</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// MahonyAHRS.h</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//=====================================================================================================</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">// Madgwick&#39;s implementation of Mayhony&#39;s AHRS algorithm.</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">// See: http://www.x-io.co.uk/node/8#open_source_ahrs_and_imu_algorithms</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">//</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">// Date         Author          Notes</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">// 29/09/2011   SOH Madgwick    Initial release</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">// 02/10/2011   SOH Madgwick    Optimised for reduced CPU load</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">//</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">//=====================================================================================================</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#ifndef MahonyAHRS_h</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#define MahonyAHRS_h</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">//----------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">// Variable declaration</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">extern</span> <span class="keyword">volatile</span> <span class="keywordtype">float</span> <a class="code hl_variable" href="a00092.html#a5d4cb34a0e2873680d073344c310292f">twoKp</a>;            <span class="comment">// 2 * proportional gain (Kp)</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">extern</span> <span class="keyword">volatile</span> <span class="keywordtype">float</span> <a class="code hl_variable" href="a00092.html#aa8780c8514d23cbd96d12e667699012a">twoKi</a>;            <span class="comment">// 2 * integral gain (Ki)</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="a00092.html#acd45017c63b41aaf3f17f8c2c02e3ac6">   21</a></span><span class="keyword">extern</span> <span class="keyword">volatile</span> <span class="keywordtype">float</span> <a class="code hl_variable" href="a00092.html#a431ba957897d0ee4cb2a4782020b2c0a">q0</a>, <a class="code hl_variable" href="a00092.html#acd45017c63b41aaf3f17f8c2c02e3ac6">q1</a>, <a class="code hl_variable" href="a00092.html#aadea61ec94d632a66f00f0968a5b366a">q2</a>, <a class="code hl_variable" href="a00092.html#af3d630a4c75b875fb26bcb0812cfd22e">q3</a>;   <span class="comment">// quaternion of sensor frame relative to auxiliary frame</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">//---------------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// Function declarations</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="a00092.html#a474f7f80603efc65a243b5cf8076cc49">   26</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00092.html#a474f7f80603efc65a243b5cf8076cc49">MahonyAHRSupdate</a>(<span class="keywordtype">float</span> gx, <span class="keywordtype">float</span> gy, <span class="keywordtype">float</span> gz, <span class="keywordtype">float</span> ax, <span class="keywordtype">float</span> ay, <span class="keywordtype">float</span> az, <span class="keywordtype">float</span> mx, <span class="keywordtype">float</span> my, <span class="keywordtype">float</span> mz, <span class="keywordtype">float</span> deltat);</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="a00092.html#aa05d571081fc35e1014a15b3d9e7d616">   27</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00092.html#aa05d571081fc35e1014a15b3d9e7d616">MahonyAHRSupdateIMU</a>(<span class="keywordtype">float</span> gx, <span class="keywordtype">float</span> gy, <span class="keywordtype">float</span> gz, <span class="keywordtype">float</span> ax, <span class="keywordtype">float</span> ay, <span class="keywordtype">float</span> az, <span class="keywordtype">float</span> deltat);</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">//=====================================================================================================</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">// End of file</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">//=====================================================================================================</span></div>
-<div class="ttc" id="aa00092_html_a431ba957897d0ee4cb2a4782020b2c0a"><div class="ttname"><a href="a00092.html#a431ba957897d0ee4cb2a4782020b2c0a">q0</a></div><div class="ttdeci">volatile float q0</div><div class="ttdef"><b>Definition:</b> madgwickAHRS.c:32</div></div>
-<div class="ttc" id="aa00092_html_a474f7f80603efc65a243b5cf8076cc49"><div class="ttname"><a href="a00092.html#a474f7f80603efc65a243b5cf8076cc49">MahonyAHRSupdate</a></div><div class="ttdeci">void MahonyAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float deltat)</div></div>
-<div class="ttc" id="aa00092_html_a5d4cb34a0e2873680d073344c310292f"><div class="ttname"><a href="a00092.html#a5d4cb34a0e2873680d073344c310292f">twoKp</a></div><div class="ttdeci">volatile float twoKp</div></div>
-<div class="ttc" id="aa00092_html_aa05d571081fc35e1014a15b3d9e7d616"><div class="ttname"><a href="a00092.html#aa05d571081fc35e1014a15b3d9e7d616">MahonyAHRSupdateIMU</a></div><div class="ttdeci">void MahonyAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az, float deltat)</div></div>
-<div class="ttc" id="aa00092_html_aa8780c8514d23cbd96d12e667699012a"><div class="ttname"><a href="a00092.html#aa8780c8514d23cbd96d12e667699012a">twoKi</a></div><div class="ttdeci">volatile float twoKi</div></div>
-<div class="ttc" id="aa00092_html_aadea61ec94d632a66f00f0968a5b366a"><div class="ttname"><a href="a00092.html#aadea61ec94d632a66f00f0968a5b366a">q2</a></div><div class="ttdeci">volatile float q2</div><div class="ttdef"><b>Definition:</b> mahonyAHRS.h:21</div></div>
-<div class="ttc" id="aa00092_html_acd45017c63b41aaf3f17f8c2c02e3ac6"><div class="ttname"><a href="a00092.html#acd45017c63b41aaf3f17f8c2c02e3ac6">q1</a></div><div class="ttdeci">volatile float q1</div><div class="ttdef"><b>Definition:</b> mahonyAHRS.h:21</div></div>
-<div class="ttc" id="aa00092_html_af3d630a4c75b875fb26bcb0812cfd22e"><div class="ttname"><a href="a00092.html#af3d630a4c75b875fb26bcb0812cfd22e">q3</a></div><div class="ttdeci">volatile float q3</div><div class="ttdef"><b>Definition:</b> mahonyAHRS.h:21</div></div>
+<a href="a00092.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#ifndef AHRSSIMPLE_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#define AHRSSIMPLE_H</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">/* Réglages du calul */</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno"><a class="line" href="a00092.html#afccbdbd7bcb7f5f6a39bdfe4ead05dbd">    7</a></span><span class="preprocessor">#define MEMS_INIT_MAG_VS_GYRO 0.1F </span><span class="comment">/* Répartition de partie du compas et dy gyromètre pour le cap */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_struct" href="a00196.html">AHRS_Interface_t</a> <a class="code hl_variable" href="a00092.html#ab9a4345c9677baa7755142c7f3c456e1">AHRS_Simple_Interface</a>;</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"> * @brief Initialise the AHRS_Simple_status_t structure.</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> * @param mstatus Pointer to the AHRS_Simple_status_t structure to initialize.</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"> * return None.</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keywordtype">void</span> <a class="code hl_function" href="a00092.html#a965d6ed904e7367d81ef3ad4eab53b0a">AHRS_Simple_init</a>(<a class="code hl_struct" href="a00192.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * @brief Compute new orientation whith mems values</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> * @parameter mstatus pointer to AHRS structure to update</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * @parameter acc pointer to accelerometer data</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * @parameter gyr pointer to gyroscope data</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * @parameter mag pointer to magnetometer data</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * @parameter deltat time elapsed since last update in seconds</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * @return 1</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keywordtype">int</span> <a class="code hl_function" href="a00092.html#aa7ea64af1dac32b3af3a4a898b940824">AHRS_Simple_update</a>(<a class="code hl_struct" href="a00192.html">AHRS_Status_t</a> *mstatus,</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                       <a class="code hl_struct" href="a00208.html">Vector3f</a> *acc,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                       <a class="code hl_struct" href="a00208.html">Vector3f</a> *gyr,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                       <a class="code hl_struct" href="a00208.html">Vector3f</a> *mag,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                       <span class="keywordtype">float</span> deltat);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"> * @brief Get the roll angle from the AHRS status.</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> * @return The roll angle in radians.</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00092.html#a99e255d454934a950557acb0d7c5ff8b">AHRS_Simple_get_roll</a>(<a class="code hl_struct" href="a00192.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"> * @brief Get the pitch angle from the AHRS status.</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> * @return The pitch angle in radians.</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00092.html#abdb7694e72ef0086cffbd2f42cbf5597">AHRS_Simple_get_pitch</a>(<a class="code hl_struct" href="a00192.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * @brief Get the heading angle from the AHRS status.</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00092.html#a8530b51082df899680f1127779b4e4a9">AHRS_Simple_get_heading</a>(<a class="code hl_struct" href="a00192.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * @brief Get the yawrate from the AHRS status.</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * yawrate is the rotation speed around z axis, in rad/s</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keywordtype">float</span> <a class="code hl_function" href="a00092.html#a6e975d6ad3a26580e61d3d82e15bf894">AHRS_Simple_get_yawRate</a>(<a class="code hl_struct" href="a00192.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * @brief Set the proportion of magnetometer vs gyroscope for heading estimation.</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> * prop is a value between 0 and 1, where 0 means only gyroscope is used and 1 means only magnetometer is used.</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"> * @return The heading angle in radians.</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="keywordtype">void</span> <a class="code hl_function" href="a00092.html#a14e5707d7d94f27f87354e5be35a7d9a">AHRS_Simple_set_mag_vs_gyr_prop</a>(<a class="code hl_struct" href="a00192.html">AHRS_Status_t</a> *mstatus, <span class="keywordtype">float</span> prop);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * @brief Get the quaternion of orientatoin from the AHRS status.</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * @param mstatus Pointer to the AHRS_Status_t structure</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * @return The quaternion of orientation.</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><a class="code hl_struct" href="a00240.html">Quaternionf</a> <a class="code hl_function" href="a00092.html#a910f320ae550028afb4e69f3a1fce74c">AHRS_Simple_get_Quaternion</a>(<a class="code hl_struct" href="a00192.html">AHRS_Status_t</a> *mstatus);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">#endif </span><span class="comment">/* AHRSSIMPLE_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aa00092_html_a14e5707d7d94f27f87354e5be35a7d9a"><div class="ttname"><a href="a00092.html#a14e5707d7d94f27f87354e5be35a7d9a">AHRS_Simple_set_mag_vs_gyr_prop</a></div><div class="ttdeci">void AHRS_Simple_set_mag_vs_gyr_prop(AHRS_Status_t *mstatus, float prop)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:67</div></div>
+<div class="ttc" id="aa00092_html_a6e975d6ad3a26580e61d3d82e15bf894"><div class="ttname"><a href="a00092.html#a6e975d6ad3a26580e61d3d82e15bf894">AHRS_Simple_get_yawRate</a></div><div class="ttdeci">float AHRS_Simple_get_yawRate(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:62</div></div>
+<div class="ttc" id="aa00092_html_a8530b51082df899680f1127779b4e4a9"><div class="ttname"><a href="a00092.html#a8530b51082df899680f1127779b4e4a9">AHRS_Simple_get_heading</a></div><div class="ttdeci">float AHRS_Simple_get_heading(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:57</div></div>
+<div class="ttc" id="aa00092_html_a910f320ae550028afb4e69f3a1fce74c"><div class="ttname"><a href="a00092.html#a910f320ae550028afb4e69f3a1fce74c">AHRS_Simple_get_Quaternion</a></div><div class="ttdeci">Quaternionf AHRS_Simple_get_Quaternion(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:74</div></div>
+<div class="ttc" id="aa00092_html_a965d6ed904e7367d81ef3ad4eab53b0a"><div class="ttname"><a href="a00092.html#a965d6ed904e7367d81ef3ad4eab53b0a">AHRS_Simple_init</a></div><div class="ttdeci">void AHRS_Simple_init(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:33</div></div>
+<div class="ttc" id="aa00092_html_a99e255d454934a950557acb0d7c5ff8b"><div class="ttname"><a href="a00092.html#a99e255d454934a950557acb0d7c5ff8b">AHRS_Simple_get_roll</a></div><div class="ttdeci">float AHRS_Simple_get_roll(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:47</div></div>
+<div class="ttc" id="aa00092_html_aa7ea64af1dac32b3af3a4a898b940824"><div class="ttname"><a href="a00092.html#aa7ea64af1dac32b3af3a4a898b940824">AHRS_Simple_update</a></div><div class="ttdeci">int AHRS_Simple_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr, Vector3f *mag, float deltat)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:91</div></div>
+<div class="ttc" id="aa00092_html_ab9a4345c9677baa7755142c7f3c456e1"><div class="ttname"><a href="a00092.html#ab9a4345c9677baa7755142c7f3c456e1">AHRS_Simple_Interface</a></div><div class="ttdeci">const AHRS_Interface_t AHRS_Simple_Interface</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:20</div></div>
+<div class="ttc" id="aa00092_html_abdb7694e72ef0086cffbd2f42cbf5597"><div class="ttname"><a href="a00092.html#abdb7694e72ef0086cffbd2f42cbf5597">AHRS_Simple_get_pitch</a></div><div class="ttdeci">float AHRS_Simple_get_pitch(AHRS_Status_t *mstatus)</div><div class="ttdef"><b>Definition:</b> ahrssimple.c:52</div></div>
+<div class="ttc" id="aa00192_html"><div class="ttname"><a href="a00192.html">AHRS_Status_t</a></div><div class="ttdef"><b>Definition:</b> ahrs.h:23</div></div>
+<div class="ttc" id="aa00196_html"><div class="ttname"><a href="a00196.html">AHRS_Interface_t</a></div><div class="ttdef"><b>Definition:</b> ahrs.h:36</div></div>
+<div class="ttc" id="aa00208_html"><div class="ttname"><a href="a00208.html">Vector3f</a></div><div class="ttdoc">Structure representing a 3D vector with float components.</div><div class="ttdef"><b>Definition:</b> geom.h:55</div></div>
+<div class="ttc" id="aa00240_html"><div class="ttname"><a href="a00240.html">Quaternionf</a></div><div class="ttdoc">Structure representing a quaternion with float components.</div><div class="ttdef"><b>Definition:</b> quat.h:57</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -151,6 +151,7 @@ static const TokenEntry tokenTable[] =
     { "set", TOKEN_SET },
     { "simple", TOKEN_SIMPLE },
     { "starboard", TOKEN_STARBOARD },
+    { "status", TOKEN_STATUS },
     { "test", TOKEN_TEST },
     { "turn", TOKEN_TURN },
     { "wind", TOKEN_WIND },
@@ -404,7 +405,7 @@ void parse_command_line(void)
     //char nbcar;
     MsgAutoPilot_t msgAutoPilot;
     MEMS_Msg_t msgMEMs;
-    Motor_msg_t msgMotor;
+    //Motor_msg_t msgMotor;
 
     for(int i = 0; i < MAX_TOKENS; i++)
     {
@@ -618,7 +619,7 @@ void parse_command_line(void)
 
             break;
 
-        case TOKEN_HWMS: /* High Water MarkS : display stack usage of each task */
+        case TOKEN_HWMS: /* High Water Marks : display stack usage of each task */
 
             /* task list is in taskHandles[] */
             for(int i = 0 ; i < tasksNumber ; i++)
@@ -628,8 +629,9 @@ void parse_command_line(void)
                 /* get task name and high water mark of task. */
                 UBaseType_t hwm = uxTaskGetStackHighWaterMark(tasksHandles[i]);
                 char* taskName = pcTaskGetName(tasksHandles[i]);
-                int nbcar = snprintf(message, sizeof(message), "TASK HWMS %d  %16s : %u bytes\n", i, taskName,
-                                     hwm * sizeof(StackType_t));
+                int nbcar = snprintf(message, sizeof(message),
+                                     "TASK HWMS %d  %16s : %u bytes\n",
+                                     i, taskName, hwm * sizeof(StackType_t));
                 svc_UART_Write(&svc_uart2, message, nbcar, 0U);
             }
 
@@ -641,10 +643,14 @@ void parse_command_line(void)
 
             case TOKEN_CONFIG: /* display motor config */
 
-                snprintf(message, sizeof(message) - 1, "Motor config ?\n");
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
-
                 Motor_msg_display_config();
+
+                break;
+
+            case TOKEN_STATUS: /* display motor status */
+
+                Motor_msg_display_status();
+
                 break;
 
             default:
@@ -725,8 +731,8 @@ void parse_command_line(void)
         break;
 
     case TOKEN_TEST:
-        
-        if (tokenTypes[1] == TOKEN_NUMBER)
+
+        if(tokenTypes[1] == TOKEN_NUMBER)
         {
             int test_number = (int)convert_number(tokens[1]);
             snprintf(message, sizeof(message), "DIALOG start test %d\n", test_number);

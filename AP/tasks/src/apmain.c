@@ -52,8 +52,8 @@ void apmain()
     Service_task_init();
     Blink_task_init();
     Test_task_init();
-    
-        
+
+
 
     /* Create tasks */
     ret &= xTaskCreate(Motor_task,     "Motor",      configMINIMAL_STACK_SIZE + 500, (void *)0, 3, tasksHandles + 0);

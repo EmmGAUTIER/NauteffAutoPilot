@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['printf_0',['printf',['../a00074.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9',1,'printf.h']]],
+  ['printf_0',['printf',['../a00077.html#a3cb9f0894fab1c8fbb0753c9c7c2a8d9',1,'printf.h']]],
   ['printf_5fdefault_5ffloat_5fprecision_1',['PRINTF_DEFAULT_FLOAT_PRECISION',['../a00008.html#ab6f8f053fe123435128cfcff1d407d75',1,'printf.c']]],
   ['printf_5fftoa_5fbuffer_5fsize_2',['PRINTF_FTOA_BUFFER_SIZE',['../a00008.html#af7aeb1c970d5c2bf5fada4eaca516a25',1,'printf.c']]],
   ['printf_5fmax_5ffloat_3',['PRINTF_MAX_FLOAT',['../a00008.html#a3efdab8617b9e4d7f01a570ce44e8d2d',1,'printf.c']]],

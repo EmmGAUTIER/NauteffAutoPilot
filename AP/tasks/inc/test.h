@@ -27,15 +27,18 @@ SOFTWARE.
 #include "task.h"
 #include "queue.h"
 
-typedef enum {
+typedef enum
+{
     TEST_MSG_TICK,
     TEST_MSG_START,
     TEST_MSG_STOP,
 } Test_msg_type_t;
 
-typedef struct {
+typedef struct
+{
     Test_msg_type_t msgType;
-    union {
+    union
+    {
         int test_number; /* number of test */
     } data;
 } Test_msg_t;
@@ -54,16 +57,19 @@ typedef void (*func_ptr_float_t)(float);
 typedef enum { ARG_NONE, ARG_INT, ARG_FLOAT } ArgType;
 
 // Structure pour un argument
-typedef struct {
+typedef struct
+{
     ArgType type;
-    union {
+    union
+    {
         int i;
         float f;
     } value;
 } Argument;
 
 // Structure pour un appel de fonction
-typedef struct {
+typedef struct
+{
     const char *name;       /* Function name or description */
     int delay;              /* Delay before calling the function, in milliseconds */
     void *func_ptr;         /* function pointer (cast to void*) */

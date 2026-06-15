@@ -55,6 +55,7 @@ typedef enum
     MOTOR_MSG_MOVE_TIME,
     MOTOR_MSG_MOVE_DONE,
     MOTOR_MSG_DISPLAY_CONFIG,
+    MOTOR_MSG_DISPLAY_STATUS,
     MOTOR_MSG_DEFAULT,
     MOTOR_MSG_SET_CVT_ANGLE_TIME,
     MOTOR_MSG_SET_HPF_COEF,
@@ -156,6 +157,15 @@ void Motor_msg_set_threshold(float cvt);
 void Motor_msg_display_config(void);
 
 /*
+ @brief Asks motor task to display motor status
+ Prints status bits and some values
+ @param none
+ @return none
+ */
+void Motor_msg_display_status(void);
+
+
+/*
  * @brief Stop motor in case pf panic.
  * This function stops the motor by resetting PA4, PA6 and PA7
  * which are connected to PWM, INA and INB of the motor driver.
@@ -163,7 +173,7 @@ void Motor_msg_display_config(void);
  * It is meant to be called by fault exceptions handlers.
  * It is INLINE in order to use no function call nor stack.
  */
-//INLINE void MOTOR_stopPanic(void)
+/* TODO test, make sure it is inlined, maybe use macro */
 __attribute__((always_inline)) inline void MOTOR_stopPanic(void)
 {
     /* Reset PWN, INA and INB */
