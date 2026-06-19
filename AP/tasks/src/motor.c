@@ -105,7 +105,8 @@ int idxadc = 0;
 #define MOTOR_CVT_ANGLE_TIME (3.2F)  /* Estimated conversion between time and helm move angle s/rad */
 #define MOTOR_TIME_START     (0.05F) /* Maximum time to allow over current when starting motor (s) */
 #define MOTOR_TIME_STOP      (0.2F)  /* Time to wait for motor to stop before opposite move order (s) */
-#define MOTOR_DELTA_DIR_GAIN (0.05F) /* Tiller move differs */
+#define MOTOR_DELTA_DIR_GAIN (0.05F) /* Tiller move difference part to add to estimated starborad move */
+/* and to substract to estimated port move*/
 
 #define MOTOR_V_CURRENT_NONE    (0.F)
 #define MOTOR_V_CURRENT_FREE    (.1F)
@@ -231,7 +232,7 @@ INLINE static void Motor_LL_runToStarboard(void)
         svc_UART_Write(&svc_uart2, "MOTOR LL run to starboard\n", 26, 0U));
 }
 
-/**
+/*
  * @brief Stop the motor
  * This function sets the GPIO pins to stop the motor.
  * It is called by taskMotor or ADC interrupt if overcurrent is detected.
@@ -239,7 +240,6 @@ INLINE static void Motor_LL_runToStarboard(void)
  * @param void
  * @return void
  */
-
 INLINE static void Motor_LL_stop(void)
 {
     /* Reset PWN, INA and INB */
@@ -248,7 +248,7 @@ INLINE static void Motor_LL_stop(void)
     DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL stop\n", 14, 0U));
 }
 
-/**
+/*
  * @brief Engage the actuator.
  * This function sets the GPIO pin to engage the actuator.
  * pin is connected to the motor driver
@@ -258,7 +258,6 @@ INLINE static void Motor_LL_stop(void)
  * @param void
  * @return void
  */
-
 INLINE static void Motor_LL_engage_actuator(void)
 {
     /* Stop motor if it was running */
@@ -269,13 +268,12 @@ INLINE static void Motor_LL_engage_actuator(void)
     DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL engage actuator\n", 25, 0U));
 }
 
-/**
+/*
  * @brief Disengage the actuator
  * This function sets the GPIO pin to disengage the actuator.
  * @param void
  * @return void
  */
-
 INLINE static void Motor_LL_disengage_actuator(void)
 {
     /* Reset Clutch (and LED), INA, INB and motor */
@@ -608,6 +606,8 @@ uint32_t Motor_new_values(Motor_t* motor,
                           float suply_voltage,
                           float motor_current)
 {
+    char message[100];
+
     uint32_t motor_event = 0U; /* Value to be returned, contains detected events */
 
     /***********************************************\
@@ -707,6 +707,9 @@ uint32_t Motor_new_values(Motor_t* motor,
         }
     }
 
+    /******************************************\
+    * If motor is moving for angle             *
+    \******************************************/
     if(motor->status & MOTOR_STATUS_ENGAGED)
     {
         float delta_angle; /* diff between helm (estimated) position and helm angle request */
@@ -733,7 +736,7 @@ uint32_t Motor_new_values(Motor_t* motor,
             /* First correction : */
             /* Motor turns more in one direction than in the other */
             /* so we apply delta gains */
-            if (angle_move > 0.F)
+            if(angle_move > 0.F)
             {
                 angle_move *= (1.F + motor->delta_dir_gain);
             }
@@ -745,15 +748,15 @@ uint32_t Motor_new_values(Motor_t* motor,
             /* second correction : */
             /* As we don't know the helm position and it deviates from estimated angle */
             /* we move slighter to 0 at each estimation with a hight pass filter */
-            if (angle_move * motor->helm_angle_estimated > 0.F)
+            if(angle_move * motor->helm_angle_estimated > 0.F)
             {
-                 angle_move *= (1 - motor->hpf_coeff);
+                angle_move *= (1 - motor->hpf_coeff);
             }
             else
             {
-                 angle_move *= (1 + motor->hpf_coeff);
+                angle_move *= (1 + motor->hpf_coeff);
             }
-            
+
             /* angle move is added to estimated angle */
             motor->helm_angle_estimated += angle_move;
             delta_angle = motor->helm_angle_requested - motor->helm_angle_estimated;
@@ -770,6 +773,9 @@ uint32_t Motor_new_values(Motor_t* motor,
                 motor_event |= MOTOR_EVENT_STOPPING;
 
                 DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR end moving angle\n", 23, 0U));
+                DBG_MOTOR_PRINT((
+                                    snprintf(message, sizeof(message), "MOTOR helm estimated angle %f\n", motor->helm_angle_estimated),
+                                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
             }
         }
         else
@@ -825,7 +831,9 @@ void Motor_move_time(Motor_t *motor, float time_to_move)
     int dirSignMoving; /* direction of actual move of motor*/
     int dirSignToMove; /* direction to move motor */
     bool ok_to_turn = false;
-    //bool already_moving = false;
+    char message[100];
+    snprintf(message, sizeof(message), "MOTOR move time %f\n", time_to_move);
+    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
 
     /* determine if running port : -1 or starboard +1 or idle : 0
      * When stalled one and only one of MOTOR_STATUS_DIR_STARBOARD and
@@ -926,7 +934,7 @@ void Motor_move_time(Motor_t *motor, float time_to_move)
 void Motor_set_helm_angle(Motor_t *motor, float angle)
 {
 
-    if (motor->status & MOTOR_STATUS_ENGAGED)
+    if(motor->status & MOTOR_STATUS_ENGAGED)
     {
         motor->helm_angle_requested = angle;
     }
@@ -1012,9 +1020,11 @@ int Motor_task_init()
 }
 
 /**
- * @brief Motor control task
+ * @brief Motor control function task
  *
- *
+ * @param ignored
+ * Function task that control the motor.
+ * @return mustn't return
  */
 
 void Motor_task(void *parameters)

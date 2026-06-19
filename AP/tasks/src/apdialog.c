@@ -467,8 +467,13 @@ void parse_command_line(void)
         {
             int angle = convert_number(tokens[2]);
             msgAutoPilot.msgType = AP_MSG_TURN;
-            msgAutoPilot.data.reqTurnAngle = ((tokenTypes[1] == TOKEN_PORT) ? -angle : angle)  * (M_PI / 180.F);
+            msgAutoPilot.data.reqTurnAngle = ((tokenTypes[1] == TOKEN_PORT) ? -angle : angle);
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
+
+            //int angle = convert_number(tokens[2]);
+            //msgAutoPilot.msgType = AP_MSG_TURN;
+            //msgAutoPilot.data.reqTurnAngle = ((tokenTypes[1] == TOKEN_PORT) ? -angle : angle)  * (M_PI / 180.F);
+            //xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
         }
         else
         {
