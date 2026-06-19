@@ -80,13 +80,17 @@ typedef enum
     TOKEN_UNKNOWN = 0, /* Unrecognized token */
     TOKEN_AP,
     TOKEN_AHRS,
+    TOKEN_ANGLE,
     TOKEN_CALIBRATE,
     TOKEN_CONFIG,
+    TOKEN_DISENGAGE,
     TOKEN_DISPLAY,
     TOKEN_DT0058,
+    TOKEN_ENGAGE,
     TOKEN_EOL, /* End-of-line marker */
     TOKEN_GPS,
     TOKEN_HEADING,
+    TOKEN_HELM,
     TOKEN_HWMS, /* High Water Marks, stack usage measure */
     TOKEN_IDLE,
     TOKEN_KD,
@@ -97,6 +101,7 @@ typedef enum
     TOKEN_MODE,
     TOKEN_MOTOR,
     TOKEN_MOTOR_CVT_ANGLE_TIME,
+    TOKEN_MOTOR_DELTA_DIR_GAIN,
     TOKEN_MOTOR_HPF_COEFF,
     TOKEN_MOTOR_THRESHOLD,
     TOKEN_NUMBER, /* Represents a number token (with optional sign) */
@@ -125,37 +130,42 @@ typedef struct
 /* Table of known keywords */
 static const TokenEntry tokenTable[] =
 {
-    { "calibrate", TOKEN_CALIBRATE },
-    { "AP", TOKEN_AP },
-    { "AHRS", TOKEN_AHRS },
-    { "config", TOKEN_CONFIG },
-    { "display", TOKEN_DISPLAY },
-    { "DT0058", TOKEN_DT0058 },
-    { "GPS", TOKEN_GPS },
-    { "heading", TOKEN_HEADING },
-    { "hwms", TOKEN_HWMS},
-    { "idle", TOKEN_IDLE },
-    { "Kd", TOKEN_KD },
-    { "Ki", TOKEN_KI },
-    { "Kp", TOKEN_KP },
-    { "mag_vs_gyr", TOKEN_MAG_VS_GYR },
-    { "MEMS", TOKEN_MEMS },
-    { "mode", TOKEN_MODE },
-    { "motor", TOKEN_MOTOR },
-    { "motor_angletime", TOKEN_MOTOR_CVT_ANGLE_TIME },
-    { "motor_hpf_coeff", TOKEN_MOTOR_HPF_COEFF },
-    { "motor_threshold", TOKEN_MOTOR_THRESHOLD },
-    { "port", TOKEN_PORT },
-    { "quat", TOKEN_QUAT },
-    { "select", TOKEN_SELECT },
-    { "set", TOKEN_SET },
-    { "simple", TOKEN_SIMPLE },
-    { "starboard", TOKEN_STARBOARD },
-    { "status", TOKEN_STATUS },
-    { "test", TOKEN_TEST },
-    { "turn", TOKEN_TURN },
-    { "wind", TOKEN_WIND },
-    { NULL, TOKEN_UNKNOWN }
+    { "calibrate",          TOKEN_CALIBRATE },
+    { "AP",                 TOKEN_AP },
+    { "AHRS",               TOKEN_AHRS },
+    { "angle",              TOKEN_ANGLE },
+    { "config",             TOKEN_CONFIG },
+    { "disengage",          TOKEN_DISENGAGE },
+    { "display",            TOKEN_DISPLAY },
+    { "DT0058",             TOKEN_DT0058 },
+    { "engage",             TOKEN_ENGAGE },
+    { "GPS",                TOKEN_GPS },
+    { "heading",            TOKEN_HEADING },
+    { "helm",               TOKEN_HELM },
+    { "hwms",               TOKEN_HWMS},
+    { "idle",               TOKEN_IDLE },
+    { "Kd",                 TOKEN_KD },
+    { "Ki",                 TOKEN_KI },
+    { "Kp",                 TOKEN_KP },
+    { "mag_vs_gyr",         TOKEN_MAG_VS_GYR },
+    { "MEMS",               TOKEN_MEMS },
+    { "mode",               TOKEN_MODE },
+    { "motor",              TOKEN_MOTOR },
+    { "motor_angletime",    TOKEN_MOTOR_CVT_ANGLE_TIME },
+    { "motor_deltadirgain", TOKEN_MOTOR_DELTA_DIR_GAIN },
+    { "motor_hpf_coeff",    TOKEN_MOTOR_HPF_COEFF },
+    { "motor_threshold",    TOKEN_MOTOR_THRESHOLD },
+    { "port",               TOKEN_PORT },
+    { "quat",               TOKEN_QUAT },
+    { "select",             TOKEN_SELECT },
+    { "set",                TOKEN_SET },
+    { "simple",             TOKEN_SIMPLE },
+    { "starboard",          TOKEN_STARBOARD },
+    { "status",             TOKEN_STATUS },
+    { "test",               TOKEN_TEST },
+    { "turn",               TOKEN_TURN },
+    { "wind",               TOKEN_WIND },
+    { NULL,                 TOKEN_UNKNOWN }
 };
 
 QueueHandle_t msgQueueDialogIn;
@@ -402,10 +412,8 @@ void parse_command_line(void)
     int tokenCount = 0;
     int terminator;
     static char message[100];
-    //char nbcar;
     MsgAutoPilot_t msgAutoPilot;
     MEMS_Msg_t msgMEMs;
-    //Motor_msg_t msgMotor;
 
     for(int i = 0; i < MAX_TOKENS; i++)
     {
@@ -459,8 +467,7 @@ void parse_command_line(void)
         {
             int angle = convert_number(tokens[2]);
             msgAutoPilot.msgType = AP_MSG_TURN;
-            msgAutoPilot.data.reqTurnAngle =
-                (tokenTypes[1] == TOKEN_PORT) ? -angle : angle;
+            msgAutoPilot.data.reqTurnAngle = ((tokenTypes[1] == TOKEN_PORT) ? -angle : angle)  * (M_PI / 180.F);
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
         }
         else
@@ -565,6 +572,10 @@ void parse_command_line(void)
 
                 case TOKEN_MOTOR_CVT_ANGLE_TIME:
                     Motor_msg_set_cvt_angle_time(numberValue);
+                    break;
+
+                case TOKEN_MOTOR_DELTA_DIR_GAIN:
+                    Motor_msg_set_delta_dir_gain(numberValue);
                     break;
 
                 case TOKEN_MAG_VS_GYR:
@@ -725,6 +736,39 @@ void parse_command_line(void)
             break;
 
         default:
+            break;
+        }
+
+        break;
+
+    case TOKEN_MOTOR:
+        switch(tokenTypes[1])
+        {
+        case TOKEN_ENGAGE:
+
+            Motor_msg_engage_actuator();
+
+            break;
+
+        case TOKEN_DISENGAGE:
+
+            Motor_msg_disengage_actuator();
+
+            break;
+
+        case TOKEN_HELM:
+
+            if((tokenTypes[2] == TOKEN_ANGLE)
+                    && (tokenTypes[3] == TOKEN_NUMBER)
+                    && (convert_float(tokens[3], &numberValue)))
+            {
+                Motor_msg_set_helm_angle(numberValue);
+            }
+
+            break;
+
+        default:
+            /* Pas compris */
             break;
         }
 

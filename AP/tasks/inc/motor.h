@@ -41,72 +41,36 @@ SOFTWARE.
 
 #include "util.h"
 
-//extern QueueHandle_t msgQueueMotor;
 int Motor_task_init();
 void Motor_task();
 
-typedef enum
-{
-    MOTOR_MSG_NONE = 0,
-    MOTOR_MSG_ADC_VALUES,
-    MOTOR_MSG_EMBRAYE,
-    MOTOR_MSG_DEBRAYE,
-    MOTOR_MSG_SET_HELM_ANGLE,
-    MOTOR_MSG_MOVE_TIME,
-    MOTOR_MSG_MOVE_DONE,
-    MOTOR_MSG_DISPLAY_CONFIG,
-    MOTOR_MSG_DISPLAY_STATUS,
-    MOTOR_MSG_DEFAULT,
-    MOTOR_MSG_SET_CVT_ANGLE_TIME,
-    MOTOR_MSG_SET_HPF_COEF,
-    MOTOR_MSG_SET_THRESHOLD,
-} Motor_msg_type_t;
-
-typedef struct
-{
-    uint16_t msgType;      /* Code de message */
-    uint16_t defaultCodes; /* Overcurrent, voltage drop, ... */
-    union
-    {
-        struct
-        {
-            /* Ces valeurs sont envoyées par une interruption */
-            /* Elles ne doivent pas être de type float */
-            uint16_t adc_power;   /* Tension d'alimentation */
-            uint16_t adc_current; /* Courant moteur */
-        } adcValues;
-        float moveTime;
-        float steerAngle;
-        float cvtAngleTime;
-        float hpf_coeff;
-        float threshold;
-    } data;
-} Motor_msg_t;
-
-/**
- * @brief Send the order "engage clutch" to motor task
- * @param none
- * Motor task stops motor if it is running and engage clutch.
- * @return none
+/*
+ * @brief Send command to engage the actuator to motor task.
+ * Upon reception of this command the motor task engages the clutch
+ * and waits for steering angles from autopilot task.
+ * @param void
+ * @return void
  */
 void Motor_msg_engage_actuator();
 
-/**
- * @brief send the order disengage clutch to motor task
- * @param none
- * Motor task release clutch and stops motor if it is running.
- * Task motor sends a message later when motor is stopped if it was moving.
- * @return none
+/*
+ *
+ * @brief Send command to let out the clutch to motor task
+ * Upon reception of this command the motor task disengages the actuator
+ * and stops motor.
+ * @param void
+ * @return void
  */
 void Motor_msg_disengage_actuator();
 
-/**
- * @brief send the order move angle
- * @param angle to move radians clockwise if positive, counterclockwise if negative
- * @note The direction to steer is usually indicated clockwise.
- * @note To turn starboard, i.e. right, helm has to be moved to port and vice versa.
- *
- * @return none
+/*
+ * @brief Send steering angle to motor task
+ * Upon reception of this command if the angle
+ * is significantly different from angle the motor task
+ * steers the helm to the given angle.
+ * The command has no effect if the Cactuator is disengaged.
+ * @param angle angle to steer is in radians
+ * @return void
  */
 void Motor_msg_set_helm_angle(float angle);
 
@@ -130,6 +94,17 @@ void Motor_msg_move_time(float time);
  * @return void
  */
 void Motor_msg_set_cvt_angle_time(float cvt);
+
+/*
+ * @brief Set the delta of gain of starboard and port
+ * @param ddg delta of gain : 0 no difference of gain
+ * The tiller move more in one direction than in the other
+ * move is multiplied py (1 + ddg) when moving starboard
+ * and by (1 - ddg) when moving to port.
+ * ddg can be positive or negative.
+ * @return void
+ */
+void Motor_msg_set_delta_dir_gain(float ddg);
 
 /*
  * @brief Set the high pass filter coefficient

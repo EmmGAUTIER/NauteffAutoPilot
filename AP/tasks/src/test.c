@@ -118,12 +118,15 @@ Test_call_t test3 [] =
 
 Test_call_t test4 [] =
 {
-    {"engage    ",      10, Motor_msg_disengage_actuator,  ARG_NONE,  {}},
+    {"engage",          10, Motor_msg_engage_actuator,     ARG_NONE,  {}},
     {"display",        100, Motor_msg_display_status,      ARG_NONE,  {}},
-    {"to stall stbd",  100, Motor_msg_move_time,           ARG_FLOAT, {.value.f = +10.F}},
+    {"hdg 1.0",       1000, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +1.F}},
+    {"display",         10, Motor_msg_display_status,      ARG_NONE,  {}},
+    {"hdg 0.5",         10, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +0.5F}},
+    {"hdg -0.5",       100, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -0.5F}},
+    {"hdg retour 0",  2000, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -0.F}},
+    {"disengage",     1000, Motor_msg_disengage_actuator,  ARG_NONE,  {}},
     {"display",        100, Motor_msg_display_status,      ARG_NONE,  {}},
-    {"turn -0.5s",    1000, Motor_msg_move_time,           ARG_FLOAT, {.value.f = -0.5F}},
-    {"disengage    ",   10, Motor_msg_disengage_actuator,  ARG_NONE,  {}},
     {"end", 0, (void*)0, ARG_NONE, {} }
 };
 
@@ -131,16 +134,62 @@ Test_call_t test5 [] =
 {
     {"engage    ",      10, Motor_msg_engage_actuator,     ARG_NONE,  {}},
     {"display",        100, Motor_msg_display_status,      ARG_NONE,  {}},
-    {"helm 3deg.",     100, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +10.F * (M_PI / 180.F)}},
-    {"display",        100, Motor_msg_display_status,      ARG_NONE,  {}},
-    {"helm 2deg.",    5000, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -10.F * (M_PI / 180.F)}},
-    {"helm 2deg.",    2000, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = 8.F * (M_PI / 180.F)}},
+    {"helm retour 0.", 500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = 0.F * (M_PI / 180.F)}},
+    {"helm +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +5.F * (M_PI / 180.F)}},
+    {"helm -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -5.F * (M_PI / 180.F)}},
+    {"helm +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +10.F * (M_PI / 180.F)}},
+    {"helm -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -10.F * (M_PI / 180.F)}},
+    {"helm +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +5.F * (M_PI / 180.F)}},
+    {"helm -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -5.F * (M_PI / 180.F)}},
+    {"helm +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +5.F * (M_PI / 180.F)}},
+    {"helm -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -5.F * (M_PI / 180.F)}},
+    {"helm +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +5.F * (M_PI / 180.F)}},
+    {"helm -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -5.F * (M_PI / 180.F)}},
+    {"helm +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +5.F * (M_PI / 180.F)}},
+    {"helm -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -5.F * (M_PI / 180.F)}},
+    {"helm retour 0.", 500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = 0.F * (M_PI / 180.F)}},
+    {"display",        000, Motor_msg_display_status,      ARG_NONE,  {}},
     {"disengage    ",   10, Motor_msg_disengage_actuator,  ARG_NONE,  {}},
     {"display",        100, Motor_msg_display_status,      ARG_NONE,  {}},
     {"end", 0, (void*)0, ARG_NONE, {} }
 };
 
-Test_call_t* tests_list[] = {test0, test1, test2, test3, test4, test5};
+Test_call_t test6 [] =
+{
+    {"engage    ",      10, Motor_msg_engage_actuator,     ARG_NONE,  {}},
+    {"display",        100, Motor_msg_display_status,      ARG_NONE,  {}},
+    {"helm retour 0.", 500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =   0.F * (M_PI / 180.F)}},
+    {"helm +15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +15.F * (M_PI / 180.F)}},
+    {"helm  +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  +5.F * (M_PI / 180.F)}},
+    {"helm +15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +15.F * (M_PI / 180.F)}},
+    {"helm  +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  +5.F * (M_PI / 180.F)}},
+    {"helm +15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +15.F * (M_PI / 180.F)}},
+    {"helm  +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  +5.F * (M_PI / 180.F)}},
+    {"helm +15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +15.F * (M_PI / 180.F)}},
+    {"helm  +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  +5.F * (M_PI / 180.F)}},
+    {"helm +15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = +15.F * (M_PI / 180.F)}},
+    {"helm  +5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  +5.F * (M_PI / 180.F)}},
+    {"helm retour 0.", 500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =   0.F * (M_PI / 180.F)}},
+    {"display",        100, Motor_msg_display_status,      ARG_NONE,  {}},
+    {"display",       2000, Motor_msg_display_status,      ARG_NONE,  {}},
+    {"helm -15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -15.F * (M_PI / 180.F)}},
+    {"helm  -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  -5.F * (M_PI / 180.F)}},
+    {"helm -15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -15.F * (M_PI / 180.F)}},
+    {"helm  -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  -5.F * (M_PI / 180.F)}},
+    {"helm -15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -15.F * (M_PI / 180.F)}},
+    {"helm  -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  -5.F * (M_PI / 180.F)}},
+    {"helm -15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -15.F * (M_PI / 180.F)}},
+    {"helm  -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  -5.F * (M_PI / 180.F)}},
+    {"helm -15 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f = -15.F * (M_PI / 180.F)}},
+    {"helm  -5 deg.",   500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =  -5.F * (M_PI / 180.F)}},
+    {"helm retour 0.", 500, Motor_msg_set_helm_angle,      ARG_FLOAT, {.value.f =   0.F * (M_PI / 180.F)}},
+    {"display",       1000, Motor_msg_display_status,      ARG_NONE,  {}},
+    {"disengage    ",   10, Motor_msg_disengage_actuator,  ARG_NONE,  {}},
+    {"display",        100, Motor_msg_display_status,      ARG_NONE,  {}},
+    {"end", 0, (void*)0, ARG_NONE, {} }
+};
+
+Test_call_t* tests_list[] = {test0, test1, test2, test3, test4, test5, test6};
 
 static QueueHandle_t test_msg_queue = NULL;
 static TimerHandle_t test_timer = NULL;
@@ -236,13 +285,14 @@ void Test_task_init()
 
 void Test_task(void *param)
 {
-    (void)param;
-    char message[100];       /* buffer for messages for debugging */
+    (void)param;  /* avoid compiler warning, unused variable */
+
+    char message[100];                          /* buffer for messages for debugging */
     BaseType_t ret;
-    Test_msg_t test_msg;     /* Message struct containing info to send to the task */
+    Test_msg_t test_msg;                        /* Message struct containing info to send to the task */
     Test_call_t* test_calls = (Test_call_t*)0;  /* Pointer to a table of calls */
-    Test_call_t *call = (Test_call_t*)0;       /* Ptr to call struct : delay, name, fct ptr, args */
-    int test_idx = -1;       /* index of current function call */
+    Test_call_t* call       = (Test_call_t*)0;  /* Ptr to call struct : delay, name, fct ptr, args */
+    int test_idx = -1;                          /* index of current function call */
 
     for(;;)  /* infinite loop */
     {

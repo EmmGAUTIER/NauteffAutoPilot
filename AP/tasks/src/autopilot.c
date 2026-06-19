@@ -36,7 +36,7 @@ SOFTWARE.
 #define AP_TIME_ONE_MOVE (0.2F) /* time to move for one order to motor in seconds */
 
 #define DB_PRINT_ORDERS(X) (X)
-#define DB_PRINT_MEMS_MSGS(X) (X)
+#define DB_PRINT_MEMS_MSGS(X)
 #define DB_PRINT_PID(X) (X)
 
 #include "math.h"
@@ -63,7 +63,7 @@ SOFTWARE.
 #include "mems.h"
 #include "autopilot.h"
 
-void timerAPCallback(TimerHandle_t xTimer);
+//void timerAPCallback(TimerHandle_t xTimer);
 
 APStatus_t APStatus;
 QueueHandle_t msgQueueAutoPilot;
@@ -85,7 +85,7 @@ int AP_turn(APStatus_t *aps, float angle);
 int AP_get_engaged(APStatus_t *aps);
 float AP_get_heading_dir(APStatus_t *aps);
 int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate);
-int AP_compute(APStatus_t *aps);
+//int AP_compute(APStatus_t *aps);
 
 int AP_MSG_send_AHRS_values(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate)
 {
@@ -243,7 +243,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
 
             case AP_MSG_TURN:
 
-                AP_turn(&APStatus, msg.data.reqTurnAngle * (M_PI / 180.F));
+                AP_turn(&APStatus, msg.data.reqTurnAngle);
 
                 DB_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP turn %8f\n", msg.data.reqTurnAngle),
                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
@@ -532,7 +532,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
      * The integral term is the integrated gap multiplied by Ki
      * The derivative term is the yaw rate multiplied by Kd
      * The coefficients are stored in APStatus_t structure and can be updated by sending a message to AP task.
-     * The order to send to motor task is the sum of the three terms and is sent to motor task by calling MOTOR_MSG_setHelmAngle() function.
+     * The order to send to motor task is the sum of the three terms and is sent to motor task by calling Motor_msg_setHelmAngle() function.
      * The order to send to motor task is also stored in APStatus_t structure for information.
     */
 
