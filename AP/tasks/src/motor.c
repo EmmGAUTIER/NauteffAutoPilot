@@ -100,12 +100,12 @@ int idxadc = 0;
 *  Rappel : 2 PI / 360 = 0,01745329..                                        *
 *****************************************************************************/
 
-#define MOTOR_HPF_COEF       (0.05F)
+#define MOTOR_HPF_COEF       (0.2F)
 #define MOTOR_THRESHOLD      (1.0F * ((float)M_PI / 180.F)) /* threshold 1 deg. */
 #define MOTOR_CVT_ANGLE_TIME (3.2F)  /* Estimated conversion between time and helm move angle s/rad */
 #define MOTOR_TIME_START     (0.05F) /* Maximum time to allow over current when starting motor (s) */
 #define MOTOR_TIME_STOP      (0.2F)  /* Time to wait for motor to stop before opposite move order (s) */
-#define MOTOR_DELTA_DIR_GAIN (0.05F) /* Tiller move difference part to add to estimated starborad move */
+#define MOTOR_DELTA_DIR_GAIN (0.00F) /* Tiller move difference part to add to estimated starborad move */
 /* and to substract to estimated port move*/
 
 #define MOTOR_V_CURRENT_NONE    (0.F)
@@ -212,7 +212,7 @@ INLINE static void Motor_LL_runToPort(void)
                            LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
     LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6);
 
-    DBG_MOTOR_LL_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL run to port\n", 21, 0U));
+    DBG_MOTOR_LL_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "MOTOR LL run to port\n", 21, 0U));
 }
 
 /**
@@ -229,7 +229,7 @@ INLINE static void Motor_LL_runToStarboard(void)
     LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_7);
 
     DBG_MOTOR_PRINT(
-        svc_UART_Write(&svc_uart2, "MOTOR LL run to starboard\n", 26, 0U));
+        svc_UART_Write(&SERVICE_UART_LOG, "MOTOR LL run to starboard\n", 26, 0U));
 }
 
 /*
@@ -245,7 +245,7 @@ INLINE static void Motor_LL_stop(void)
     /* Reset PWN, INA and INB */
     LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
 
-    DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL stop\n", 14, 0U));
+    DBG_MOTOR_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "MOTOR LL stop\n", 14, 0U));
 }
 
 /*
@@ -265,7 +265,7 @@ INLINE static void Motor_LL_engage_actuator(void)
     /* engage actuator */
     LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
 
-    DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL engage actuator\n", 25, 0U));
+    DBG_MOTOR_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "MOTOR LL engage actuator\n", 25, 0U));
 }
 
 /*
@@ -280,7 +280,7 @@ INLINE static void Motor_LL_disengage_actuator(void)
     LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4 | LL_GPIO_PIN_5 |
                            LL_GPIO_PIN_6 | LL_GPIO_PIN_7);
 
-    DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR LL disengage actuator\n", 28, 0U));
+    DBG_MOTOR_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "MOTOR LL disengage actuator\n", 28, 0U));
 }
 
 /****************************************************************************\
@@ -347,7 +347,7 @@ void Motor_msg_engage_actuator(void)
 {
     char message [40];
     snprintf(message, sizeof(message), "MOTOR msg engage actuator\n");
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
     Motor_msg_t msg = {.msgType = MOTOR_MSG_EMBRAYE};
     xQueueSend(msgQueueMotor, &msg, 0);
 }
@@ -645,7 +645,7 @@ uint32_t Motor_new_values(Motor_t* motor,
         motor->status |= MOTOR_STATUS_STALLED | MOTOR_STATUS_STOPPING;
         motor->stopping_time = 0.F;
 
-        DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR stalled\n", 14, 0U));
+        DBG_MOTOR_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "MOTOR stalled\n", 14, 0U));
         motor_event |= MOTOR_EVENT_STALLED;
     }
 
@@ -679,7 +679,7 @@ uint32_t Motor_new_values(Motor_t* motor,
 
             motor_event |= MOTOR_EVENT_STOP;
 
-            DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR stopped\n", 14, 0U));
+            DBG_MOTOR_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "MOTOR stopped\n", 14, 0U));
         }
     }
 
@@ -703,7 +703,7 @@ uint32_t Motor_new_values(Motor_t* motor,
 
             motor_event |= MOTOR_EVENT_STOPPING;
 
-            DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR end moving time\n", 22, 0U));
+            DBG_MOTOR_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "MOTOR end moving time\n", 22, 0U));
         }
     }
 
@@ -772,10 +772,10 @@ uint32_t Motor_new_values(Motor_t* motor,
                 motor->stopping_time = 0.F;
                 motor_event |= MOTOR_EVENT_STOPPING;
 
-                DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart2, "MOTOR end moving angle\n", 23, 0U));
+                DBG_MOTOR_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "MOTOR end moving angle\n", 23, 0U));
                 DBG_MOTOR_PRINT((
                                     snprintf(message, sizeof(message), "MOTOR helm estimated angle %f\n", motor->helm_angle_estimated),
-                                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
+                                    svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U)));
             }
         }
         else
@@ -833,7 +833,7 @@ void Motor_move_time(Motor_t *motor, float time_to_move)
     bool ok_to_turn = false;
     char message[100];
     snprintf(message, sizeof(message), "MOTOR move time %f\n", time_to_move);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
     /* determine if running port : -1 or starboard +1 or idle : 0
      * When stalled one and only one of MOTOR_STATUS_DIR_STARBOARD and
@@ -1046,7 +1046,7 @@ void Motor_task(void *parameters)
 
     timestamp = xTaskGetTickCount();
 
-    DBG_MOTOR_PRINT(svc_UART_Write(&svc_uart1, "Motor start task\n", 17, 0U));
+    DBG_MOTOR_PRINT(svc_UART_Write(&SERVICE_UART_LOG, "Motor start task\n", 17, 0U));
 
     /*
      * Motor and power supply monitoring is made by ADC triggered periodicaly
@@ -1094,7 +1094,7 @@ void Motor_task(void *parameters)
                                   "ADC %d %f %5.2f %5.3f\n",
                                   counter, deltat,
                                   vPower, vCurrent),
-                         svc_UART_Write(&svc_uart2, message,
+                         svc_UART_Write(&SERVICE_UART_LOG, message,
                                         strlen(message), 0U)));
                 }
 
@@ -1102,7 +1102,7 @@ void Motor_task(void *parameters)
                 if(motorEvent & MOTOR_EVENT_STALLED)
                 {
                     /* if stalled send a message (UART2) and warn autopilot task */
-                    svc_UART_Write(&svc_uart2, "MOTOR stalled\n", 14, 0U);
+                    svc_UART_Write(&SERVICE_UART_LOG, "MOTOR stalled\n", 14, 0U);
                     AP_MSG_MotorStalled();
                 }
 
@@ -1116,9 +1116,9 @@ void Motor_task(void *parameters)
                 DBG_MOTOR_PRINT((snprintf(message, sizeof(message),
                                           "MOTOR set helm angle %.3f\n",
                                           msgMoteur.data.steerAngle),
-                                 svc_UART_Write(&svc_uart2, message, strlen(message), 0U)));
+                                 svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U)));
                 Motor_get_text_status(motor, message, sizeof(message));
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
                 break; /* case MSG_MOTOR_SET_HELM_ANGLE: */
 
@@ -1141,24 +1141,24 @@ void Motor_task(void *parameters)
                 DBG_MOTOR_PRINT((snprintf(message, sizeof(message),
                                           "MOTOR move time %.3f\n",
                                           msgMoteur.data.moveTime),
-                                 svc_UART_Write(&svc_uart2, message,
+                                 svc_UART_Write(&SERVICE_UART_LOG, message,
                                                 strlen(message), 0U)));
                 Motor_get_text_status(motor, message, sizeof(message));
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
                 break; /* case MSG_MOTOR_MOVE_TIME: */
 
             case MOTOR_MSG_DISPLAY_CONFIG: /* Display configuration  */
 
                 nbcar = Motor_get_text_config(motor, message, sizeof(message));
-                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U);
 
                 break; /* case MSG_MOTOR_DISPLAY_CONFIG: */
 
             case MOTOR_MSG_DISPLAY_STATUS : /* Display motor status */
 
                 nbcar = Motor_get_text_status(motor, message, sizeof(message));
-                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U);
 
                 break; /* MOTOR_MSG_DISPLAY_STATUS */
 
@@ -1170,7 +1170,7 @@ void Motor_task(void *parameters)
                 snprintf(message, sizeof(message),
                          "MOTOR param cvt angle time %6f\n",
                          msgMoteur.data.cvtAngleTime);
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
                 break; /* case MSG_MOTOR_SET_CVT_ANGLE_TIME: */
 
@@ -1182,7 +1182,7 @@ void Motor_task(void *parameters)
                 snprintf(message, sizeof(message),
                          "MOTOR param delta dir gain %6f\n",
                          msgMoteur.data.deltaDirGain);
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
                 break; /* case MSG_MOTOR_SET_DELTAT_DIR_GAIN: */
 
@@ -1195,7 +1195,7 @@ void Motor_task(void *parameters)
                 snprintf(message, sizeof(message),
                          "MOTOR param hpf coefficient %6f\n",
                          msgMoteur.data.moveTime);
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
                 break; /* MSG_MOTOR_SET_HPF_COEF:  */
 
@@ -1207,7 +1207,7 @@ void Motor_task(void *parameters)
                 snprintf(message, sizeof(message),
                          "MOTOR param set threshold %6f\n",
                          msgMoteur.data.threshold);
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
                 break; /* case MSG_MOTOR_SET_THRESHOLD:  */
 

@@ -306,7 +306,7 @@ void Test_task(void *param)
                 if((test_idx >= 0) && (test_calls[test_idx].func_ptr != (void*)0))
                 {
                     snprintf(message, sizeof(message), "TEST\nTEST tick %d  %s\n", test_idx, test_calls[test_idx].name);
-                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                    svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
                     /* Call the function with the argument if any */
                     switch(test_calls[test_idx].arg_type)
@@ -342,7 +342,7 @@ void Test_task(void *param)
                 if(test_msg.data.test_number >= 0 && test_msg.data.test_number < sizeof(tests_list) / sizeof(tests_list[0]))
                 {
                     snprintf(message, sizeof(message), "TEST start %d\n", test_msg.data.test_number);
-                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                    svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
                     test_calls = tests_list[test_msg.data.test_number];
                     test_idx = 0;
                     call = &test_calls[test_idx];

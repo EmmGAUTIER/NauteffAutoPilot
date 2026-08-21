@@ -57,6 +57,8 @@ UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
+DMA_HandleTypeDef hdma_uart4_rx;
+DMA_HandleTypeDef hdma_uart4_tx;
 DMA_HandleTypeDef hdma_usart1_rx;
 DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart2_rx;
@@ -442,7 +444,7 @@ static void MX_UART4_Init(void)
 
   /* USER CODE END UART4_Init 1 */
   huart4.Instance = UART4;
-  huart4.Init.BaudRate = 115200;
+  huart4.Init.BaudRate = 4800;
   huart4.Init.WordLength = UART_WORDLENGTH_8B;
   huart4.Init.StopBits = UART_STOPBITS_1;
   huart4.Init.Parity = UART_PARITY_NONE;
@@ -477,7 +479,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 38400;
+  huart1.Init.BaudRate = 230400;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -592,6 +594,12 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel7_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
+  /* DMA2_Channel3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Channel3_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Channel3_IRQn);
+  /* DMA2_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Channel5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Channel5_IRQn);
   /* DMA2_Channel6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Channel6_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA2_Channel6_IRQn);
@@ -644,7 +652,7 @@ static void MX_GPIO_Init(void)
   EXTI_InitStruct.Line_32_63 = LL_EXTI_LINE_NONE;
   EXTI_InitStruct.LineCommand = ENABLE;
   EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-  EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
+  EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING;
   LL_EXTI_Init(&EXTI_InitStruct);
 
   /**/
@@ -664,7 +672,7 @@ static void MX_GPIO_Init(void)
   LL_EXTI_Init(&EXTI_InitStruct);
 
   /**/
-  LL_GPIO_SetPinPull(B1_GPIO_Port, B1_Pin, LL_GPIO_PULL_NO);
+  LL_GPIO_SetPinPull(BLUE_BUTTON_GPIO_Port, BLUE_BUTTON_Pin, LL_GPIO_PULL_NO);
 
   /**/
   LL_GPIO_SetPinPull(GYR_READY_GPIO_Port, GYR_READY_Pin, LL_GPIO_PULL_NO);
@@ -673,7 +681,7 @@ static void MX_GPIO_Init(void)
   LL_GPIO_SetPinPull(MAG_READY_GPIO_Port, MAG_READY_Pin, LL_GPIO_PULL_NO);
 
   /**/
-  LL_GPIO_SetPinMode(B1_GPIO_Port, B1_Pin, LL_GPIO_MODE_INPUT);
+  LL_GPIO_SetPinMode(BLUE_BUTTON_GPIO_Port, BLUE_BUTTON_Pin, LL_GPIO_MODE_INPUT);
 
   /**/
   LL_GPIO_SetPinMode(GYR_READY_GPIO_Port, GYR_READY_Pin, LL_GPIO_MODE_INPUT);
@@ -682,10 +690,10 @@ static void MX_GPIO_Init(void)
   LL_GPIO_SetPinMode(MAG_READY_GPIO_Port, MAG_READY_Pin, LL_GPIO_MODE_INPUT);
 
   /**/
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1|LL_GPIO_PIN_2|LL_GPIO_PIN_3
-                          |LL_GPIO_PIN_7|LL_GPIO_PIN_8|LL_GPIO_PIN_12;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  GPIO_InitStruct.Pin = KBD_MODE_AUTO_Pin|KBD_MODE_IDLE_Pin|KBD_STBD_1_Pin|KBD_PORT_1_Pin
+                          |KBD_STBD_10_Pin|KBD_PORT_10_Pin|KBD_AUX_2_Pin|KBD_AUX_1_Pin;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /**/
@@ -695,12 +703,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /**/
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_4|LL_GPIO_PIN_5;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-  LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /**/
   GPIO_InitStruct.Pin = LL_GPIO_PIN_0;
@@ -738,6 +740,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /**/
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_12;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /**/
   GPIO_InitStruct.Pin = LL_GPIO_PIN_2;

@@ -4,6 +4,7 @@
 
 #define SERVICE_QUEUE_LENGTH 20
 #define SERVICE_USART_BUFFER_SIZE (4*1024)
+#define SERVICE_UART_LOG (svc_usart2)
 
 /*
  * Service Handle for UART communication.
@@ -20,8 +21,8 @@ typedef struct
     StreamBufferHandle_t receiveBuffer;
 } ServiceUartHandle_t;
 
-extern ServiceUartHandle_t svc_uart1;
-extern ServiceUartHandle_t svc_uart2;
+extern ServiceUartHandle_t svc_usart1;
+extern ServiceUartHandle_t svc_usart2;
 
 int svc_UART_Write(ServiceUartHandle_t *svc_uart, const void *data, size_t len, TickType_t delay);
 int svc_UART_getc(ServiceUartHandle_t *svc_uart, TickType_t delay);

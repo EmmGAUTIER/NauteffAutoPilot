@@ -16,25 +16,27 @@
 #include "apdialog.h"
 #include "autopilot.h"
 #include "blink.h"
+#include "keyboard.h"
 #include "test.h"
 
 TaskHandle_t tasksHandles [] =
 {
-    [0] = NULL, /* taskMotor     */
-    [1] = NULL, /* taskMEMs      */
-    [2] = NULL, /* taskDialogIn  */
-    [3] = NULL, /* taskAutoPilot */
-    [4] = NULL, /* taskService   */
-    [5] = NULL,  /* taskBlink     */
-    [6] = NULL  /* taskTest      */
+    [0] = NULL, /* Motor task     */
+    [1] = NULL, /* MEMs task      */
+    [2] = NULL, /* DialogIn task  */
+    [3] = NULL, /* AutoPilot task */
+    [4] = NULL, /* Service task   */
+    [5] = NULL, /* Blink task     */
+    [6] = NULL, /* Keyboard task  */
+    [7] = NULL  /* Test task      */
 };
 int tasksNumber = sizeof(tasksHandles) / sizeof(tasksHandles[0]);
 
-void panic(int panicType)
+void panic (int panicType)
 {
-    MOTOR_stopPanic();
+    MOTOR_stopPanic ();
     /* Alarm_give(); */
-    /* TODO fire a reset witth special condition */
+    /* TODO fire a reset with special condition */
     /* TODO Mettre dans une macro pour être sûr de ne pas utiliser de pile */
 }
 
@@ -42,32 +44,32 @@ void apmain()
 {
     int ret = 0;
 
-    /* init_tasksXXX fcts create queues semaphores, timers,...
+    /* XXXX_task_init fcts create queues semaphores, timers,...
      * before starting scheduler
      */
-    Motor_task_init();
-    Mems_task_init();
-    Dialog_task_init();
-    AutoPilot_task_init();
-    Service_task_init();
-    Blink_task_init();
-    Test_task_init();
-
-
+    Motor_task_init ();
+    Mems_task_init ();
+    Dialog_task_init ();
+    AutoPilot_task_init ();
+    Service_task_init ();
+    Blink_task_init ();
+    Keyboard_task_init ();
+    Test_task_init ();
 
     /* Create tasks */
-    ret &= xTaskCreate(Motor_task,     "Motor",      configMINIMAL_STACK_SIZE + 500, (void *)0, 3, tasksHandles + 0);
-    ret &= xTaskCreate(Mems_task,      "MEMs",       configMINIMAL_STACK_SIZE + 500, (void *)0, 4, tasksHandles + 1);
-    ret &= xTaskCreate(Dialog_task,    "Dialog",     configMINIMAL_STACK_SIZE + 300, (void *)0, 2, tasksHandles + 2);
-    ret &= xTaskCreate(AutoPilot_task, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, tasksHandles + 3);
-    ret &= xTaskCreate(Service_task,   "SVC",        configMINIMAL_STACK_SIZE + 200, (void *)0, 5, tasksHandles + 4);
-    ret &= xTaskCreate(Blink_task,     "Blink",      configMINIMAL_STACK_SIZE + 100, (void *)0, 2, tasksHandles + 5);
-    ret &= xTaskCreate(Test_task,      "Test",       configMINIMAL_STACK_SIZE + 200, (void *)0, 2, tasksHandles + 6);
+    ret &= xTaskCreate (Motor_task,     "Motor",      configMINIMAL_STACK_SIZE + 500, (void *)0, 3, tasksHandles + 0);
+    ret &= xTaskCreate (Mems_task,      "MEMs",       configMINIMAL_STACK_SIZE + 500, (void *)0, 4, tasksHandles + 1);
+    ret &= xTaskCreate (Dialog_task,    "Dialog",     configMINIMAL_STACK_SIZE + 300, (void *)0, 2, tasksHandles + 2);
+    ret &= xTaskCreate (AutoPilot_task, "Auto Pilot", configMINIMAL_STACK_SIZE + 500, (void *)0, 2, tasksHandles + 3);
+    ret &= xTaskCreate (Service_task,   "SVC",        configMINIMAL_STACK_SIZE + 200, (void *)0, 5, tasksHandles + 4);
+    ret &= xTaskCreate (Blink_task,     "Blink",      configMINIMAL_STACK_SIZE + 100, (void *)0, 2, tasksHandles + 5);
+    ret &= xTaskCreate (Keyboard_task,  "Keyboard",   configMINIMAL_STACK_SIZE + 100, (void *)0, 2, tasksHandles + 6);
+    ret &= xTaskCreate (Test_task,      "Test",       configMINIMAL_STACK_SIZE + 200, (void *)0, 2, tasksHandles + 7);
 
     /* Start scheduler, should never return */
-    vTaskStartScheduler();
+    vTaskStartScheduler ();
 
-    for(;;)
+    for (;;)
         ; /* Shall never happen */
 
     (void)ret; // To avoid unused variable warning

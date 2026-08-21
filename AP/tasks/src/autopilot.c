@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 /* PID coefficients */
-#define AP_KP 1.0F /* Proportional coefficient */
+#define AP_KP 8.0F /* Proportional coefficient */
 #define AP_KI 0.0F /* Integral coefficient */
 #define AP_KD 0.0F /* Derivative coefficient */
 
@@ -87,7 +87,7 @@ float AP_get_heading_dir(APStatus_t *aps);
 int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate);
 //int AP_compute(APStatus_t *aps);
 
-int AP_MSG_send_AHRS_values(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate)
+int AutoPilot_msg_send_AHRS_values(TickType_t timeStamp, float heading, float roll, float pitch, float yawRate)
 {
 
     MsgAutoPilot_t msg =
@@ -120,6 +120,38 @@ int AP_MSG_MotorStalled()
     }
 
     return 1;
+}
+
+
+void AutoPilot_msg_turn_deg(int headingToTurnDegrees)
+{
+    MsgAutoPilot_t msg =
+    {
+        .msgType = AP_MSG_TURN,
+        .data.reqTurnAngle = headingToTurnDegrees
+    };
+
+    xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0));
+}
+
+void AutoPilot_msg_mode_heading()
+{
+    static MsgAutoPilot_t msg =
+    {
+        .msgType = AP_MSG_MODE_HEADING
+    };
+
+    xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0));
+}
+
+void AutoPilot_msg_mode_idle()
+{
+    static MsgAutoPilot_t msg =
+    {
+        .msgType = AP_MSG_MODE_IDLE
+    };
+
+    xQueueSend(msgQueueAutoPilot, &msg, pdMS_TO_TICKS(0));
 }
 
 int AP_MSG_MotorStopped()
@@ -207,7 +239,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                                               msg.data.IMUData.yawRate * (180. / M_PI),
                                               APStatus.currentGap * (180. / M_PI),
                                               APStatus.integratedGap * (180. / M_PI)),
-                                     svc_UART_Write(&svc_uart2, message, strlen(message), 0)));
+                                     svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0)));
 
                 break; /* case AP_MSG_AHRS: */
 
@@ -217,7 +249,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                 DBG_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message),
                                                    "AP Mode heading current %.1f\n",
                                                    AP_get_heading_dir(&APStatus)),
-                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                                  svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U)));
                 timestamp = xTaskGetTickCount();
 
                 break; /* case AP_MSG_MODE_HEADING */
@@ -228,7 +260,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                 DBG_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message),
                                                    "AP Mode heading dir %.1f\n",
                                                    msg.data.reqHeading * (M_PI / 180.F)),
-                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                                  svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U)));
                 timestamp = xTaskGetTickCount();
 
                 break; /* case AP_MSG_MODE_HEADING */
@@ -236,7 +268,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
             case AP_MSG_MODE_IDLE: /* set mode idle */
 
                 DBG_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP Mode idle\n"),
-                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                                  svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U)));
                 AP_set_mode_idle(&APStatus);
 
                 break; /* case AP_MSG_MODE_IDLE */
@@ -245,8 +277,8 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
 
                 AP_turn(&APStatus, msg.data.reqTurnAngle);
 
-                DBG_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP turn %8f\n", msg.data.reqTurnAngle),
-                                  svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                DBG_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message), "AP turn %d\n", msg.data.reqTurnAngle),
+                                  svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U)));
 
                 break; /* case AP_MSG_TURN */
 
@@ -263,7 +295,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                 nbcar = snprintf(message, sizeof(message) - 1, "AP param %s %f\n",
                                  APParameterNames[(int)msg.data.coefficient.param_number],
                                  msg.data.coefficient.param_value);
-                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U);
 
                 // APStatus.headingToSteer = msg.data.reqHeading;
                 switch(msg.data.coefficient.param_number)
@@ -298,12 +330,12 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                 if(APStatus.engaged)
                 {
                     DBG_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message) - 1, "AP MEMS calibrate impossible while AP engaged\n"),
-                                      svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                                      svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U)));
                 }
                 else
                 {
                     DBG_PRINT_ORDERS((nbcar = snprintf(message, sizeof(message) - 1, "AP: calibrate MEMS\n"),
-                                      svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                                      svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U)));
                     static MEMS_Msg_t msgMEMs = {.msgType = MEMS_MSG_CALIBRATE};
                     xQueueSend(msgQueueMEMs, &msgMEMs, pdMS_TO_TICKS(10));
                 }
@@ -314,7 +346,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
 
                 DBG_PRINT_MEMS_MSGS((
                                         nbcar = snprintf(message, sizeof(message) - 1, "AP MEMS ready\n"),
-                                        svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                                        svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U)));
                 APStatus.MEMsReady = 1;
 
                 break; /* case AP_MSG_MEMS_READY: */
@@ -326,7 +358,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                                  APStatus.kp,
                                  APStatus.ki,
                                  APStatus.kd);
-                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U);
 
                 break; /* case AP_MSG_DISPLAY_CONFIG: */
 
@@ -335,7 +367,7 @@ void __attribute__((noreturn)) AutoPilot_task(void *args __attribute__((unused))
                 if(! APStatus.engaged)
                 {
                     snprintf(message, sizeof(message) - 1, "AP select AHRS type %d\n", (int)msg.data.ahrsType);
-                    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                    svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
                     static MEMS_Msg_t msgMEMs = {.msgType = MEMS_MSG_SET_AHRS_TYPE};
                     msgMEMs.data.ahrsType = msg.data.ahrsType;
                     xQueueSend(msgQueueMEMs, &msgMEMs, pdMS_TO_TICKS(10));
@@ -585,7 +617,7 @@ int AP_new_values(APStatus_t *aps, float deltat, float heading, float yawRate)
                                         aps->integratedGap,
                                         aps->yawRate,
                                         steerReq),
-                       svc_UART_Write(&svc_uart2, message, nbcar, 0U)));
+                       svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U)));
 
         Motor_msg_set_helm_angle(steerReq);
 

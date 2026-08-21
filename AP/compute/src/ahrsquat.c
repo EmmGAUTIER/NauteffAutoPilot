@@ -137,15 +137,15 @@ int AHRS_Quat_update(AHRS_Status_t *mstatus, Vector3f *acc, Vector3f *gyr,
 
 #if 0
     snprintf(message, sizeof(message), "IMU east %+f %+f %+f\n", east.x, east.y, east.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
     snprintf(message, sizeof(message), "IMU north %+f %+f %+f\n", north.x, north.y, north.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
     snprintf(message, sizeof(message), "IMU  down %+f %+f %+f\n", down.x, down.y, down.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
     snprintf(message, sizeof(message), "IMU ref quat %+f %+f %+f %+f\n", q_ref.w, q_ref.x, q_ref.y, q_ref.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
     snprintf(message, sizeof(message), "IMU angles %+f %+f %+f\n", roll, pitch, yaw);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
 #endif
 
     return 0;

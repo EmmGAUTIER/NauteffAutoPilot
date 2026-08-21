@@ -20,6 +20,7 @@
 eps-converted-to.pdf # eps to pdf used by pdflatex
 *.alt
 *.bak
+*.bak21
 *.orig
 build/*
 NauteffAutoPilot.geany

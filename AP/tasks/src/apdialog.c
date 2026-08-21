@@ -27,8 +27,11 @@
  *
  * Reads from line buffered input
  *
- * turn port/starboard <angle>
- * mode idle|heading : set idle or heading mode
+ * turn port | starboard <angle>
+ * mode idle | heading : set idle or heading mode
+ * Kp = <Number> : set Kp proportional coefficient of PID regulator
+ * Ki = <Number> : set Ki integral coefficient of PID regulator
+ * Ki = <Number> : set Kd derivative coefficient of PID regulator
  *
  *
  *****************************************************************************/
@@ -55,7 +58,7 @@
 
 #define DBG_DIALOG_PRINT(X) (X)
 
-#define YYINPUT svc_UART_getc(&svc_uart2, portMAX_DELAY)
+#define YYINPUT svc_UART_getc(&SERVICE_UART_LOG, portMAX_DELAY)
 
 #if 0
 // #define YYINPUT entree()
@@ -648,7 +651,7 @@ void parse_command_line(void)
                 int nbcar = snprintf(message, sizeof(message),
                                      "TASK HWMS %d  %16s : %u bytes\n",
                                      i, taskName, hwm * sizeof(StackType_t));
-                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U);
             }
 
             break; /* TOKEN_HWMS */
@@ -731,7 +734,7 @@ void parse_command_line(void)
             }
 
             snprintf(message, sizeof(message), "DIALOG select AHRS type %d\n", ahrsType);
-            svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+            svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
             if(ahrsType != AHRS_TYPE_NONE)
             {
@@ -785,14 +788,14 @@ void parse_command_line(void)
         {
             int test_number = (int)convert_number(tokens[1]);
             snprintf(message, sizeof(message), "DIALOG start test %d\n", test_number);
-            svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+            svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
             Test_msg_start(test_number);
         }
 
         break;
 
     default:
-        return; // Syntax error: unrecognized command
+        return; /* Syntax error: unrecognized command */
     }
 
     return;
@@ -824,7 +827,7 @@ void __attribute__((noreturn)) taskDialogOut(void *args __attribute__((unused)))
             nbcar = snprintf(message, sizeof(message), "Message type %d\r\n", (int)msg.msgType);
             // Process the message
             // For now, just print the message type
-            svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+            svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U);
         }
     }
 }

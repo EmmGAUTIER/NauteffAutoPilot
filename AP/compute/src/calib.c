@@ -210,7 +210,7 @@ int Calib6_addSample(Calib6_t *calib, const Calib6_typeSensor_t type,
                 snprintf(message, sizeof(message), "CALIB acc %f %f %f\n",
                          calib->acc_x[faceIdx], calib->acc_y[faceIdx],
                          calib->acc_z[faceIdx]);
-                svc_UART_Write(&svc_uart2, message, strlen(message),
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message),
                                pdMS_TO_TICKS(1));
             }
             else
