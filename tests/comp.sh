@@ -5,6 +5,7 @@ COMPUTE_DIR="../AP/compute/src/"
 FILES="main.c      \
        aux_fcts.c   \
       test_geom.c \
+      test_util.c \
       ${COMPUTE_DIR}/geom.c"
 
 C_INCLUDES=" \

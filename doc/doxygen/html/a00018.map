@@ -1,13 +1,13 @@
 <map id="ahrs.c" name="ahrs.c">
-<area shape="rect" id="node1" title=" " alt="" coords="268,5,330,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="214,229,285,256"/>
-<area shape="rect" id="node3" title=" " alt="" coords="31,80,114,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="138,80,206,107"/>
-<area shape="rect" id="node5" href="$a00080.html" title=" " alt="" coords="230,80,285,107"/>
-<area shape="rect" id="node6" href="$a00095.html" title=" " alt="" coords="309,80,372,107"/>
-<area shape="rect" id="node9" href="$a00089.html" title=" " alt="" coords="396,80,503,107"/>
-<area shape="rect" id="node10" href="$a00098.html" title=" " alt="" coords="527,80,618,107"/>
-<area shape="rect" id="node11" href="$a00113.html" title=" " alt="" coords="642,80,748,107"/>
-<area shape="rect" id="node7" href="$a00119.html" title=" " alt="" coords="214,155,285,181"/>
-<area shape="rect" id="node8" href="$a00107.html" title=" " alt="" coords="309,155,372,181"/>
+<area shape="rect" id="node1" title=" " alt="" coords="247,5,309,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="188,229,259,256"/>
+<area shape="rect" id="node3" title=" " alt="" coords="30,80,113,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="137,80,205,107"/>
+<area shape="rect" id="node5" href="$a00083.html" title=" " alt="" coords="153,155,208,181"/>
+<area shape="rect" id="node6" href="$a00098.html" title=" " alt="" coords="281,80,344,107"/>
+<area shape="rect" id="node9" href="$a00092.html" title=" " alt="" coords="369,80,475,107"/>
+<area shape="rect" id="node10" href="$a00101.html" title=" " alt="" coords="499,80,590,107"/>
+<area shape="rect" id="node11" href="$a00116.html" title=" " alt="" coords="614,80,721,107"/>
+<area shape="rect" id="node7" href="$a00122.html" title=" " alt="" coords="232,155,303,181"/>
+<area shape="rect" id="node8" href="$a00110.html" title=" " alt="" coords="327,155,389,181"/>
 </map>

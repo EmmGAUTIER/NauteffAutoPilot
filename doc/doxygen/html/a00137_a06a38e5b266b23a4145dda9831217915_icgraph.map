@@ -1,0 +1,5 @@
+<map id="Motor_msg_disengage_actuator" name="Motor_msg_disengage_actuator">
+<area shape="rect" id="node1" title="send the order disengage clutch to motor task" alt="" coords="349,5,519,47"/>
+<area shape="rect" id="node2" href="$a00065.html#af6663ef3860cc9454511614ab488900a" title=" " alt="" coords="160,13,301,39"/>
+<area shape="rect" id="node3" href="$a00065.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,13,112,39"/>
+</map>

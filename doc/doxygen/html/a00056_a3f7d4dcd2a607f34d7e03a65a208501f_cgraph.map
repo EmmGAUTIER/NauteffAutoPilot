@@ -1,14 +1,24 @@
 <map id="parse_command_line" name="parse_command_line">
-<area shape="rect" id="node1" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="5,157,167,184"/>
-<area shape="rect" id="node2" href="$a00062.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="215,5,381,32"/>
-<area shape="rect" id="node3" href="$a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="245,56,351,83"/>
-<area shape="rect" id="node4" href="$a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="234,107,362,133"/>
-<area shape="rect" id="node5" href="$a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="244,157,352,184"/>
-<area shape="rect" id="node6" href="$a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="251,208,345,235"/>
-<area shape="rect" id="node7" href="$a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="269,259,327,285"/>
-<area shape="rect" id="node8" href="$a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="234,309,362,336"/>
-<area shape="rect" id="node9" href="$a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="637,284,801,311"/>
-<area shape="rect" id="node10" href="$a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="429,360,589,387"/>
-<area shape="rect" id="node12" href="$a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="457,309,562,336"/>
-<area shape="rect" id="node11" href="$a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="657,360,782,387"/>
+<area shape="rect" id="node1" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="5,335,167,361"/>
+<area shape="rect" id="node2" href="$a00065.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="246,5,413,32"/>
+<area shape="rect" id="node3" href="$a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="276,56,383,83"/>
+<area shape="rect" id="node4" href="$a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="265,107,393,133"/>
+<area shape="rect" id="node5" href="$a00050.html#a8866b5421a676559242721d47fc1fcdc" title=" " alt="" coords="310,157,349,184"/>
+<area shape="rect" id="node13" href="$a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="275,259,383,285"/>
+<area shape="rect" id="node14" href="$a00059.html#a05ed0d391610946ce1255c9645c4bd84" title=" " alt="" coords="232,309,427,336"/>
+<area shape="rect" id="node15" href="$a00059.html#ac0300ece27bdc23a8545f7aa869760ae" title=" " alt="" coords="231,360,427,387"/>
+<area shape="rect" id="node16" href="$a00059.html#a93e213f1b3bd22fb5e5669fae1956456" title=" " alt="" coords="215,411,444,437"/>
+<area shape="rect" id="node17" href="$a00059.html#afcdf9b0a01973c4ec04f56b39a8ff860" title=" " alt="" coords="235,461,424,488"/>
+<area shape="rect" id="node18" href="$a00059.html#ad65086395e98dedebb8f31d301809d55" title=" " alt="" coords="234,512,425,539"/>
+<area shape="rect" id="node19" href="$a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="282,563,377,589"/>
+<area shape="rect" id="node20" href="$a00071.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="300,613,359,640"/>
+<area shape="rect" id="node21" href="$a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="548,208,676,235"/>
+<area shape="rect" id="node22" href="$a00062.html#aef32bb0c942a82dafa2b15ba7b64b9c5" title=" " alt="" coords="269,664,389,691"/>
+<area shape="rect" id="node6" href="$a00050.html#af0b843e95b71e99f178f067d104c34c1" title=" " alt="" coords="492,81,732,108"/>
+<area shape="rect" id="node10" href="$a00050.html#a36c7605fe943636b66f8f5b411f81136" title=" " alt="" coords="519,157,705,184"/>
+<area shape="rect" id="node7" href="$a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="780,107,940,133"/>
+<area shape="rect" id="node8" href="$a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="1007,81,1133,108"/>
+<area shape="rect" id="node9" href="$a00005.html#ab3e01b9f2d18902b5ae589d07c638dd8" title="Skips len bytes in the buffer (advances idxStart)." alt="" coords="811,5,909,32"/>
+<area shape="rect" id="node11" href="$a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="988,208,1152,235"/>
+<area shape="rect" id="node12" href="$a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="807,208,913,235"/>
 </map>

@@ -81,15 +81,16 @@ $(function() {
 <code>#include &quot;stream_buffer.h&quot;</code><br />
 <code>#include &quot;task.h&quot;</code><br />
 <code>#include &quot;timers.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00074_source.html">printf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00068_source.html">rlib.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00080_source.html">util.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00122_source.html">apmain.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00137_source.html">apdialog.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00140_source.html">autopilot.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00128_source.html">mems.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00131_source.html">motor.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00125_source.html">service.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00077_source.html">printf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00071_source.html">rlib.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00083_source.html">util.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00125_source.html">apmain.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00143_source.html">apdialog.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00146_source.html">autopilot.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00134_source.html">mems.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00137_source.html">motor.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00131_source.html">service.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00128_source.html">test.h</a>&quot;</code><br />
 <code>#include &lt;stm32l452xx.h&gt;</code><br />
 <code>#include &lt;stm32l4xx_ll_gpio.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -97,46 +98,47 @@ Include dependency graph for apdialog.c:</div>
 <div class="dyncontent">
 <div class="center"><img src="a00057.png" border="0" usemap="#aapdialog_8c" alt=""/></div>
 <map name="aapdialog_8c" id="aapdialog_8c">
-<area shape="rect" title=" " alt="" coords="638,5,727,32"/>
-<area shape="rect" title=" " alt="" coords="5,155,101,181"/>
-<area shape="rect" title=" " alt="" coords="455,80,537,107"/>
-<area shape="rect" title=" " alt="" coords="562,80,686,107"/>
-<area shape="rect" title=" " alt="" coords="710,80,773,107"/>
-<area shape="rect" title=" " alt="" coords="797,80,873,107"/>
-<area shape="rect" href="a00074.html" title=" " alt="" coords="897,80,965,107"/>
-<area shape="rect" href="a00068.html" title=" " alt="" coords="178,80,233,107"/>
-<area shape="rect" href="a00080.html" title=" " alt="" coords="126,155,181,181"/>
-<area shape="rect" href="a00122.html" title=" " alt="" coords="989,80,1072,107"/>
-<area shape="rect" href="a00137.html" title=" " alt="" coords="1096,80,1187,107"/>
-<area shape="rect" href="a00140.html" title=" " alt="" coords="1211,80,1303,107"/>
-<area shape="rect" href="a00128.html" title=" " alt="" coords="1439,80,1513,107"/>
-<area shape="rect" href="a00131.html" title=" " alt="" coords="257,80,329,107"/>
-<area shape="rect" title=" " alt="" coords="305,155,458,181"/>
-<area shape="rect" title=" " alt="" coords="482,155,601,181"/>
-<area shape="rect" href="a00125.html" title=" " alt="" coords="1333,80,1414,107"/>
-<area shape="rect" title=" " alt="" coords="943,155,1017,181"/>
-<area shape="rect" title=" " alt="" coords="844,155,919,181"/>
-<area shape="rect" href="a00107.html" title=" " alt="" coords="1167,229,1230,256"/>
-<area shape="rect" href="a00095.html" title=" " alt="" coords="1223,155,1286,181"/>
-<area shape="rect" title=" " alt="" coords="1278,304,1349,331"/>
-<area shape="rect" href="a00119.html" title=" " alt="" coords="1278,229,1349,256"/>
-<area shape="rect" title=" " alt="" coords="205,155,280,181"/>
-<area shape="rect" href="a00077.html" title=" " alt="" coords="1466,155,1542,181"/>
-<area shape="rect" title=" " alt="" coords="1311,155,1441,181"/>
-<area shape="rect" title=" " alt="" coords="1463,229,1545,256"/>
+<area shape="rect" title=" " alt="" coords="809,5,898,32"/>
+<area shape="rect" title=" " alt="" coords="992,155,1088,181"/>
+<area shape="rect" title=" " alt="" coords="151,80,233,107"/>
+<area shape="rect" title=" " alt="" coords="258,80,382,107"/>
+<area shape="rect" title=" " alt="" coords="706,155,769,181"/>
+<area shape="rect" title=" " alt="" coords="793,155,869,181"/>
+<area shape="rect" href="a00077.html" title=" " alt="" coords="58,80,126,107"/>
+<area shape="rect" href="a00071.html" title=" " alt="" coords="1381,80,1435,107"/>
+<area shape="rect" href="a00083.html" title=" " alt="" coords="1433,155,1487,181"/>
+<area shape="rect" href="a00125.html" title=" " alt="" coords="812,80,895,107"/>
+<area shape="rect" href="a00143.html" title=" " alt="" coords="919,80,1009,107"/>
+<area shape="rect" href="a00146.html" title=" " alt="" coords="406,80,498,107"/>
+<area shape="rect" href="a00134.html" title=" " alt="" coords="1084,80,1159,107"/>
+<area shape="rect" href="a00137.html" title=" " alt="" coords="1183,80,1255,107"/>
+<area shape="rect" title=" " alt="" coords="1113,155,1266,181"/>
+<area shape="rect" title=" " alt="" coords="1290,155,1409,181"/>
+<area shape="rect" href="a00131.html" title=" " alt="" coords="522,80,603,107"/>
+<area shape="rect" href="a00128.html" title=" " alt="" coords="729,80,788,107"/>
+<area shape="rect" title=" " alt="" coords="104,155,179,181"/>
+<area shape="rect" title=" " alt="" coords="5,155,80,181"/>
+<area shape="rect" title=" " alt="" coords="422,304,493,331"/>
+<area shape="rect" href="a00110.html" title=" " alt="" coords="275,229,338,256"/>
+<area shape="rect" href="a00098.html" title=" " alt="" coords="363,155,426,181"/>
+<area shape="rect" href="a00122.html" title=" " alt="" coords="386,229,457,256"/>
+<area shape="rect" title=" " alt="" coords="893,155,968,181"/>
+<area shape="rect" href="a00080.html" title=" " alt="" coords="450,155,526,181"/>
+<area shape="rect" title=" " alt="" coords="551,155,681,181"/>
+<area shape="rect" title=" " alt="" coords="532,229,615,256"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00154.html">TokenEntry</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00160.html">TokenEntry</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a6f845159259313251d394521999c7c3b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a6f845159259313251d394521999c7c3b">DBG_DIALOG_PRINT</a>(X)&#160;&#160;&#160;(X)</td></tr>
 <tr class="separator:a6f845159259313251d394521999c7c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36781b6b4384cbb1232f14f4abc7b2ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a36781b6b4384cbb1232f14f4abc7b2ab">YYINPUT</a>&#160;&#160;&#160;<a class="el" href="a00125.html#a07a9fbf5b0b93c82edb8d1d7582f7019">svc_UART_getc</a>(&amp;<a class="el" href="a00125.html#ab0a7406e4fc58e27dc1efdc0b7861cff">svc_uart2</a>, portMAX_DELAY)</td></tr>
+<tr class="memitem:a36781b6b4384cbb1232f14f4abc7b2ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a36781b6b4384cbb1232f14f4abc7b2ab">YYINPUT</a>&#160;&#160;&#160;<a class="el" href="a00131.html#a07a9fbf5b0b93c82edb8d1d7582f7019">svc_UART_getc</a>(&amp;<a class="el" href="a00131.html#ab0a7406e4fc58e27dc1efdc0b7861cff">svc_uart2</a>, portMAX_DELAY)</td></tr>
 <tr class="separator:a36781b6b4384cbb1232f14f4abc7b2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f6d16dfdf7920e1e5f1dad5db5347f2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a3f6d16dfdf7920e1e5f1dad5db5347f2">MAX_TOKEN_LEN</a>&#160;&#160;&#160;20</td></tr>
 <tr class="separator:a3f6d16dfdf7920e1e5f1dad5db5347f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,8 +185,10 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921aeaf68c5d9b052b370d715736cdb99ae2">TOKEN_STARBOARD</a>
 , <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a8aa50f3151b28d4eaaef43ebc05bf302">TOKEN_STATUS</a>
+, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a70014c8e2b8e2aa6a1504ee6f71f0a2c">TOKEN_TEST</a>
 , <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a2b771e894572d3610b357cdb4986a87f">TOKEN_TURN</a>
-, <a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a695d30cfd5838823571d3176fba3fb50">TOKEN_WIND</a>
+, <br />
+&#160;&#160;<a class="el" href="a00056.html#aa520fbf142ba1e7e659590c07da31921a695d30cfd5838823571d3176fba3fb50">TOKEN_WIND</a>
 <br />
  }</td></tr>
 <tr class="separator:aa520fbf142ba1e7e659590c07da31921"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,7 +211,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a3f7d4dcd2a607f34d7e03a65a208501f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f">parse_command_line</a> (void)</td></tr>
 <tr class="memdesc:a3f7d4dcd2a607f34d7e03a65a208501f"><td class="mdescLeft">&#160;</td><td class="mdescRight">parse_command_line: Parses a single command line (terminated by a newline) from standard input.  <a href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f">More...</a><br /></td></tr>
 <tr class="separator:a3f7d4dcd2a607f34d7e03a65a208501f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae240d0d18dee3daf177c5fd01d99936f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f">Dialog_task</a> (void *args <a class="el" href="a00131.html#a450d87c6a516eb359791b9aa89955cb5">__attribute__</a>((unused)))</td></tr>
+<tr class="memitem:ae240d0d18dee3daf177c5fd01d99936f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f">Dialog_task</a> (void *args <a class="el" href="a00137.html#a450d87c6a516eb359791b9aa89955cb5">__attribute__</a>((unused)))</td></tr>
 <tr class="separator:ae240d0d18dee3daf177c5fd01d99936f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -271,7 +275,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define YYINPUT&#160;&#160;&#160;<a class="el" href="a00125.html#a07a9fbf5b0b93c82edb8d1d7582f7019">svc_UART_getc</a>(&amp;<a class="el" href="a00125.html#ab0a7406e4fc58e27dc1efdc0b7861cff">svc_uart2</a>, portMAX_DELAY)</td>
+          <td class="memname">#define YYINPUT&#160;&#160;&#160;<a class="el" href="a00131.html#a07a9fbf5b0b93c82edb8d1d7582f7019">svc_UART_getc</a>(&amp;<a class="el" href="a00131.html#ab0a7406e4fc58e27dc1efdc0b7861cff">svc_uart2</a>, portMAX_DELAY)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -321,6 +325,7 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921ae46756391f70776ffc1807571e304ff0" name="aa520fbf142ba1e7e659590c07da31921ae46756391f70776ffc1807571e304ff0"></a>TOKEN_SIMPLE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921aeaf68c5d9b052b370d715736cdb99ae2" name="aa520fbf142ba1e7e659590c07da31921aeaf68c5d9b052b370d715736cdb99ae2"></a>TOKEN_STARBOARD&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a8aa50f3151b28d4eaaef43ebc05bf302" name="aa520fbf142ba1e7e659590c07da31921a8aa50f3151b28d4eaaef43ebc05bf302"></a>TOKEN_STATUS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a70014c8e2b8e2aa6a1504ee6f71f0a2c" name="aa520fbf142ba1e7e659590c07da31921a70014c8e2b8e2aa6a1504ee6f71f0a2c"></a>TOKEN_TEST&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a2b771e894572d3610b357cdb4986a87f" name="aa520fbf142ba1e7e659590c07da31921a2b771e894572d3610b357cdb4986a87f"></a>TOKEN_TURN&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aa520fbf142ba1e7e659590c07da31921a695d30cfd5838823571d3176fba3fb50" name="aa520fbf142ba1e7e659590c07da31921a695d30cfd5838823571d3176fba3fb50"></a>TOKEN_WIND&#160;</td><td class="fielddoc"></td></tr>
 </table>
@@ -421,19 +426,29 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="a00056_ae240d0d18dee3daf177c5fd01d99936f_cgraph.png" border="0" usemap="#aa00056_ae240d0d18dee3daf177c5fd01d99936f_cgraph" alt=""/></div>
 <map name="aa00056_ae240d0d18dee3daf177c5fd01d99936f_cgraph" id="aa00056_ae240d0d18dee3daf177c5fd01d99936f_cgraph">
-<area shape="rect" title=" " alt="" coords="5,157,104,184"/>
-<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="152,157,313,184"/>
-<area shape="rect" href="a00062.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="361,5,528,32"/>
-<area shape="rect" href="a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="391,56,498,83"/>
-<area shape="rect" href="a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="381,107,509,133"/>
-<area shape="rect" href="a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="391,157,499,184"/>
-<area shape="rect" href="a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="397,208,492,235"/>
-<area shape="rect" href="a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="415,259,474,285"/>
-<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="381,309,509,336"/>
-<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="784,284,948,311"/>
-<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="576,360,736,387"/>
-<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="603,309,709,336"/>
-<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="803,360,929,387"/>
+<area shape="rect" title=" " alt="" coords="5,335,104,361"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="152,335,313,361"/>
+<area shape="rect" href="a00065.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="393,5,559,32"/>
+<area shape="rect" href="a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="423,56,529,83"/>
+<area shape="rect" href="a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="412,107,540,133"/>
+<area shape="rect" href="a00050.html#a8866b5421a676559242721d47fc1fcdc" title=" " alt="" coords="457,157,495,184"/>
+<area shape="rect" href="a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="422,259,530,285"/>
+<area shape="rect" href="a00059.html#a05ed0d391610946ce1255c9645c4bd84" title=" " alt="" coords="379,309,573,336"/>
+<area shape="rect" href="a00059.html#ac0300ece27bdc23a8545f7aa869760ae" title=" " alt="" coords="378,360,574,387"/>
+<area shape="rect" href="a00059.html#a93e213f1b3bd22fb5e5669fae1956456" title=" " alt="" coords="361,411,591,437"/>
+<area shape="rect" href="a00059.html#afcdf9b0a01973c4ec04f56b39a8ff860" title=" " alt="" coords="381,461,571,488"/>
+<area shape="rect" href="a00059.html#ad65086395e98dedebb8f31d301809d55" title=" " alt="" coords="381,512,571,539"/>
+<area shape="rect" href="a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="429,563,523,589"/>
+<area shape="rect" href="a00071.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="447,613,505,640"/>
+<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="695,208,823,235"/>
+<area shape="rect" href="a00062.html#aef32bb0c942a82dafa2b15ba7b64b9c5" title=" " alt="" coords="416,664,536,691"/>
+<area shape="rect" href="a00050.html#af0b843e95b71e99f178f067d104c34c1" title=" " alt="" coords="639,81,879,108"/>
+<area shape="rect" href="a00050.html#a36c7605fe943636b66f8f5b411f81136" title=" " alt="" coords="666,157,851,184"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="927,107,1087,133"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="1154,81,1279,108"/>
+<area shape="rect" href="a00005.html#ab3e01b9f2d18902b5ae589d07c638dd8" title="Skips len bytes in the buffer (advances idxStart)." alt="" coords="957,5,1056,32"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="1135,208,1299,235"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="954,208,1059,235"/>
 </map>
 </div>
 <div class="dynheader">
@@ -532,18 +547,28 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="a00056_a3f7d4dcd2a607f34d7e03a65a208501f_cgraph.png" border="0" usemap="#aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_cgraph" alt=""/></div>
 <map name="aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_cgraph" id="aa00056_a3f7d4dcd2a607f34d7e03a65a208501f_cgraph">
-<area shape="rect" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="5,157,167,184"/>
-<area shape="rect" href="a00062.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="215,5,381,32"/>
-<area shape="rect" href="a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="245,56,351,83"/>
-<area shape="rect" href="a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="234,107,362,133"/>
-<area shape="rect" href="a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="244,157,352,184"/>
-<area shape="rect" href="a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="251,208,345,235"/>
-<area shape="rect" href="a00068.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="269,259,327,285"/>
-<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="234,309,362,336"/>
-<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="637,284,801,311"/>
-<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="429,360,589,387"/>
-<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="457,309,562,336"/>
-<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="657,360,782,387"/>
+<area shape="rect" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="5,335,167,361"/>
+<area shape="rect" href="a00065.html#a4fc8a3debbdfe072eed3d6ac10b3f024" title=" " alt="" coords="246,5,413,32"/>
+<area shape="rect" href="a00056.html#ae2fd86edfbe772063129bca4abbd1eb1" title=" " alt="" coords="276,56,383,83"/>
+<area shape="rect" href="a00056.html#a876d26799b33d1d1c13397656e391bdd" title="convert_number: Manually converts a string representing a signed number into an integer." alt="" coords="265,107,393,133"/>
+<area shape="rect" href="a00050.html#a8866b5421a676559242721d47fc1fcdc" title=" " alt="" coords="310,157,349,184"/>
+<area shape="rect" href="a00056.html#a072d11c2be29c39c82d13492090d3d74" title="lookup_token: Compares a given token string to the known keywords table." alt="" coords="275,259,383,285"/>
+<area shape="rect" href="a00059.html#a05ed0d391610946ce1255c9645c4bd84" title=" " alt="" coords="232,309,427,336"/>
+<area shape="rect" href="a00059.html#ac0300ece27bdc23a8545f7aa869760ae" title=" " alt="" coords="231,360,427,387"/>
+<area shape="rect" href="a00059.html#a93e213f1b3bd22fb5e5669fae1956456" title=" " alt="" coords="215,411,444,437"/>
+<area shape="rect" href="a00059.html#afcdf9b0a01973c4ec04f56b39a8ff860" title=" " alt="" coords="235,461,424,488"/>
+<area shape="rect" href="a00059.html#ad65086395e98dedebb8f31d301809d55" title=" " alt="" coords="234,512,425,539"/>
+<area shape="rect" href="a00056.html#ac464eff2c5b203876f1d5993d2bfcf46" title="read_token: Reads a token (a word or number) from standard input using USART_getc()." alt="" coords="282,563,377,589"/>
+<area shape="rect" href="a00071.html#aa383452fe445bfae989358c9d7d96f4f" title=" " alt="" coords="300,613,359,640"/>
+<area shape="rect" href="a00050.html#aca9a2b5d52ea7cb385abffb611d72361" title=" " alt="" coords="548,208,676,235"/>
+<area shape="rect" href="a00062.html#aef32bb0c942a82dafa2b15ba7b64b9c5" title=" " alt="" coords="269,664,389,691"/>
+<area shape="rect" href="a00050.html#af0b843e95b71e99f178f067d104c34c1" title=" " alt="" coords="492,81,732,108"/>
+<area shape="rect" href="a00050.html#a36c7605fe943636b66f8f5b411f81136" title=" " alt="" coords="519,157,705,184"/>
+<area shape="rect" href="a00005.html#a04fc040a6bc37c6e937941834355e74a" title="Gets the next contiguous block of data available for reading." alt="" coords="780,107,940,133"/>
+<area shape="rect" href="a00005.html#ae7d2b03a35849ef3608478c60275ee98" title="Checks if the buffer is empty." alt="" coords="1007,81,1133,108"/>
+<area shape="rect" href="a00005.html#ab3e01b9f2d18902b5ae589d07c638dd8" title="Skips len bytes in the buffer (advances idxStart)." alt="" coords="811,5,909,32"/>
+<area shape="rect" href="a00005.html#a14879a103e26f4046753802aae30b3ee" title="Gets the available space in the buffer." alt="" coords="988,208,1152,235"/>
+<area shape="rect" href="a00005.html#a01aef86db943a39b165b5f2596c0ac97" title="Writes data to the ring buffer." alt="" coords="807,208,913,235"/>
 </map>
 </div>
 <div class="dynheader">

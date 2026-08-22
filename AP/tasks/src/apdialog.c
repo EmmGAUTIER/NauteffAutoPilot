@@ -27,8 +27,11 @@
  *
  * Reads from line buffered input
  *
- * turn port/starboard <angle>
- * mode idle|heading : set idle or heading mode
+ * turn port | starboard <angle>
+ * mode idle | heading : set idle or heading mode
+ * Kp = <Number> : set Kp proportional coefficient of PID regulator
+ * Ki = <Number> : set Ki integral coefficient of PID regulator
+ * Ki = <Number> : set Kd derivative coefficient of PID regulator
  *
  *
  *****************************************************************************/
@@ -49,12 +52,13 @@
 #include "mems.h"
 #include "motor.h"
 #include "service.h"
+#include "test.h"
 #include <stm32l452xx.h>
 #include <stm32l4xx_ll_gpio.h>
 
 #define DBG_DIALOG_PRINT(X) (X)
 
-#define YYINPUT svc_UART_getc(&svc_uart2, portMAX_DELAY)
+#define YYINPUT svc_UART_getc(&SERVICE_UART_LOG, portMAX_DELAY)
 
 #if 0
 // #define YYINPUT entree()
@@ -79,13 +83,17 @@ typedef enum
     TOKEN_UNKNOWN = 0, /* Unrecognized token */
     TOKEN_AP,
     TOKEN_AHRS,
+    TOKEN_ANGLE,
     TOKEN_CALIBRATE,
     TOKEN_CONFIG,
+    TOKEN_DISENGAGE,
     TOKEN_DISPLAY,
     TOKEN_DT0058,
+    TOKEN_ENGAGE,
     TOKEN_EOL, /* End-of-line marker */
     TOKEN_GPS,
     TOKEN_HEADING,
+    TOKEN_HELM,
     TOKEN_HWMS, /* High Water Marks, stack usage measure */
     TOKEN_IDLE,
     TOKEN_KD,
@@ -96,6 +104,7 @@ typedef enum
     TOKEN_MODE,
     TOKEN_MOTOR,
     TOKEN_MOTOR_CVT_ANGLE_TIME,
+    TOKEN_MOTOR_DELTA_DIR_GAIN,
     TOKEN_MOTOR_HPF_COEFF,
     TOKEN_MOTOR_THRESHOLD,
     TOKEN_NUMBER, /* Represents a number token (with optional sign) */
@@ -106,6 +115,7 @@ typedef enum
     TOKEN_SIMPLE,
     TOKEN_STARBOARD,
     TOKEN_STATUS,
+    TOKEN_TEST,
     TOKEN_TURN,
     TOKEN_WIND
 
@@ -123,35 +133,42 @@ typedef struct
 /* Table of known keywords */
 static const TokenEntry tokenTable[] =
 {
-    { "calibrate", TOKEN_CALIBRATE },
-    { "AP", TOKEN_AP },
-    { "AHRS", TOKEN_AHRS },
-    { "config", TOKEN_CONFIG },
-    { "display", TOKEN_DISPLAY },
-    { "DT0058", TOKEN_DT0058 },
-    { "GPS", TOKEN_GPS },
-    { "heading", TOKEN_HEADING },
-    { "hwms", TOKEN_HWMS},
-    { "idle", TOKEN_IDLE },
-    { "Kd", TOKEN_KD },
-    { "Ki", TOKEN_KI },
-    { "Kp", TOKEN_KP },
-    { "mag_vs_gyr", TOKEN_MAG_VS_GYR },
-    { "MEMS", TOKEN_MEMS },
-    { "mode", TOKEN_MODE },
-    { "motor", TOKEN_MOTOR },
-    { "motor_angletime", TOKEN_MOTOR_CVT_ANGLE_TIME },
-    { "motor_hpf_coeff", TOKEN_MOTOR_HPF_COEFF },
-    { "motor_threshold", TOKEN_MOTOR_THRESHOLD },
-    { "port", TOKEN_PORT },
-    { "quat", TOKEN_QUAT },
-    { "select", TOKEN_SELECT },
-    { "set", TOKEN_SET },
-    { "simple", TOKEN_SIMPLE },
-    { "starboard", TOKEN_STARBOARD },
-    { "turn", TOKEN_TURN },
-    { "wind", TOKEN_WIND },
-    { NULL, TOKEN_UNKNOWN }
+    { "calibrate",          TOKEN_CALIBRATE },
+    { "AP",                 TOKEN_AP },
+    { "AHRS",               TOKEN_AHRS },
+    { "angle",              TOKEN_ANGLE },
+    { "config",             TOKEN_CONFIG },
+    { "disengage",          TOKEN_DISENGAGE },
+    { "display",            TOKEN_DISPLAY },
+    { "DT0058",             TOKEN_DT0058 },
+    { "engage",             TOKEN_ENGAGE },
+    { "GPS",                TOKEN_GPS },
+    { "heading",            TOKEN_HEADING },
+    { "helm",               TOKEN_HELM },
+    { "hwms",               TOKEN_HWMS},
+    { "idle",               TOKEN_IDLE },
+    { "Kd",                 TOKEN_KD },
+    { "Ki",                 TOKEN_KI },
+    { "Kp",                 TOKEN_KP },
+    { "mag_vs_gyr",         TOKEN_MAG_VS_GYR },
+    { "MEMS",               TOKEN_MEMS },
+    { "mode",               TOKEN_MODE },
+    { "motor",              TOKEN_MOTOR },
+    { "motor_angletime",    TOKEN_MOTOR_CVT_ANGLE_TIME },
+    { "motor_deltadirgain", TOKEN_MOTOR_DELTA_DIR_GAIN },
+    { "motor_hpf_coeff",    TOKEN_MOTOR_HPF_COEFF },
+    { "motor_threshold",    TOKEN_MOTOR_THRESHOLD },
+    { "port",               TOKEN_PORT },
+    { "quat",               TOKEN_QUAT },
+    { "select",             TOKEN_SELECT },
+    { "set",                TOKEN_SET },
+    { "simple",             TOKEN_SIMPLE },
+    { "starboard",          TOKEN_STARBOARD },
+    { "status",             TOKEN_STATUS },
+    { "test",               TOKEN_TEST },
+    { "turn",               TOKEN_TURN },
+    { "wind",               TOKEN_WIND },
+    { NULL,                 TOKEN_UNKNOWN }
 };
 
 QueueHandle_t msgQueueDialogIn;
@@ -398,10 +415,8 @@ void parse_command_line(void)
     int tokenCount = 0;
     int terminator;
     static char message[100];
-    //char nbcar;
     MsgAutoPilot_t msgAutoPilot;
     MEMS_Msg_t msgMEMs;
-    Motor_msg_t msgMotor;
 
     for(int i = 0; i < MAX_TOKENS; i++)
     {
@@ -455,9 +470,13 @@ void parse_command_line(void)
         {
             int angle = convert_number(tokens[2]);
             msgAutoPilot.msgType = AP_MSG_TURN;
-            msgAutoPilot.data.reqTurnAngle =
-                (tokenTypes[1] == TOKEN_PORT) ? -angle : angle;
+            msgAutoPilot.data.reqTurnAngle = ((tokenTypes[1] == TOKEN_PORT) ? -angle : angle);
             xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
+
+            //int angle = convert_number(tokens[2]);
+            //msgAutoPilot.msgType = AP_MSG_TURN;
+            //msgAutoPilot.data.reqTurnAngle = ((tokenTypes[1] == TOKEN_PORT) ? -angle : angle)  * (M_PI / 180.F);
+            //xQueueSend(msgQueueAutoPilot, &msgAutoPilot, 0);
         }
         else
         {
@@ -560,9 +579,11 @@ void parse_command_line(void)
                     break;
 
                 case TOKEN_MOTOR_CVT_ANGLE_TIME:
-                    msgMotor.msgType = MOTOR_MSG_SET_CVT_ANGLE_TIME;
-                    msgMotor.data.cvtAngleTime = numberValue;
-                    xQueueSend(msgQueueMotor, &msgMotor, 0);
+                    Motor_msg_set_cvt_angle_time(numberValue);
+                    break;
+
+                case TOKEN_MOTOR_DELTA_DIR_GAIN:
+                    Motor_msg_set_delta_dir_gain(numberValue);
                     break;
 
                 case TOKEN_MAG_VS_GYR:
@@ -572,15 +593,11 @@ void parse_command_line(void)
                     break;
 
                 case TOKEN_MOTOR_THRESHOLD:
-                    msgMotor.msgType = MOTOR_MSG_SET_THRESHOLD;
-                    msgMotor.data.threshold = numberValue;
-                    xQueueSend(msgQueueMotor, &msgMotor, 0);
+                    Motor_msg_set_threshold(numberValue);
                     break;
 
                 case TOKEN_MOTOR_HPF_COEFF:
-                    msgMotor.msgType = MOTOR_MSG_SET_HPF_COEF;
-                    msgMotor.data.hpf_coeff = numberValue;
-                    xQueueSend(msgQueueMotor, &msgMotor, 0);
+                    Motor_msg_set_hpf_coeff(numberValue);
                     break;
 
                 default:
@@ -621,7 +638,7 @@ void parse_command_line(void)
 
             break;
 
-        case TOKEN_HWMS: /* High Water MarkS : display stack usage of each task */
+        case TOKEN_HWMS: /* High Water Marks : display stack usage of each task */
 
             /* task list is in taskHandles[] */
             for(int i = 0 ; i < tasksNumber ; i++)
@@ -631,9 +648,10 @@ void parse_command_line(void)
                 /* get task name and high water mark of task. */
                 UBaseType_t hwm = uxTaskGetStackHighWaterMark(tasksHandles[i]);
                 char* taskName = pcTaskGetName(tasksHandles[i]);
-                int nbcar = snprintf(message, sizeof(message), "TASK HWMS %d  %16s : %u bytes\n", i, taskName,
-                                     hwm * sizeof(StackType_t));
-                svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+                int nbcar = snprintf(message, sizeof(message),
+                                     "TASK HWMS %d  %16s : %u bytes\n",
+                                     i, taskName, hwm * sizeof(StackType_t));
+                svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U);
             }
 
             break; /* TOKEN_HWMS */
@@ -644,11 +662,14 @@ void parse_command_line(void)
 
             case TOKEN_CONFIG: /* display motor config */
 
-                snprintf(message, sizeof(message) - 1, "Motor config ?\n");
-                svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+                Motor_msg_display_config();
 
-                msgMotor.msgType = MOTOR_MSG_DISPLAY_CONFIG;
-                xQueueSend(msgQueueMotor, &msgMotor, 0);
+                break;
+
+            case TOKEN_STATUS: /* display motor status */
+
+                Motor_msg_display_status();
+
                 break;
 
             default:
@@ -712,8 +733,8 @@ void parse_command_line(void)
 
             }
 
-            snprintf(message,sizeof(message), "DIALOG select AHRS type %d\n", ahrsType);
-            svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+            snprintf(message, sizeof(message), "DIALOG select AHRS type %d\n", ahrsType);
+            svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
 
             if(ahrsType != AHRS_TYPE_NONE)
             {
@@ -728,8 +749,53 @@ void parse_command_line(void)
 
         break;
 
+    case TOKEN_MOTOR:
+        switch(tokenTypes[1])
+        {
+        case TOKEN_ENGAGE:
+
+            Motor_msg_engage_actuator();
+
+            break;
+
+        case TOKEN_DISENGAGE:
+
+            Motor_msg_disengage_actuator();
+
+            break;
+
+        case TOKEN_HELM:
+
+            if((tokenTypes[2] == TOKEN_ANGLE)
+                    && (tokenTypes[3] == TOKEN_NUMBER)
+                    && (convert_float(tokens[3], &numberValue)))
+            {
+                Motor_msg_set_helm_angle(numberValue);
+            }
+
+            break;
+
+        default:
+            /* Pas compris */
+            break;
+        }
+
+        break;
+
+    case TOKEN_TEST:
+
+        if(tokenTypes[1] == TOKEN_NUMBER)
+        {
+            int test_number = (int)convert_number(tokens[1]);
+            snprintf(message, sizeof(message), "DIALOG start test %d\n", test_number);
+            svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), 0U);
+            Test_msg_start(test_number);
+        }
+
+        break;
+
     default:
-        return; // Syntax error: unrecognized command
+        return; /* Syntax error: unrecognized command */
     }
 
     return;
@@ -761,7 +827,7 @@ void __attribute__((noreturn)) taskDialogOut(void *args __attribute__((unused)))
             nbcar = snprintf(message, sizeof(message), "Message type %d\r\n", (int)msg.msgType);
             // Process the message
             // For now, just print the message type
-            svc_UART_Write(&svc_uart2, message, nbcar, 0U);
+            svc_UART_Write(&SERVICE_UART_LOG, message, nbcar, 0U);
         }
     }
 }

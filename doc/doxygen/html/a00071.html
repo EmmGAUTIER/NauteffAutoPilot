@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: nassert.h File Reference</title>
+<title>Nauteff auto pilot: rlib.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -68,33 +68,377 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a>  </div>
-  <div class="headertitle"><div class="title">nassert.h File Reference</div></div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">rlib.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-
+<div class="textblock"><code>#include &quot;<a class="el" href="a00083_source.html">util.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for rlib.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00072.png" border="0" usemap="#arlib_8h" alt=""/></div>
+<map name="arlib_8h" id="arlib_8h">
+<area shape="rect" title=" " alt="" coords="13,5,68,32"/>
+<area shape="rect" href="a00083.html" title=" " alt="" coords="13,80,68,107"/>
+<area shape="rect" title=" " alt="" coords="5,155,76,181"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00073.png" border="0" usemap="#arlib_8hdep" alt=""/></div>
+<map name="arlib_8hdep" id="arlib_8hdep">
+<area shape="rect" title=" " alt="" coords="569,5,623,32"/>
+<area shape="rect" href="a00041.html" title=" " alt="" coords="5,80,96,107"/>
+<area shape="rect" href="a00029.html" title=" " alt="" coords="121,80,226,107"/>
+<area shape="rect" href="a00056.html" title=" " alt="" coords="250,80,339,107"/>
+<area shape="rect" href="a00065.html" title=" " alt="" coords="364,80,455,107"/>
+<area shape="rect" href="a00011.html" title=" " alt="" coords="479,80,543,107"/>
+<area shape="rect" href="a00038.html" title=" " alt="" coords="567,80,625,107"/>
+<area shape="rect" href="a00026.html" title=" " alt="" coords="649,80,767,107"/>
+<area shape="rect" href="a00047.html" title=" " alt="" coords="791,80,865,107"/>
+<area shape="rect" href="a00059.html" title=" " alt="" coords="890,80,961,107"/>
+<area shape="rect" href="a00002.html" title=" " alt="" coords="985,80,1039,107"/>
+<area shape="rect" href="a00062.html" title=" " alt="" coords="1064,80,1123,107"/>
+</map>
+</div>
+</div>
 <p><a href="a00071_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a8c2c4c2d7befb036eb79822f1b05dc85"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#a8c2c4c2d7befb036eb79822f1b05dc85">nassert</a>(X)&#160;&#160;&#160;if (!(X)) {}</td></tr>
-<tr class="separator:a8c2c4c2d7befb036eb79822f1b05dc85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4a1bbbf810b33c3bba28171179cd8ed"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#ae4a1bbbf810b33c3bba28171179cd8ed">RLIB_CTYPE_LOWER</a>&#160;&#160;&#160;0x01</td></tr>
+<tr class="separator:ae4a1bbbf810b33c3bba28171179cd8ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc1793f8da30e38c6e57d3ecda08f457"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#afc1793f8da30e38c6e57d3ecda08f457">RLIB_CTYPE_UPPER</a>&#160;&#160;&#160;0x02</td></tr>
+<tr class="separator:afc1793f8da30e38c6e57d3ecda08f457"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a691dee6868cb969808f908810e170091"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#a691dee6868cb969808f908810e170091">RLIB_CTYPE_DIGIT</a>&#160;&#160;&#160;0x04</td></tr>
+<tr class="separator:a691dee6868cb969808f908810e170091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae51655f612db4819cdca585ba6325feb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#ae51655f612db4819cdca585ba6325feb">RLIB_CTYPE_SPACE</a>&#160;&#160;&#160;0x08</td></tr>
+<tr class="separator:ae51655f612db4819cdca585ba6325feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e63fd941771b656c364aaa4497032e3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#a2e63fd941771b656c364aaa4497032e3">RLIB_CTYPE_PUNCT</a>&#160;&#160;&#160;0x10</td></tr>
+<tr class="separator:a2e63fd941771b656c364aaa4497032e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a162537945c848d0422625fb2b69649b1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#a162537945c848d0422625fb2b69649b1">RLIB_CTYPE_CNTRL</a>&#160;&#160;&#160;0x20</td></tr>
+<tr class="separator:a162537945c848d0422625fb2b69649b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb5933facb5734c81a3ed544cd2f4614"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#adb5933facb5734c81a3ed544cd2f4614">RLIB_CTYPE_GRAPH</a>&#160;&#160;&#160;0x40</td></tr>
+<tr class="separator:adb5933facb5734c81a3ed544cd2f4614"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c324f74659d3bcd0945ecf6d184167e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#a4c324f74659d3bcd0945ecf6d184167e">RLIB_CTYPE_XDIGIT</a>&#160;&#160;&#160;0x80</td></tr>
+<tr class="separator:a4c324f74659d3bcd0945ecf6d184167e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:aa383452fe445bfae989358c9d7d96f4f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#aa383452fe445bfae989358c9d7d96f4f">strlen</a> (const char *<a class="el" href="a00083.html#a9c19701a191e1491dd96b283ad82bbdd">s</a>)</td></tr>
+<tr class="separator:aa383452fe445bfae989358c9d7d96f4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba088e716bccbc96d42da97e96316df1"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#aba088e716bccbc96d42da97e96316df1">memcpy</a> (void *dest, const void *src, size_t n)</td></tr>
+<tr class="separator:aba088e716bccbc96d42da97e96316df1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a313175102214d45434bf045db18dddf0"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#a313175102214d45434bf045db18dddf0">memset</a> (void *<a class="el" href="a00083.html#a9c19701a191e1491dd96b283ad82bbdd">s</a>, <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> c, size_t n)</td></tr>
+<tr class="separator:a313175102214d45434bf045db18dddf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66e363031a1cbf510d5eafe40d49a790"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#a66e363031a1cbf510d5eafe40d49a790">strcpy</a> (char *dst, const char *src)</td></tr>
+<tr class="separator:a66e363031a1cbf510d5eafe40d49a790"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32d1288ea20fb6da27381435ffc5cf54"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#a32d1288ea20fb6da27381435ffc5cf54">__attribute__</a> ((always_inline)) inline <a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> rlib_isalnum(<a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> c)</td></tr>
+<tr class="separator:a32d1288ea20fb6da27381435ffc5cf54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aa260f85e13eb47838c25053d883266b3"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00071.html#aa260f85e13eb47838c25053d883266b3">_ctypes</a> [256]</td></tr>
+<tr class="separator:aa260f85e13eb47838c25053d883266b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a8c2c4c2d7befb036eb79822f1b05dc85" name="a8c2c4c2d7befb036eb79822f1b05dc85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c2c4c2d7befb036eb79822f1b05dc85">&#9670;&nbsp;</a></span>nassert</h2>
+<a id="a162537945c848d0422625fb2b69649b1" name="a162537945c848d0422625fb2b69649b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a162537945c848d0422625fb2b69649b1">&#9670;&nbsp;</a></span>RLIB_CTYPE_CNTRL</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define nassert</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">X</td><td>)</td>
-          <td>&#160;&#160;&#160;if (!(X)) {}</td>
+          <td class="memname">#define RLIB_CTYPE_CNTRL&#160;&#160;&#160;0x20</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a691dee6868cb969808f908810e170091" name="a691dee6868cb969808f908810e170091"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a691dee6868cb969808f908810e170091">&#9670;&nbsp;</a></span>RLIB_CTYPE_DIGIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RLIB_CTYPE_DIGIT&#160;&#160;&#160;0x04</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adb5933facb5734c81a3ed544cd2f4614" name="adb5933facb5734c81a3ed544cd2f4614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb5933facb5734c81a3ed544cd2f4614">&#9670;&nbsp;</a></span>RLIB_CTYPE_GRAPH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RLIB_CTYPE_GRAPH&#160;&#160;&#160;0x40</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae4a1bbbf810b33c3bba28171179cd8ed" name="ae4a1bbbf810b33c3bba28171179cd8ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4a1bbbf810b33c3bba28171179cd8ed">&#9670;&nbsp;</a></span>RLIB_CTYPE_LOWER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RLIB_CTYPE_LOWER&#160;&#160;&#160;0x01</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2e63fd941771b656c364aaa4497032e3" name="a2e63fd941771b656c364aaa4497032e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e63fd941771b656c364aaa4497032e3">&#9670;&nbsp;</a></span>RLIB_CTYPE_PUNCT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RLIB_CTYPE_PUNCT&#160;&#160;&#160;0x10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae51655f612db4819cdca585ba6325feb" name="ae51655f612db4819cdca585ba6325feb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51655f612db4819cdca585ba6325feb">&#9670;&nbsp;</a></span>RLIB_CTYPE_SPACE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RLIB_CTYPE_SPACE&#160;&#160;&#160;0x08</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afc1793f8da30e38c6e57d3ecda08f457" name="afc1793f8da30e38c6e57d3ecda08f457"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc1793f8da30e38c6e57d3ecda08f457">&#9670;&nbsp;</a></span>RLIB_CTYPE_UPPER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RLIB_CTYPE_UPPER&#160;&#160;&#160;0x02</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4c324f74659d3bcd0945ecf6d184167e" name="a4c324f74659d3bcd0945ecf6d184167e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c324f74659d3bcd0945ecf6d184167e">&#9670;&nbsp;</a></span>RLIB_CTYPE_XDIGIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RLIB_CTYPE_XDIGIT&#160;&#160;&#160;0x80</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a32d1288ea20fb6da27381435ffc5cf54" name="a32d1288ea20fb6da27381435ffc5cf54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32d1288ea20fb6da27381435ffc5cf54">&#9670;&nbsp;</a></span>__attribute__()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">__attribute__ </td>
+          <td>(</td>
+          <td class="paramtype">(always_inline)&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba088e716bccbc96d42da97e96316df1" name="aba088e716bccbc96d42da97e96316df1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba088e716bccbc96d42da97e96316df1">&#9670;&nbsp;</a></span>memcpy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void * memcpy </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a313175102214d45434bf045db18dddf0" name="a313175102214d45434bf045db18dddf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a313175102214d45434bf045db18dddf0">&#9670;&nbsp;</a></span>memset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void * memset </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00071_a313175102214d45434bf045db18dddf0_icgraph.png" border="0" usemap="#aa00071_a313175102214d45434bf045db18dddf0_icgraph" alt=""/></div>
+<map name="aa00071_a313175102214d45434bf045db18dddf0_icgraph" id="aa00071_a313175102214d45434bf045db18dddf0_icgraph">
+<area shape="rect" title=" " alt="" coords="144,5,220,32"/>
+<area shape="rect" href="a00011.html#a2045e43ed87a04df16914157ea4decc7" title=" " alt="" coords="5,5,96,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a66e363031a1cbf510d5eafe40d49a790" name="a66e363031a1cbf510d5eafe40d49a790"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66e363031a1cbf510d5eafe40d49a790">&#9670;&nbsp;</a></span>strcpy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * strcpy </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>src</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa383452fe445bfae989358c9d7d96f4f" name="aa383452fe445bfae989358c9d7d96f4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa383452fe445bfae989358c9d7d96f4f">&#9670;&nbsp;</a></span>strlen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t strlen </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00071_aa383452fe445bfae989358c9d7d96f4f_icgraph.png" border="0" usemap="#aa00071_aa383452fe445bfae989358c9d7d96f4f_icgraph" alt=""/></div>
+<map name="aa00071_aa383452fe445bfae989358c9d7d96f4f_icgraph" id="aa00071_aa383452fe445bfae989358c9d7d96f4f_icgraph">
+<area shape="rect" title=" " alt="" coords="660,201,719,228"/>
+<area shape="rect" href="a00065.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,302,112,329"/>
+<area shape="rect" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb" title=" " alt="" coords="433,49,581,76"/>
+<area shape="rect" href="a00029.html#aa7ea64af1dac32b3af3a4a898b940824" title=" " alt="" coords="425,100,588,126"/>
+<area shape="rect" href="a00026.html#abc8ae3e325b0b84e82632cd263c30fb0" title=" " alt="" coords="451,150,562,177"/>
+<area shape="rect" href="a00011.html#a55d30a57ced2043d0903c37c8254e0f5" title=" " alt="" coords="435,201,578,228"/>
+<area shape="rect" href="a00038.html#a212785a20157f9f72833269483fbbdbc" title=" " alt="" coords="441,252,573,278"/>
+<area shape="rect" href="a00038.html#ab565c5a9ef974d7ae8873525de16cb95" title=" " alt="" coords="420,302,593,329"/>
+<area shape="rect" href="a00059.html#a62cff2f3ec42ff68c9cecde80cfb5679" title="Send the order &quot;engage clutch&quot; to motor task." alt="" coords="401,353,612,380"/>
+<area shape="rect" href="a00056.html#a3f7d4dcd2a607f34d7e03a65a208501f" title="parse_command_line: Parses a single command line (terminated by a newline) from standard input." alt="" coords="426,404,587,430"/>
+<area shape="rect" href="a00065.html#a9d6276b9ad0b1f218e4db68ca0dd5a62" title=" " alt="" coords="172,302,341,329"/>
+<area shape="rect" href="a00065.html#a25a4b846419f0843e9516b27fc86fd77" title=" " alt="" coords="160,353,353,380"/>
+<area shape="rect" href="a00056.html#ae240d0d18dee3daf177c5fd01d99936f" title=" " alt="" coords="207,404,306,430"/>
+<area shape="rect" href="a00053.html#a3ecc3c4ea937a5d2e86bd65848aa2551" title=" " alt="" coords="23,404,94,430"/>
+</map>
+</div>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="aa260f85e13eb47838c25053d883266b3" name="aa260f85e13eb47838c25053d883266b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa260f85e13eb47838c25053d883266b3">&#9670;&nbsp;</a></span>_ctypes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char _ctypes[256]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

@@ -1,0 +1,6 @@
+<map id="Motor_msg_engage_actuator" name="Motor_msg_engage_actuator">
+<area shape="rect" id="node1" title="Send the order &quot;engage clutch&quot; to motor task." alt="" coords="401,31,612,57"/>
+<area shape="rect" id="node2" href="$a00065.html#a9d6276b9ad0b1f218e4db68ca0dd5a62" title=" " alt="" coords="172,5,341,32"/>
+<area shape="rect" id="node4" href="$a00065.html#a25a4b846419f0843e9516b27fc86fd77" title=" " alt="" coords="160,56,353,83"/>
+<area shape="rect" id="node3" href="$a00065.html#a93b9cf91f7623d6d8b100a3693d6d5e4" title=" " alt="" coords="5,31,112,57"/>
+</map>

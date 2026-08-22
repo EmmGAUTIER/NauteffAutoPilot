@@ -39,8 +39,8 @@
 #define DBG_PRINT_RAW_VALUES_MAG(X)
 #define DBG_PRINT_MEAN_RAW_VALUES(X)
 #define DBG_PRINT_CALIB(X) (X)
-#define DBG_PRINT_MEAN_CORR_VALUES(X) (X)
-#define DBG_PRINT_ATTITUDE(X)  (X)
+#define DBG_PRINT_MEAN_CORR_VALUES(X)
+#define DBG_PRINT_ATTITUDE(X) (X)
 #define DBG_PRINT_QUATERNION(X)
 #define DBG_PRINT_MADGWICK(X)
 
@@ -833,7 +833,7 @@ void Mems_task(void *param)
                 {
                     DBG_PRINT_RAW_VALUES_ACC(
                         (snprintf(message, sizeof(message), "ACC : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intacc[0], intacc[1], intacc[2]),
-                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                         svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                     if(status == MEMS_Status_Calibrate)
                     {
@@ -853,7 +853,7 @@ void Mems_task(void *param)
                 {
                     DBG_PRINT_RAW_VALUES_GYR(
                         (snprintf(message, sizeof(message), "GYR : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intgyr[0], intgyr[1], intgyr[2]),
-                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                         svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                     if(status == MEMS_Status_Calibrate)
                     {
@@ -872,7 +872,7 @@ void Mems_task(void *param)
                 {
                     DBG_PRINT_RAW_VALUES_MAG(
                         (snprintf(message, sizeof(message), "MAG : %u  %+6d %+6d %+6d\n", xTaskGetTickCount(), intmag[0], intmag[1], intmag[2]),
-                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                         svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                     if(status == MEMS_Status_Calibrate)
                     {
@@ -897,7 +897,7 @@ void Mems_task(void *param)
                                   calibreur.stabNumber,
                                   calibreur.accumulating,
                                   calibreur.nbSampleAcc),
-                         svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                         svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                     if(Calib6_hasEnoughSamples(&calibreur))
                     {
@@ -918,7 +918,7 @@ void Mems_task(void *param)
                                       corrector.accCorrGainx,
                                       corrector.accCorrGainy,
                                       corrector.accCorrGainz),
-                             svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                             svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
                         vTaskDelay(pdMS_TO_TICKS(10));
                         DBG_PRINT_CALIB(
                             (snprintf(message, sizeof(message),
@@ -929,7 +929,7 @@ void Mems_task(void *param)
                                       corrector.gyrCorrGainx,
                                       corrector.gyrCorrGainy,
                                       corrector.gyrCorrGainz),
-                             svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                             svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                         for(int i = 0; i < 6; i++)
                         {
@@ -940,7 +940,7 @@ void Mems_task(void *param)
                                      calibreur.mag_x[i],
                                      calibreur.mag_y[i],
                                      calibreur.mag_z[i]),
-                                                     svc_UART_Write(&svc_uart2, message,
+                                                     svc_UART_Write(&SERVICE_UART_LOG, message,
                                                                     strlen(message), pdMS_TO_TICKS(1));
                         }
 
@@ -953,7 +953,7 @@ void Mems_task(void *param)
                                       corrector.magCorrGainx,
                                       corrector.magCorrGainy,
                                       corrector.magCorrGainz),
-                             svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                             svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
                     }
                 }
 
@@ -992,7 +992,7 @@ void Mems_task(void *param)
                               accMeanRaw.x, accMeanRaw.y, accMeanRaw.z,
                               gyrMeanRaw.x, gyrMeanRaw.y, gyrMeanRaw.z,
                               magMeanRaw.x, magMeanRaw.y, magMeanRaw.z),
-                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                     svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 /* offset and gain corrections */
                 accComp = Corrector_getAccCorrected(&corrector, &accMeanRaw);
@@ -1008,7 +1008,7 @@ void Mems_task(void *param)
                               accComp.x, accComp.y, accComp.z,
                               gyrComp.x, gyrComp.y, gyrComp.z,
                               magComp.x, magComp.y, magComp.z),
-                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                     svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 AHRS_Interfaces[ahrsType]->AHRS_update(&ahrs, &accComp, &gyrComp, &magComp, deltat);
 
@@ -1019,7 +1019,7 @@ void Mems_task(void *param)
                               AHRS_Interfaces[ahrsType]->AHRS_get_pitch(&ahrs),
                               AHRS_Interfaces[ahrsType]->AHRS_get_heading(&ahrs),
                               AHRS_Interfaces[ahrsType]->AHRS_get_yawRate((&ahrs))),
-                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                     svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 Quaternionf orient;
                 orient = AHRS_Interfaces[ahrsType]->AHRS_get_Quaternion(&ahrs);
@@ -1028,7 +1028,7 @@ void Mems_task(void *param)
                     (snprintf(message, sizeof(message),
                               "QUATERNION %+f %+f %+f %+f\n",
                               orient.w, orient.x, orient.y, orient.z),
-                     svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1))));
+                     svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1))));
 
                 tickPast = tickCurrent;
                 accNb = 0U;
@@ -1066,8 +1066,8 @@ void Mems_task(void *param)
                 snprintf(message, sizeof(message),
                          "MEMS param : mag/gyr : %f\n",
                          ahrs.magVsGyr);
-                svc_UART_Write(&svc_uart2, message, strlen(message),
-                                pdMS_TO_TICKS(1));
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message),
+                               pdMS_TO_TICKS(1));
 
                 break; /* case MEMS_MSG_SET_MAG_VS_GYR: */
 
@@ -1080,7 +1080,7 @@ void Mems_task(void *param)
                          AHRS_Interfaces[ahrsType]->name,
                          //ahrsType,
                          ahrs.magVsGyr);
-                svc_UART_Write(&svc_uart2, message, strlen(message),
+                svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message),
                                pdMS_TO_TICKS(1));
 
                 break; /* case MEMS_MSG_DISPLAY_CONFIG: */
@@ -1095,7 +1095,7 @@ void Mems_task(void *param)
                     //AHRS_Interfaces[ahrsType]->AHRS_init(&ahrs);
                     snprintf(message, sizeof(message),
                              "MEMS param AHRS type set to %d\n", ahrsType);
-                    svc_UART_Write(&svc_uart2, message, strlen(message),
+                    svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message),
                                    pdMS_TO_TICKS(1));
                 }
 
@@ -1109,7 +1109,7 @@ void Mems_task(void *param)
         else
         {
             strcpy(message, "MEMS Error receive from queue\n");
-            svc_UART_Write(&svc_uart2, message, strlen(message),
+            svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message),
                            pdMS_TO_TICKS(100));
         }
     }

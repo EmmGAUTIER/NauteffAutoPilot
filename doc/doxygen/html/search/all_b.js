@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['len_0',['len',['../a00162.html#a47182924c0dbbd4035a22585c046c0f0',1,'ServiceTransfer_t']]],
+  ['len_0',['len',['../a00172.html#a47182924c0dbbd4035a22585c046c0f0',1,'ServiceTransfer_t']]],
   ['lookup_5ftoken_1',['lookup_token',['../a00056.html#a072d11c2be29c39c82d13492090d3d74',1,'apdialog.c']]],
   ['lpf_5fcoef_2',['LPF_COEF',['../a00011.html#a47df2dc162e73a41dd8cb89abe12b0d2',1,'calib.c']]],
   ['lsm9ds1_5fcvt_5fmks_5ffactor_5facc_3',['LSM9DS1_CVT_MKS_FACTOR_ACC',['../a00047.html#a5beb07aee3f7b6f5b4f149dcbc4d9e12',1,'mems.c']]],

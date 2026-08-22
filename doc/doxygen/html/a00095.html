@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Nauteff auto pilot: ahrs.h File Reference</title>
+<title>Nauteff auto pilot: mahonyAHRS.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -68,299 +68,96 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
-  <div class="headertitle"><div class="title">ahrs.h File Reference</div></div>
+  <div class="headertitle"><div class="title">mahonyAHRS.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="a00119_source.html">geom.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="a00107_source.html">quat.h</a>&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for ahrs.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00096.png" border="0" usemap="#aahrs_8h" alt=""/></div>
-<map name="aahrs_8h" id="aahrs_8h">
-<area shape="rect" title=" " alt="" coords="55,5,117,32"/>
-<area shape="rect" href="a00119.html" title=" " alt="" coords="5,80,76,107"/>
-<area shape="rect" href="a00107.html" title=" " alt="" coords="100,80,163,107"/>
-<area shape="rect" title=" " alt="" coords="51,155,121,181"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00097.png" border="0" usemap="#aahrs_8hdep" alt=""/></div>
-<map name="aahrs_8hdep" id="aahrs_8hdep">
-<area shape="rect" title=" " alt="" coords="403,5,466,32"/>
-<area shape="rect" href="a00017.html" title=" " alt="" coords="5,80,67,107"/>
-<area shape="rect" href="a00014.html" title=" " alt="" coords="91,80,197,107"/>
-<area shape="rect" href="a00041.html" title=" " alt="" coords="221,80,312,107"/>
-<area shape="rect" href="a00029.html" title=" " alt="" coords="337,80,442,107"/>
-<area shape="rect" href="a00053.html" title=" " alt="" coords="373,155,456,181"/>
-<area shape="rect" href="a00062.html" title=" " alt="" coords="480,155,571,181"/>
-<area shape="rect" href="a00140.html" title=" " alt="" coords="579,80,671,107"/>
-<area shape="rect" href="a00047.html" title=" " alt="" coords="804,155,879,181"/>
-<area shape="rect" href="a00056.html" title=" " alt="" coords="690,155,779,181"/>
-<area shape="rect" href="a00059.html" title=" " alt="" coords="595,155,666,181"/>
-</map>
-</div>
-</div>
+
 <p><a href="a00095_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00182.html">AHRS_Status_t</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00186.html">AHRS_Interface_t</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a8ac904d83063ec9b661ba6d9e2a6b453"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#a8ac904d83063ec9b661ba6d9e2a6b453">AHRS_TYPES_NUMBER</a>&#160;&#160;&#160;1</td></tr>
-<tr class="separator:a8ac904d83063ec9b661ba6d9e2a6b453"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a5653958ade3b660d54e5f617728cd76e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#a5653958ade3b660d54e5f617728cd76e">AHRS_Types</a> { <a class="el" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea0257e55fbf1b896515a8e7e0428ebf03">AHRS_TYPE_NONE</a> = -1
-, <a class="el" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea7041b045e6327a5fa882dec5bbc6610c">AHRS_TYPE_SIMPLE</a> = 0
-, <a class="el" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea410b6edba9f4a9516086953e94a004d0">AHRS_TYPE_QUAT</a>
-, <a class="el" href="a00095.html#a5653958ade3b660d54e5f617728cd76ea05d4544068a22deab8c48c0897617716">AHRS_TYPE_DT0058</a>
- }</td></tr>
-<tr class="separator:a5653958ade3b660d54e5f617728cd76e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a618298c6bba8b28006f83840c64108fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#a618298c6bba8b28006f83840c64108fd">AHRS_init</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
-<tr class="separator:a618298c6bba8b28006f83840c64108fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae25330d51426485223f6ef1b5ba8e5c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#ae25330d51426485223f6ef1b5ba8e5c6">AHRS_update</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus, <a class="el" href="a00198.html">Vector3f</a> *acc, <a class="el" href="a00198.html">Vector3f</a> *gyr, <a class="el" href="a00198.html">Vector3f</a> *mag, float deltat)</td></tr>
-<tr class="separator:ae25330d51426485223f6ef1b5ba8e5c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56484f46471712bfc47bd066488b8511"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#a56484f46471712bfc47bd066488b8511">AHRS_get_roll</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
-<tr class="separator:a56484f46471712bfc47bd066488b8511"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd68e05312decd599783b33b3da7b1d3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#afd68e05312decd599783b33b3da7b1d3">AHRS_get_pitch</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
-<tr class="separator:afd68e05312decd599783b33b3da7b1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafbe1e32e529a951c5a7b2abc0d803a3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#aafbe1e32e529a951c5a7b2abc0d803a3">AHRS_get_heading</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
-<tr class="separator:aafbe1e32e529a951c5a7b2abc0d803a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aead537e023527d91301cd5ca17bd9c17"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#aead537e023527d91301cd5ca17bd9c17">AHRS_get_yawRate</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
-<tr class="separator:aead537e023527d91301cd5ca17bd9c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa841e662fd69e3fc2a25e9987100e499"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#aa841e662fd69e3fc2a25e9987100e499">AHRS_set_mag_vs_gyr_prop</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus, float prop)</td></tr>
-<tr class="separator:aa841e662fd69e3fc2a25e9987100e499"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae991b3a46353130b66e20d8cb3053d88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00230.html">Quaternionf</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#ae991b3a46353130b66e20d8cb3053d88">AHRS_get_Quaternion</a> (<a class="el" href="a00182.html">AHRS_Status_t</a> *mstatus)</td></tr>
-<tr class="separator:ae991b3a46353130b66e20d8cb3053d88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bd7bdeac773e7c317be75ca7331b247"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00230.html">Quaternionf</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#a3bd7bdeac773e7c317be75ca7331b247">calculer_orientation_navire</a> (<a class="el" href="a00198.html">Vector3f</a> north, <a class="el" href="a00198.html">Vector3f</a> east, <a class="el" href="a00198.html">Vector3f</a> down)</td></tr>
-<tr class="separator:a3bd7bdeac773e7c317be75ca7331b247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa02d5933c6d5e374c3c7e2a6cf7c7ad1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#aa02d5933c6d5e374c3c7e2a6cf7c7ad1">quaternion_vers_euler</a> (<a class="el" href="a00230.html">Quaternionf</a> q, float *roll, float *pitch, float *yaw)</td></tr>
-<tr class="separator:aa02d5933c6d5e374c3c7e2a6cf7c7ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a474f7f80603efc65a243b5cf8076cc49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#a474f7f80603efc65a243b5cf8076cc49">MahonyAHRSupdate</a> (float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float deltat)</td></tr>
+<tr class="separator:a474f7f80603efc65a243b5cf8076cc49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa05d571081fc35e1014a15b3d9e7d616"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#aa05d571081fc35e1014a15b3d9e7d616">MahonyAHRSupdateIMU</a> (float gx, float gy, float gz, float ax, float ay, float az, float deltat)</td></tr>
+<tr class="separator:aa05d571081fc35e1014a15b3d9e7d616"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ad2438ce1a9d965da439db90ddd01a0e8"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="a00186.html">AHRS_Interface_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#ad2438ce1a9d965da439db90ddd01a0e8">AHRS_Interfaces</a> []</td></tr>
-<tr class="separator:ad2438ce1a9d965da439db90ddd01a0e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d4cb34a0e2873680d073344c310292f"><td class="memItemLeft" align="right" valign="top">volatile float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#a5d4cb34a0e2873680d073344c310292f">twoKp</a></td></tr>
+<tr class="separator:a5d4cb34a0e2873680d073344c310292f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8780c8514d23cbd96d12e667699012a"><td class="memItemLeft" align="right" valign="top">volatile float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#aa8780c8514d23cbd96d12e667699012a">twoKi</a></td></tr>
+<tr class="separator:aa8780c8514d23cbd96d12e667699012a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a431ba957897d0ee4cb2a4782020b2c0a"><td class="memItemLeft" align="right" valign="top">volatile float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#a431ba957897d0ee4cb2a4782020b2c0a">q0</a></td></tr>
+<tr class="separator:a431ba957897d0ee4cb2a4782020b2c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd45017c63b41aaf3f17f8c2c02e3ac6"><td class="memItemLeft" align="right" valign="top">volatile float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#acd45017c63b41aaf3f17f8c2c02e3ac6">q1</a></td></tr>
+<tr class="separator:acd45017c63b41aaf3f17f8c2c02e3ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadea61ec94d632a66f00f0968a5b366a"><td class="memItemLeft" align="right" valign="top">volatile float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#aadea61ec94d632a66f00f0968a5b366a">q2</a></td></tr>
+<tr class="separator:aadea61ec94d632a66f00f0968a5b366a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d630a4c75b875fb26bcb0812cfd22e"><td class="memItemLeft" align="right" valign="top">volatile float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00095.html#af3d630a4c75b875fb26bcb0812cfd22e">q3</a></td></tr>
+<tr class="separator:af3d630a4c75b875fb26bcb0812cfd22e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a8ac904d83063ec9b661ba6d9e2a6b453" name="a8ac904d83063ec9b661ba6d9e2a6b453"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ac904d83063ec9b661ba6d9e2a6b453">&#9670;&nbsp;</a></span>AHRS_TYPES_NUMBER</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define AHRS_TYPES_NUMBER&#160;&#160;&#160;1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="a5653958ade3b660d54e5f617728cd76e" name="a5653958ade3b660d54e5f617728cd76e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5653958ade3b660d54e5f617728cd76e">&#9670;&nbsp;</a></span>AHRS_Types</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="a00095.html#a5653958ade3b660d54e5f617728cd76e">AHRS_Types</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5653958ade3b660d54e5f617728cd76ea0257e55fbf1b896515a8e7e0428ebf03" name="a5653958ade3b660d54e5f617728cd76ea0257e55fbf1b896515a8e7e0428ebf03"></a>AHRS_TYPE_NONE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a5653958ade3b660d54e5f617728cd76ea7041b045e6327a5fa882dec5bbc6610c" name="a5653958ade3b660d54e5f617728cd76ea7041b045e6327a5fa882dec5bbc6610c"></a>AHRS_TYPE_SIMPLE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a5653958ade3b660d54e5f617728cd76ea410b6edba9f4a9516086953e94a004d0" name="a5653958ade3b660d54e5f617728cd76ea410b6edba9f4a9516086953e94a004d0"></a>AHRS_TYPE_QUAT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a5653958ade3b660d54e5f617728cd76ea05d4544068a22deab8c48c0897617716" name="a5653958ade3b660d54e5f617728cd76ea05d4544068a22deab8c48c0897617716"></a>AHRS_TYPE_DT0058&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aafbe1e32e529a951c5a7b2abc0d803a3" name="aafbe1e32e529a951c5a7b2abc0d803a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafbe1e32e529a951c5a7b2abc0d803a3">&#9670;&nbsp;</a></span>AHRS_get_heading()</h2>
+<a id="a474f7f80603efc65a243b5cf8076cc49" name="a474f7f80603efc65a243b5cf8076cc49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a474f7f80603efc65a243b5cf8076cc49">&#9670;&nbsp;</a></span>MahonyAHRSupdate()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float AHRS_get_heading </td>
+          <td class="memname">void MahonyAHRSupdate </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
-          <td class="paramname"><em>mstatus</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afd68e05312decd599783b33b3da7b1d3" name="afd68e05312decd599783b33b3da7b1d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd68e05312decd599783b33b3da7b1d3">&#9670;&nbsp;</a></span>AHRS_get_pitch()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float AHRS_get_pitch </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
-          <td class="paramname"><em>mstatus</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae991b3a46353130b66e20d8cb3053d88" name="ae991b3a46353130b66e20d8cb3053d88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae991b3a46353130b66e20d8cb3053d88">&#9670;&nbsp;</a></span>AHRS_get_Quaternion()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00230.html">Quaternionf</a> AHRS_get_Quaternion </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
-          <td class="paramname"><em>mstatus</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a56484f46471712bfc47bd066488b8511" name="a56484f46471712bfc47bd066488b8511"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56484f46471712bfc47bd066488b8511">&#9670;&nbsp;</a></span>AHRS_get_roll()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float AHRS_get_roll </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
-          <td class="paramname"><em>mstatus</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aead537e023527d91301cd5ca17bd9c17" name="aead537e023527d91301cd5ca17bd9c17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aead537e023527d91301cd5ca17bd9c17">&#9670;&nbsp;</a></span>AHRS_get_yawRate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float AHRS_get_yawRate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
-          <td class="paramname"><em>mstatus</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a618298c6bba8b28006f83840c64108fd" name="a618298c6bba8b28006f83840c64108fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a618298c6bba8b28006f83840c64108fd">&#9670;&nbsp;</a></span>AHRS_init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void AHRS_init </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
-          <td class="paramname"><em>mstatus</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa841e662fd69e3fc2a25e9987100e499" name="aa841e662fd69e3fc2a25e9987100e499"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa841e662fd69e3fc2a25e9987100e499">&#9670;&nbsp;</a></span>AHRS_set_mag_vs_gyr_prop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void AHRS_set_mag_vs_gyr_prop </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
-          <td class="paramname"><em>mstatus</em>, </td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gx</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>prop</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae25330d51426485223f6ef1b5ba8e5c6" name="ae25330d51426485223f6ef1b5ba8e5c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae25330d51426485223f6ef1b5ba8e5c6">&#9670;&nbsp;</a></span>AHRS_update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00050.html#a8866b5421a676559242721d47fc1fcdc">int</a> AHRS_update </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00182.html">AHRS_Status_t</a> *&#160;</td>
-          <td class="paramname"><em>mstatus</em>, </td>
+          <td class="paramname"><em>gy</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
-          <td class="paramname"><em>acc</em>, </td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gz</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
-          <td class="paramname"><em>gyr</em>, </td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>ax</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a> *&#160;</td>
-          <td class="paramname"><em>mag</em>, </td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>ay</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>az</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>mx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>my</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>mz</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -378,29 +175,53 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a3bd7bdeac773e7c317be75ca7331b247" name="a3bd7bdeac773e7c317be75ca7331b247"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3bd7bdeac773e7c317be75ca7331b247">&#9670;&nbsp;</a></span>calculer_orientation_navire()</h2>
+<a id="aa05d571081fc35e1014a15b3d9e7d616" name="aa05d571081fc35e1014a15b3d9e7d616"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa05d571081fc35e1014a15b3d9e7d616">&#9670;&nbsp;</a></span>MahonyAHRSupdateIMU()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00230.html">Quaternionf</a> calculer_orientation_navire </td>
+          <td class="memname">void MahonyAHRSupdateIMU </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>north</em>, </td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gx</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>east</em>, </td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gy</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00198.html">Vector3f</a>&#160;</td>
-          <td class="paramname"><em>down</em>&#160;</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gz</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>ax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>ay</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>az</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>deltat</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -409,81 +230,12 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00095_a3bd7bdeac773e7c317be75ca7331b247_cgraph.png" border="0" usemap="#aa00095_a3bd7bdeac773e7c317be75ca7331b247_cgraph" alt=""/></div>
-<map name="aa00095_a3bd7bdeac773e7c317be75ca7331b247_cgraph" id="aa00095_a3bd7bdeac773e7c317be75ca7331b247_cgraph">
-<area shape="rect" title=" " alt="" coords="5,23,156,65"/>
-<area shape="rect" href="a00032.html#a7079c3ac4ae2b37c622a486f320e4750" title="Normalizes a 3D vector to have a length of 1." alt="" coords="204,31,407,57"/>
-<area shape="rect" href="a00032.html#aa19acb4a5290918456252d10d5b73889" title="Computes the Euclidean norm (&quot;length&quot;) of a 3D vector." alt="" coords="459,5,621,32"/>
-<area shape="rect" href="a00032.html#a5a2bc8ab3233bdbf447d1d572f801288" title="Multiplies a 3D vector by a scalar." alt="" coords="455,56,625,83"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00095_a3bd7bdeac773e7c317be75ca7331b247_icgraph.png" border="0" usemap="#aa00095_a3bd7bdeac773e7c317be75ca7331b247_icgraph" alt=""/></div>
-<map name="aa00095_a3bd7bdeac773e7c317be75ca7331b247_icgraph" id="aa00095_a3bd7bdeac773e7c317be75ca7331b247_icgraph">
-<area shape="rect" title=" " alt="" coords="201,5,352,47"/>
-<area shape="rect" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb" title=" " alt="" coords="5,13,153,39"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="aa02d5933c6d5e374c3c7e2a6cf7c7ad1" name="aa02d5933c6d5e374c3c7e2a6cf7c7ad1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa02d5933c6d5e374c3c7e2a6cf7c7ad1">&#9670;&nbsp;</a></span>quaternion_vers_euler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void quaternion_vers_euler </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00230.html">Quaternionf</a>&#160;</td>
-          <td class="paramname"><em>q</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>roll</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>pitch</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float *&#160;</td>
-          <td class="paramname"><em>yaw</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00095_aa02d5933c6d5e374c3c7e2a6cf7c7ad1_icgraph.png" border="0" usemap="#aa00095_aa02d5933c6d5e374c3c7e2a6cf7c7ad1_icgraph" alt=""/></div>
-<map name="aa00095_aa02d5933c6d5e374c3c7e2a6cf7c7ad1_icgraph" id="aa00095_aa02d5933c6d5e374c3c7e2a6cf7c7ad1_icgraph">
-<area shape="rect" title=" " alt="" coords="201,5,368,32"/>
-<area shape="rect" href="a00041.html#a52748091a7e13612f6fe73cad2f1dadb" title=" " alt="" coords="5,5,153,32"/>
-</map>
-</div>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="ad2438ce1a9d965da439db90ddd01a0e8" name="ad2438ce1a9d965da439db90ddd01a0e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2438ce1a9d965da439db90ddd01a0e8">&#9670;&nbsp;</a></span>AHRS_Interfaces</h2>
+<a id="a431ba957897d0ee4cb2a4782020b2c0a" name="a431ba957897d0ee4cb2a4782020b2c0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a431ba957897d0ee4cb2a4782020b2c0a">&#9670;&nbsp;</a></span>q0</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -492,7 +244,93 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="a00186.html">AHRS_Interface_t</a>* AHRS_Interfaces[]</td>
+          <td class="memname">volatile float q0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acd45017c63b41aaf3f17f8c2c02e3ac6" name="acd45017c63b41aaf3f17f8c2c02e3ac6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd45017c63b41aaf3f17f8c2c02e3ac6">&#9670;&nbsp;</a></span>q1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile float q1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aadea61ec94d632a66f00f0968a5b366a" name="aadea61ec94d632a66f00f0968a5b366a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadea61ec94d632a66f00f0968a5b366a">&#9670;&nbsp;</a></span>q2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile float q2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af3d630a4c75b875fb26bcb0812cfd22e" name="af3d630a4c75b875fb26bcb0812cfd22e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3d630a4c75b875fb26bcb0812cfd22e">&#9670;&nbsp;</a></span>q3</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile float q3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa8780c8514d23cbd96d12e667699012a" name="aa8780c8514d23cbd96d12e667699012a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8780c8514d23cbd96d12e667699012a">&#9670;&nbsp;</a></span>twoKi</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile float twoKi</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d4cb34a0e2873680d073344c310292f" name="a5d4cb34a0e2873680d073344c310292f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d4cb34a0e2873680d073344c310292f">&#9670;&nbsp;</a></span>twoKp</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile float twoKp</td>
         </tr>
       </table>
   </td>

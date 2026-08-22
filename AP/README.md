@@ -37,3 +37,5 @@ C'est une tâche auxiliare assurant la gestion de l'UART.
 ### Tâche apdialog
 Elle reçoit les ordres provenant de UART2, les décode et envoie les ordres aux autres tâches.
 
+### Tâche test
+Elle envoie des commandes à la tâche moteur pour la mise au point.

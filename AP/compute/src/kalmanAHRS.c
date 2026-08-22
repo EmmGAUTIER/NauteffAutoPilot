@@ -117,7 +117,7 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
     // Vector3f v1 = north_body;
 
     //snprintf(message, sizeof message, "Nord haha %+7.3f %+7.3f %+7.3f\n", v1.x, v1.y, v1.z);
-    //svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+    //svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1));
 
     Quaternionf qm;
 
@@ -182,7 +182,7 @@ AHRSStatus_t AHRS_update(AHRSState_t *const ahrs, const Vector3f *const acc,
 
     snprintf(message, sizeof message,
              "quat  %d  %+7.3f  %+7.3f %+7.3f %+7.3f\n", cas, qm.w, qm.x, qm.y, qm.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), pdMS_TO_TICKS(1));
+    svc_UART_Write(&SERVICE_UART_LOG, message, strlen(message), pdMS_TO_TICKS(1));
 
     /* Compute Euler angles : roll pitch and heading */
 

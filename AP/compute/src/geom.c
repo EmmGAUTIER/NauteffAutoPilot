@@ -26,7 +26,7 @@ SOFTWARE.
 #include <stdint.h>
 #include "geom.h"
 
-int __errno = 0; /* needed by math functions */
+//int __errno = 0; /* needed by math functions */
 
 Vector3f Vector3f_null = {.0F, .0F, .0F};
 
@@ -225,7 +225,8 @@ float normalize_angle_rad_centered(float angle)
     {
         na = 2.0F * M_PIF - fmodf(-angle, 2.0F * M_PIF);
     }
-    if (na > M_PIF)
+
+    if(na > M_PIF)
     {
         na -= 2.0F * M_PIF;
     }

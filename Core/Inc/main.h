@@ -67,12 +67,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define B1_Pin LL_GPIO_PIN_13
-#define B1_GPIO_Port GPIOC
-#define USART_TX_Pin LL_GPIO_PIN_2
-#define USART_TX_GPIO_Port GPIOA
-#define USART_RX_Pin LL_GPIO_PIN_3
-#define USART_RX_GPIO_Port GPIOA
+#define BLUE_BUTTON_Pin LL_GPIO_PIN_13
+#define BLUE_BUTTON_GPIO_Port GPIOC
+#define KBD_MODE_AUTO_Pin LL_GPIO_PIN_0
+#define KBD_MODE_AUTO_GPIO_Port GPIOC
+#define KBD_MODE_IDLE_Pin LL_GPIO_PIN_1
+#define KBD_MODE_IDLE_GPIO_Port GPIOC
+#define KBD_STBD_1_Pin LL_GPIO_PIN_2
+#define KBD_STBD_1_GPIO_Port GPIOC
+#define KBD_PORT_1_Pin LL_GPIO_PIN_3
+#define KBD_PORT_1_GPIO_Port GPIOC
+#define USART2_TX_Pin LL_GPIO_PIN_2
+#define USART2_TX_GPIO_Port GPIOA
+#define USART2_RX_Pin LL_GPIO_PIN_3
+#define USART2_RX_GPIO_Port GPIOA
 #define MOTOR_Pin LL_GPIO_PIN_4
 #define MOTOR_GPIO_Port GPIOA
 #define LD4_Pin LL_GPIO_PIN_5
@@ -81,6 +89,10 @@ void Error_Handler(void);
 #define INA_GPIO_Port GPIOA
 #define INB_Pin LL_GPIO_PIN_7
 #define INB_GPIO_Port GPIOA
+#define KBD_STBD_10_Pin LL_GPIO_PIN_4
+#define KBD_STBD_10_GPIO_Port GPIOC
+#define KBD_PORT_10_Pin LL_GPIO_PIN_5
+#define KBD_PORT_10_GPIO_Port GPIOC
 #define GYR_READY_Pin LL_GPIO_PIN_1
 #define GYR_READY_GPIO_Port GPIOB
 #define GYR_READY_EXTI_IRQn EXTI1_IRQn
@@ -91,6 +103,10 @@ void Error_Handler(void);
 #define CS_AG_GPIO_Port GPIOB
 #define CS_M_Pin LL_GPIO_PIN_12
 #define CS_M_GPIO_Port GPIOB
+#define KBD_AUX_2_Pin LL_GPIO_PIN_7
+#define KBD_AUX_2_GPIO_Port GPIOC
+#define KBD_AUX_1_Pin LL_GPIO_PIN_8
+#define KBD_AUX_1_GPIO_Port GPIOC
 #define Synchro_signal_Pin LL_GPIO_PIN_9
 #define Synchro_signal_GPIO_Port GPIOC
 #define TMS_Pin LL_GPIO_PIN_13

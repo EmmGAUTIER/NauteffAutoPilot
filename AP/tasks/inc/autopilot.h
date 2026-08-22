@@ -165,7 +165,7 @@ void AutoPilot_task(void *parameters);
 *
 * @return 0 if success, -1 if error
 */
-int AP_MSG_send_AHRS_values(TickType_t timeStamp, float roll, float pitch, float heading, float yawRate);
+int AutoPilot_msg_send_AHRS_values(TickType_t timeStamp, float roll, float pitch, float heading, float yawRate);
 
 /*
 * @brief Send motor stall message to autopilot task
@@ -183,3 +183,24 @@ int AP_MSG_MotorStalled();
  * @note when autopilot is engaged autopilot task doesn't change the AHRS type
  */
 int AP_MSG_Select_AHRS(AHRS_Types ahrsType);
+
+/*
+ * @brief Sends a message to autopilot task to turn
+ * @param headingToTurnDegrees int heading to turn in degrees, positive when turning to starboard
+ * @return void
+ */
+void AutoPilot_msg_turn_deg(int headingToTurnDegrees);
+
+/*
+ * @brief Sends a message to autopilot task to set the autopilot mode to auto
+ * @param none
+ * @return void
+ */
+void AutoPilot_msg_mode_heading();
+
+/*
+ * @brief Sends a message to autopilot task to set the autopilot mode to idle
+ * @param none
+ * @return void
+ */
+void AutoPilot_msg_mode_idle();

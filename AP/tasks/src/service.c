@@ -76,7 +76,7 @@ typedef struct
     } requestdescription;
 } ServiceRequest_t;
 
-ServiceUartHandle_t svc_uart1 =
+ServiceUartHandle_t svc_usart1 =
 {
     .huart = &huart1,
     .dma_tx_busy = 0U,
@@ -84,7 +84,7 @@ ServiceUartHandle_t svc_uart1 =
     .receiveBuffer = (StreamBufferHandle_t)0,
 };
 
-ServiceUartHandle_t svc_uart2 =
+ServiceUartHandle_t svc_usart2 =
 {
     .huart = &huart2,
     .dma_tx_busy = 0U,
@@ -127,8 +127,8 @@ int Service_task_init()
         return -1;
     }
 
-    svc_init_UART(&svc_uart1);
-    svc_init_UART(&svc_uart2);
+    svc_init_UART(&svc_usart1);
+    svc_init_UART(&svc_usart2);
 
     return 1;
 }
@@ -161,8 +161,8 @@ void Service_task(void *)
 
     /* Enable reception by interrupts  of UARTS */
 
-    HAL_UART_Receive_IT(svc_uart1.huart, &(svc_uart1.charRx), 1);
-    HAL_UART_Receive_IT(svc_uart2.huart, &(svc_uart2.charRx), 1);
+    HAL_UART_Receive_IT(svc_usart1.huart, &(svc_usart1.charRx), 1);
+    HAL_UART_Receive_IT(svc_usart2.huart, &(svc_usart2.charRx), 1);
 
     for(;;)
     {
@@ -341,13 +341,13 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
     // Cherche le handle de service correspondant
     ServiceUartHandle_t *svc_uart = NULL;
 
-    if(huart == svc_uart1.huart)
+    if(huart == svc_usart1.huart)
     {
-        svc_uart = &svc_uart1;
+        svc_uart = &svc_usart1;
     }
-    else if(huart == svc_uart2.huart)
+    else if(huart == svc_usart2.huart)
     {
-        svc_uart = &svc_uart2;
+        svc_uart = &svc_usart2;
     }
 
     /* End of a DMA transfer, sends a notification to service task */
@@ -371,13 +371,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     ServiceUartHandle_t *svc_uart = (ServiceUartHandle_t *)0;
 
-    if(huart == svc_uart1.huart)
+    if(huart == svc_usart1.huart)
     {
-        svc_uart = &svc_uart1;
+        svc_uart = &svc_usart1;
     }
-    else if(huart == svc_uart2.huart)
+    else if(huart == svc_usart2.huart)
     {
-        svc_uart = &svc_uart2;
+        svc_uart = &svc_usart2;
     }
 
     if(huart != (UART_HandleTypeDef *)0)

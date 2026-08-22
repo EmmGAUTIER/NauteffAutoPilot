@@ -119,14 +119,14 @@ int AHRS_Simple_update(AHRS_Status_t *mstatus,
              "IMU mag %+6f %+6f %+6f   acc %+6f %+6f %+6f    east%+6f %+6f %+6f\n",
              acc->x, acc->y, acc->z, mag->x, mag->y, mag->z, east.x, east.y,
              east.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
 #endif
 
 #if 0
     snprintf(message, sizeof(message) - 1,
              "IMU east %+6f %+6f %+6f   north %+6f %+6f %+6f\n",
              east.x, east.y, east.z, north.x, north.y, north.z);
-    svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+    svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
 #endif
 
     if((!mstatus->initialized) || isnan(mstatus->heading))
@@ -169,12 +169,12 @@ int AHRS_Simple_update(AHRS_Status_t *mstatus,
 #if 0
         snprintf(message, sizeof(message) - 1, "IMU gyr turn  %+6f  north %+7f %+7f dir heading %+7f %+7f\n",
                  gyrturn, north.x, north.y, cosgyr, singyr);
-        svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+        svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
 #endif
 #if 0
         snprintf(message, sizeof(message) - 1, "IMU hdgprev  %+6f hdg mag %+6f gyr turn %+6f  direstim %+6f\n",
                  mstatus->heading, hdgmag, gyrturn, hdgestim);
-        svc_UART_Write(&svc_uart2, message, strlen(message), 0U);
+        svc_UART_Write(&svc_uart1, message, strlen(message), 0U);
 #endif
 
         /* compute new heading, no need to normalize newdir_x,y for anat2f */
