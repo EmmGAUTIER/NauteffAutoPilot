@@ -26,7 +26,7 @@ SOFTWARE.
 #include <stdint.h>
 #include "geom.h"
 
-int __errno = 0; /* needed by math functions */
+//int __errno = 0; /* needed by math functions */
 
 Vector3f Vector3f_null = {.0F, .0F, .0F};
 
