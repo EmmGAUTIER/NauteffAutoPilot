@@ -205,6 +205,17 @@ SECTIONS
      _eram2 = .;        /* define a global symbol at data end */
   } >RAM2
 
+  .fastcode :
+  {
+      . = ALIGN(4);
+     _sfastcode = .;        /* create a global symbol at fastcode start */
+    *(.fastcode)           /* .fastcode sections */
+    *(.fastcode*)          /* .fastcode* sections */
+
+    . = ALIGN(4);
+     _efastcode = .;        /* define a global symbol at fastcode end */
+  } >RAM2 AT> FLASH
+
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {

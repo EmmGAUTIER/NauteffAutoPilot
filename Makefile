@@ -101,6 +101,7 @@ AP/compute/src/geom.c \
 AP/compute/src/quat.c \
 AP/compute/src/matrix3f.c \
 AP/compute/src/calib.c \
+AP/compute/src/nmea.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_can.c
 #AP/compute/src/madgwickAHRS.c \
 #AP/compute/src/madgwickAHRS.c \#AP/compute/src/madgwickAHRS.c \#AP/compute/src/madgwickAHRS.c \#AP/compute/src/madgwickAHRS.c \#AP/compute/src/madgwickAHRS.c \#AP/compute/src/madgwickAHRS.c \#AP/compute/src/madgwickAHRS.c \#AP/compute/src/madgwickAHRS.c \#AP/compute/src/madgwickAHRS.c \#AP/compute/src/kalmanAHRS.c \

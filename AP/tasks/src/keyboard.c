@@ -185,7 +185,7 @@ void Keyboard_task(void *param)
             /* read 16 bits of GPIO port even */
             keys = keys & KEYBOARD_PIN_MASK;
 
-#if 1
+#if 0
             snprintf (message, sizeof (message), "KBD : 0x%4x    %x %x   %x %x   %x %x   %x %x\n",
                       keys & KEYBOARD_PIN_MASK,
                       ((keys & KEYBOARD_PIN_MODE_AUTO) !=0 ),

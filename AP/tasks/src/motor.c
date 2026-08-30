@@ -419,11 +419,7 @@ void Motor_msg_display_status(void)
 }
 
 /****************************************************************************\
-<<<<<<< HEAD
-*     Functions and struct to control the actuator and clutch                *
-=======
 *     Functions and structures that control the motor                        *
->>>>>>> new_motor_cmd
 ******************************************************************************
 *                                                                            *
 * These functions control the motor, they :                                  *
@@ -440,17 +436,9 @@ void Motor_msg_display_status(void)
 *                                                                            *
 \****************************************************************************/
 
-<<<<<<< HEAD
-typedef struct {
-    Motor_status_transition_t transitions[];
-
-} Motor_status_transition_t;
-
-=======
 /*
 * Motor status structure
 */
->>>>>>> new_motor_cmd
 typedef struct
 {
     /* Status */
@@ -459,60 +447,6 @@ typedef struct
     /* Tuning Data */
     float threshold; /* Threshold motor command */
     float hpf_coeff; /* High pass filter coefficient */
-<<<<<<< HEAD
-    /**/
-    /* Data for duration and move */
-    float HelmAngleEstimated; /* Estimated helm angle (rad) */
-    float helmAngleRequested; /* Requested steer angle (rad) */
-    float turnTimeReq;        /* Turn angle requested */
-    /* (rad counterclockwise ie with sign) */
-    float turnTimeRemaining;  /* Turning time Remaining positive */
-    float stopTimeRemaining;  /* Time since motor powered off */
-    float overCurrentTime;    /* Time since start of overcurrent */
-    /**/
-    /* Values of calibration */
-    float vcurrentNone;    /* adc value of current when not moving */
-    float vcurrentFree;    /* adc value of current when moving with no effort */
-    float vcurrentBlocked; /* adc value of current when motor blocked */
-    float vPowerStandard;  /* Standard power voltage */
-    float timeToStart;     /* Time to start the motor */
-    float timeToStop;      /* Time to stop the motor */
-    float cvt_angle_time;  /* Conversion helm angle to time */
-    float currentStalled;  /* Current when motor is stalled */
-
-    /* measured values */
-    float vPower;   /* Actual voltage*/
-    float vCurrent; /* Actual current */
-} MotorData;
-
-MotorData motorData = {.status = MOTOR_STATUS_IDLE,
-                       .helmAngleRequested = 0.F,
-                       .HelmAngleEstimated = 0.F,
-                       .turnTimeReq = 0.F,
-                       .turnTimeRemaining = 0.F,
-
-                       .vcurrentNone = MOTOR_V_CURRENT_NONE,
-                       .vcurrentFree = MOTOR_V_CURRENT_FREE,
-                       .vcurrentBlocked = MOTOR_V_CURRENT_BLOCKED,
-                       .timeToStart = MOTOR_TIME_START,
-                       .timeToStop = MOTOR_TIME_STOP,
-                       .currentStalled = 1.0F,
-                       .cvt_angle_time = MOTOR_CVT_ANGLE_TIME,
-                       .hpf_coeff = MOTOR_HPF_COEF,
-                       .threshold = MOTOR_THRESHOLD,
-
-                       .vPowerStandard = 12.F,
-                       .vPower = 0.F,
-                       .vCurrent = 0.F
-                      };
-
-
-
-
-
-
-
-=======
     /* Data for duration and move */
     float helm_angle_estimated;   /* Estimated helm angle (rad) */
     float helm_angle_requested;   /* Requested steer angle (rad) */
@@ -654,7 +588,6 @@ int Motor_get_text_status(Motor_t *motor, char* str, int len)
 
     return nbcar;
 }
->>>>>>> new_motor_cmd
 
 /*
  * @brief Update motor status with new values of voltage and current
@@ -702,6 +635,7 @@ uint32_t Motor_new_values(Motor_t* motor,
         {
             motor->status &= ~(MOTOR_STATUS_STARTING_RUN);
         }
+
     }
 
     if(!(motor->status & MOTOR_STATUS_STARTING_RUN) && (motor_current > motor->vcurrent_stalled * .6F))
